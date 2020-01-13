@@ -1,0 +1,18 @@
+<html>
+	<head>
+		<title>test bundle</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"/>
+	</head>
+	<body style="position: fixed;overflow: hidden;">
+		<script src="../dist/sargasso.js"></script>
+		<div id="scroll-wrapper" style="width:100vw;height:100vh;overflow-y:scroll;">
+			<h1>This is static</h1>
+			<p>Once loaded it stays the same no matter what page you go to. The main advantages of this approach are speed and letting javascript hold state between pages making it more like an app than a web site. A web app.</p>
+			<div id="content" data-hijax="true">
+				<p>But this HIJAX container's content changes from page to page. <a href="page1.html">Click Here!</a></p>
+				<p>The clicks are captured but the HIJAX controller so they mostly deal with it. If you need to programatically load a page call the loadPageHandler <span style="text-decoration:underline;cursor:pointer;" onClick="loadPageHandler('/example/page2.html')">Like This</span>
+			</div>
+		</div>
+		<script src="./test.js"></script>
+	</body>
+</html>

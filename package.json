@@ -1,0 +1,44 @@
+{
+	"name": "@antiSocialNet/sargasso",
+	"version": "0.5.8",
+	"description": "Simple, Fast, Reactive, supervised Javascript controllers for html elements.",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "npx webpack"
+	},
+	"author": "Michael Rhodes",
+	"license": "MIT",
+	"devDependencies": {
+		"@babel/core": "^7.7.7",
+		"@babel/preset-env": "^7.7.7",
+		"babel-loader": "^8.0.6",
+		"webpack": "^4.41.5",
+		"webpack-cli": "^3.3.10",
+		"eslint": "^6.8.0",
+		"eslint-config-standard": "^14.1.0",
+		"eslint-plugin-import": "^2.19.1",
+		"eslint-plugin-node": "^10.0.0",
+		"eslint-plugin-promise": "^4.2.1",
+		"eslint-plugin-standard": "^4.0.1"
+	},
+	"dependencies": {
+		"js-cookie": "^2.2.1",
+		"lodash": "^4.17.15"
+	},
+	"directories": {
+		"example": "example",
+		"lib": "lib"
+	},
+	"publishConfig": {
+		"registry": "https://npm.pkg.github.com/"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/antiSocialNet/Sargasso.git"
+	},
+	"bugs": {
+		"url": "https://github.com/antiSocialNet/Sargasso/issues"
+	},
+	"homepage": "https://github.com/antiSocialNet/Sargasso#readme"
+}
