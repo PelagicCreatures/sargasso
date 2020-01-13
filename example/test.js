@@ -1,4 +1,4 @@
-class myClass extends reAgent.Sargasso {
+class myClass extends sargasso.Sargasso {
 	constructor (element, options = {}) {
 		options.watchViewport = true
 		super(element, options)
@@ -15,9 +15,9 @@ class myClass extends reAgent.Sargasso {
 	}
 }
 
-reAgent.registerSargassoClass('myClass', myClass)
+sargasso.registerSargassoClass('myClass', myClass)
 
-const loadPageHandler = reAgent.bootSargasso({
+const loadPageHandler = sargasso.bootSargasso({
 	hijax: {
 		onError: (level, message) => {
 			alert('hijax error: ' + message)

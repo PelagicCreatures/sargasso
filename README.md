@@ -43,16 +43,16 @@ registerSargassoClass('MyClass',MyClass)
 Bootstrap Sargasso Objects in ES5:
 ---------------------------------
 The bundle exposes App as a global so you can call the framework
-* reAgent.Sargasso
-* reAgent.registerSargassoClass
-* reAgent.bootSargasso
+* sargasso.Sargasso
+* sargasso.registerSargassoClass
+* sargasso.bootSargasso
 
 ```
 <script src="/path/to/sargasso.js">
 <script>
-	let loadPageHandler = reAgent.bootSargasso(options)
-	class MyClass extends reAgent.Sargasso {}
-	reAgent.registerSargassoClass('MyClass',MyClass)
+	let loadPageHandler = sargasso.bootSargasso(options)
+	class MyClass extends sargasso.Sargasso {}
+	sargasso.registerSargassoClass('MyClass',MyClass)
 </script>
 ```
 

@@ -6,7 +6,7 @@ module.exports = {
 	output: {
 		filename: 'sargasso.js',
 		path: path.resolve(__dirname, 'dist'),
-		library: 'reAgent'
+		library: 'sargasso'
 	},
 	watchOptions: {
 		poll: 1000 // Check for changes every second
