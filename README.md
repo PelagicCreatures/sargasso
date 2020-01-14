@@ -12,13 +12,13 @@ This framework is very lightweight, pure ES6 with only few dependencies
 Made in Barbados 🇧🇧
 ```
 
-Sometimes HTML elements need a nervous system - once DOM elements are coupled with Sargasso classes many things are possible – Lazy Loading, size appropriate images and content, parallax scrolling effects, form validators, API endpoint controllers to name a few.
+Sometimes HTML elements need a nervous system - with Sargasso classes many things are possible – Lazy Loading, size appropriate images and content, parallax scrolling effects, form validators, API endpoint controllers to name a few.
 
 This framework implements a sophisticated HIJAX page loading scheme which supports deep linking and lightning fast page loads where only only content areas are updated between pages leaving css, js and wrapper elements intact.
 
 Performance is optimized with shared event listeners which are fully debounced during large updates and services are provided to schedule content changes using the browser's animation frame event loop resulting in smooth page updates.
 
-This framework aims to use the advanced features of modern browsers to maximum effect.
+This framework aims to use the advanced features of modern browsers to maximum effect leaving as much historical cruft in the past as possible. The result is lean and fast.
 
 ```npm install @pelagiccreatures/sargasso```
 
@@ -66,13 +66,13 @@ SargassoSupervisor then watches the DOM for any elements with 'data-sargasso-cla
 and instantiates the object, hooking up the appropriate observers. It also destroys
 any dangling objects when the underlying element is removed from the DOM.
 
-`<div data-sargasso-class="mySubclass"></div>`
+`<div data-sargasso-class="MyClass"></div>`
 
 You can also defer the instantiation using the lazy method:
 
-`<div data-lazy-sargasso-class="mySubclass"></div>`
+`<div data-lazy-sargasso-class="MyClass"></div>`
 
-If using Hijax it captures `<a href="..">` tags and calls the LoadPageHandler instead of letting the browser do it.  `LoadPageHandler(href)` is a function you should call to load a new page. New pages are merged with the current page replacing any elements marked with 'data-hijax="true"'
+If using Hijax Sargasso captures `<a href="..">` tags and calls the LoadPageHandler instead of letting the browser do it.  `LoadPageHandler(href)` is a function you should call to load a new page. New pages are merged with the current page replacing any elements marked with 'data-hijax="true"'
 
 EG. instead of `location.href= '/home'`, use `LoadPageHandler('/home')`
 
@@ -81,7 +81,7 @@ Defining SubClasses:
 Your Sargasso subclasses can subscribe to event feeds to be notified of events.
 
 ```
-class mySubclass extends Sargasso {
+class MyClass extends Sargasso {
 	constructor(element, options) {
 		super(element, {
 			watchDOM: [true:false],
@@ -106,14 +106,14 @@ class mySubclass extends Sargasso {
 	elementEvent(e)      // this.element receieved an 'sargasso' event
 }
 
-registerSargassoClass('mySubclass', mySubclass)
+registerSargassoClass('MyClass', MyClass)
 
 ```
 
 Don't do any long processes in these callbacks or things might bog down the browser UI. To avoid any chaotic repaints you should only make DOM changes inside animation frames - see a lazy loading example below.
 
 ```
-class mySubclass extends Sargasso {
+class MyClass extends Sargasso {
 	constructor(element,options = {}) {
 		options.watchViewport = true
 		super(element,options)
@@ -128,7 +128,7 @@ class mySubclass extends Sargasso {
 	}
 }
 
-registerSargassoClass('mySubclass', mySubclass)
+registerSargassoClass('MyClass', MyClass)
 
 ```
 
