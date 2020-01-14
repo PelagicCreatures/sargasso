@@ -20,6 +20,8 @@ Performance is optimized with shared event listeners which are fully debounced d
 
 This framework aims to use the advanced features of modern browsers to maximum effect.
 
+```npm install @pelagiccreatures/sargasso```
+
 Bootstrap Sargasso Objects in ES6:
 ---------------------------------
 ```
@@ -42,19 +44,23 @@ registerSargassoClass('MyClass',MyClass)
 
 Bootstrap Sargasso Objects in ES5:
 ---------------------------------
-The bundle exposes App as a global so you can call the framework
+The bundle exposes sargasso as a global so you can call the framework
 * sargasso.Sargasso
 * sargasso.registerSargassoClass
 * sargasso.bootSargasso
 
 ```
-<script src="/path/to/sargasso.js">
+<script src="/path/to/dist/sargasso.js">
 <script>
 	let loadPageHandler = sargasso.bootSargasso(options)
 	class MyClass extends sargasso.Sargasso {}
 	sargasso.registerSargassoClass('MyClass',MyClass)
 </script>
 ```
+
+You can also use this cdn:
+```<script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso@0.5.10/dist/sargasso.js"></script>```
+
 
 SargassoSupervisor then watches the DOM for any elements with 'data-sargasso-class'
 and instantiates the object, hooking up the appropriate observers. It also destroys
@@ -127,7 +133,7 @@ registerSargassoClass('mySubclass', mySubclass)
 ```
 
 ### Viewing the Test Page in the example directory
-To use Hijax you have to serve the files (window.popstate can't deal with file://) so run this in the project directory
+To use Hijax you have to serve the files (window.popstate can't deal with file://) so run this in the project/example directory
 ```
 python -m SimpleHTTPServer 8000
 ```
