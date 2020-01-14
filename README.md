@@ -74,7 +74,7 @@ The bundle exposes sargasso as a global so you can call the framework
 
 You can also use this cdn:
 ```
-<script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso@0.5.10/dist/sargasso.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.js"></script>
 ```
 
 ### Adding Your Sargasso class to an HTML element
@@ -91,7 +91,7 @@ Sargasso watches the DOM for any elements with `data-sargasso-class`
 and instantiates the sargasso object, hooking up the appropriate observers. When the underlying element is removed from the DOM it destroys any dangling sargasso objects.
 
 ### HIJAX
-Is the function you should call to load a new page. Once loaded, new pages are merged with the current page only replacing elements marked with 'data-hijax="true"'. Sargasso automatically captures `<a href="..">` tags and calls the LoadPageHandler instead of letting the browser load pages. `LoadPageHandler(href)`
+Is the function you should call to load a new page. Once loaded, new pages are merged with the current page only replacing elements marked with `data-hijax="true"`. Sargasso automatically captures `<a href="..">` tags and calls the LoadPageHandler instead of letting the browser load pages. `LoadPageHandler(href)`
 
 EG. instead of `location.href= '/home'`, use `LoadPageHandler('/home')`
 
@@ -148,32 +148,32 @@ Utility Methods:
 Example Button Handler:
 
 ```
-	class MyButtonClass extends Sargasso {
+class MyButtonClass extends Sargasso {
 
-		// listen for click
-		start() {
-			super.start()
+	// listen for click
+	start() {
+		super.start()
 
-			this.clicker = (e) => {
-				this.clicked()
-			}
-			this.element.addEventListener('click', this.clicker, false)
+		this.clicker = (e) => {
+			this.clicked()
 		}
-
-		// cleanup listener
-		sleep() {
-			this.element.removeEventListener('click', this.clicker)
-			super.sleep()
-		}
-
-		// use an animation frame to mutate the DOM
-		clicked() {
-			let frame = () {
-				this.addClass('clicked')
-			}
-			this.queueFrame(frame)
-		}
+		this.element.addEventListener('click', this.clicker, false)
 	}
+
+	// cleanup listener
+	sleep() {
+		this.element.removeEventListener('click', this.clicker)
+		super.sleep()
+	}
+
+	// use an animation frame to mutate the DOM
+	clicked() {
+		let frame = () {
+			this.addClass('clicked')
+		}
+		this.queueFrame(frame)
+	}
+}
 
 Then in HTML:
 
