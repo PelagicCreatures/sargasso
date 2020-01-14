@@ -138,4 +138,4 @@ To use Hijax you have to serve the files (window.popstate can't deal with file:/
 python -m SimpleHTTPServer 8000
 ```
 
-then point your browser to `http://localhost:8000/example/index.html`
+then point your browser to `http://localhost:8000/index.html`
