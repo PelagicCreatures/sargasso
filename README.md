@@ -134,16 +134,18 @@ registerSargassoClass('MyClass', MyClass)
 
 ### Sargasso Object Lifecycle
 
-When the object is created the supervisor will call the `start()`` method of the object. You should use this hook to set up any element events you need to respond to such as clicking a button or key presses.
+When the object is created the supervisor will call the `start()`` method of the object. You should use this hook to set up any element events you need to respond to such as clicking a button or key presses. Beyond responding to scrolling, resize and other responsive events, you will probably want to interact with your element in some way.
 
-important properties:
-this.element - the element we are controlling
+Properties
+* this.element - the element we are controlling
 
-Some useful methods:
-this.hasClass('cssclass') 		// returns true if this.element has cssclass
-this.addClass('cssclass') 		// add cssclass to this.element
-this.removeClass('cssclass')	// remove cssclass to this.element
-this.queueFrame(function)			// queue a function to execute that changes the DOM
+Utility Methods:
+* this.hasClass('cssclass') 		// returns true if this.element has cssclass
+* this.addClass('cssclass') 		// add cssclass to this.element
+* this.removeClass('cssclass')	// remove cssclass to this.element
+* this.queueFrame(function)			// queue a function to execute that changes the DOM
+
+Example Button Handler:
 
 ```
 	class MyButtonClass extends Sargasso {
@@ -173,6 +175,13 @@ this.queueFrame(function)			// queue a function to execute that changes the DOM
 		}
 	}
 
+Then in HTML:
+
+<style>
+	.clicked { background-color:red; }
+</style>
+
+<button data-sargasso-class="MyButtonClass">Click me and I'll turn red!</button>
 ```
 
 ### Using Animation Frames
