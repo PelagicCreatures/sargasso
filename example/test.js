@@ -26,21 +26,24 @@ class myClass extends sargasso.Sargasso {
 			postMessage('Done doing pointless math: ' + result)
 		}
 
+		// stringify it
 		const txtFunction = 'onmessage = ' + mySlowFunction.toString()
 
 		// create the worker. managed by sargasso
-		const worker = this.startWorker('myworkId', txtFunction)
+		this.workerStart('myworkId', '/example/test-worker.js')
 
-		// listen to the worker
-		worker.onmessage = (e) => {
+		// make the worker do work
+		this.workerPost('myworkId', 12)
+	}
+
+	workerOnMessage (id, e) {
+		if (id === 'myworkId') {
 			const frame = () => {
 				this.element.innerHTML = e.data
 			}
 			this.queueFrame(frame)
 		}
-
-		// make the worker work
-		worker.postMessage(12)
+		super.workerOnMessage(id, e)
 	}
 }
 

@@ -219,9 +219,11 @@ from string of raw code.
 
 ```
 class MySubClass extends Sargasso {
+
 	...
 
 	someMethod() {
+
 		// define some code to run in the worker
 
 		let mycode = `onmessage = function (e) {
@@ -233,23 +235,29 @@ class MySubClass extends Sargasso {
 			postMessage('Done doing pointless math: ' + result)
 		}`
 
-		// create worker
-		let worker = this.startWorker('workerbee', mycode)
+		// create the worker to be managed by sargasso and give it an id
+		this.workerStart('myworkId', mycode)
 
-		// listen for result
-		worker.onmessage = (e) => {
-			console.log(e.data) // "Done doing pointless math: 50934038.24768489"
+		// make the worker do work
+		this.workerPost('myworkId', 12)
+	}
+
+	// listen for worker events
+	workerOnMessage (id, e) {
+		if (id === 'myworkId') {
+			const frame = () => {
+				this.element.innerHTML = e.data
+			}
+			this.queueFrame(frame)
 		}
-
-		// start computing
-		worker.postMessage(12)
+		super.workerOnMessage(id, e)
 	}
 }
 ```
 
 
 ### Viewing the Test Page in the example directory
-To use Hijax you have to serve the files (window.popstate can't deal with file://) so run this in the project directory
+To use Hijax you have to serve the files (window.popstate can't deal with file://) so run SimpleHTTPServer in the project directory to see demo page
 ```
 python -m SimpleHTTPServer 8000
 ```
