@@ -1,8 +1,18 @@
 {
 	"name": "@pelagiccreatures/sargasso",
-	"version": "0.5.13",
+	"version": "0.5.14",
 	"description": "Simple, Fast, Reactive, supervised Javascript controllers for html elements.",
-	"keywords": ["javascript", "es6", "responsive", "web worker", "framework", "lazy load", "pwa", "web app", "hijax"],
+	"keywords": [
+		"javascript",
+		"es6",
+		"responsive",
+		"web worker",
+		"framework",
+		"lazy load",
+		"pwa",
+		"web app",
+		"hijax"
+	],
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
