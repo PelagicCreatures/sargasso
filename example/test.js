@@ -6,29 +6,41 @@ class myClass extends sargasso.Sargasso {
 
 	enterViewport () { // do some stuff such as modify element html or classes
 		const frame = () => {
-			this.element.innerHTML = '<p>Hello There Viewport! Starting offloaded task in web worker so things are still responsive here.'
+			this.element.innerHTML = '<p>Hello There Viewport! Now starting an offloaded task in web worker so things are still responsive here while I think.'
 			this.element.style.color = 'red'
 			this.addClass('animated')
 			this.addClass('tada')
-			this.offLoadTask()
 		}
 		this.queueFrame(frame)
+		this.offLoadTask()
 	}
 
 	offLoadTask () {
-		const code = `onmessage = function(e) {
-	console.log('starting web worker work')
-	for(let i = 0; i < e.data; i++){
-		// do something lots of times
-	}
-	postMessage('done counting to ' + e.data)
-}`
-		const worker = this.startWorker('myworkId', code)
-		worker.onmessage = (e) => {
-			this.element.innerHTML = e.data
-			this.stopWorker('myworkId')
+		// define a pointless function
+		const mySlowFunction = function (e) {
+			const baseNumber = e.data
+			let result = 0
+			for (var i = Math.pow(baseNumber, 7); i >= 0; i--) {
+				result += Math.atan(i) * Math.tan(i)
+			};
+			postMessage('Done doing pointless math: ' + result)
 		}
-		worker.postMessage(10000000)
+
+		const txtFunction = 'onmessage = ' + mySlowFunction.toString()
+
+		// create the worker. managed by sargasso
+		const worker = this.startWorker('myworkId', txtFunction)
+
+		// listen to the worker
+		worker.onmessage = (e) => {
+			const frame = () => {
+				this.element.innerHTML = e.data
+			}
+			this.queueFrame(frame)
+		}
+
+		// make the worker work
+		worker.postMessage(12)
 	}
 }
 

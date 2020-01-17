@@ -1,10 +1,10 @@
 # @PelagicCreatures/Sargasso
 
-### Simple, Fast, Supervised Javascript controllers for html elements.
+### Simple, Fast, Supervised Javascript Controllers for HTML Elements.
 
 [Demo Site](https://blog.myanti.social)
 
-This framework is very lightweight, pure ES6 with only few dependencies
+This is a very lightweight, pure ES6 (with only few dependencies) framework which aims to use the most advanced stable features of modern browsers to maximum effect leaving as much historical cruft in the past as possible. The result is lean, highly performant and clean code that simplifies the complex requirements of modern progressive web apps and web sites.
 
 ```
 @author Michael Rhodes (except where noted)
@@ -12,23 +12,25 @@ This framework is very lightweight, pure ES6 with only few dependencies
 Made in Barbados 🇧🇧
 ```
 
-Sometimes HTML elements need a nervous system - with Sargasso classes many things are possible – Lazy Loading, size appropriate images and content, parallax scrolling effects, form validators, API endpoint controllers to name a few.
+HTML elements sometimes need a nervous system to see and respond to what's going on around them - Sargasso element controllers are fully aware of their environment making many things are possible – lazy loading, screen size appropriate images and content, parallax scrolling effects, form validators, API endpoint controllers to name a few.
 
-This framework implements an asynchronous HIJAX page loading scheme which supports deep linking and lightning fast page loads where only content areas are updated between pages leaving css, js and wrapper elements intact. Sargasso objects are created and destroyed as needed when they appear or are removed from the DOM.
+HIJAX made easy - this framework implements an asynchronous page loading scheme which supports deep linking and lightning fast page loads where only dynamic content areas are merged between pages leaving css, js, web workers and wrapper elements intact. Sargasso controller instances are created as needed when their element appears in the DOM and destroyed when their element is removed.
 
-Performance is optimized with shared event listeners which are fully debounced during large updates and services are provided to schedule content changes using the browser's animation frame event loop resulting in smooth page updates.
-
-This framework aims to use the advanced features of modern browsers to maximum effect leaving as much historical cruft in the past as possible. The result is lean and fast.
+Performance is optimized with shared event listeners which are fully debounced during large updates. Services are provided to schedule content changes using the browser's animation frame event loop and computation heavy tasks can be easily offloaded to managed web workers resulting in highly performant pages.
 
 ```npm install @pelagiccreatures/sargasso```
 
 Bootstrap Sargasso (ES6):
----------------------------------
+-------------------------
 ```
 // import lib
 import {
 	bootSargasso, Sargasso, registerSargassoClass
 } from 'sargasso'
+
+// bootSargasso is the function to call to start the framework
+// Sargasso is the superclass of all sargasso controllers
+// registerSargassoClass is a function to tell sargasso about your classes
 
 // set options
 let options = {
@@ -40,7 +42,7 @@ let options = {
 // boot supervisors and HIJAX loader
 let loadPageHandler = bootSargasso(options)
 
-// define a custom class and register the classname
+// define a custom class and register the classname so it can be supervised
 class MyClass extends Sargasso {}
 registerSargassoClass('MyClass',MyClass)
 
@@ -48,7 +50,7 @@ registerSargassoClass('MyClass',MyClass)
 
 Bootstrap Sargasso (ES5):
 ---------------------------------
-The bundle exposes sargasso as a global so you can call the framework
+The bundle exposes `sargasso` as a global so you can call the framework
 * sargasso.Sargasso
 * sargasso.registerSargassoClass
 * sargasso.bootSargasso
@@ -72,7 +74,7 @@ The bundle exposes sargasso as a global so you can call the framework
 </script>
 ```
 
-You can also use this cdn:
+You can also use this cdn if you want:
 ```
 <script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.js"></script>
 ```
@@ -91,7 +93,7 @@ Sargasso watches the DOM for any elements with `data-sargasso-class`
 and instantiates the sargasso object, hooking up the appropriate observers. When the underlying element is removed from the DOM it destroys any dangling sargasso objects.
 
 ### HIJAX
-Is the function you should call to load a new page. Once loaded, new pages are merged with the current page only replacing elements marked with `data-hijax="true"`. Sargasso automatically captures `<a href="..">` tags and calls the LoadPageHandler instead of letting the browser load pages. `LoadPageHandler(href)`
+bootSargasso returns the function `LoadPageHandler(href)` that you should call to load a new page programatically. Once loaded, new pages are merged with the current page only replacing elements marked with `data-hijax="true"`. Sargasso automatically captures `<a href="..">` tags and calls the LoadPageHandler instead of letting the browser load pages.
 
 EG. instead of `location.href= '/home'`, use `LoadPageHandler('/home')`
 
@@ -207,6 +209,44 @@ class MyClass extends Sargasso {
 registerSargassoClass('MyClass', MyClass)
 
 ```
+
+### Using managed Web Workers
+
+Offload compute heavy tasks to a new thread and listen for result
+
+Pass in a url of a web worker js file or create an inline web worker
+from string of raw code.
+
+```
+class MySubClass extends Sargasso {
+	...
+
+	someMethod() {
+		// define some code to run in the worker
+
+		let mycode = `onmessage = function (e) {
+			const baseNumber = e.data
+			let result = 0
+			for (var i = Math.pow(baseNumber, 7); i >= 0; i--) {
+				result += Math.atan(i) * Math.tan(i)
+			};
+			postMessage('Done doing pointless math: ' + result)
+		}`
+
+		// create worker
+		let worker = this.startWorker('workerbee', mycode)
+
+		// listen for result
+		worker.onmessage = (e) => {
+			console.log(e.data) // "Done doing pointless math: 50934038.24768489"
+		}
+
+		// start computing
+		worker.postMessage(12)
+	}
+}
+```
+
 
 ### Viewing the Test Page in the example directory
 To use Hijax you have to serve the files (window.popstate can't deal with file://) so run this in the project/example directory

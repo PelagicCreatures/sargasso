@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('path')
 
 module.exports = {
 	mode: 'development',
@@ -18,8 +18,8 @@ module.exports = {
 			loader: 'babel-loader',
 			exclude: /(node_modules|bower_components)/,
 			query: {
-				presets: ['@babel/preset-env'],
-			},
-		}],
-	},
-};
+				presets: ['@babel/preset-env']
+			}
+		}]
+	}
+}
