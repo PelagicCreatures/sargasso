@@ -10,8 +10,25 @@ class myClass extends sargasso.Sargasso {
 			this.element.style.color = 'red'
 			this.addClass('animated')
 			this.addClass('tada')
+			this.offLoadTask()
 		}
 		this.queueFrame(frame)
+	}
+
+	offLoadTask () {
+		const code = `onmessage = function(e) {
+									console.log('starting web worker work')
+									for(let i = 0; i < e.data; i++){
+										// do something 100k times
+									}
+									postMessage({status:'ok'})
+								}`
+		const worker = this.startWorker('myworkId', code)
+		worker.onmessage = function (e) {
+			this.element.innerHTML = 'done counting to 100k'
+			this.stopWorker('myworkId')
+		}
+		worker.postMessage(1000000)
 	}
 }
 
