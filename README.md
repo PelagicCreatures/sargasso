@@ -249,7 +249,7 @@ class MySubClass extends Sargasso {
 
 
 ### Viewing the Test Page in the example directory
-To use Hijax you have to serve the files (window.popstate can't deal with file://) so run this in the project/example directory
+To use Hijax you have to serve the files (window.popstate can't deal with file://) so run this in the project directory
 ```
 python -m SimpleHTTPServer 8000
 ```
