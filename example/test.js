@@ -6,7 +6,7 @@ class myClass extends sargasso.Sargasso {
 
 	enterViewport () { // do some stuff such as modify element html or classes
 		const frame = () => {
-			this.element.innerHTML = '<p>Hello There Viewport!'
+			this.element.innerHTML = '<p>Hello There Viewport! Starting offloaded task in web worker so things are still responsive here.'
 			this.element.style.color = 'red'
 			this.addClass('animated')
 			this.addClass('tada')
@@ -17,18 +17,18 @@ class myClass extends sargasso.Sargasso {
 
 	offLoadTask () {
 		const code = `onmessage = function(e) {
-									console.log('starting web worker work')
-									for(let i = 0; i < e.data; i++){
-										// do something 100k times
-									}
-									postMessage({status:'ok'})
-								}`
+	console.log('starting web worker work')
+	for(let i = 0; i < e.data; i++){
+		// do something lots of times
+	}
+	postMessage('done counting to ' + e.data)
+}`
 		const worker = this.startWorker('myworkId', code)
-		worker.onmessage = function (e) {
-			this.element.innerHTML = 'done counting to 100k'
+		worker.onmessage = (e) => {
+			this.element.innerHTML = e.data
 			this.stopWorker('myworkId')
 		}
-		worker.postMessage(1000000)
+		worker.postMessage(10000000)
 	}
 }
 
