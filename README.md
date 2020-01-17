@@ -4,7 +4,7 @@
 
 [Demo Site](https://blog.myanti.social)
 
-This is a very lightweight, pure ES6 (with only few dependencies) framework which aims to use the most advanced stable features of modern browsers to maximum effect leaving as much historical cruft in the past as possible. The result is lean, highly performant and clean code that simplifies the complex requirements of modern progressive web apps and web sites.
+This is a very lightweight, pure ES6 framework (with only few dependencies) which aims to use the most advanced stable features of modern browsers to maximum effect leaving the historical cruft, kludges and code barnacles infesting older web frameworks behind. The result is lean, highly performant and clean code that simplifies the complex requirements of modern progressive web apps and web sites.
 
 ```
 @author Michael Rhodes (except where noted)
@@ -12,9 +12,9 @@ This is a very lightweight, pure ES6 (with only few dependencies) framework whic
 Made in Barbados 🇧🇧
 ```
 
-HTML elements sometimes need a nervous system to see and respond to what's going on around them - Sargasso element controllers are fully aware of their environment making many things are possible – lazy loading, screen size appropriate images and content, parallax scrolling effects, form validators, API endpoint controllers to name a few.
+HTML elements sometimes need a nervous system to see and respond to what's going on around them - Sargasso element controllers are fully aware of their environment making many things  possible – HIJAX, lazy loading, screen size appropriate images and content, parallax scrolling effects, form validators, API endpoint controllers to name a few.
 
-HIJAX made easy - this framework implements an asynchronous page loading scheme which supports deep linking and lightning fast page loads where only dynamic content areas are merged between pages leaving css, js, web workers and wrapper elements intact. Sargasso controller instances are created as needed when their element appears in the DOM and destroyed when their element is removed.
+HIJAX made easy - this framework implements an asynchronous page loading scheme which supports deep linking and lightning fast page loads where only dynamic content areas are merged between pages leaving css, js, web workers and wrapper elements intact. Sargasso controller instances are managed as needed when their element appears in the DOM and destroyed when their element is removed.
 
 Performance is optimized with shared event listeners which are fully debounced during large updates. Services are provided to schedule content changes using the browser's animation frame event loop and computation heavy tasks can be easily offloaded to managed web workers resulting in highly performant pages.
 
