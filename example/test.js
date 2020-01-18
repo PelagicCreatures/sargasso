@@ -16,30 +16,19 @@ class myClass extends sargasso.Sargasso {
 	}
 
 	offLoadTask () {
-		// define a pointless function
-		const mySlowFunction = function (e) {
-			const baseNumber = e.data
-			let result = 0
-			for (var i = Math.pow(baseNumber, 7); i >= 0; i--) {
-				result += Math.atan(i) * Math.tan(i)
-			};
-			postMessage('Done doing pointless math: ' + result)
-		}
-
-		// stringify it
-		const txtFunction = 'onmessage = ' + mySlowFunction.toString()
-
 		// create the worker. managed by sargasso
 		this.workerStart('myworkId', '/example/test-worker.js')
 
 		// make the worker do work
-		this.workerPost('myworkId', 12)
+		this.workerPostMessage('myworkId', {
+			power: 12
+		})
 	}
 
 	workerOnMessage (id, e) {
 		if (id === 'myworkId') {
 			const frame = () => {
-				this.element.innerHTML = e.data
+				this.element.innerHTML = e.data.result
 			}
 			this.queueFrame(frame)
 		}

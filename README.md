@@ -4,7 +4,9 @@
 
 [Demo Site](https://blog.myanti.social)
 
-This is a very lightweight, pure ES6 framework (with only few dependencies) which aims to use the most advanced stable features of modern browsers to maximum effect leaving the historical cruft, kludges and code barnacles infesting older web frameworks behind. The result is lean, highly performant and clean code that simplifies the complex requirements of modern progressive web apps and web sites.
+HTML elements sometimes need a nervous system to see and respond to what's going on around them - Sargasso element controllers are fully aware of their environment.
+
+Events such as Document (DOM) insertions and deletions, HIJAX Page load, Scrolling, Resizing, Orientation and messages from fully Managed Web Workers are passed to Sargasso controllers allowing them to efficiently implement any behavior they need to perform.
 
 ```
 @author Michael Rhodes (except where noted)
@@ -12,11 +14,12 @@ This is a very lightweight, pure ES6 framework (with only few dependencies) whic
 Made in Barbados 🇧🇧
 ```
 
-HTML elements sometimes need a nervous system to see and respond to what's going on around them - Sargasso element controllers are fully aware of their environment making many things  possible – HIJAX, lazy loading, screen size appropriate images and content, parallax scrolling effects, form validators, API endpoint controllers to name a few.
+This is a very lightweight, pure ES6 framework (with only few dependencies) which aims to use the most advanced stable features of modern browsers to maximum effect leaving the historical cruft, kludges and code barnacles infesting older web frameworks behind. The result is lean, highly performant and clean code that simplifies the complex technologies behind modern progressive web apps and web sites.
 
 HIJAX made easy - this framework implements an asynchronous page loading scheme which supports deep linking and lightning fast page loads where only dynamic content areas are merged between pages leaving css, js, web workers and wrapper elements intact. Sargasso controller instances are managed as needed when their element appears in the DOM and destroyed when their element is removed.
 
-Performance is optimized with shared event listeners which are fully debounced during large updates. Services are provided to schedule content changes using the browser's animation frame event loop and computation heavy tasks can be easily offloaded to managed web workers resulting in highly performant pages.
+Performance is optimized using shared event listening services which are fully debounced during large updates. Services are provided to schedule content changes using the browser's animation frame event loop and computation heavy tasks can be easily offloaded to managed web workers resulting in highly performant pages.
+
 
 ```npm install @pelagiccreatures/sargasso```
 
@@ -217,6 +220,12 @@ Offload compute heavy tasks to a new thread and listen for result
 Pass in a url of a web worker js file or create an inline web worker
 from string of raw code.
 
+The worker code does the work when it receives an onmessage event
+
+e.data contains the params for our worker
+
+A web worker could be used by many sargasso instances so e.data.uid is reserved for the id on the instance that is invoking and the worker and should always hand uid back in the postMessage events it sends back to the sargasso object.
+
 ```
 class MySubClass extends Sargasso {
 
@@ -224,25 +233,28 @@ class MySubClass extends Sargasso {
 
 	someMethod() {
 
-		// define some code to run in the worker
+		/*
+			myWorker can be inline code or the url of a worker script to download
+		*/
 
-		let mycode = `onmessage = function (e) {
-			const baseNumber = e.data
+		let myWorker = `onmessage = function (e) {
+			const baseNumber = e.data.power
 			let result = 0
 			for (var i = Math.pow(baseNumber, 7); i >= 0; i--) {
 				result += Math.atan(i) * Math.tan(i)
 			};
-			postMessage('Done doing pointless math: ' + result)
+			postMessage({ uid: e.data.uid, result: 'Done doing pointless math: ' + result })
 		}`
 
 		// create the worker to be managed by sargasso and give it an id
-		this.workerStart('myworkId', mycode)
+		this.workerStart('myworkId', myWorker)
 
-		// make the worker do work
-		this.workerPost('myworkId', 12)
+
+		let data = { power: 12 }
+		this.workerPostMessage('myworkId', data) // send message to the worker
 	}
 
-	// listen for worker events
+	// listen for worker result
 	workerOnMessage (id, e) {
 		if (id === 'myworkId') {
 			const frame = () => {
