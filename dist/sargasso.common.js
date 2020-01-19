@@ -1355,7 +1355,7 @@ function () {
 
   }, {
     key: "workerOnMessage",
-    value: function workerOnMessage(e) {} // stop a worker
+    value: function workerOnMessage(id, e) {} // stop a worker
 
   }, {
     key: "stopWorker",

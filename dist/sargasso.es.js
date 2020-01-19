@@ -2040,7 +2040,7 @@ class Sargasso {
 	}
 
 	// subclass should overide this to listen to workers
-	workerOnMessage (e) {
+	workerOnMessage (id, e) {
 
 	}
 
