@@ -2000,13 +2000,15 @@ const bootSargasso = (options = {}) => {
 	return loadPage
 };
 
-const sargasso = {
-	Sargasso: Sargasso,
-	registerSargassoClass: registerSargassoClass,
-	bootSargasso: bootSargasso
-};
+// don't really like this but the only way I can find that allows a common scope
+// for es6 and cjs bundles... TODO: revisit this
+if (window) {
+	window.Sargasso = Sargasso;
+	window.registerSargassoClass = registerSargassoClass;
+	window.bootSargasso = bootSargasso;
+}
 
-class myClass extends sargasso.Sargasso {
+class myClass extends Sargasso {
 	constructor (element, options = {}) {
 		options.watchViewport = true;
 		super(element, options);
@@ -2044,9 +2046,9 @@ class myClass extends sargasso.Sargasso {
 	}
 }
 
-sargasso.registerSargassoClass('myClass', myClass);
+registerSargassoClass('myClass', myClass);
 
-const loadPageHandler = sargasso.bootSargasso({
+const loadPageHandler = bootSargasso({
 	hijax: {
 		onError: (level, message) => {
 			alert('hijax error: ' + message);

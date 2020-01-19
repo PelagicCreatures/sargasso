@@ -1992,6 +1992,10 @@ class Sargasso {
 		return elementTools.isVisible(this.element)
 	}
 
+	scrollTop (newTop) {
+		return theScrollWatcher.scrollTop(newTop)
+	}
+
 	/*
 		Worker management
 
@@ -2468,7 +2472,7 @@ class HijaxLoader extends Sargasso {
 				const loc = xhr.getResponseHeader('Sargasso-Location');
 				this.setPage(loc);
 			} else if (xhr.status === 200) {
-				theScrollWatcher.scrollTop(0);
+				this.scrollTop(0);
 				this.mergePage(xhr.responseText);
 				const oldPage = this.currentPage;
 				const frame = () => {
@@ -2646,6 +2650,14 @@ const bootSargasso = (options = {}) => {
 
 	return loadPage
 };
+
+// don't really like this but the only way I can find that allows a common scope
+// for es6 and cjs bundles... TODO: revisit this
+if (window) {
+	window.Sargasso = Sargasso;
+	window.registerSargassoClass = registerSargassoClass;
+	window.bootSargasso = bootSargasso;
+}
 
 export { Sargasso, bootSargasso, registerSargassoClass };
 //# sourceMappingURL=sargasso.es.js.map

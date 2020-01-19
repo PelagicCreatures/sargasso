@@ -1,4 +1,3 @@
-var sargasso =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -147,7 +146,15 @@ var bootSargasso = function bootSargasso() {
   }
 
   return loadPage;
-};
+}; // don't really like this but the only way I can find that allows a common scope
+// for es6 and cjs bundles... TODO: revisit this
+
+
+if (window) {
+  window.Sargasso = _lib_Sargasso_js__WEBPACK_IMPORTED_MODULE_0__["Sargasso"];
+  window.registerSargassoClass = _lib_Sargasso_js__WEBPACK_IMPORTED_MODULE_0__["registerSargassoClass"];
+  window.bootSargasso = bootSargasso;
+}
 
 
 
@@ -435,7 +442,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HijaxLoader", function() { return HijaxLoader; });
 /* harmony import */ var _Sargasso_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Sargasso.js */ "./lib/Sargasso.js");
 /* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils.js */ "./lib/utils.js");
-/* harmony import */ var _Services_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Services.js */ "./lib/Services.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -469,7 +475,6 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 	@license MIT
 	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
 **/
-
 
 
 
@@ -577,7 +582,7 @@ function (_Sargasso) {
 
           _this4.setPage(loc);
         } else if (xhr.status === 200) {
-          _Services_js__WEBPACK_IMPORTED_MODULE_2__["theScrollWatcher"].scrollTop(0);
+          _this4.scrollTop(0);
 
           _this4.mergePage(xhr.responseText);
 
@@ -1299,6 +1304,11 @@ function () {
     key: "isVisible",
     value: function isVisible() {
       return _utils_js__WEBPACK_IMPORTED_MODULE_0__["elementTools"].isVisible(this.element);
+    }
+  }, {
+    key: "scrollTop",
+    value: function scrollTop(newTop) {
+      return _Services_js__WEBPACK_IMPORTED_MODULE_1__["theScrollWatcher"].scrollTop(newTop);
     }
     /*
     	Worker management

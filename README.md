@@ -27,14 +27,14 @@ Bootstrap Sargasso:
 -------------------
 The ES and the CommonJS bundles both expose:
 
-* sargasso.Sargasso - the sargasso super class
-* sargasso.registerSargassoClass - function to register your sub classes
-* sargasso.bootSargasso - start sargasso services and HIHAX
+* Sargasso - the sargasso super class
+* registerSargassoClass - function to register your sub classes
+* bootSargasso - start sargasso services and HIHAX
 
 [Most browsers](https://caniuse.com/#search=modules) are aware of ES6 and modules these days but but you can use the module/nomodule scheme to fall back to the common js bundle if needed.
 ```
 <script type="module">
-	import sargasso from "https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.es.js"
+	import from "https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.es.js"
 	... your code here ...
 </script>
 
@@ -58,11 +58,11 @@ For the '... your code here ...' part, it's the same in both cases. You need to 
 	}
 
 	// boot supervisors and HIJAX loader
-	window.loadPageHandler = sargasso.bootSargasso(options)
+	window.loadPageHandler = bootSargasso(options)
 
 	// define a custom class and register the classname.
-	class MyClass extends sargasso.Sargasso {} // This won't do very much...
-	sargasso.registerSargassoClass('MyClass',MyClass)
+	class MyClass extends Sargasso {} // This won't do very much...
+	registerSargassoClass('MyClass',MyClass)
 
 </script>
 ```
@@ -106,68 +106,59 @@ New pages are loaded via AJAX and are merged with the current page only replacin
 		more static stuff
 	</body>
 <html>
-
 ```
+
 Note that data-hijax elements must have well formed child html elements. Not like this:
 ```<div>I'm just text. No child elements. Won't work.</div>```
 
-### Defining SubClasses:
-
-Your Sargasso subclasses can subscribe to event feeds to be notified of events.
-
-The instance is associated with an element `this.element`
-
-```
-class MyClass extends Sargasso {
-	constructor(element, options) {
-		// subscribe to events
-		super(element, {
-			watchDOM: [true:false],
-			watchScroll: [true:false],
-			watchResize: [true:false],
-			watchOrientation: [true:false],
-			watchViewport: [true:false]
-		})
-	}
-
-	// Methods that will be called when various events occur. Do only what you need to do.
-
-	DOMChanged() {}      // called if 'watchDOM: true' when DOM changes
-	didScroll() {}       // called if 'watchScroll: true' when scroll occurs
-	didResize() {}       // called if 'watchResize: true' when resize changes
-	enterViewport() {}   // called if 'watchViewport: true' when element is entering viewport
-	exitViewport() {}    // called if 'watchViewport: true' when element is exiting viewport
-	enterFullscreen() {} // called if 'watchOrientation: true' when user rotates phone or if setFullscreen is called
-	exitFullscreen() {}  // called on exit fullscreen
-	newPage(old,new)     // on a new page
-	didBreakpoint()      // new screen width breakpoint
-	elementEvent(e)      // this.element received an 'sargasso' event
-}
-
-registerSargassoClass('MyClass', MyClass)
-
-```
 
 ### Sargasso Object Lifecycle
 
 When the object is instantiated, the supervisor will call the `start()` method of the object.  Beyond responding to scrolling, resize and other responsive events, you will probably want to interact with your element in some way. You should use this hook to set up any element events you need to respond to such as clicking a button, responding to touch events or key presses, etc.
 
+### Defining SubClasses:
+
+Your Sargasso subclasses subscribe to event feeds to be notified of events.
+
 Methods to override as needed
-* constructor(element,options) // subscribe to services
-* start() // set up any interactions and event handlers
-* sleep() // remove any event handlers
+| method | description | notes |
+| --- | --- |
+| constructor(element, options) | subscribe to services | options ```{
+	watchDOM: [true:false],
+	watchScroll: [true:false],
+	watchResize: [true:false],
+	watchOrientation: [true:false],
+	watchViewport: [true:false]
+}``` |
+| start() | set up any interactions and event handlers |
+| sleep() | remove any event handlers |
+| DOMChanged() | called if 'watchDOM: true' when DOM changes
+| didScroll() | called if 'watchScroll: true' when scroll occurs
+| didResize() | called if 'watchResize: true' when resize changes
+| enterViewport() | called if 'watchViewport: true' when element is entering viewport
+| exitViewport() | called if 'watchViewport: true' when element is exiting viewport
+| enterFullscreen()  | called if 'watchOrientation: true' when user rotates phone or if | | | setFullscreen is called
+| exitFullscreen()  | called on exit fullscreen
+| newPage(old,new) | on a new page
+| didBreakpoint() | new screen width breakpoint
+| elementEvent(e) | this.element received an 'sargasso' event
 
 Properties
-* this.element - the element we are controlling
+| property | description |
+| this.element | the element we are controlling |
 
 Utility Methods:
-* this.hasClass('cssclass') 		// returns true if this.element has cssclass
-* this.addClass('cssclass') 		// add cssclass to this.element
-* this.removeClass('cssclass')	// remove cssclass to this.element
-* this.css({})									// set css pairs defined in object on this.element
-* this.scrollTop(newTop)				// get and set the current scroll position
-* this.queueFrame(function)			// queue a function to execute that changes the DOM
+| method | description |
+| ------ | ----------- |
+| this.hasClass('cssclass') | returns true if this.element has cssclass |
+| this.addClass('cssclass') | add cssclass to this.element |
+| this.removeClass('cssclass')  | remove cssclass to this.element |
+| this.css({})  | set css pairs defined in object on this.element |
+| this.scrollTop(newTop) | get and set the current scroll position |
+| this.queueFrame(function) | queue a function to execute that changes the DOM |
 
+You need to let sargasso know about your class:
+```registerSargassoClass('MyClass', MyClass)```
 
 ### Using Animation Frames
 

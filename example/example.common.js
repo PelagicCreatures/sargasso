@@ -1,7 +1,3 @@
-const Sargasso = sargasso.Sargasso
-const registerSargassoClass = sargasso.registerSargassoClass
-const bootSargasso = sargasso.bootSargasso
-
 class myClass extends Sargasso {
 	constructor (element, options = {}) {
 		options.watchViewport = true

@@ -5,8 +5,7 @@ const entry = {
 
 const legacy = {
 	output: {
-		filename: './sargasso.common.js',
-		library: 'sargasso'
+		filename: './sargasso.common.js'
 	},
 	name: 'antique',
 	entry,
@@ -22,7 +21,6 @@ const legacy = {
 					['@babel/preset-env']
 				]
 			}
-
 		}]
 	}
 }

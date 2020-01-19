@@ -1,9 +1,9 @@
 import {
-	sargasso
+	Sargasso, registerSargassoClass, bootSargasso
 }
 	from '../index.js'
 
-class myClass extends sargasso.Sargasso {
+class myClass extends Sargasso {
 	constructor (element, options = {}) {
 		options.watchViewport = true
 		super(element, options)
@@ -41,9 +41,9 @@ class myClass extends sargasso.Sargasso {
 	}
 }
 
-sargasso.registerSargassoClass('myClass', myClass)
+registerSargassoClass('myClass', myClass)
 
-const loadPageHandler = sargasso.bootSargasso({
+const loadPageHandler = bootSargasso({
 	hijax: {
 		onError: (level, message) => {
 			alert('hijax error: ' + message)
