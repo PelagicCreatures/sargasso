@@ -59,7 +59,7 @@ The bundle exposes `sargasso` as a global so you can call the framework
 * sargasso.bootSargasso
 
 ```
-<script src="/path/to/dist/sargasso.js">
+<script src="/path/to/dist/sargasso.common.js">
 <script>
 	// set options
 	let options = {
@@ -69,17 +69,17 @@ The bundle exposes `sargasso` as a global so you can call the framework
 	}
 
 	// boot supervisors and HIJAX loader
-	let loadPageHandler = sargasso.bootSargasso(options)
-	class MyClass extends sargasso.Sargasso {}
+	window.loadPageHandler = sargasso.bootSargasso(options)
 
 	// define a custom class and register the classname
+	class MyClass extends sargasso.Sargasso {}
 	sargasso.registerSargassoClass('MyClass',MyClass)
 </script>
 ```
 
 You can also use this cdn if you want:
 ```
-<script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.common.js"></script>
 ```
 
 ### Adding Your Sargasso class to an HTML element
@@ -224,7 +224,7 @@ The worker code does the work when it receives an onmessage event
 
 e.data contains the params for our worker
 
-A web worker could be used by many sargasso instances so e.data.uid is reserved for the id on the instance that is invoking and the worker and should always hand uid back in the postMessage events it sends back to the sargasso object.
+This web worker, once installed, could be used by many instances so sargasso sets e.data.uid to the id on the instance that is invoking the worker which we need to pass back in the postMessage so we know who is who.
 
 ```
 class MySubClass extends Sargasso {

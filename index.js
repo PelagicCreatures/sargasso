@@ -3,41 +3,41 @@
 
 	Simple, Fast, Reactive, supervised Javascript controllers for html elements.
 
-	* @author Michael Rhodes (except where noted)
-	* @license MIT
-	* Made in Barbados 🇧🇧
+	@author Michael Rhodes (except where noted)
+	@license MIT
+	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
 
 	*/
 
 import {
 	registerSargassoClass, Sargasso
 }
-	from './lib/Sargasso'
+	from './lib/Sargasso.js'
 
 import {
 	SargassoSupervisor
 }
-	from './lib/SargassoSupervisor'
+	from './lib/SargassoSupervisor.js'
 
 import {
 	Breakpoints, materialBreakpoints
 }
-	from './lib/Breakpoints'
+	from './lib/Breakpoints.js'
 
 import {
 	HijaxLoader
 }
-	from './lib/HijaxLoader'
+	from './lib/HijaxLoader.js'
 
 import {
 	LazyBackground
 }
-	from './lib/LazyBackground'
+	from './lib/LazyBackground.js'
 
 import {
 	startServices
 }
-	from './lib/Services'
+	from './lib/Services.js'
 
 let loadPage
 

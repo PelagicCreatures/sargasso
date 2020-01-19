@@ -11,6 +11,7 @@ pids
 
 # Dependency directories
 node_modules/
+modularize/
 
 .npm
 

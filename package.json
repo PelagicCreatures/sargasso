@@ -16,7 +16,9 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "npx webpack"
+		"build": "npx webpack",
+		"rollup": "lodash modularize exports=es include=camelCase,debounce; rollup ./index.js -m -o dist/sargasso.es.js -f es",
+		"rollup-example": "lodash modularize exports=es include=camelCase,debounce; rollup example/example.es.js -f es > example/example-bundle.es.js"
 	},
 	"author": "Michael Rhodes",
 	"license": "MIT",
@@ -24,6 +26,8 @@
 		"@babel/core": "^7.7.7",
 		"@babel/preset-env": "^7.7.7",
 		"babel-loader": "^8.0.6",
+		"babel-preset-env": "^1.7.0",
+		"core-js": "^3.6.4",
 		"eslint": "^6.8.0",
 		"eslint-config-standard": "^14.1.0",
 		"eslint-plugin-import": "^2.19.1",

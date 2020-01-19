@@ -1,25 +1,36 @@
-const path = require('path')
+const webpack = require('webpack')
+const entry = {
+	main: './index.js'
+}
 
-module.exports = {
-	mode: 'development',
-	entry: ['./index.js'],
+const legacy = {
 	output: {
-		filename: 'sargasso.js',
-		path: path.resolve(__dirname, 'dist'),
+		filename: './sargasso.common.js',
 		library: 'sargasso'
 	},
-	watchOptions: {
-		poll: 1000 // Check for changes every second
-	},
-	target: 'web',
+	name: 'antique',
+	entry,
+	mode: 'development',
+	devtool: 'source-map',
+	plugins: [
+		new webpack.ProvidePlugin({
+			Cookies: 'js-cookie/src/js.cookie.js'
+		})
+	],
 	module: {
+
 		rules: [{
 			test: /\.js$/,
 			loader: 'babel-loader',
-			exclude: /(node_modules|bower_components)/,
-			query: {
-				presets: ['@babel/preset-env']
+			exclude: /(node_modules)/,
+			options: {
+				presets: [
+					['@babel/preset-env']
+				]
 			}
+
 		}]
 	}
 }
+
+module.exports = [legacy]

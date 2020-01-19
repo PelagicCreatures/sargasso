@@ -1,4 +1,9 @@
-class myClass extends sargasso.Sargasso {
+import {
+	Sargasso, registerSargassoClass, bootSargasso
+}
+	from '../index.js'
+
+class myClass extends Sargasso {
 	constructor (element, options = {}) {
 		options.watchViewport = true
 		super(element, options)
@@ -17,7 +22,7 @@ class myClass extends sargasso.Sargasso {
 
 	offLoadTask () {
 		// create the worker. managed by sargasso
-		this.workerStart('myworkId', '/example/test-worker.js')
+		this.workerStart('myworkId', '/test-worker.js')
 
 		// make the worker do work
 		this.workerPostMessage('myworkId', {
@@ -36,9 +41,9 @@ class myClass extends sargasso.Sargasso {
 	}
 }
 
-sargasso.registerSargassoClass('myClass', myClass)
+registerSargassoClass('myClass', myClass)
 
-const loadPageHandler = sargasso.bootSargasso({
+const loadPageHandler = bootSargasso({
 	hijax: {
 		onError: (level, message) => {
 			alert('hijax error: ' + message)
@@ -50,3 +55,7 @@ const loadPageHandler = sargasso.bootSargasso({
 	breakpoints: {},
 	scrollElement: document.getElementById('scroll-wrapper')
 })
+
+export {
+	loadPageHandler
+}
