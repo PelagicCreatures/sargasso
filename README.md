@@ -78,7 +78,7 @@ Sargasso watches the DOM for any elements tagged with the `data-sargasso-class` 
 You can also defer the instantiation using the lazy method by tagging it with `data-lazy-sargasso-class` instead of `data-sargasso-class` which will only start up the class when the element is visible in the viewport
 
 ### HIJAX
-Sargasso automatically captures `<a href="..">` tags and calls the LoadPageHandler instead of letting the browser load pages. You can make a link be ignored by hijax by setting the '<a href=".." data-no-hijax>'. Offsite links and links with targets are automatically ignored. bootSargasso also returns the function `LoadPageHandler(href)`. You must call this to load a new page programatically.
+Sargasso automatically captures `<a href="..">` tags and calls the LoadPageHandler instead of letting the browser load pages. You can make a link be ignored by hijax by setting the `<a href=".." data-no-hijax>`. Offsite links and links with targets are automatically ignored. bootSargasso also returns the function `LoadPageHandler(href)`. You must call this to load a new page programatically.
 
 EG. instead of `location.href= '/home'`, use `LoadPageHandler('/home')`
 
@@ -120,7 +120,8 @@ When the object is instantiated, the supervisor will call the `start()` method o
 
 Your Sargasso subclasses subscribe to event feeds to be notified of events.
 
-Methods to override as needed
+Methods to override as needed:
+
 | method | description | notes |
 | --- | --- |
 | constructor(element, options) | subscribe to services | options ```{
@@ -144,10 +145,13 @@ Methods to override as needed
 | elementEvent(e) | this.element received an 'sargasso' event
 
 Properties
+
+| ------ | ----------- |
 | property | description |
 | this.element | the element we are controlling |
 
 Utility Methods:
+
 | method | description |
 | ------ | ----------- |
 | this.hasClass('cssclass') | returns true if this.element has cssclass |
