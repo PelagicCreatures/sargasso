@@ -6,7 +6,7 @@
 
 HTML elements sometimes need a nervous system to see and respond to what's going on around them - Sargasso element controllers are fully aware of their environment.
 
-Events such as Document (DOM) insertions and deletions, HIJAX Page load, Scrolling, Resizing, Orientation and messages from fully Managed Web Workers are passed to Sargasso controllers allowing them to efficiently implement any behavior they need to perform.
+Events such as Document (DOM) insertions and deletions, HIJAX Page load, Scrolling, Resizing, Orientation and messages from Managed Web Workers are passed to Sargasso controllers allowing them to efficiently implement any behavior they need to perform.
 
 ```
 @author Michael Rhodes (except where noted)
@@ -150,7 +150,12 @@ registerSargassoClass('MyClass', MyClass)
 
 ### Sargasso Object Lifecycle
 
-When the object is created the supervisor will call the `start()`` method of the object. You should use this hook to set up any element events you need to respond to such as clicking a button or key presses. Beyond responding to scrolling, resize and other responsive events, you will probably want to interact with your element in some way.
+When the object is instantiated, the supervisor will call the `start()` method of the object.  Beyond responding to scrolling, resize and other responsive events, you will probably want to interact with your element in some way. You should use this hook to set up any element events you need to respond to such as clicking a button, responding to touch events or key presses, etc.
+
+Methods to override as needed
+* constructor(element,options) // subscribe to services
+* start() // set up any interactions and event handlers
+* sleep() // remove any event handlers
 
 Properties
 * this.element - the element we are controlling
@@ -159,17 +164,21 @@ Utility Methods:
 * this.hasClass('cssclass') 		// returns true if this.element has cssclass
 * this.addClass('cssclass') 		// add cssclass to this.element
 * this.removeClass('cssclass')	// remove cssclass to this.element
+* this.css({})									// set css pairs defined in object on this.element
+* this.scrollTop(newTop)				// get and set the current scroll position
 * this.queueFrame(function)			// queue a function to execute that changes the DOM
 
-Example Button Handler:
+
+### Using Animation Frames
+
+To avoid any chaotic repaints you should only make DOM changes inside animation frames - don't do any long processes in the responsive callbacks or things might bog down the browser UI.
 
 ```
 class MyButtonClass extends Sargasso {
 
 	// listen for click
 	start() {
-		super.start()
-
+		super.start() // important!
 		this.clicker = (e) => {
 			this.clicked()
 		}
@@ -179,15 +188,15 @@ class MyButtonClass extends Sargasso {
 	// cleanup listener
 	sleep() {
 		this.element.removeEventListener('click', this.clicker)
-		super.sleep()
+		super.sleep() // important!
 	}
 
 	// use an animation frame to mutate the DOM
 	clicked() {
-		let frame = () {
+		let frame = () { // set up a DOM mutation
 			this.addClass('clicked')
 		}
-		this.queueFrame(frame)
+		this.queueFrame(frame) // schedule it
 	}
 }
 
@@ -200,9 +209,6 @@ Then in HTML:
 <button data-sargasso-class="MyButtonClass">Click me and I'll turn red!</button>
 ```
 
-### Using Animation Frames
-
-Don't do any long processes in the responsive callbacks or things might bog down the browser UI. To avoid any chaotic repaints you should only make DOM changes inside animation frames - see a lazy loading example below. You should offload any heavy weight processing to a web worker.
 
 ```
 class MyClass extends Sargasso {
@@ -225,17 +231,13 @@ registerSargassoClass('MyClass', MyClass)
 ```
 
 ### Using managed Web Workers
+You should offload compute heavy tasks to a new thread when possible.
 
-Offload compute heavy tasks to a new thread and listen for result
+Sargasso controllers have build in managed Web Workers that can be defined in external scripts or inline code blobs simplifying the management of running workers.
 
-Pass in a url of a web worker js file or create an inline web worker
-from string of raw code.
+The worker code runs when it receives an onmessage event
 
-The worker code does the work when it receives an onmessage event
-
-e.data contains the params for our worker
-
-This web worker, once installed, could be used by many instances so sargasso sets e.data.uid to the id on the instance that is invoking the worker which we need to pass back in the postMessage so we know who is who.
+A web worker, once installed, could be used by many instances so sargasso sets e.data.uid to the id on the instance that is invoking the worker which we need to pass back in the postMessage so we know who is who.
 
 ```
 class MySubClass extends Sargasso {
@@ -245,29 +247,34 @@ class MySubClass extends Sargasso {
 	someMethod() {
 
 		/*
-			myWorker can be inline code or the url of a worker script to download
+			myWorker can be the url of a worker script or
+			inline code as in this example
 		*/
 
-		let myWorker = `onmessage = function (e) {
+		let pointlessMath = `onmessage = function (e) {
 			const baseNumber = e.data.power
 			let result = 0
 			for (var i = Math.pow(baseNumber, 7); i >= 0; i--) {
 				result += Math.atan(i) * Math.tan(i)
 			};
-			postMessage({ uid: e.data.uid, result: 'Done doing pointless math: ' + result })
+			postMessage({
+				uid: e.data.uid, // Important! always pass this back in the message
+				result: 'Done doing pointless math: ' + result
+			})
 		}`
 
 		// create the worker to be managed by sargasso and give it an id
-		this.workerStart('myworkId', myWorker)
-
+		// the id can be unique to your task or shared by many sargasso
+		// controller
+		this.workerStart('pointlessMath', pointlessMath)
 
 		let data = { power: 12 }
-		this.workerPostMessage('myworkId', data) // send message to the worker
+		this.workerPostMessage('pointlessMath', data) // send message to the worker
 	}
 
 	// listen for worker result
 	workerOnMessage (id, e) {
-		if (id === 'myworkId') {
+		if (id === 'pointlessMath') {
 			const frame = () => {
 				this.element.innerHTML = e.data
 			}
@@ -278,9 +285,9 @@ class MySubClass extends Sargasso {
 }
 ```
 
-
 ### Viewing the Test Page in the example directory
-To use Hijax you have to serve the files (window.popstate can't deal with file://) so run SimpleHTTPServer in the project example directory to see demo page
+
+To use Hijax you have to serve the files (window.popstate can't deal with file://...) so run SimpleHTTPServer in the project example directory to see demo page
 ```
 python -m localhost.py
 ```
