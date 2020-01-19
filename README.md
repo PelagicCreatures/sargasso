@@ -137,6 +137,7 @@ Your Sargasso subclasses subscribe to event feeds to be notified of events.
 | newPage(old, new) | on a new page |
 | didBreakpoint() | new screen width breakpoint |
 | elementEvent(e) | this.element received an 'sargasso' event |
+| workerOnMessage (id, e) | id is the worker sending the message. Any payload from the worker `postMessage` is in e.data.xxx as defined by the worker |
 
 **Properties**
 
@@ -148,12 +149,13 @@ Your Sargasso subclasses subscribe to event feeds to be notified of events.
 
 | method | description |
 | ------ | ----------- |
-| this.hasClass('cssclass') | returns true if this.element has cssclass |
-| this.addClass('cssclass') | add cssclass to this.element |
-| this.removeClass('cssclass')  | remove cssclass to this.element |
-| this.css({})  | set css pairs defined in object on this.element |
-| this.scrollTop(newTop) | get and set the current scroll position |
-| this.queueFrame(function) | queue a function to execute that changes the DOM |
+| hasClass('cssclass') | returns true if this.element has cssclass |
+| addClass('cssclass') | add cssclass to this.element |
+| removeClass('cssclass')  | remove cssclass to this.element |
+| css({})  | set css pairs defined in object on this.element |
+| scrollTop(newTop) | get and set the current scroll position |
+| queueFrame(function) | queue a function to execute that changes the DOM |
+| workerStart(id, codeOrURL) | start a web worker with id. Ignored if worker id already installed (see lib/LazyBackground.js for a shared worker example)|
 
 You need to let sargasso know about your class:
 ```registerSargassoClass('MyClass', MyClass)```
