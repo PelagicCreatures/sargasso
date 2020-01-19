@@ -122,32 +122,28 @@ Your Sargasso subclasses subscribe to event feeds to be notified of events.
 
 Methods to override as needed:
 
-| method | description | notes |
-| --- | --- |
-| constructor(element, options) | subscribe to services | options ```{
-	watchDOM: [true:false],
-	watchScroll: [true:false],
-	watchResize: [true:false],
-	watchOrientation: [true:false],
-	watchViewport: [true:false]
-}``` |
+| method | description |
+| ------ | ----------- |
+| constructor(element, options = {}) | subscribe to services by setting options.watchDOM, watchScroll, watchResize, watchOrientation, watchViewport to true |
 | start() | set up any interactions and event handlers |
 | sleep() | remove any event handlers |
-| DOMChanged() | called if 'watchDOM: true' when DOM changes
-| didScroll() | called if 'watchScroll: true' when scroll occurs
-| didResize() | called if 'watchResize: true' when resize changes
-| enterViewport() | called if 'watchViewport: true' when element is entering viewport
-| exitViewport() | called if 'watchViewport: true' when element is exiting viewport
-| enterFullscreen()  | called if 'watchOrientation: true' when user rotates phone or if | | | setFullscreen is called
-| exitFullscreen()  | called on exit fullscreen
-| newPage(old,new) | on a new page
-| didBreakpoint() | new screen width breakpoint
-| elementEvent(e) | this.element received an 'sargasso' event
+| DOMChanged() | called if options 'watchDOM: true' when DOM changes |
+| didScroll() | called if options 'watchScroll: true' when scroll occurs |
+| didResize() | called if options 'watchResize: true' when resize changes |
+| enterViewport() | called if options 'watchViewport: true' when element is entering viewport |
+| exitViewport() | called if options 'watchViewport: true' when element is exiting viewport |
+| enterFullscreen()  | called if options 'watchOrientation: true' when user rotates phone or if setFullscreen is called |
+| exitFullscreen()  | called on exit fullscreen |
+| newPage(old, new) | on a new page |
+| didBreakpoint() | new screen width breakpoint |
+| elementEvent(e) | this.element received an 'sargasso' event |
+
+Constructor options: all default to false so only set the ones you need
 
 Properties
 
-| ------ | ----------- |
 | property | description |
+| ------ | ----------- |
 | this.element | the element we are controlling |
 
 Utility Methods:
