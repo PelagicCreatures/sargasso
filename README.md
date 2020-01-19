@@ -124,7 +124,7 @@ Methods to override as needed:
 
 | method | description |
 | ------ | ----------- |
-| constructor(element, options = {}) | subscribe to services by setting options.watchDOM, watchScroll, watchResize, watchOrientation, watchViewport to true |
+| constructor(element, options = {}) | subscribe to services by setting options properties. All default to false so only set the ones you need `watchDOM`, `watchScroll`, `watchResize`, `watchOrientation`, `watchViewport` {xxx:true} |
 | start() | set up any interactions and event handlers |
 | sleep() | remove any event handlers |
 | DOMChanged() | called if options 'watchDOM: true' when DOM changes |
@@ -137,8 +137,6 @@ Methods to override as needed:
 | newPage(old, new) | on a new page |
 | didBreakpoint() | new screen width breakpoint |
 | elementEvent(e) | this.element received an 'sargasso' event |
-
-Constructor options: all default to false so only set the ones you need
 
 Properties
 
