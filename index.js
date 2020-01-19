@@ -62,8 +62,12 @@ const bootSargasso = (options = {}) => {
 	return loadPage
 }
 
+const sargasso = {
+	Sargasso: Sargasso,
+	registerSargassoClass: registerSargassoClass,
+	bootSargasso: bootSargasso
+}
+
 export {
-	Sargasso,
-	registerSargassoClass,
-	bootSargasso
+	sargasso
 }

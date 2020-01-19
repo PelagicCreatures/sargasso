@@ -155,68 +155,6 @@ var symbolProto = Symbol ? Symbol.prototype : undefined,
     symbolToString = symbolProto ? symbolProto.toString : undefined;
 
 /**
-	Utility routines for Sargasso classes
-
-	@author Michael Rhodes (except where noted)
-	@license MIT
-	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
-**/
-
-const _hasClass = (element, cssClass) => {
-	const className = element.className || '';
-	const classes = className.split(/\s+/);
-	return classes.indexOf(cssClass) !== -1
-};
-
-const _addClass = (element, cssClass) => {
-	const className = element.className || '';
-	const classes = className.split(/\s+/);
-	if (classes.indexOf(cssClass) === -1) {
-		classes.push(cssClass);
-		element.className = classes.join(' ');
-	}
-};
-
-const _removeClass = (element, cssClass) => {
-	const className = element.className || '';
-	const classes = className.split(/\s+/);
-	if (classes.indexOf(cssClass) !== -1) {
-		classes.splice(classes.indexOf(cssClass), 1);
-		element.className = classes.join(' ');
-	}
-};
-
-const _isVisible = (element) => {
-	return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length)
-};
-
-const _inViewPort = (element, container = window) => {
-	const rect = element.getBoundingClientRect();
-	const visible = _isVisible(element);
-	const aboveTheTop = (rect.bottom < 0);
-	let belowTheFold;
-
-	if (container.self === window) {
-		belowTheFold = (rect.top > (window.innerHeight || document.documentElement.clientHeight));
-	} else {
-		belowTheFold = (rect.top > container.clientHeight);
-	}
-
-	// console.log('_inViewPort', visible, belowTheFold, aboveTheTop)
-
-	return (visible && !belowTheFold && !aboveTheTop)
-};
-
-const elementTools = {
-	hasClass: _hasClass,
-	addClass: _addClass,
-	removeClass: _removeClass,
-	isVisible: _isVisible,
-	inViewPort: _inViewPort
-	// setCSS: _css
-};
-
-/**
  * Checks if `value` is the
  * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
  * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
@@ -521,6 +459,218 @@ function debounce(func, wait, options) {
   debounced.flush = flush;
   return debounced;
 }
+
+// does not play well with rollup yet. TODO: revisit once js-cookie ES out of beta
+let Cookies
+
+/*!
+ * JavaScript Cookie v2.2.1
+ * https://github.com/js-cookie/js-cookie
+ *
+ * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
+ * Released under the MIT license
+ */
+;
+(function (factory) {
+	Cookies = factory();
+}(function () {
+	function extend () {
+		var i = 0;
+		var result = {};
+		for (; i < arguments.length; i++) {
+			var attributes = arguments[i];
+			for (var key in attributes) {
+				result[key] = attributes[key];
+			}
+		}
+		return result
+	}
+
+	function decode (s) {
+		return s.replace(/(%[0-9A-Z]{2})+/g, decodeURIComponent)
+	}
+
+	function init (converter) {
+		function api () {}
+
+		function set (key, value, attributes) {
+			if (typeof document === 'undefined') {
+				return
+			}
+
+			attributes = extend({
+				path: '/'
+			}, api.defaults, attributes);
+
+			if (typeof attributes.expires === 'number') {
+				attributes.expires = new Date(new Date() * 1 + attributes.expires * 864e+5);
+			}
+
+			// We're using "expires" because "max-age" is not supported by IE
+			attributes.expires = attributes.expires ? attributes.expires.toUTCString() : '';
+
+			try {
+				var result = JSON.stringify(value);
+				if (/^[\{\[]/.test(result)) {
+					value = result;
+				}
+			} catch (e) {}
+
+			value = converter.write ? converter.write(value, key) : encodeURIComponent(String(value))
+				.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
+
+			key = encodeURIComponent(String(key))
+				.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent)
+				.replace(/[\(\)]/g, escape);
+
+			var stringifiedAttributes = '';
+			for (var attributeName in attributes) {
+				if (!attributes[attributeName]) {
+					continue
+				}
+				stringifiedAttributes += '; ' + attributeName;
+				if (attributes[attributeName] === true) {
+					continue
+				}
+
+				// Considers RFC 6265 section 5.2:
+				// ...
+				// 3.  If the remaining unparsed-attributes contains a %x3B (";")
+				//     character:
+				// Consume the characters of the unparsed-attributes up to,
+				// not including, the first %x3B (";") character.
+				// ...
+				stringifiedAttributes += '=' + attributes[attributeName].split(';')[0];
+			}
+
+			return (document.cookie = key + '=' + value + stringifiedAttributes)
+		}
+
+		function get (key, json) {
+			if (typeof document === 'undefined') {
+				return
+			}
+
+			var jar = {};
+			// To prevent the for loop in the first place assign an empty array
+			// in case there are no cookies at all.
+			var cookies = document.cookie ? document.cookie.split('; ') : [];
+			var i = 0;
+
+			for (; i < cookies.length; i++) {
+				var parts = cookies[i].split('=');
+				var cookie = parts.slice(1).join('=');
+
+				if (!json && cookie.charAt(0) === '"') {
+					cookie = cookie.slice(1, -1);
+				}
+
+				try {
+					var name = decode(parts[0]);
+					cookie = (converter.read || converter)(cookie, name) ||
+						decode(cookie);
+
+					if (json) {
+						try {
+							cookie = JSON.parse(cookie);
+						} catch (e) {}
+					}
+
+					jar[name] = cookie;
+
+					if (key === name) {
+						break
+					}
+				} catch (e) {}
+			}
+
+			return key ? jar[key] : jar
+		}
+
+		api.set = set;
+		api.get = function (key) {
+			return get(key, false /* read as raw */)
+		};
+		api.getJSON = function (key) {
+			return get(key, true /* read as json */)
+		};
+		api.remove = function (key, attributes) {
+			set(key, '', extend(attributes, {
+				expires: -1
+			}));
+		};
+
+		api.defaults = {};
+
+		api.withConverter = init;
+
+		return api
+	}
+
+	return init(function () {})
+}));
+
+/**
+	Utility routines for Sargasso classes
+
+	@author Michael Rhodes (except where noted)
+	@license MIT
+	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+**/
+
+const _hasClass = (element, cssClass) => {
+	const className = element.className || '';
+	const classes = className.split(/\s+/);
+	return classes.indexOf(cssClass) !== -1
+};
+
+const _addClass = (element, cssClass) => {
+	const className = element.className || '';
+	const classes = className.split(/\s+/);
+	if (classes.indexOf(cssClass) === -1) {
+		classes.push(cssClass);
+		element.className = classes.join(' ');
+	}
+};
+
+const _removeClass = (element, cssClass) => {
+	const className = element.className || '';
+	const classes = className.split(/\s+/);
+	if (classes.indexOf(cssClass) !== -1) {
+		classes.splice(classes.indexOf(cssClass), 1);
+		element.className = classes.join(' ');
+	}
+};
+
+const _isVisible = (element) => {
+	return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length)
+};
+
+const _inViewPort = (element, container = window) => {
+	const rect = element.getBoundingClientRect();
+	const visible = _isVisible(element);
+	const aboveTheTop = (rect.bottom < 0);
+	let belowTheFold;
+
+	if (container.self === window) {
+		belowTheFold = (rect.top > (window.innerHeight || document.documentElement.clientHeight));
+	} else {
+		belowTheFold = (rect.top > container.clientHeight);
+	}
+
+	// console.log('_inViewPort', visible, belowTheFold, aboveTheTop)
+
+	return (visible && !belowTheFold && !aboveTheTop)
+};
+
+const elementTools = {
+	hasClass: _hasClass,
+	addClass: _addClass,
+	removeClass: _removeClass,
+	isVisible: _isVisible,
+	inViewPort: _inViewPort
+	// setCSS: _css
+};
 
 /**
 	Shared event observers used by Sargasso classes.
@@ -1192,6 +1342,10 @@ class Sargasso {
 		return elementTools.isVisible(this.element)
 	}
 
+	scrollTop (newTop) {
+		return theScrollWatcher.scrollTop(newTop)
+	}
+
 	/*
 		Worker management
 
@@ -1393,170 +1547,6 @@ class SargassoSupervisor extends Sargasso {
 }
 
 registerSargassoClass('SargassoSupervisor', SargassoSupervisor);
-
-/*!
- * JavaScript Cookie v2.2.1
- * https://github.com/js-cookie/js-cookie
- *
- * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
- * Released under the MIT license
- */
-(function (factory) {
-	var registeredInModuleLoader;
-	if (typeof define === 'function' && define.amd) {
-		define(factory);
-		registeredInModuleLoader = true;
-	}
-	if (typeof exports === 'object') {
-		module.exports = factory();
-		registeredInModuleLoader = true;
-	}
-	if (!registeredInModuleLoader) {
-		var OldCookies = window.Cookies;
-		var api = window.Cookies = factory();
-		api.noConflict = function () {
-			window.Cookies = OldCookies;
-			return api;
-		};
-	}
-}(function () {
-	function extend () {
-		var i = 0;
-		var result = {};
-		for (; i < arguments.length; i++) {
-			var attributes = arguments[ i ];
-			for (var key in attributes) {
-				result[key] = attributes[key];
-			}
-		}
-		return result;
-	}
-
-	function decode (s) {
-		return s.replace(/(%[0-9A-Z]{2})+/g, decodeURIComponent);
-	}
-
-	function init (converter) {
-		function api() {}
-
-		function set (key, value, attributes) {
-			if (typeof document === 'undefined') {
-				return;
-			}
-
-			attributes = extend({
-				path: '/'
-			}, api.defaults, attributes);
-
-			if (typeof attributes.expires === 'number') {
-				attributes.expires = new Date(new Date() * 1 + attributes.expires * 864e+5);
-			}
-
-			// We're using "expires" because "max-age" is not supported by IE
-			attributes.expires = attributes.expires ? attributes.expires.toUTCString() : '';
-
-			try {
-				var result = JSON.stringify(value);
-				if (/^[\{\[]/.test(result)) {
-					value = result;
-				}
-			} catch (e) {}
-
-			value = converter.write ?
-				converter.write(value, key) :
-				encodeURIComponent(String(value))
-					.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
-
-			key = encodeURIComponent(String(key))
-				.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent)
-				.replace(/[\(\)]/g, escape);
-
-			var stringifiedAttributes = '';
-			for (var attributeName in attributes) {
-				if (!attributes[attributeName]) {
-					continue;
-				}
-				stringifiedAttributes += '; ' + attributeName;
-				if (attributes[attributeName] === true) {
-					continue;
-				}
-
-				// Considers RFC 6265 section 5.2:
-				// ...
-				// 3.  If the remaining unparsed-attributes contains a %x3B (";")
-				//     character:
-				// Consume the characters of the unparsed-attributes up to,
-				// not including, the first %x3B (";") character.
-				// ...
-				stringifiedAttributes += '=' + attributes[attributeName].split(';')[0];
-			}
-
-			return (document.cookie = key + '=' + value + stringifiedAttributes);
-		}
-
-		function get (key, json) {
-			if (typeof document === 'undefined') {
-				return;
-			}
-
-			var jar = {};
-			// To prevent the for loop in the first place assign an empty array
-			// in case there are no cookies at all.
-			var cookies = document.cookie ? document.cookie.split('; ') : [];
-			var i = 0;
-
-			for (; i < cookies.length; i++) {
-				var parts = cookies[i].split('=');
-				var cookie = parts.slice(1).join('=');
-
-				if (!json && cookie.charAt(0) === '"') {
-					cookie = cookie.slice(1, -1);
-				}
-
-				try {
-					var name = decode(parts[0]);
-					cookie = (converter.read || converter)(cookie, name) ||
-						decode(cookie);
-
-					if (json) {
-						try {
-							cookie = JSON.parse(cookie);
-						} catch (e) {}
-					}
-
-					jar[name] = cookie;
-
-					if (key === name) {
-						break;
-					}
-				} catch (e) {}
-			}
-
-			return key ? jar[key] : jar;
-		}
-
-		api.set = set;
-		api.get = function (key) {
-			return get(key, false /* read as raw */);
-		};
-		api.getJSON = function (key) {
-			return get(key, true /* read as json */);
-		};
-		api.remove = function (key, attributes) {
-			set(key, '', extend(attributes, {
-				expires: -1
-			}));
-		};
-
-		api.defaults = {};
-
-		api.withConverter = init;
-
-		return api;
-	}
-
-	return init(function () {});
-}));
 
 /**
 	Breakpoints
@@ -1831,7 +1821,7 @@ class HijaxLoader extends Sargasso {
 				const loc = xhr.getResponseHeader('Sargasso-Location');
 				this.setPage(loc);
 			} else if (xhr.status === 200) {
-				theScrollWatcher.scrollTop(0);
+				this.scrollTop(0);
 				this.mergePage(xhr.responseText);
 				const oldPage = this.currentPage;
 				const frame = () => {
@@ -2010,7 +2000,13 @@ const bootSargasso = (options = {}) => {
 	return loadPage
 };
 
-class myClass extends Sargasso {
+const sargasso = {
+	Sargasso: Sargasso,
+	registerSargassoClass: registerSargassoClass,
+	bootSargasso: bootSargasso
+};
+
+class myClass extends sargasso.Sargasso {
 	constructor (element, options = {}) {
 		options.watchViewport = true;
 		super(element, options);
@@ -2048,9 +2044,9 @@ class myClass extends Sargasso {
 	}
 }
 
-registerSargassoClass('myClass', myClass);
+sargasso.registerSargassoClass('myClass', myClass);
 
-const loadPageHandler = bootSargasso({
+const loadPageHandler = sargasso.bootSargasso({
 	hijax: {
 		onError: (level, message) => {
 			alert('hijax error: ' + message);

@@ -162,12 +162,11 @@ var bootSargasso = function bootSargasso() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(Cookies) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Breakpoints", function() { return Breakpoints; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Breakpoints", function() { return Breakpoints; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "materialBreakpoints", function() { return materialBreakpoints; });
 /* harmony import */ var _Sargasso_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Sargasso.js */ "./lib/Sargasso.js");
 /* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils.js */ "./lib/utils.js");
-/* harmony import */ var _node_modules_js_cookie_src_js_cookie_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../node_modules/js-cookie/src/js.cookie.js */ "./node_modules/js-cookie/src/js.cookie.js");
-/* harmony import */ var _node_modules_js_cookie_src_js_cookie_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_js_cookie_src_js_cookie_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _dependencies__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./dependencies */ "./lib/dependencies.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -396,7 +395,7 @@ function (_Sargasso) {
   }, {
     key: "getCookie",
     value: function getCookie(key) {
-      return Cookies.get(key);
+      return _dependencies__WEBPACK_IMPORTED_MODULE_2__["Cookies"].get(key);
     }
   }, {
     key: "setCookie",
@@ -406,7 +405,7 @@ function (_Sargasso) {
         domain: this.options.cookieDomain || null,
         expires: expires
       };
-      Cookies.set(key, value, options);
+      _dependencies__WEBPACK_IMPORTED_MODULE_2__["Cookies"].set(key, value, options);
     }
   }, {
     key: "deleteCookie",
@@ -421,7 +420,6 @@ function (_Sargasso) {
 ;
 Object(_Sargasso_js__WEBPACK_IMPORTED_MODULE_0__["registerSargassoClass"])('Breakpoints', Breakpoints);
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! js-cookie/src/js.cookie.js */ "./node_modules/js-cookie/src/js.cookie.js")))
 
 /***/ }),
 
@@ -1564,7 +1562,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "theOrientationWatcher", function() { return theOrientationWatcher; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "theWorkerWatcher", function() { return theWorkerWatcher; });
 /* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils.js */ "./lib/utils.js");
-/* harmony import */ var _modularize_debounce_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../modularize/debounce.js */ "./modularize/debounce.js");
+/* harmony import */ var _dependencies__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./dependencies */ "./lib/dependencies.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
@@ -1713,7 +1711,7 @@ function (_ObserverSubscription) {
 
     _this2 = _possibleConstructorReturn(this, _getPrototypeOf(DOMWatcher).call(this, options)); // debounce - just need to know if a change occured, not every change
 
-    _this2.mutationHandler = Object(_modularize_debounce_js__WEBPACK_IMPORTED_MODULE_1__["default"])(function (mutations, observer) {
+    _this2.mutationHandler = Object(_dependencies__WEBPACK_IMPORTED_MODULE_1__["debounce"])(function (mutations, observer) {
       _this2.observeDOM(mutations, observer);
     }, 100, {
       maxWait: 250
@@ -1863,7 +1861,7 @@ function (_ObserverSubscription3) {
     _classCallCheck(this, ResizeWatcher);
 
     _this4 = _possibleConstructorReturn(this, _getPrototypeOf(ResizeWatcher).call(this, options));
-    _this4.debounce = Object(_modularize_debounce_js__WEBPACK_IMPORTED_MODULE_1__["default"])(function () {
+    _this4.debounce = Object(_dependencies__WEBPACK_IMPORTED_MODULE_1__["debounce"])(function () {
       _this4.watchResize();
     }, 250);
     return _this4;
@@ -1918,7 +1916,7 @@ function (_ObserverSubscription4) {
       _utils_js__WEBPACK_IMPORTED_MODULE_0__["elementTools"].addClass(document.body, 'no-orientation');
     }
 
-    _this5.debounce = Object(_modularize_debounce_js__WEBPACK_IMPORTED_MODULE_1__["default"])(function () {
+    _this5.debounce = Object(_dependencies__WEBPACK_IMPORTED_MODULE_1__["debounce"])(function () {
       _this5.watchOrientation();
     }, 250);
     return _this5;
@@ -2077,114 +2075,194 @@ var startServices = function startServices(options) {
 
 /***/ }),
 
-/***/ "./lib/utils.js":
-/*!**********************!*\
-  !*** ./lib/utils.js ***!
-  \**********************/
-/*! exports provided: elementTools */
+/***/ "./lib/dependencies.js":
+/*!*****************************!*\
+  !*** ./lib/dependencies.js ***!
+  \*****************************/
+/*! exports provided: camelCase, debounce, Cookies */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "elementTools", function() { return elementTools; });
-/* harmony import */ var _modularize_camelCase_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../modularize/camelCase.js */ "./modularize/camelCase.js");
-/**
-	Utility routines for Sargasso classes
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Cookies", function() { return Cookies; });
+/* harmony import */ var _lodash_modularize_camelCase_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./lodash-modularize/camelCase.js */ "./lib/lodash-modularize/camelCase.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "camelCase", function() { return _lodash_modularize_camelCase_js__WEBPACK_IMPORTED_MODULE_0__["default"]; });
 
-	@author Michael Rhodes (except where noted)
-	@license MIT
-	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
-**/
+/* harmony import */ var _lodash_modularize_debounce_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./lodash-modularize/debounce.js */ "./lib/lodash-modularize/debounce.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "debounce", function() { return _lodash_modularize_debounce_js__WEBPACK_IMPORTED_MODULE_1__["default"]; });
 
 
-var _hasClass = function _hasClass(element, cssClass) {
-  var className = element.className || '';
-  var classes = className.split(/\s+/);
-  return classes.indexOf(cssClass) !== -1;
-};
+ // does not play well with rollup yet. TODO: revisit once js-cookie ES out of beta
 
-var _addClass = function _addClass(element, cssClass) {
-  var className = element.className || '';
-  var classes = className.split(/\s+/);
+var Cookies
+/*!
+ * JavaScript Cookie v2.2.1
+ * https://github.com/js-cookie/js-cookie
+ *
+ * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
+ * Released under the MIT license
+ */
+;
 
-  if (classes.indexOf(cssClass) === -1) {
-    classes.push(cssClass);
-    element.className = classes.join(' ');
-  }
-};
+(function (factory) {
+  Cookies = factory();
+})(function () {
+  function extend() {
+    var i = 0;
+    var result = {};
 
-var _removeClass = function _removeClass(element, cssClass) {
-  var className = element.className || '';
-  var classes = className.split(/\s+/);
+    for (; i < arguments.length; i++) {
+      var attributes = arguments[i];
 
-  if (classes.indexOf(cssClass) !== -1) {
-    classes.splice(classes.indexOf(cssClass), 1);
-    element.className = classes.join(' ');
-  }
-};
-
-var _isVisible = function _isVisible(element) {
-  return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length);
-};
-
-var _inViewPort = function _inViewPort(element) {
-  var container = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : window;
-  var rect = element.getBoundingClientRect();
-
-  var visible = _isVisible(element);
-
-  var aboveTheTop = rect.bottom < 0;
-  var belowTheFold;
-
-  if (container.self === window) {
-    belowTheFold = rect.top > (window.innerHeight || document.documentElement.clientHeight);
-  } else {
-    belowTheFold = rect.top > container.clientHeight;
-  } // console.log('_inViewPort', visible, belowTheFold, aboveTheTop)
-
-
-  return visible && !belowTheFold && !aboveTheTop;
-};
-/*
-	element: element to apply to
-	css: JSON object with properties in kebab-case or camelCase (or even in snake_case and seperate words)
-*/
-
-
-var _css = function _css(element, css) {
-  for (var prop in css) {
-    var key = prop;
-
-    if (key.match(/_- /)) {
-      key = Object(_modularize_camelCase_js__WEBPACK_IMPORTED_MODULE_0__["default"])(prop);
+      for (var key in attributes) {
+        result[key] = attributes[key];
+      }
     }
 
-    element.style[key] = css[prop];
+    return result;
   }
-};
 
-var elementTools = {
-  hasClass: _hasClass,
-  addClass: _addClass,
-  removeClass: _removeClass,
-  isVisible: _isVisible,
-  inViewPort: _inViewPort // setCSS: _css
+  function decode(s) {
+    return s.replace(/(%[0-9A-Z]{2})+/g, decodeURIComponent);
+  }
 
-};
+  function init(converter) {
+    function api() {}
+
+    function set(key, value, attributes) {
+      if (typeof document === 'undefined') {
+        return;
+      }
+
+      attributes = extend({
+        path: '/'
+      }, api.defaults, attributes);
+
+      if (typeof attributes.expires === 'number') {
+        attributes.expires = new Date(new Date() * 1 + attributes.expires * 864e+5);
+      } // We're using "expires" because "max-age" is not supported by IE
+
+
+      attributes.expires = attributes.expires ? attributes.expires.toUTCString() : '';
+
+      try {
+        var result = JSON.stringify(value);
+
+        if (/^[\{\[]/.test(result)) {
+          value = result;
+        }
+      } catch (e) {}
+
+      value = converter.write ? converter.write(value, key) : encodeURIComponent(String(value)).replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
+      key = encodeURIComponent(String(key)).replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent).replace(/[\(\)]/g, escape);
+      var stringifiedAttributes = '';
+
+      for (var attributeName in attributes) {
+        if (!attributes[attributeName]) {
+          continue;
+        }
+
+        stringifiedAttributes += '; ' + attributeName;
+
+        if (attributes[attributeName] === true) {
+          continue;
+        } // Considers RFC 6265 section 5.2:
+        // ...
+        // 3.  If the remaining unparsed-attributes contains a %x3B (";")
+        //     character:
+        // Consume the characters of the unparsed-attributes up to,
+        // not including, the first %x3B (";") character.
+        // ...
+
+
+        stringifiedAttributes += '=' + attributes[attributeName].split(';')[0];
+      }
+
+      return document.cookie = key + '=' + value + stringifiedAttributes;
+    }
+
+    function get(key, json) {
+      if (typeof document === 'undefined') {
+        return;
+      }
+
+      var jar = {}; // To prevent the for loop in the first place assign an empty array
+      // in case there are no cookies at all.
+
+      var cookies = document.cookie ? document.cookie.split('; ') : [];
+      var i = 0;
+
+      for (; i < cookies.length; i++) {
+        var parts = cookies[i].split('=');
+        var cookie = parts.slice(1).join('=');
+
+        if (!json && cookie.charAt(0) === '"') {
+          cookie = cookie.slice(1, -1);
+        }
+
+        try {
+          var name = decode(parts[0]);
+          cookie = (converter.read || converter)(cookie, name) || decode(cookie);
+
+          if (json) {
+            try {
+              cookie = JSON.parse(cookie);
+            } catch (e) {}
+          }
+
+          jar[name] = cookie;
+
+          if (key === name) {
+            break;
+          }
+        } catch (e) {}
+      }
+
+      return key ? jar[key] : jar;
+    }
+
+    api.set = set;
+
+    api.get = function (key) {
+      return get(key, false
+      /* read as raw */
+      );
+    };
+
+    api.getJSON = function (key) {
+      return get(key, true
+      /* read as json */
+      );
+    };
+
+    api.remove = function (key, attributes) {
+      set(key, '', extend(attributes, {
+        expires: -1
+      }));
+    };
+
+    api.defaults = {};
+    api.withConverter = init;
+    return api;
+  }
+
+  return init(function () {});
+});
+
 
 
 /***/ }),
 
-/***/ "./modularize/_Symbol.js":
-/*!*******************************!*\
-  !*** ./modularize/_Symbol.js ***!
-  \*******************************/
+/***/ "./lib/lodash-modularize/_Symbol.js":
+/*!******************************************!*\
+  !*** ./lib/lodash-modularize/_Symbol.js ***!
+  \******************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _root_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_root.js */ "./modularize/_root.js");
+/* harmony import */ var _root_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_root.js */ "./lib/lodash-modularize/_root.js");
 
 /** Built-in value references. */
 
@@ -2193,10 +2271,10 @@ var _Symbol = _root_js__WEBPACK_IMPORTED_MODULE_0__["default"].Symbol;
 
 /***/ }),
 
-/***/ "./modularize/_arrayMap.js":
-/*!*********************************!*\
-  !*** ./modularize/_arrayMap.js ***!
-  \*********************************/
+/***/ "./lib/lodash-modularize/_arrayMap.js":
+/*!********************************************!*\
+  !*** ./lib/lodash-modularize/_arrayMap.js ***!
+  \********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2227,10 +2305,10 @@ function arrayMap(array, iteratee) {
 
 /***/ }),
 
-/***/ "./modularize/_arrayReduce.js":
-/*!************************************!*\
-  !*** ./modularize/_arrayReduce.js ***!
-  \************************************/
+/***/ "./lib/lodash-modularize/_arrayReduce.js":
+/*!***********************************************!*\
+  !*** ./lib/lodash-modularize/_arrayReduce.js ***!
+  \***********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2267,10 +2345,10 @@ function arrayReduce(array, iteratee, accumulator, initAccum) {
 
 /***/ }),
 
-/***/ "./modularize/_asciiToArray.js":
-/*!*************************************!*\
-  !*** ./modularize/_asciiToArray.js ***!
-  \*************************************/
+/***/ "./lib/lodash-modularize/_asciiToArray.js":
+/*!************************************************!*\
+  !*** ./lib/lodash-modularize/_asciiToArray.js ***!
+  \************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2291,10 +2369,10 @@ function asciiToArray(string) {
 
 /***/ }),
 
-/***/ "./modularize/_asciiWords.js":
-/*!***********************************!*\
-  !*** ./modularize/_asciiWords.js ***!
-  \***********************************/
+/***/ "./lib/lodash-modularize/_asciiWords.js":
+/*!**********************************************!*\
+  !*** ./lib/lodash-modularize/_asciiWords.js ***!
+  \**********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2318,18 +2396,18 @@ function asciiWords(string) {
 
 /***/ }),
 
-/***/ "./modularize/_baseGetTag.js":
-/*!***********************************!*\
-  !*** ./modularize/_baseGetTag.js ***!
-  \***********************************/
+/***/ "./lib/lodash-modularize/_baseGetTag.js":
+/*!**********************************************!*\
+  !*** ./lib/lodash-modularize/_baseGetTag.js ***!
+  \**********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Symbol_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_Symbol.js */ "./modularize/_Symbol.js");
-/* harmony import */ var _getRawTag_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_getRawTag.js */ "./modularize/_getRawTag.js");
-/* harmony import */ var _objectToString_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./_objectToString.js */ "./modularize/_objectToString.js");
+/* harmony import */ var _Symbol_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_Symbol.js */ "./lib/lodash-modularize/_Symbol.js");
+/* harmony import */ var _getRawTag_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_getRawTag.js */ "./lib/lodash-modularize/_getRawTag.js");
+/* harmony import */ var _objectToString_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./_objectToString.js */ "./lib/lodash-modularize/_objectToString.js");
 
 
 
@@ -2360,10 +2438,10 @@ function baseGetTag(value) {
 
 /***/ }),
 
-/***/ "./modularize/_basePropertyOf.js":
-/*!***************************************!*\
-  !*** ./modularize/_basePropertyOf.js ***!
-  \***************************************/
+/***/ "./lib/lodash-modularize/_basePropertyOf.js":
+/*!**************************************************!*\
+  !*** ./lib/lodash-modularize/_basePropertyOf.js ***!
+  \**************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2386,10 +2464,10 @@ function basePropertyOf(object) {
 
 /***/ }),
 
-/***/ "./modularize/_baseSlice.js":
-/*!**********************************!*\
-  !*** ./modularize/_baseSlice.js ***!
-  \**********************************/
+/***/ "./lib/lodash-modularize/_baseSlice.js":
+/*!*********************************************!*\
+  !*** ./lib/lodash-modularize/_baseSlice.js ***!
+  \*********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2433,19 +2511,19 @@ function baseSlice(array, start, end) {
 
 /***/ }),
 
-/***/ "./modularize/_baseToString.js":
-/*!*************************************!*\
-  !*** ./modularize/_baseToString.js ***!
-  \*************************************/
+/***/ "./lib/lodash-modularize/_baseToString.js":
+/*!************************************************!*\
+  !*** ./lib/lodash-modularize/_baseToString.js ***!
+  \************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Symbol_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_Symbol.js */ "./modularize/_Symbol.js");
-/* harmony import */ var _arrayMap_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_arrayMap.js */ "./modularize/_arrayMap.js");
-/* harmony import */ var _isArray_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./isArray.js */ "./modularize/isArray.js");
-/* harmony import */ var _isSymbol_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./isSymbol.js */ "./modularize/isSymbol.js");
+/* harmony import */ var _Symbol_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_Symbol.js */ "./lib/lodash-modularize/_Symbol.js");
+/* harmony import */ var _arrayMap_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_arrayMap.js */ "./lib/lodash-modularize/_arrayMap.js");
+/* harmony import */ var _isArray_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./isArray.js */ "./lib/lodash-modularize/isArray.js");
+/* harmony import */ var _isSymbol_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./isSymbol.js */ "./lib/lodash-modularize/isSymbol.js");
 
 
 
@@ -2489,16 +2567,16 @@ function baseToString(value) {
 
 /***/ }),
 
-/***/ "./modularize/_castSlice.js":
-/*!**********************************!*\
-  !*** ./modularize/_castSlice.js ***!
-  \**********************************/
+/***/ "./lib/lodash-modularize/_castSlice.js":
+/*!*********************************************!*\
+  !*** ./lib/lodash-modularize/_castSlice.js ***!
+  \*********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _baseSlice_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_baseSlice.js */ "./modularize/_baseSlice.js");
+/* harmony import */ var _baseSlice_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_baseSlice.js */ "./lib/lodash-modularize/_baseSlice.js");
 
 /**
  * Casts `array` to a slice if it's needed.
@@ -2520,19 +2598,19 @@ function castSlice(array, start, end) {
 
 /***/ }),
 
-/***/ "./modularize/_createCaseFirst.js":
-/*!****************************************!*\
-  !*** ./modularize/_createCaseFirst.js ***!
-  \****************************************/
+/***/ "./lib/lodash-modularize/_createCaseFirst.js":
+/*!***************************************************!*\
+  !*** ./lib/lodash-modularize/_createCaseFirst.js ***!
+  \***************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _castSlice_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_castSlice.js */ "./modularize/_castSlice.js");
-/* harmony import */ var _hasUnicode_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_hasUnicode.js */ "./modularize/_hasUnicode.js");
-/* harmony import */ var _stringToArray_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./_stringToArray.js */ "./modularize/_stringToArray.js");
-/* harmony import */ var _toString_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./toString.js */ "./modularize/toString.js");
+/* harmony import */ var _castSlice_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_castSlice.js */ "./lib/lodash-modularize/_castSlice.js");
+/* harmony import */ var _hasUnicode_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_hasUnicode.js */ "./lib/lodash-modularize/_hasUnicode.js");
+/* harmony import */ var _stringToArray_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./_stringToArray.js */ "./lib/lodash-modularize/_stringToArray.js");
+/* harmony import */ var _toString_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./toString.js */ "./lib/lodash-modularize/toString.js");
 
 
 
@@ -2559,18 +2637,18 @@ function createCaseFirst(methodName) {
 
 /***/ }),
 
-/***/ "./modularize/_createCompounder.js":
-/*!*****************************************!*\
-  !*** ./modularize/_createCompounder.js ***!
-  \*****************************************/
+/***/ "./lib/lodash-modularize/_createCompounder.js":
+/*!****************************************************!*\
+  !*** ./lib/lodash-modularize/_createCompounder.js ***!
+  \****************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _arrayReduce_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_arrayReduce.js */ "./modularize/_arrayReduce.js");
-/* harmony import */ var _deburr_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./deburr.js */ "./modularize/deburr.js");
-/* harmony import */ var _words_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./words.js */ "./modularize/words.js");
+/* harmony import */ var _arrayReduce_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_arrayReduce.js */ "./lib/lodash-modularize/_arrayReduce.js");
+/* harmony import */ var _deburr_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./deburr.js */ "./lib/lodash-modularize/deburr.js");
+/* harmony import */ var _words_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./words.js */ "./lib/lodash-modularize/words.js");
 
 
 
@@ -2598,16 +2676,16 @@ function createCompounder(callback) {
 
 /***/ }),
 
-/***/ "./modularize/_deburrLetter.js":
-/*!*************************************!*\
-  !*** ./modularize/_deburrLetter.js ***!
-  \*************************************/
+/***/ "./lib/lodash-modularize/_deburrLetter.js":
+/*!************************************************!*\
+  !*** ./lib/lodash-modularize/_deburrLetter.js ***!
+  \************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _basePropertyOf_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_basePropertyOf.js */ "./modularize/_basePropertyOf.js");
+/* harmony import */ var _basePropertyOf_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_basePropertyOf.js */ "./lib/lodash-modularize/_basePropertyOf.js");
 
 /** Used to map Latin Unicode letters to basic Latin letters. */
 
@@ -2819,10 +2897,10 @@ var deburrLetter = Object(_basePropertyOf_js__WEBPACK_IMPORTED_MODULE_0__["defau
 
 /***/ }),
 
-/***/ "./modularize/_freeGlobal.js":
-/*!***********************************!*\
-  !*** ./modularize/_freeGlobal.js ***!
-  \***********************************/
+/***/ "./lib/lodash-modularize/_freeGlobal.js":
+/*!**********************************************!*\
+  !*** ./lib/lodash-modularize/_freeGlobal.js ***!
+  \**********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2833,20 +2911,20 @@ __webpack_require__.r(__webpack_exports__);
 /** Detect free variable `global` from Node.js. */
 var freeGlobal = (typeof global === "undefined" ? "undefined" : _typeof(global)) == 'object' && global && global.Object === Object && global;
 /* harmony default export */ __webpack_exports__["default"] = (freeGlobal);
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
 
 /***/ }),
 
-/***/ "./modularize/_getRawTag.js":
-/*!**********************************!*\
-  !*** ./modularize/_getRawTag.js ***!
-  \**********************************/
+/***/ "./lib/lodash-modularize/_getRawTag.js":
+/*!*********************************************!*\
+  !*** ./lib/lodash-modularize/_getRawTag.js ***!
+  \*********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Symbol_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_Symbol.js */ "./modularize/_Symbol.js");
+/* harmony import */ var _Symbol_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_Symbol.js */ "./lib/lodash-modularize/_Symbol.js");
 
 /** Used for built-in method references. */
 
@@ -2898,10 +2976,10 @@ function getRawTag(value) {
 
 /***/ }),
 
-/***/ "./modularize/_hasUnicode.js":
-/*!***********************************!*\
-  !*** ./modularize/_hasUnicode.js ***!
-  \***********************************/
+/***/ "./lib/lodash-modularize/_hasUnicode.js":
+/*!**********************************************!*\
+  !*** ./lib/lodash-modularize/_hasUnicode.js ***!
+  \**********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2936,10 +3014,10 @@ function hasUnicode(string) {
 
 /***/ }),
 
-/***/ "./modularize/_hasUnicodeWord.js":
-/*!***************************************!*\
-  !*** ./modularize/_hasUnicodeWord.js ***!
-  \***************************************/
+/***/ "./lib/lodash-modularize/_hasUnicodeWord.js":
+/*!**************************************************!*\
+  !*** ./lib/lodash-modularize/_hasUnicodeWord.js ***!
+  \**************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2963,10 +3041,10 @@ function hasUnicodeWord(string) {
 
 /***/ }),
 
-/***/ "./modularize/_objectToString.js":
-/*!***************************************!*\
-  !*** ./modularize/_objectToString.js ***!
-  \***************************************/
+/***/ "./lib/lodash-modularize/_objectToString.js":
+/*!**************************************************!*\
+  !*** ./lib/lodash-modularize/_objectToString.js ***!
+  \**************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2997,16 +3075,16 @@ function objectToString(value) {
 
 /***/ }),
 
-/***/ "./modularize/_root.js":
-/*!*****************************!*\
-  !*** ./modularize/_root.js ***!
-  \*****************************/
+/***/ "./lib/lodash-modularize/_root.js":
+/*!****************************************!*\
+  !*** ./lib/lodash-modularize/_root.js ***!
+  \****************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _freeGlobal_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_freeGlobal.js */ "./modularize/_freeGlobal.js");
+/* harmony import */ var _freeGlobal_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_freeGlobal.js */ "./lib/lodash-modularize/_freeGlobal.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 
@@ -3020,18 +3098,18 @@ var root = _freeGlobal_js__WEBPACK_IMPORTED_MODULE_0__["default"] || freeSelf ||
 
 /***/ }),
 
-/***/ "./modularize/_stringToArray.js":
-/*!**************************************!*\
-  !*** ./modularize/_stringToArray.js ***!
-  \**************************************/
+/***/ "./lib/lodash-modularize/_stringToArray.js":
+/*!*************************************************!*\
+  !*** ./lib/lodash-modularize/_stringToArray.js ***!
+  \*************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _asciiToArray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_asciiToArray.js */ "./modularize/_asciiToArray.js");
-/* harmony import */ var _hasUnicode_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_hasUnicode.js */ "./modularize/_hasUnicode.js");
-/* harmony import */ var _unicodeToArray_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./_unicodeToArray.js */ "./modularize/_unicodeToArray.js");
+/* harmony import */ var _asciiToArray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_asciiToArray.js */ "./lib/lodash-modularize/_asciiToArray.js");
+/* harmony import */ var _hasUnicode_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_hasUnicode.js */ "./lib/lodash-modularize/_hasUnicode.js");
+/* harmony import */ var _unicodeToArray_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./_unicodeToArray.js */ "./lib/lodash-modularize/_unicodeToArray.js");
 
 
 
@@ -3051,10 +3129,10 @@ function stringToArray(string) {
 
 /***/ }),
 
-/***/ "./modularize/_unicodeToArray.js":
-/*!***************************************!*\
-  !*** ./modularize/_unicodeToArray.js ***!
-  \***************************************/
+/***/ "./lib/lodash-modularize/_unicodeToArray.js":
+/*!**************************************************!*\
+  !*** ./lib/lodash-modularize/_unicodeToArray.js ***!
+  \**************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3103,10 +3181,10 @@ function unicodeToArray(string) {
 
 /***/ }),
 
-/***/ "./modularize/_unicodeWords.js":
-/*!*************************************!*\
-  !*** ./modularize/_unicodeWords.js ***!
-  \*************************************/
+/***/ "./lib/lodash-modularize/_unicodeWords.js":
+/*!************************************************!*\
+  !*** ./lib/lodash-modularize/_unicodeWords.js ***!
+  \************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3175,17 +3253,17 @@ function unicodeWords(string) {
 
 /***/ }),
 
-/***/ "./modularize/camelCase.js":
-/*!*********************************!*\
-  !*** ./modularize/camelCase.js ***!
-  \*********************************/
+/***/ "./lib/lodash-modularize/camelCase.js":
+/*!********************************************!*\
+  !*** ./lib/lodash-modularize/camelCase.js ***!
+  \********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _capitalize_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./capitalize.js */ "./modularize/capitalize.js");
-/* harmony import */ var _createCompounder_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_createCompounder.js */ "./modularize/_createCompounder.js");
+/* harmony import */ var _capitalize_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./capitalize.js */ "./lib/lodash-modularize/capitalize.js");
+/* harmony import */ var _createCompounder_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_createCompounder.js */ "./lib/lodash-modularize/_createCompounder.js");
 /**
  * Lodash (Custom Build) <https://lodash.com/>
  * Build: `lodash modularize exports="es" include="camelCase,debounce"`
@@ -3225,17 +3303,17 @@ var camelCase = Object(_createCompounder_js__WEBPACK_IMPORTED_MODULE_1__["defaul
 
 /***/ }),
 
-/***/ "./modularize/capitalize.js":
-/*!**********************************!*\
-  !*** ./modularize/capitalize.js ***!
-  \**********************************/
+/***/ "./lib/lodash-modularize/capitalize.js":
+/*!*********************************************!*\
+  !*** ./lib/lodash-modularize/capitalize.js ***!
+  \*********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _toString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./toString.js */ "./modularize/toString.js");
-/* harmony import */ var _upperFirst_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./upperFirst.js */ "./modularize/upperFirst.js");
+/* harmony import */ var _toString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./toString.js */ "./lib/lodash-modularize/toString.js");
+/* harmony import */ var _upperFirst_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./upperFirst.js */ "./lib/lodash-modularize/upperFirst.js");
 
 
 /**
@@ -3262,18 +3340,18 @@ function capitalize(string) {
 
 /***/ }),
 
-/***/ "./modularize/debounce.js":
-/*!********************************!*\
-  !*** ./modularize/debounce.js ***!
-  \********************************/
+/***/ "./lib/lodash-modularize/debounce.js":
+/*!*******************************************!*\
+  !*** ./lib/lodash-modularize/debounce.js ***!
+  \*******************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _isObject_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isObject.js */ "./modularize/isObject.js");
-/* harmony import */ var _now_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./now.js */ "./modularize/now.js");
-/* harmony import */ var _toNumber_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./toNumber.js */ "./modularize/toNumber.js");
+/* harmony import */ var _isObject_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isObject.js */ "./lib/lodash-modularize/isObject.js");
+/* harmony import */ var _now_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./now.js */ "./lib/lodash-modularize/now.js");
+/* harmony import */ var _toNumber_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./toNumber.js */ "./lib/lodash-modularize/toNumber.js");
 /**
  * Lodash (Custom Build) <https://lodash.com/>
  * Build: `lodash modularize exports="es" include="camelCase,debounce"`
@@ -3477,17 +3555,17 @@ function debounce(func, wait, options) {
 
 /***/ }),
 
-/***/ "./modularize/deburr.js":
-/*!******************************!*\
-  !*** ./modularize/deburr.js ***!
-  \******************************/
+/***/ "./lib/lodash-modularize/deburr.js":
+/*!*****************************************!*\
+  !*** ./lib/lodash-modularize/deburr.js ***!
+  \*****************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _deburrLetter_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_deburrLetter.js */ "./modularize/_deburrLetter.js");
-/* harmony import */ var _toString_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./toString.js */ "./modularize/toString.js");
+/* harmony import */ var _deburrLetter_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_deburrLetter.js */ "./lib/lodash-modularize/_deburrLetter.js");
+/* harmony import */ var _toString_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./toString.js */ "./lib/lodash-modularize/toString.js");
 
 
 /** Used to match Latin Unicode letters (excluding mathematical operators). */
@@ -3536,10 +3614,10 @@ function deburr(string) {
 
 /***/ }),
 
-/***/ "./modularize/isArray.js":
-/*!*******************************!*\
-  !*** ./modularize/isArray.js ***!
-  \*******************************/
+/***/ "./lib/lodash-modularize/isArray.js":
+/*!******************************************!*\
+  !*** ./lib/lodash-modularize/isArray.js ***!
+  \******************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3573,10 +3651,10 @@ var isArray = Array.isArray;
 
 /***/ }),
 
-/***/ "./modularize/isObject.js":
-/*!********************************!*\
-  !*** ./modularize/isObject.js ***!
-  \********************************/
+/***/ "./lib/lodash-modularize/isObject.js":
+/*!*******************************************!*\
+  !*** ./lib/lodash-modularize/isObject.js ***!
+  \*******************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3619,10 +3697,10 @@ function isObject(value) {
 
 /***/ }),
 
-/***/ "./modularize/isObjectLike.js":
-/*!************************************!*\
-  !*** ./modularize/isObjectLike.js ***!
-  \************************************/
+/***/ "./lib/lodash-modularize/isObjectLike.js":
+/*!***********************************************!*\
+  !*** ./lib/lodash-modularize/isObjectLike.js ***!
+  \***********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3662,17 +3740,17 @@ function isObjectLike(value) {
 
 /***/ }),
 
-/***/ "./modularize/isSymbol.js":
-/*!********************************!*\
-  !*** ./modularize/isSymbol.js ***!
-  \********************************/
+/***/ "./lib/lodash-modularize/isSymbol.js":
+/*!*******************************************!*\
+  !*** ./lib/lodash-modularize/isSymbol.js ***!
+  \*******************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _baseGetTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_baseGetTag.js */ "./modularize/_baseGetTag.js");
-/* harmony import */ var _isObjectLike_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./isObjectLike.js */ "./modularize/isObjectLike.js");
+/* harmony import */ var _baseGetTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_baseGetTag.js */ "./lib/lodash-modularize/_baseGetTag.js");
+/* harmony import */ var _isObjectLike_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./isObjectLike.js */ "./lib/lodash-modularize/isObjectLike.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 
@@ -3706,16 +3784,16 @@ function isSymbol(value) {
 
 /***/ }),
 
-/***/ "./modularize/now.js":
-/*!***************************!*\
-  !*** ./modularize/now.js ***!
-  \***************************/
+/***/ "./lib/lodash-modularize/now.js":
+/*!**************************************!*\
+  !*** ./lib/lodash-modularize/now.js ***!
+  \**************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _root_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_root.js */ "./modularize/_root.js");
+/* harmony import */ var _root_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_root.js */ "./lib/lodash-modularize/_root.js");
 
 /**
  * Gets the timestamp of the number of milliseconds that have elapsed since
@@ -3742,17 +3820,17 @@ var now = function now() {
 
 /***/ }),
 
-/***/ "./modularize/toNumber.js":
-/*!********************************!*\
-  !*** ./modularize/toNumber.js ***!
-  \********************************/
+/***/ "./lib/lodash-modularize/toNumber.js":
+/*!*******************************************!*\
+  !*** ./lib/lodash-modularize/toNumber.js ***!
+  \*******************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _isObject_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isObject.js */ "./modularize/isObject.js");
-/* harmony import */ var _isSymbol_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./isSymbol.js */ "./modularize/isSymbol.js");
+/* harmony import */ var _isObject_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./isObject.js */ "./lib/lodash-modularize/isObject.js");
+/* harmony import */ var _isSymbol_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./isSymbol.js */ "./lib/lodash-modularize/isSymbol.js");
 
 
 /** Used as references for various `Number` constants. */
@@ -3824,16 +3902,16 @@ function toNumber(value) {
 
 /***/ }),
 
-/***/ "./modularize/toString.js":
-/*!********************************!*\
-  !*** ./modularize/toString.js ***!
-  \********************************/
+/***/ "./lib/lodash-modularize/toString.js":
+/*!*******************************************!*\
+  !*** ./lib/lodash-modularize/toString.js ***!
+  \*******************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _baseToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_baseToString.js */ "./modularize/_baseToString.js");
+/* harmony import */ var _baseToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_baseToString.js */ "./lib/lodash-modularize/_baseToString.js");
 
 /**
  * Converts `value` to a string. An empty string is returned for `null`
@@ -3865,16 +3943,16 @@ function toString(value) {
 
 /***/ }),
 
-/***/ "./modularize/upperFirst.js":
-/*!**********************************!*\
-  !*** ./modularize/upperFirst.js ***!
-  \**********************************/
+/***/ "./lib/lodash-modularize/upperFirst.js":
+/*!*********************************************!*\
+  !*** ./lib/lodash-modularize/upperFirst.js ***!
+  \*********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _createCaseFirst_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_createCaseFirst.js */ "./modularize/_createCaseFirst.js");
+/* harmony import */ var _createCaseFirst_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_createCaseFirst.js */ "./lib/lodash-modularize/_createCaseFirst.js");
 
 /**
  * Converts the first character of `string` to upper case.
@@ -3899,19 +3977,19 @@ var upperFirst = Object(_createCaseFirst_js__WEBPACK_IMPORTED_MODULE_0__["defaul
 
 /***/ }),
 
-/***/ "./modularize/words.js":
-/*!*****************************!*\
-  !*** ./modularize/words.js ***!
-  \*****************************/
+/***/ "./lib/lodash-modularize/words.js":
+/*!****************************************!*\
+  !*** ./lib/lodash-modularize/words.js ***!
+  \****************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _asciiWords_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_asciiWords.js */ "./modularize/_asciiWords.js");
-/* harmony import */ var _hasUnicodeWord_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_hasUnicodeWord.js */ "./modularize/_hasUnicodeWord.js");
-/* harmony import */ var _toString_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./toString.js */ "./modularize/toString.js");
-/* harmony import */ var _unicodeWords_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./_unicodeWords.js */ "./modularize/_unicodeWords.js");
+/* harmony import */ var _asciiWords_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_asciiWords.js */ "./lib/lodash-modularize/_asciiWords.js");
+/* harmony import */ var _hasUnicodeWord_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_hasUnicodeWord.js */ "./lib/lodash-modularize/_hasUnicodeWord.js");
+/* harmony import */ var _toString_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./toString.js */ "./lib/lodash-modularize/toString.js");
+/* harmony import */ var _unicodeWords_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./_unicodeWords.js */ "./lib/lodash-modularize/_unicodeWords.js");
 
 
 
@@ -3951,180 +4029,100 @@ function words(string, pattern, guard) {
 
 /***/ }),
 
-/***/ "./node_modules/js-cookie/src/js.cookie.js":
-/*!*************************************************!*\
-  !*** ./node_modules/js-cookie/src/js.cookie.js ***!
-  \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./lib/utils.js":
+/*!**********************!*\
+  !*** ./lib/utils.js ***!
+  \**********************/
+/*! exports provided: elementTools */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- * JavaScript Cookie v2.2.1
- * https://github.com/js-cookie/js-cookie
- *
- * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
- * Released under the MIT license
- */
-;(function (factory) {
-	var registeredInModuleLoader;
-	if (true) {
-		!(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
-				__WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		registeredInModuleLoader = true;
-	}
-	if (true) {
-		module.exports = factory();
-		registeredInModuleLoader = true;
-	}
-	if (!registeredInModuleLoader) {
-		var OldCookies = window.Cookies;
-		var api = window.Cookies = factory();
-		api.noConflict = function () {
-			window.Cookies = OldCookies;
-			return api;
-		};
-	}
-}(function () {
-	function extend () {
-		var i = 0;
-		var result = {};
-		for (; i < arguments.length; i++) {
-			var attributes = arguments[ i ];
-			for (var key in attributes) {
-				result[key] = attributes[key];
-			}
-		}
-		return result;
-	}
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "elementTools", function() { return elementTools; });
+/* harmony import */ var _dependencies__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dependencies */ "./lib/dependencies.js");
+/**
+	Utility routines for Sargasso classes
 
-	function decode (s) {
-		return s.replace(/(%[0-9A-Z]{2})+/g, decodeURIComponent);
-	}
+	@author Michael Rhodes (except where noted)
+	@license MIT
+	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+**/
 
-	function init (converter) {
-		function api() {}
 
-		function set (key, value, attributes) {
-			if (typeof document === 'undefined') {
-				return;
-			}
+var _hasClass = function _hasClass(element, cssClass) {
+  var className = element.className || '';
+  var classes = className.split(/\s+/);
+  return classes.indexOf(cssClass) !== -1;
+};
 
-			attributes = extend({
-				path: '/'
-			}, api.defaults, attributes);
+var _addClass = function _addClass(element, cssClass) {
+  var className = element.className || '';
+  var classes = className.split(/\s+/);
 
-			if (typeof attributes.expires === 'number') {
-				attributes.expires = new Date(new Date() * 1 + attributes.expires * 864e+5);
-			}
+  if (classes.indexOf(cssClass) === -1) {
+    classes.push(cssClass);
+    element.className = classes.join(' ');
+  }
+};
 
-			// We're using "expires" because "max-age" is not supported by IE
-			attributes.expires = attributes.expires ? attributes.expires.toUTCString() : '';
+var _removeClass = function _removeClass(element, cssClass) {
+  var className = element.className || '';
+  var classes = className.split(/\s+/);
 
-			try {
-				var result = JSON.stringify(value);
-				if (/^[\{\[]/.test(result)) {
-					value = result;
-				}
-			} catch (e) {}
+  if (classes.indexOf(cssClass) !== -1) {
+    classes.splice(classes.indexOf(cssClass), 1);
+    element.className = classes.join(' ');
+  }
+};
 
-			value = converter.write ?
-				converter.write(value, key) :
-				encodeURIComponent(String(value))
-					.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
+var _isVisible = function _isVisible(element) {
+  return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length);
+};
 
-			key = encodeURIComponent(String(key))
-				.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent)
-				.replace(/[\(\)]/g, escape);
+var _inViewPort = function _inViewPort(element) {
+  var container = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : window;
+  var rect = element.getBoundingClientRect();
 
-			var stringifiedAttributes = '';
-			for (var attributeName in attributes) {
-				if (!attributes[attributeName]) {
-					continue;
-				}
-				stringifiedAttributes += '; ' + attributeName;
-				if (attributes[attributeName] === true) {
-					continue;
-				}
+  var visible = _isVisible(element);
 
-				// Considers RFC 6265 section 5.2:
-				// ...
-				// 3.  If the remaining unparsed-attributes contains a %x3B (";")
-				//     character:
-				// Consume the characters of the unparsed-attributes up to,
-				// not including, the first %x3B (";") character.
-				// ...
-				stringifiedAttributes += '=' + attributes[attributeName].split(';')[0];
-			}
+  var aboveTheTop = rect.bottom < 0;
+  var belowTheFold;
 
-			return (document.cookie = key + '=' + value + stringifiedAttributes);
-		}
+  if (container.self === window) {
+    belowTheFold = rect.top > (window.innerHeight || document.documentElement.clientHeight);
+  } else {
+    belowTheFold = rect.top > container.clientHeight;
+  } // console.log('_inViewPort', visible, belowTheFold, aboveTheTop)
 
-		function get (key, json) {
-			if (typeof document === 'undefined') {
-				return;
-			}
 
-			var jar = {};
-			// To prevent the for loop in the first place assign an empty array
-			// in case there are no cookies at all.
-			var cookies = document.cookie ? document.cookie.split('; ') : [];
-			var i = 0;
+  return visible && !belowTheFold && !aboveTheTop;
+};
+/*
+	element: element to apply to
+	css: JSON object with properties in kebab-case or camelCase (or even in snake_case and seperate words)
+*/
 
-			for (; i < cookies.length; i++) {
-				var parts = cookies[i].split('=');
-				var cookie = parts.slice(1).join('=');
 
-				if (!json && cookie.charAt(0) === '"') {
-					cookie = cookie.slice(1, -1);
-				}
+var _css = function _css(element, css) {
+  for (var prop in css) {
+    var key = prop;
 
-				try {
-					var name = decode(parts[0]);
-					cookie = (converter.read || converter)(cookie, name) ||
-						decode(cookie);
+    if (key.match(/_- /)) {
+      key = Object(_dependencies__WEBPACK_IMPORTED_MODULE_0__["camelCase"])(prop);
+    }
 
-					if (json) {
-						try {
-							cookie = JSON.parse(cookie);
-						} catch (e) {}
-					}
+    element.style[key] = css[prop];
+  }
+};
 
-					jar[name] = cookie;
+var elementTools = {
+  hasClass: _hasClass,
+  addClass: _addClass,
+  removeClass: _removeClass,
+  isVisible: _isVisible,
+  inViewPort: _inViewPort // setCSS: _css
 
-					if (key === name) {
-						break;
-					}
-				} catch (e) {}
-			}
-
-			return key ? jar[key] : jar;
-		}
-
-		api.set = set;
-		api.get = function (key) {
-			return get(key, false /* read as raw */);
-		};
-		api.getJSON = function (key) {
-			return get(key, true /* read as json */);
-		};
-		api.remove = function (key, attributes) {
-			set(key, '', extend(attributes, {
-				expires: -1
-			}));
-		};
-
-		api.defaults = {};
-
-		api.withConverter = init;
-
-		return api;
-	}
-
-	return init(function () {});
-}));
+};
 
 
 /***/ }),

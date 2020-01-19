@@ -12,13 +12,7 @@ const legacy = {
 	entry,
 	mode: 'development',
 	devtool: 'source-map',
-	plugins: [
-		new webpack.ProvidePlugin({
-			Cookies: 'js-cookie/src/js.cookie.js'
-		})
-	],
 	module: {
-
 		rules: [{
 			test: /\.js$/,
 			loader: 'babel-loader',

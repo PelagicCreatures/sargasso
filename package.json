@@ -17,8 +17,9 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "npx webpack",
-		"rollup": "lodash modularize exports=es include=camelCase,debounce; rollup ./index.js -m -o dist/sargasso.es.js -f es",
-		"rollup-example": "lodash modularize exports=es include=camelCase,debounce; rollup example/example.es.js -f es > example/example-bundle.es.js"
+		"rollup": "rollup ./index.js -m -o dist/sargasso.es.js -f es --no-treeshake",
+		"rollup-example": "rollup example/example.es.js -f es > example/example-bundle.es.js",
+		"package-lodash": "lodash modularize exports=es include=camelCase,debounce;rm -r lib/lodash-modularize;mv modularize lib/lodash-modularize"
 	},
 	"author": "Michael Rhodes",
 	"license": "MIT",
@@ -26,6 +27,7 @@
 		"@babel/core": "^7.7.7",
 		"@babel/preset-env": "^7.7.7",
 		"babel-loader": "^8.0.6",
+		"babel-plugin-lodash": "^3.3.4",
 		"babel-preset-env": "^1.7.0",
 		"core-js": "^3.6.4",
 		"eslint": "^6.8.0",
@@ -38,7 +40,6 @@
 		"webpack-cli": "^3.3.10"
 	},
 	"dependencies": {
-		"js-cookie": "^2.2.1",
 		"lodash": "^4.17.15"
 	},
 	"directories": {

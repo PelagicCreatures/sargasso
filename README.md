@@ -23,85 +23,96 @@ Performance is optimized using shared event listening services which are fully d
 
 ```npm install @pelagiccreatures/sargasso```
 
-Bootstrap Sargasso (ES6):
--------------------------
+Bootstrap Sargasso:
+-------------------
+The ES and the CommonJS bundles both expose:
+
+* sargasso.Sargasso - the sargasso super class
+* sargasso.registerSargassoClass - function to register your sub classes
+* sargasso.bootSargasso - start sargasso services and HIHAX
+
+[Most browsers](https://caniuse.com/#search=modules) are aware of ES6 and modules these days but but you can use the module/nomodule scheme to fall back to the common js bundle if needed.
 ```
-// import lib
-import {
-	bootSargasso, Sargasso, registerSargassoClass
-} from 'sargasso'
+<script type="module">
+	import sargasso from "https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.es.js"
+	... your code here ...
+</script>
 
-// bootSargasso is the function to call to start the framework
-// Sargasso is the superclass of all sargasso controllers
-// registerSargassoClass is a function to tell sargasso about your classes
-
-// set options
-let options = {
-	hijax: {
-		onError: (level, message) => {} // throw up an alert or something with message.
-	}
-}
-
-// boot supervisors and HIJAX loader
-let loadPageHandler = bootSargasso(options)
-
-// define a custom class and register the classname so it can be supervised
-class MyClass extends Sargasso {}
-registerSargassoClass('MyClass',MyClass)
-
+// optional - deal with the antiques if yo see fit.
+<script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.common.js" nomodule></script>
+<script nomodule defer>
+	... your code here ...
+</script>
 ```
+In production you probably want to host the bundles yourself instead of using the CDN and probably even make your own bundles including your subclasses using webpack or rollup or something.
 
-Bootstrap Sargasso (ES5):
----------------------------------
-The bundle exposes `sargasso` as a global so you can call the framework
-* sargasso.Sargasso
-* sargasso.registerSargassoClass
-* sargasso.bootSargasso
+For the '... your code here ...' part, it's the same in both cases. You need to at least start up the services.
 
 ```
-<script src="/path/to/dist/sargasso.common.js">
 <script>
-	// set options
+
 	let options = {
 		hijax: {
-			onError: (level, message) => {} // throw up an alert or something with message.
+			onError: (level, message) => { alert('Something went wrong. ' + message) }
 		}
 	}
 
 	// boot supervisors and HIJAX loader
 	window.loadPageHandler = sargasso.bootSargasso(options)
 
-	// define a custom class and register the classname
-	class MyClass extends sargasso.Sargasso {}
+	// define a custom class and register the classname.
+	class MyClass extends sargasso.Sargasso {} // This won't do very much...
 	sargasso.registerSargassoClass('MyClass',MyClass)
-</script>
-```
 
-You can also use this cdn if you want:
-```
-<script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.common.js"></script>
+</script>
 ```
 
 ### Adding Your Sargasso class to an HTML element
 
-Mark the elements you want to be enhance but adding a data-sargasso-class attribute:
+Sargasso watches the DOM for any elements tagged with the `data-sargasso-class` attribute and instantiates the Sargasso class specified while hooking up the appropriate services. When the underlying element is removed from the DOM (loading a new page or something) it automatically destroys any dangling Sargasso objects.
 
-`<div data-sargasso-class="MyClass"></div>`
+```
+<div data-sargasso-class="MyClass">This element has a MyClass Sargasso controller</div>
+```
 
-You can also defer the instantiation using the lazy method which will only start up the class when the element is visible in the viewport:
-
-`<div data-lazy-sargasso-class="MyClass"></div>`
-
-Sargasso watches the DOM for any elements with `data-sargasso-class`
-and instantiates the sargasso object, hooking up the appropriate observers. When the underlying element is removed from the DOM it destroys any dangling sargasso objects.
+You can also defer the instantiation using the lazy method by tagging it with `data-lazy-sargasso-class` instead of `data-sargasso-class` which will only start up the class when the element is visible in the viewport
 
 ### HIJAX
-bootSargasso returns the function `LoadPageHandler(href)` that you should call to load a new page programatically. Once loaded, new pages are merged with the current page only replacing elements marked with `data-hijax="true"`. Sargasso automatically captures `<a href="..">` tags and calls the LoadPageHandler instead of letting the browser load pages.
+Sargasso automatically captures `<a href="..">` tags and calls the LoadPageHandler instead of letting the browser load pages. You can make a link be ignored by hijax by setting the '<a href=".." data-no-hijax>'. Offsite links and links with targets are automatically ignored. bootSargasso also returns the function `LoadPageHandler(href)`. You must call this to load a new page programatically.
 
 EG. instead of `location.href= '/home'`, use `LoadPageHandler('/home')`
 
-Defining SubClasses:
---------------------
+## Mark dynamic content
+
+New pages are loaded via AJAX and are merged with the current page only replacing elements marked with `data-hijax` from the new page.
+```
+<html>
+	<head>
+	</head>
+	<body>
+		static stuff
+
+		<div id="page-body" data-hijax>
+			<p>this changes from page to page</p>
+			<div>lots of html here</div>
+		</div>
+
+		more static stuff
+
+		<div id="some-element" data-hijax>
+			<p>this also changes from page to page</p>
+		</div>
+
+		more static stuff
+	</body>
+<html>
+
+```
+Note that data-hijax elements must have well formed child html elements. Not like this:
+```<div>I'm just text. No child elements. Won't work.</div>```
+
+### Defining SubClasses:
+
 Your Sargasso subclasses can subscribe to event feeds to be notified of events.
 
 The instance is associated with an element `this.element`
@@ -269,9 +280,9 @@ class MySubClass extends Sargasso {
 
 
 ### Viewing the Test Page in the example directory
-To use Hijax you have to serve the files (window.popstate can't deal with file://) so run SimpleHTTPServer in the project directory to see demo page
+To use Hijax you have to serve the files (window.popstate can't deal with file://) so run SimpleHTTPServer in the project example directory to see demo page
 ```
-python -m SimpleHTTPServer 8000
+python -m localhost.py
 ```
 
 then point your browser to `http://localhost:8000/index.html`
