@@ -82,7 +82,7 @@ Sargasso automatically captures `<a href="..">` tags and calls the LoadPageHandl
 
 EG. instead of `location.href= '/home'`, use `LoadPageHandler('/home')`
 
-## Mark dynamic content
+#### Mark dynamic content
 
 New pages are loaded via AJAX and are merged with the current page only replacing elements marked with `data-hijax` from the new page.
 ```
@@ -120,13 +120,13 @@ When the object is instantiated, the supervisor will call the `start()` method o
 
 Your Sargasso subclasses subscribe to event feeds to be notified of events.
 
-Methods to override as needed:
+**Methods to override as needed:** *don't forget to call super.xxx() in your subclass*
 
 | method | description |
 | ------ | ----------- |
 | constructor(element, options = {}) | subscribe to services by setting options properties. All default to false so only set the ones you need `watchDOM`, `watchScroll`, `watchResize`, `watchOrientation`, `watchViewport` {xxx:true} |
 | start() | set up any interactions and event handlers |
-| sleep() | remove any event handlers |
+| sleep() | remove any event handlers defined in start() and cleanup references |
 | DOMChanged() | called if options 'watchDOM: true' when DOM changes |
 | didScroll() | called if options 'watchScroll: true' when scroll occurs |
 | didResize() | called if options 'watchResize: true' when resize changes |
@@ -138,13 +138,13 @@ Methods to override as needed:
 | didBreakpoint() | new screen width breakpoint |
 | elementEvent(e) | this.element received an 'sargasso' event |
 
-Properties
+**Properties**
 
 | property | description |
 | ------ | ----------- |
 | this.element | the element we are controlling |
 
-Utility Methods:
+**Utility Methods:**
 
 | method | description |
 | ------ | ----------- |
