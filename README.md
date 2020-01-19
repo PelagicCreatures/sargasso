@@ -176,6 +176,11 @@ To avoid any chaotic repaints you should only make DOM changes inside animation 
 ```
 class MyButtonClass extends Sargasso {
 
+	constructor(element, options = {}) {
+		options.watchViewport = true // tell me when I am visible
+		super(element, options) // important!
+	}
+
 	// listen for click
 	start() {
 		super.start() // important!
@@ -198,6 +203,14 @@ class MyButtonClass extends Sargasso {
 		}
 		this.queueFrame(frame) // schedule it
 	}
+
+	enterViewport() {
+		// do some stuff such as modify element html or classes
+		let frame = () => {
+			this.element.innerHTML = '<p>Hello viewport! Please click me!'
+		}
+		this.queueFrame(frame)
+	}
 }
 
 Then in HTML:
@@ -207,27 +220,6 @@ Then in HTML:
 </style>
 
 <button data-sargasso-class="MyButtonClass">Click me and I'll turn red!</button>
-```
-
-
-```
-class MyClass extends Sargasso {
-	constructor(element,options = {}) {
-		options.watchViewport = true
-		super(element,options)
-	}
-
-	enterViewport() {
-		// do some stuff such as modify element html or classes
-		let frame = () => {
-			this.element.innerHTML = '<p>Hello viewport!'
-		}
-		this.queueFrame(frame)
-	}
-}
-
-registerSargassoClass('MyClass', MyClass)
-
 ```
 
 ### Using managed Web Workers
