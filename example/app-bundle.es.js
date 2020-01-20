@@ -1,14 +1,26 @@
+var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
+
 /** Detect free variable `global` from Node.js. */
-var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+var freeGlobal = typeof commonjsGlobal == 'object' && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
+
+var _freeGlobal = freeGlobal;
 
 /** Detect free variable `self`. */
 var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
 
 /** Used as a reference to the global object. */
-var root = freeGlobal || freeSelf || Function('return this')();
+var root = _freeGlobal || freeSelf || Function('return this')();
+
+var _root = root;
 
 /** Built-in value references. */
-var Symbol = root.Symbol;
+var Symbol = _root.Symbol;
+
+var _Symbol = Symbol;
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -24,7 +36,7 @@ var hasOwnProperty = objectProto.hasOwnProperty;
 var nativeObjectToString = objectProto.toString;
 
 /** Built-in value references. */
-var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+var symToStringTag = _Symbol ? _Symbol.toStringTag : undefined;
 
 /**
  * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
@@ -53,6 +65,8 @@ function getRawTag(value) {
   return result;
 }
 
+var _getRawTag = getRawTag;
+
 /** Used for built-in method references. */
 var objectProto$1 = Object.prototype;
 
@@ -74,12 +88,14 @@ function objectToString(value) {
   return nativeObjectToString$1.call(value);
 }
 
+var _objectToString = objectToString;
+
 /** `Object#toString` result references. */
 var nullTag = '[object Null]',
     undefinedTag = '[object Undefined]';
 
 /** Built-in value references. */
-var symToStringTag$1 = Symbol ? Symbol.toStringTag : undefined;
+var symToStringTag$1 = _Symbol ? _Symbol.toStringTag : undefined;
 
 /**
  * The base implementation of `getTag` without fallbacks for buggy environments.
@@ -93,9 +109,11 @@ function baseGetTag(value) {
     return value === undefined ? undefinedTag : nullTag;
   }
   return (symToStringTag$1 && symToStringTag$1 in Object(value))
-    ? getRawTag(value)
-    : objectToString(value);
+    ? _getRawTag(value)
+    : _objectToString(value);
 }
+
+var _baseGetTag = baseGetTag;
 
 /**
  * Checks if `value` is object-like. A value is object-like if it's not `null`
@@ -125,6 +143,8 @@ function isObjectLike(value) {
   return value != null && typeof value == 'object';
 }
 
+var isObjectLike_1 = isObjectLike;
+
 /** `Object#toString` result references. */
 var symbolTag = '[object Symbol]';
 
@@ -147,11 +167,13 @@ var symbolTag = '[object Symbol]';
  */
 function isSymbol(value) {
   return typeof value == 'symbol' ||
-    (isObjectLike(value) && baseGetTag(value) == symbolTag);
+    (isObjectLike_1(value) && _baseGetTag(value) == symbolTag);
 }
 
+var isSymbol_1 = isSymbol;
+
 /** Used to convert symbols to primitives and strings. */
-var symbolProto = Symbol ? Symbol.prototype : undefined,
+var symbolProto = _Symbol ? _Symbol.prototype : undefined,
     symbolToString = symbolProto ? symbolProto.toString : undefined;
 
 /**
@@ -184,6 +206,8 @@ function isObject(value) {
   return value != null && (type == 'object' || type == 'function');
 }
 
+var isObject_1 = isObject;
+
 /**
  * Gets the timestamp of the number of milliseconds that have elapsed since
  * the Unix epoch (1 January 1970 00:00:00 UTC).
@@ -201,8 +225,10 @@ function isObject(value) {
  * // => Logs the number of milliseconds it took for the deferred invocation.
  */
 var now = function() {
-  return root.Date.now();
+  return _root.Date.now();
 };
+
+var now_1 = now;
 
 /** Used as references for various `Number` constants. */
 var NAN = 0 / 0;
@@ -249,12 +275,12 @@ function toNumber(value) {
   if (typeof value == 'number') {
     return value;
   }
-  if (isSymbol(value)) {
+  if (isSymbol_1(value)) {
     return NAN;
   }
-  if (isObject(value)) {
+  if (isObject_1(value)) {
     var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
-    value = isObject(other) ? (other + '') : other;
+    value = isObject_1(other) ? (other + '') : other;
   }
   if (typeof value != 'string') {
     return value === 0 ? value : +value;
@@ -266,14 +292,7 @@ function toNumber(value) {
     : (reIsBadHex.test(value) ? NAN : +value);
 }
 
-/**
- * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash modularize exports="es" include="camelCase,debounce"`
- * Copyright JS Foundation and other contributors <https://js.foundation/>
- * Released under MIT license <https://lodash.com/license>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- */
+var toNumber_1 = toNumber;
 
 /** Error message constants. */
 var FUNC_ERROR_TEXT = 'Expected a function';
@@ -351,11 +370,11 @@ function debounce(func, wait, options) {
   if (typeof func != 'function') {
     throw new TypeError(FUNC_ERROR_TEXT);
   }
-  wait = toNumber(wait) || 0;
-  if (isObject(options)) {
+  wait = toNumber_1(wait) || 0;
+  if (isObject_1(options)) {
     leading = !!options.leading;
     maxing = 'maxWait' in options;
-    maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
+    maxWait = maxing ? nativeMax(toNumber_1(options.maxWait) || 0, wait) : maxWait;
     trailing = 'trailing' in options ? !!options.trailing : trailing;
   }
 
@@ -400,7 +419,7 @@ function debounce(func, wait, options) {
   }
 
   function timerExpired() {
-    var time = now();
+    var time = now_1();
     if (shouldInvoke(time)) {
       return trailingEdge(time);
     }
@@ -429,11 +448,11 @@ function debounce(func, wait, options) {
   }
 
   function flush() {
-    return timerId === undefined ? result : trailingEdge(now());
+    return timerId === undefined ? result : trailingEdge(now_1());
   }
 
   function debounced() {
-    var time = now(),
+    var time = now_1(),
         isInvoking = shouldInvoke(time);
 
     lastArgs = arguments;
@@ -446,6 +465,7 @@ function debounce(func, wait, options) {
       }
       if (maxing) {
         // Handle invocations in a tight loop.
+        clearTimeout(timerId);
         timerId = setTimeout(timerExpired, wait);
         return invokeFunc(lastCallTime);
       }
@@ -460,18 +480,12 @@ function debounce(func, wait, options) {
   return debounced;
 }
 
-/*
-	some libs we need to package in kludgy ways... TODO: revisit when these are modernized
+var debounce_1 = debounce;
 
-	we only need a little bit of lodash and js-cookie is peculiar... the npm is not in sync with github.
-*/
+var js_cookie = createCommonjsModule(function (module, exports) {
 (function (factory) {
 	var registeredInModuleLoader;
-	if (typeof define === 'function' && define.amd) {
-		define(factory);
-		registeredInModuleLoader = true;
-	}
-	if (typeof exports === 'object') {
+	{
 		module.exports = factory();
 		registeredInModuleLoader = true;
 	}
@@ -480,7 +494,7 @@ function debounce(func, wait, options) {
 		var api = window.Cookies = factory();
 		api.noConflict = function () {
 			window.Cookies = OldCookies;
-			return api
+			return api;
 		};
 	}
 }(function () {
@@ -488,24 +502,24 @@ function debounce(func, wait, options) {
 		var i = 0;
 		var result = {};
 		for (; i < arguments.length; i++) {
-			var attributes = arguments[i];
+			var attributes = arguments[ i ];
 			for (var key in attributes) {
 				result[key] = attributes[key];
 			}
 		}
-		return result
+		return result;
 	}
 
 	function decode (s) {
-		return s.replace(/(%[0-9A-Z]{2})+/g, decodeURIComponent)
+		return s.replace(/(%[0-9A-Z]{2})+/g, decodeURIComponent);
 	}
 
 	function init (converter) {
-		function api () {}
+		function api() {}
 
 		function set (key, value, attributes) {
 			if (typeof document === 'undefined') {
-				return
+				return;
 			}
 
 			attributes = extend({
@@ -526,8 +540,10 @@ function debounce(func, wait, options) {
 				}
 			} catch (e) {}
 
-			value = converter.write ? converter.write(value, key) : encodeURIComponent(String(value))
-				.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
+			value = converter.write ?
+				converter.write(value, key) :
+				encodeURIComponent(String(value))
+					.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
 
 			key = encodeURIComponent(String(key))
 				.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent)
@@ -536,11 +552,11 @@ function debounce(func, wait, options) {
 			var stringifiedAttributes = '';
 			for (var attributeName in attributes) {
 				if (!attributes[attributeName]) {
-					continue
+					continue;
 				}
 				stringifiedAttributes += '; ' + attributeName;
 				if (attributes[attributeName] === true) {
-					continue
+					continue;
 				}
 
 				// Considers RFC 6265 section 5.2:
@@ -553,12 +569,12 @@ function debounce(func, wait, options) {
 				stringifiedAttributes += '=' + attributes[attributeName].split(';')[0];
 			}
 
-			return (document.cookie = key + '=' + value + stringifiedAttributes)
+			return (document.cookie = key + '=' + value + stringifiedAttributes);
 		}
 
 		function get (key, json) {
 			if (typeof document === 'undefined') {
-				return
+				return;
 			}
 
 			var jar = {};
@@ -589,20 +605,20 @@ function debounce(func, wait, options) {
 					jar[name] = cookie;
 
 					if (key === name) {
-						break
+						break;
 					}
 				} catch (e) {}
 			}
 
-			return key ? jar[key] : jar
+			return key ? jar[key] : jar;
 		}
 
 		api.set = set;
 		api.get = function (key) {
-			return get(key, false /* read as raw */)
+			return get(key, false /* read as raw */);
 		};
 		api.getJSON = function (key) {
-			return get(key, true /* read as json */)
+			return get(key, true /* read as json */);
 		};
 		api.remove = function (key, attributes) {
 			set(key, '', extend(attributes, {
@@ -614,13 +630,12 @@ function debounce(func, wait, options) {
 
 		api.withConverter = init;
 
-		return api
+		return api;
 	}
 
-	return init(function () {})
+	return init(function () {});
 }));
-
-const Cookies = window.Cookies;
+});
 
 /**
 	Utility routines for Sargasso classes
@@ -771,7 +786,7 @@ class DOMWatcher extends ObserverSubscriptionManager {
 		super(options);
 
 		// debounce - just need to know if a change occured, not every change
-		this.mutationHandler = debounce((mutations, observer) => {
+		this.mutationHandler = debounce_1((mutations, observer) => {
 			this.observeDOM(mutations, observer);
 		}, 100, {
 			maxWait: 250
@@ -877,7 +892,7 @@ class ResizeWatcher extends ObserverSubscriptionManager {
 	constructor (options) {
 		super(options);
 
-		this.debounce = debounce(() => {
+		this.debounce = debounce_1(() => {
 			this.watchResize();
 		}, 250);
 	}
@@ -912,7 +927,7 @@ class OrientationWatcher extends ObserverSubscriptionManager {
 			elementTools.addClass(document.body, 'no-orientation');
 		}
 
-		this.debounce = debounce(() => {
+		this.debounce = debounce_1(() => {
 			this.watchOrientation();
 		}, 250);
 	}
@@ -1733,7 +1748,7 @@ class Breakpoints extends Sargasso {
 	};
 
 	getCookie (key) {
-		return Cookies.get(key)
+		return js_cookie.get(key)
 	};
 
 	setCookie (key, value, expires) {
@@ -1742,7 +1757,7 @@ class Breakpoints extends Sargasso {
 			domain: this.options.cookieDomain || null,
 			expires: expires
 		};
-		Cookies.set(key, value, options);
+		js_cookie.set(key, value, options);
 	};
 
 	deleteCookie (key) {

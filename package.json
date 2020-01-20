@@ -16,8 +16,8 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "npx webpack; rollup ./index.js -m -o dist/sargasso.es.js -f es --no-treeshake",
-		"build-example": "rollup example/app.js -f es > example/app-bundle.es.js",
+		"build": "npx webpack; rollup -c rollup.config.js",
+		"build-example": "rollup -c rollup.config.app.js",
 		"package-lodash": "lodash modularize exports=es include=camelCase,debounce;rm -r lib/lodash-modularize;mv modularize lib/lodash-modularize"
 	},
 	"author": "Michael Rhodes",
