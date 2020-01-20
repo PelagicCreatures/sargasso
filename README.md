@@ -4,9 +4,9 @@
 
 [Demo Site](https://blog.myanti.social)
 
-HTML elements sometimes need a nervous system to see and respond to what's going on around them - Sargasso element controllers are fully aware of their environment.
+Sargasso Makes HTML elements aware of events such as Document (DOM) insertions and deletions, HIJAX Page load, Scrolling, Resizing, Orientation and messages Managed Web Workers allowing them to efficiently implement any behavior they need to perform.
 
-Events such as Document (DOM) insertions and deletions, HIJAX Page load, Scrolling, Resizing, Orientation and messages from Managed Web Workers are passed to Sargasso controllers allowing them to efficiently implement any behavior they need to perform.
+This is a very lightweight, pure ES6 framework (with only few dependencies) which aims to use the most advanced stable features of modern browsers to maximum effect leaving the historical cruft, kludges and code barnacles infesting older web frameworks behind. The result is lean, highly performant and clean library that simplifies the complex technologies behind modern progressive web apps and web sites.
 
 ```
 @author Michael Rhodes (except where noted)
@@ -14,11 +14,9 @@ Events such as Document (DOM) insertions and deletions, HIJAX Page load, Scrolli
 Made in Barbados 🇧🇧
 ```
 
-This is a very lightweight, pure ES6 framework (with only few dependencies) which aims to use the most advanced stable features of modern browsers to maximum effect leaving the historical cruft, kludges and code barnacles infesting older web frameworks behind. The result is lean, highly performant and clean code that simplifies the complex technologies behind modern progressive web apps and web sites.
+Progressive Web Apps and modern websites need a HIJAX scheme. One of the core features of this framework is to implement an asynchronous page loading scheme which supports deep linking and lightning fast page loads where only dynamic content areas are merged between page loads leaving css, js, web workers and wrapper elements intact. Sargasso controller instances are automatically created as needed when their element appears in the DOM and destroyed when their element is removed so everything is cleanly destroyed and all the trash is collected.
 
-HIJAX made easy - this framework implements an asynchronous page loading scheme which supports deep linking and lightning fast page loads where only dynamic content areas are merged between pages leaving css, js, web workers and wrapper elements intact. Sargasso controller instances are managed as needed when their element appears in the DOM and destroyed when their element is removed.
-
-Performance is optimized using shared event listening services which are fully debounced during large updates. Services are provided to schedule content changes using the browser's animation frame event loop and computation heavy tasks can be easily offloaded to managed web workers resulting in highly performant pages.
+Performance is further enhanced with shared event listening services which are fully debounced during large updates. Services are also provided to schedule content changes using the browser's **animation frame** event loop and managed **web workers** for offloading computation heavy tasks to a dedicated thread resulting in highly performant pages.
 
 ```npm install @pelagiccreatures/sargasso```
 
