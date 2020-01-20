@@ -11,11 +11,7 @@ export default {
 
 	plugins: [
 		json(),
-		nodeResolve({
-			preferBuiltins: false
-		}),
-		commonjs({
-			namedExports: {}
-		})
+		nodeResolve(),
+		commonjs()
 	]
 }
