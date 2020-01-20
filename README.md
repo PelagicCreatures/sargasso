@@ -20,7 +20,6 @@ HIJAX made easy - this framework implements an asynchronous page loading scheme 
 
 Performance is optimized using shared event listening services which are fully debounced during large updates. Services are provided to schedule content changes using the browser's animation frame event loop and computation heavy tasks can be easily offloaded to managed web workers resulting in highly performant pages.
 
-
 ```npm install @pelagiccreatures/sargasso```
 
 Bootstrap Sargasso:
@@ -32,19 +31,16 @@ The ES and the CommonJS bundles both expose:
 * bootSargasso - start sargasso services and HIHAX
 
 [Most browsers](https://caniuse.com/#search=modules) are aware of ES6 and modules these days but but you can use the module/nomodule scheme to fall back to the common js bundle if needed.
-```
-<script type="module">
-	import from "https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.es.js"
-	... your code here ...
-</script>
 
-// optional - deal with the antiques if yo see fit.
-<script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.common.js" nomodule></script>
-<script nomodule defer>
+```
+<script type="module" src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.es.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.cjs.js" nomodule></script>
+<script defer>
 	... your code here ...
 </script>
 ```
-In production you probably want to host the bundles yourself instead of using the CDN and probably even make your own bundles including your subclasses using webpack or rollup or something.
+
+In production you probably want to host the bundles yourself instead of using the CDN and probably even make your own bundles including your subclasses using webpack or rollup or something. See rollup section below.
 
 For the '... your code here ...' part, it's the same in both cases. You need to at least start up the services.
 
@@ -85,6 +81,7 @@ EG. instead of `location.href= '/home'`, use `LoadPageHandler('/home')`
 #### Mark dynamic content
 
 New pages are loaded via AJAX and are merged with the current page only replacing elements marked with `data-hijax` from the new page.
+
 ```
 <html>
 	<head>
@@ -108,7 +105,8 @@ New pages are loaded via AJAX and are merged with the current page only replacin
 <html>
 ```
 
-Note that data-hijax elements must have well formed child html elements. Not like this:
+Note that data-hijax elements must have well formed child html elements. **Not** like this:
+
 ```<div>I'm just text. No child elements. Won't work.</div>```
 
 
@@ -139,13 +137,17 @@ Your Sargasso subclasses subscribe to event feeds to be notified of events.
 | elementEvent(e) | this.element received an 'sargasso' event |
 | workerOnMessage (id, e) | id is the worker sending the message. Any payload from the worker `postMessage` is in e.data.xxx as defined by the worker |
 
+
 **Properties**
+
 
 | property | description |
 | ------ | ----------- |
 | this.element | the element we are controlling |
 
+
 **Utility Methods:**
+
 
 | method | description |
 | ------ | ----------- |
@@ -156,6 +158,7 @@ Your Sargasso subclasses subscribe to event feeds to be notified of events.
 | scrollTop(newTop) | get and set the current scroll position |
 | queueFrame(function) | queue a function to execute that changes the DOM |
 | workerStart(id, codeOrURL) | start a web worker with id. Ignored if worker id already installed (see lib/LazyBackground.js for a shared worker example)|
+
 
 You need to let sargasso know about your class:
 ```registerSargassoClass('MyClass', MyClass)```
@@ -268,11 +271,52 @@ class MySubClass extends Sargasso {
 }
 ```
 
-### Viewing the Test Page in the example directory
+### Rollup ES6 Bundling
 
-To use Hijax you have to serve the files (window.popstate can't deal with file://...) so run SimpleHTTPServer in the project example directory to see demo page
+While you can use the libs in /dist in you project you would typically want to bundle your own ES6 (and perhaps commonJS) bundles to serve with your pages.
+
+The example below is for the /example directory pages.
+
+rollup.config.app.js
+```
+import commonjs from '@rollup/plugin-commonjs'
+import nodeResolve from '@rollup/plugin-node-resolve'
+import json from '@rollup/plugin-json'
+
+export default {
+	input: './example/app.js', // load the app root
+	output: [{
+		format: 'es',
+		file: './example/app-bundle.es.js' // output the bundle
+	}],
+
+	plugins: [
+		json(),
+		nodeResolve({
+			preferBuiltins: false
+		}),
+		commonjs({
+			namedExports: {}
+		})
+	]
+}
+
+```
+
+Just run `rollup -c rollup.config.app.js` and you have an ES6 bundle which includes all your dependancies
+
+### Example directory
+
+To use Hijax you have to serve the files (window.popstate can't deal with file://...) so run SimpleHTTPServer in the project example directory to see demo pages which provide examples of how to integrate with html.
+
 ```
 python -m localhost.py
 ```
 
-then point your browser to `http://localhost:8000/index.html`
+There are 3 entry points:
+
+`http://localhost:8000/index.html` - use ES6 example.js app bundled with sargasso
+
+`http://localhost:8000/index-cjs.html` - use common js library from /dist
+
+`http://localhost:8000/index-es.html` - use ES6 library from /dist

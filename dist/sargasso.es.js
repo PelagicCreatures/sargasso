@@ -1,59 +1,26 @@
+var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
+
 /** Detect free variable `global` from Node.js. */
-var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+var freeGlobal = typeof commonjsGlobal == 'object' && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
+
+var _freeGlobal = freeGlobal;
 
 /** Detect free variable `self`. */
 var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
 
 /** Used as a reference to the global object. */
-var root = freeGlobal || freeSelf || Function('return this')();
+var root = _freeGlobal || freeSelf || Function('return this')();
+
+var _root = root;
 
 /** Built-in value references. */
-var Symbol = root.Symbol;
+var Symbol = _root.Symbol;
 
-/**
- * A specialized version of `_.map` for arrays without support for iteratee
- * shorthands.
- *
- * @private
- * @param {Array} [array] The array to iterate over.
- * @param {Function} iteratee The function invoked per iteration.
- * @returns {Array} Returns the new mapped array.
- */
-function arrayMap(array, iteratee) {
-  var index = -1,
-      length = array == null ? 0 : array.length,
-      result = Array(length);
-
-  while (++index < length) {
-    result[index] = iteratee(array[index], index, array);
-  }
-  return result;
-}
-
-/**
- * Checks if `value` is classified as an `Array` object.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an array, else `false`.
- * @example
- *
- * _.isArray([1, 2, 3]);
- * // => true
- *
- * _.isArray(document.body.children);
- * // => false
- *
- * _.isArray('abc');
- * // => false
- *
- * _.isArray(_.noop);
- * // => false
- */
-var isArray = Array.isArray;
+var _Symbol = Symbol;
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -69,7 +36,7 @@ var hasOwnProperty = objectProto.hasOwnProperty;
 var nativeObjectToString = objectProto.toString;
 
 /** Built-in value references. */
-var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+var symToStringTag = _Symbol ? _Symbol.toStringTag : undefined;
 
 /**
  * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
@@ -98,6 +65,8 @@ function getRawTag(value) {
   return result;
 }
 
+var _getRawTag = getRawTag;
+
 /** Used for built-in method references. */
 var objectProto$1 = Object.prototype;
 
@@ -119,12 +88,14 @@ function objectToString(value) {
   return nativeObjectToString$1.call(value);
 }
 
+var _objectToString = objectToString;
+
 /** `Object#toString` result references. */
 var nullTag = '[object Null]',
     undefinedTag = '[object Undefined]';
 
 /** Built-in value references. */
-var symToStringTag$1 = Symbol ? Symbol.toStringTag : undefined;
+var symToStringTag$1 = _Symbol ? _Symbol.toStringTag : undefined;
 
 /**
  * The base implementation of `getTag` without fallbacks for buggy environments.
@@ -138,9 +109,11 @@ function baseGetTag(value) {
     return value === undefined ? undefinedTag : nullTag;
   }
   return (symToStringTag$1 && symToStringTag$1 in Object(value))
-    ? getRawTag(value)
-    : objectToString(value);
+    ? _getRawTag(value)
+    : _objectToString(value);
 }
+
+var _baseGetTag = baseGetTag;
 
 /**
  * Checks if `value` is object-like. A value is object-like if it's not `null`
@@ -170,6 +143,8 @@ function isObjectLike(value) {
   return value != null && typeof value == 'object';
 }
 
+var isObjectLike_1 = isObjectLike;
+
 /** `Object#toString` result references. */
 var symbolTag = '[object Symbol]';
 
@@ -192,587 +167,14 @@ var symbolTag = '[object Symbol]';
  */
 function isSymbol(value) {
   return typeof value == 'symbol' ||
-    (isObjectLike(value) && baseGetTag(value) == symbolTag);
+    (isObjectLike_1(value) && _baseGetTag(value) == symbolTag);
 }
 
-/** Used as references for various `Number` constants. */
-var INFINITY = 1 / 0;
+var isSymbol_1 = isSymbol;
 
 /** Used to convert symbols to primitives and strings. */
-var symbolProto = Symbol ? Symbol.prototype : undefined,
+var symbolProto = _Symbol ? _Symbol.prototype : undefined,
     symbolToString = symbolProto ? symbolProto.toString : undefined;
-
-/**
- * The base implementation of `_.toString` which doesn't convert nullish
- * values to empty strings.
- *
- * @private
- * @param {*} value The value to process.
- * @returns {string} Returns the string.
- */
-function baseToString(value) {
-  // Exit early for strings to avoid a performance hit in some environments.
-  if (typeof value == 'string') {
-    return value;
-  }
-  if (isArray(value)) {
-    // Recursively convert values (susceptible to call stack limits).
-    return arrayMap(value, baseToString) + '';
-  }
-  if (isSymbol(value)) {
-    return symbolToString ? symbolToString.call(value) : '';
-  }
-  var result = (value + '');
-  return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
-}
-
-/**
- * Converts `value` to a string. An empty string is returned for `null`
- * and `undefined` values. The sign of `-0` is preserved.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to convert.
- * @returns {string} Returns the converted string.
- * @example
- *
- * _.toString(null);
- * // => ''
- *
- * _.toString(-0);
- * // => '-0'
- *
- * _.toString([1, 2, 3]);
- * // => '1,2,3'
- */
-function toString(value) {
-  return value == null ? '' : baseToString(value);
-}
-
-/**
- * The base implementation of `_.slice` without an iteratee call guard.
- *
- * @private
- * @param {Array} array The array to slice.
- * @param {number} [start=0] The start position.
- * @param {number} [end=array.length] The end position.
- * @returns {Array} Returns the slice of `array`.
- */
-function baseSlice(array, start, end) {
-  var index = -1,
-      length = array.length;
-
-  if (start < 0) {
-    start = -start > length ? 0 : (length + start);
-  }
-  end = end > length ? length : end;
-  if (end < 0) {
-    end += length;
-  }
-  length = start > end ? 0 : ((end - start) >>> 0);
-  start >>>= 0;
-
-  var result = Array(length);
-  while (++index < length) {
-    result[index] = array[index + start];
-  }
-  return result;
-}
-
-/**
- * Casts `array` to a slice if it's needed.
- *
- * @private
- * @param {Array} array The array to inspect.
- * @param {number} start The start position.
- * @param {number} [end=array.length] The end position.
- * @returns {Array} Returns the cast slice.
- */
-function castSlice(array, start, end) {
-  var length = array.length;
-  end = end === undefined ? length : end;
-  return (!start && end >= length) ? array : baseSlice(array, start, end);
-}
-
-/** Used to compose unicode character classes. */
-var rsAstralRange = '\\ud800-\\udfff',
-    rsComboMarksRange = '\\u0300-\\u036f',
-    reComboHalfMarksRange = '\\ufe20-\\ufe2f',
-    rsComboSymbolsRange = '\\u20d0-\\u20ff',
-    rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange,
-    rsVarRange = '\\ufe0e\\ufe0f';
-
-/** Used to compose unicode capture groups. */
-var rsZWJ = '\\u200d';
-
-/** Used to detect strings with [zero-width joiners or code points from the astral planes](http://eev.ee/blog/2015/09/12/dark-corners-of-unicode/). */
-var reHasUnicode = RegExp('[' + rsZWJ + rsAstralRange  + rsComboRange + rsVarRange + ']');
-
-/**
- * Checks if `string` contains Unicode symbols.
- *
- * @private
- * @param {string} string The string to inspect.
- * @returns {boolean} Returns `true` if a symbol is found, else `false`.
- */
-function hasUnicode(string) {
-  return reHasUnicode.test(string);
-}
-
-/**
- * Converts an ASCII `string` to an array.
- *
- * @private
- * @param {string} string The string to convert.
- * @returns {Array} Returns the converted array.
- */
-function asciiToArray(string) {
-  return string.split('');
-}
-
-/** Used to compose unicode character classes. */
-var rsAstralRange$1 = '\\ud800-\\udfff',
-    rsComboMarksRange$1 = '\\u0300-\\u036f',
-    reComboHalfMarksRange$1 = '\\ufe20-\\ufe2f',
-    rsComboSymbolsRange$1 = '\\u20d0-\\u20ff',
-    rsComboRange$1 = rsComboMarksRange$1 + reComboHalfMarksRange$1 + rsComboSymbolsRange$1,
-    rsVarRange$1 = '\\ufe0e\\ufe0f';
-
-/** Used to compose unicode capture groups. */
-var rsAstral = '[' + rsAstralRange$1 + ']',
-    rsCombo = '[' + rsComboRange$1 + ']',
-    rsFitz = '\\ud83c[\\udffb-\\udfff]',
-    rsModifier = '(?:' + rsCombo + '|' + rsFitz + ')',
-    rsNonAstral = '[^' + rsAstralRange$1 + ']',
-    rsRegional = '(?:\\ud83c[\\udde6-\\uddff]){2}',
-    rsSurrPair = '[\\ud800-\\udbff][\\udc00-\\udfff]',
-    rsZWJ$1 = '\\u200d';
-
-/** Used to compose unicode regexes. */
-var reOptMod = rsModifier + '?',
-    rsOptVar = '[' + rsVarRange$1 + ']?',
-    rsOptJoin = '(?:' + rsZWJ$1 + '(?:' + [rsNonAstral, rsRegional, rsSurrPair].join('|') + ')' + rsOptVar + reOptMod + ')*',
-    rsSeq = rsOptVar + reOptMod + rsOptJoin,
-    rsSymbol = '(?:' + [rsNonAstral + rsCombo + '?', rsCombo, rsRegional, rsSurrPair, rsAstral].join('|') + ')';
-
-/** Used to match [string symbols](https://mathiasbynens.be/notes/javascript-unicode). */
-var reUnicode = RegExp(rsFitz + '(?=' + rsFitz + ')|' + rsSymbol + rsSeq, 'g');
-
-/**
- * Converts a Unicode `string` to an array.
- *
- * @private
- * @param {string} string The string to convert.
- * @returns {Array} Returns the converted array.
- */
-function unicodeToArray(string) {
-  return string.match(reUnicode) || [];
-}
-
-/**
- * Converts `string` to an array.
- *
- * @private
- * @param {string} string The string to convert.
- * @returns {Array} Returns the converted array.
- */
-function stringToArray(string) {
-  return hasUnicode(string)
-    ? unicodeToArray(string)
-    : asciiToArray(string);
-}
-
-/**
- * Creates a function like `_.lowerFirst`.
- *
- * @private
- * @param {string} methodName The name of the `String` case method to use.
- * @returns {Function} Returns the new case function.
- */
-function createCaseFirst(methodName) {
-  return function(string) {
-    string = toString(string);
-
-    var strSymbols = hasUnicode(string)
-      ? stringToArray(string)
-      : undefined;
-
-    var chr = strSymbols
-      ? strSymbols[0]
-      : string.charAt(0);
-
-    var trailing = strSymbols
-      ? castSlice(strSymbols, 1).join('')
-      : string.slice(1);
-
-    return chr[methodName]() + trailing;
-  };
-}
-
-/**
- * Converts the first character of `string` to upper case.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category String
- * @param {string} [string=''] The string to convert.
- * @returns {string} Returns the converted string.
- * @example
- *
- * _.upperFirst('fred');
- * // => 'Fred'
- *
- * _.upperFirst('FRED');
- * // => 'FRED'
- */
-var upperFirst = createCaseFirst('toUpperCase');
-
-/**
- * Converts the first character of `string` to upper case and the remaining
- * to lower case.
- *
- * @static
- * @memberOf _
- * @since 3.0.0
- * @category String
- * @param {string} [string=''] The string to capitalize.
- * @returns {string} Returns the capitalized string.
- * @example
- *
- * _.capitalize('FRED');
- * // => 'Fred'
- */
-function capitalize(string) {
-  return upperFirst(toString(string).toLowerCase());
-}
-
-/**
- * A specialized version of `_.reduce` for arrays without support for
- * iteratee shorthands.
- *
- * @private
- * @param {Array} [array] The array to iterate over.
- * @param {Function} iteratee The function invoked per iteration.
- * @param {*} [accumulator] The initial value.
- * @param {boolean} [initAccum] Specify using the first element of `array` as
- *  the initial value.
- * @returns {*} Returns the accumulated value.
- */
-function arrayReduce(array, iteratee, accumulator, initAccum) {
-  var index = -1,
-      length = array == null ? 0 : array.length;
-
-  if (initAccum && length) {
-    accumulator = array[++index];
-  }
-  while (++index < length) {
-    accumulator = iteratee(accumulator, array[index], index, array);
-  }
-  return accumulator;
-}
-
-/**
- * The base implementation of `_.propertyOf` without support for deep paths.
- *
- * @private
- * @param {Object} object The object to query.
- * @returns {Function} Returns the new accessor function.
- */
-function basePropertyOf(object) {
-  return function(key) {
-    return object == null ? undefined : object[key];
-  };
-}
-
-/** Used to map Latin Unicode letters to basic Latin letters. */
-var deburredLetters = {
-  // Latin-1 Supplement block.
-  '\xc0': 'A',  '\xc1': 'A', '\xc2': 'A', '\xc3': 'A', '\xc4': 'A', '\xc5': 'A',
-  '\xe0': 'a',  '\xe1': 'a', '\xe2': 'a', '\xe3': 'a', '\xe4': 'a', '\xe5': 'a',
-  '\xc7': 'C',  '\xe7': 'c',
-  '\xd0': 'D',  '\xf0': 'd',
-  '\xc8': 'E',  '\xc9': 'E', '\xca': 'E', '\xcb': 'E',
-  '\xe8': 'e',  '\xe9': 'e', '\xea': 'e', '\xeb': 'e',
-  '\xcc': 'I',  '\xcd': 'I', '\xce': 'I', '\xcf': 'I',
-  '\xec': 'i',  '\xed': 'i', '\xee': 'i', '\xef': 'i',
-  '\xd1': 'N',  '\xf1': 'n',
-  '\xd2': 'O',  '\xd3': 'O', '\xd4': 'O', '\xd5': 'O', '\xd6': 'O', '\xd8': 'O',
-  '\xf2': 'o',  '\xf3': 'o', '\xf4': 'o', '\xf5': 'o', '\xf6': 'o', '\xf8': 'o',
-  '\xd9': 'U',  '\xda': 'U', '\xdb': 'U', '\xdc': 'U',
-  '\xf9': 'u',  '\xfa': 'u', '\xfb': 'u', '\xfc': 'u',
-  '\xdd': 'Y',  '\xfd': 'y', '\xff': 'y',
-  '\xc6': 'Ae', '\xe6': 'ae',
-  '\xde': 'Th', '\xfe': 'th',
-  '\xdf': 'ss',
-  // Latin Extended-A block.
-  '\u0100': 'A',  '\u0102': 'A', '\u0104': 'A',
-  '\u0101': 'a',  '\u0103': 'a', '\u0105': 'a',
-  '\u0106': 'C',  '\u0108': 'C', '\u010a': 'C', '\u010c': 'C',
-  '\u0107': 'c',  '\u0109': 'c', '\u010b': 'c', '\u010d': 'c',
-  '\u010e': 'D',  '\u0110': 'D', '\u010f': 'd', '\u0111': 'd',
-  '\u0112': 'E',  '\u0114': 'E', '\u0116': 'E', '\u0118': 'E', '\u011a': 'E',
-  '\u0113': 'e',  '\u0115': 'e', '\u0117': 'e', '\u0119': 'e', '\u011b': 'e',
-  '\u011c': 'G',  '\u011e': 'G', '\u0120': 'G', '\u0122': 'G',
-  '\u011d': 'g',  '\u011f': 'g', '\u0121': 'g', '\u0123': 'g',
-  '\u0124': 'H',  '\u0126': 'H', '\u0125': 'h', '\u0127': 'h',
-  '\u0128': 'I',  '\u012a': 'I', '\u012c': 'I', '\u012e': 'I', '\u0130': 'I',
-  '\u0129': 'i',  '\u012b': 'i', '\u012d': 'i', '\u012f': 'i', '\u0131': 'i',
-  '\u0134': 'J',  '\u0135': 'j',
-  '\u0136': 'K',  '\u0137': 'k', '\u0138': 'k',
-  '\u0139': 'L',  '\u013b': 'L', '\u013d': 'L', '\u013f': 'L', '\u0141': 'L',
-  '\u013a': 'l',  '\u013c': 'l', '\u013e': 'l', '\u0140': 'l', '\u0142': 'l',
-  '\u0143': 'N',  '\u0145': 'N', '\u0147': 'N', '\u014a': 'N',
-  '\u0144': 'n',  '\u0146': 'n', '\u0148': 'n', '\u014b': 'n',
-  '\u014c': 'O',  '\u014e': 'O', '\u0150': 'O',
-  '\u014d': 'o',  '\u014f': 'o', '\u0151': 'o',
-  '\u0154': 'R',  '\u0156': 'R', '\u0158': 'R',
-  '\u0155': 'r',  '\u0157': 'r', '\u0159': 'r',
-  '\u015a': 'S',  '\u015c': 'S', '\u015e': 'S', '\u0160': 'S',
-  '\u015b': 's',  '\u015d': 's', '\u015f': 's', '\u0161': 's',
-  '\u0162': 'T',  '\u0164': 'T', '\u0166': 'T',
-  '\u0163': 't',  '\u0165': 't', '\u0167': 't',
-  '\u0168': 'U',  '\u016a': 'U', '\u016c': 'U', '\u016e': 'U', '\u0170': 'U', '\u0172': 'U',
-  '\u0169': 'u',  '\u016b': 'u', '\u016d': 'u', '\u016f': 'u', '\u0171': 'u', '\u0173': 'u',
-  '\u0174': 'W',  '\u0175': 'w',
-  '\u0176': 'Y',  '\u0177': 'y', '\u0178': 'Y',
-  '\u0179': 'Z',  '\u017b': 'Z', '\u017d': 'Z',
-  '\u017a': 'z',  '\u017c': 'z', '\u017e': 'z',
-  '\u0132': 'IJ', '\u0133': 'ij',
-  '\u0152': 'Oe', '\u0153': 'oe',
-  '\u0149': "'n", '\u017f': 's'
-};
-
-/**
- * Used by `_.deburr` to convert Latin-1 Supplement and Latin Extended-A
- * letters to basic Latin letters.
- *
- * @private
- * @param {string} letter The matched letter to deburr.
- * @returns {string} Returns the deburred letter.
- */
-var deburrLetter = basePropertyOf(deburredLetters);
-
-/** Used to match Latin Unicode letters (excluding mathematical operators). */
-var reLatin = /[\xc0-\xd6\xd8-\xf6\xf8-\xff\u0100-\u017f]/g;
-
-/** Used to compose unicode character classes. */
-var rsComboMarksRange$2 = '\\u0300-\\u036f',
-    reComboHalfMarksRange$2 = '\\ufe20-\\ufe2f',
-    rsComboSymbolsRange$2 = '\\u20d0-\\u20ff',
-    rsComboRange$2 = rsComboMarksRange$2 + reComboHalfMarksRange$2 + rsComboSymbolsRange$2;
-
-/** Used to compose unicode capture groups. */
-var rsCombo$1 = '[' + rsComboRange$2 + ']';
-
-/**
- * Used to match [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks) and
- * [combining diacritical marks for symbols](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks_for_Symbols).
- */
-var reComboMark = RegExp(rsCombo$1, 'g');
-
-/**
- * Deburrs `string` by converting
- * [Latin-1 Supplement](https://en.wikipedia.org/wiki/Latin-1_Supplement_(Unicode_block)#Character_table)
- * and [Latin Extended-A](https://en.wikipedia.org/wiki/Latin_Extended-A)
- * letters to basic Latin letters and removing
- * [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks).
- *
- * @static
- * @memberOf _
- * @since 3.0.0
- * @category String
- * @param {string} [string=''] The string to deburr.
- * @returns {string} Returns the deburred string.
- * @example
- *
- * _.deburr('déjà vu');
- * // => 'deja vu'
- */
-function deburr(string) {
-  string = toString(string);
-  return string && string.replace(reLatin, deburrLetter).replace(reComboMark, '');
-}
-
-/** Used to match words composed of alphanumeric characters. */
-var reAsciiWord = /[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/g;
-
-/**
- * Splits an ASCII `string` into an array of its words.
- *
- * @private
- * @param {string} The string to inspect.
- * @returns {Array} Returns the words of `string`.
- */
-function asciiWords(string) {
-  return string.match(reAsciiWord) || [];
-}
-
-/** Used to detect strings that need a more robust regexp to match words. */
-var reHasUnicodeWord = /[a-z][A-Z]|[A-Z]{2,}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]/;
-
-/**
- * Checks if `string` contains a word composed of Unicode symbols.
- *
- * @private
- * @param {string} string The string to inspect.
- * @returns {boolean} Returns `true` if a word is found, else `false`.
- */
-function hasUnicodeWord(string) {
-  return reHasUnicodeWord.test(string);
-}
-
-/** Used to compose unicode character classes. */
-var rsAstralRange$2 = '\\ud800-\\udfff',
-    rsComboMarksRange$3 = '\\u0300-\\u036f',
-    reComboHalfMarksRange$3 = '\\ufe20-\\ufe2f',
-    rsComboSymbolsRange$3 = '\\u20d0-\\u20ff',
-    rsComboRange$3 = rsComboMarksRange$3 + reComboHalfMarksRange$3 + rsComboSymbolsRange$3,
-    rsDingbatRange = '\\u2700-\\u27bf',
-    rsLowerRange = 'a-z\\xdf-\\xf6\\xf8-\\xff',
-    rsMathOpRange = '\\xac\\xb1\\xd7\\xf7',
-    rsNonCharRange = '\\x00-\\x2f\\x3a-\\x40\\x5b-\\x60\\x7b-\\xbf',
-    rsPunctuationRange = '\\u2000-\\u206f',
-    rsSpaceRange = ' \\t\\x0b\\f\\xa0\\ufeff\\n\\r\\u2028\\u2029\\u1680\\u180e\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u202f\\u205f\\u3000',
-    rsUpperRange = 'A-Z\\xc0-\\xd6\\xd8-\\xde',
-    rsVarRange$2 = '\\ufe0e\\ufe0f',
-    rsBreakRange = rsMathOpRange + rsNonCharRange + rsPunctuationRange + rsSpaceRange;
-
-/** Used to compose unicode capture groups. */
-var rsApos = "['\u2019]",
-    rsBreak = '[' + rsBreakRange + ']',
-    rsCombo$2 = '[' + rsComboRange$3 + ']',
-    rsDigits = '\\d+',
-    rsDingbat = '[' + rsDingbatRange + ']',
-    rsLower = '[' + rsLowerRange + ']',
-    rsMisc = '[^' + rsAstralRange$2 + rsBreakRange + rsDigits + rsDingbatRange + rsLowerRange + rsUpperRange + ']',
-    rsFitz$1 = '\\ud83c[\\udffb-\\udfff]',
-    rsModifier$1 = '(?:' + rsCombo$2 + '|' + rsFitz$1 + ')',
-    rsNonAstral$1 = '[^' + rsAstralRange$2 + ']',
-    rsRegional$1 = '(?:\\ud83c[\\udde6-\\uddff]){2}',
-    rsSurrPair$1 = '[\\ud800-\\udbff][\\udc00-\\udfff]',
-    rsUpper = '[' + rsUpperRange + ']',
-    rsZWJ$2 = '\\u200d';
-
-/** Used to compose unicode regexes. */
-var rsMiscLower = '(?:' + rsLower + '|' + rsMisc + ')',
-    rsMiscUpper = '(?:' + rsUpper + '|' + rsMisc + ')',
-    rsOptContrLower = '(?:' + rsApos + '(?:d|ll|m|re|s|t|ve))?',
-    rsOptContrUpper = '(?:' + rsApos + '(?:D|LL|M|RE|S|T|VE))?',
-    reOptMod$1 = rsModifier$1 + '?',
-    rsOptVar$1 = '[' + rsVarRange$2 + ']?',
-    rsOptJoin$1 = '(?:' + rsZWJ$2 + '(?:' + [rsNonAstral$1, rsRegional$1, rsSurrPair$1].join('|') + ')' + rsOptVar$1 + reOptMod$1 + ')*',
-    rsOrdLower = '\\d*(?:1st|2nd|3rd|(?![123])\\dth)(?=\\b|[A-Z_])',
-    rsOrdUpper = '\\d*(?:1ST|2ND|3RD|(?![123])\\dTH)(?=\\b|[a-z_])',
-    rsSeq$1 = rsOptVar$1 + reOptMod$1 + rsOptJoin$1,
-    rsEmoji = '(?:' + [rsDingbat, rsRegional$1, rsSurrPair$1].join('|') + ')' + rsSeq$1;
-
-/** Used to match complex or compound words. */
-var reUnicodeWord = RegExp([
-  rsUpper + '?' + rsLower + '+' + rsOptContrLower + '(?=' + [rsBreak, rsUpper, '$'].join('|') + ')',
-  rsMiscUpper + '+' + rsOptContrUpper + '(?=' + [rsBreak, rsUpper + rsMiscLower, '$'].join('|') + ')',
-  rsUpper + '?' + rsMiscLower + '+' + rsOptContrLower,
-  rsUpper + '+' + rsOptContrUpper,
-  rsOrdUpper,
-  rsOrdLower,
-  rsDigits,
-  rsEmoji
-].join('|'), 'g');
-
-/**
- * Splits a Unicode `string` into an array of its words.
- *
- * @private
- * @param {string} The string to inspect.
- * @returns {Array} Returns the words of `string`.
- */
-function unicodeWords(string) {
-  return string.match(reUnicodeWord) || [];
-}
-
-/**
- * Splits `string` into an array of its words.
- *
- * @static
- * @memberOf _
- * @since 3.0.0
- * @category String
- * @param {string} [string=''] The string to inspect.
- * @param {RegExp|string} [pattern] The pattern to match words.
- * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
- * @returns {Array} Returns the words of `string`.
- * @example
- *
- * _.words('fred, barney, & pebbles');
- * // => ['fred', 'barney', 'pebbles']
- *
- * _.words('fred, barney, & pebbles', /[^, ]+/g);
- * // => ['fred', 'barney', '&', 'pebbles']
- */
-function words(string, pattern, guard) {
-  string = toString(string);
-  pattern = guard ? undefined : pattern;
-
-  if (pattern === undefined) {
-    return hasUnicodeWord(string) ? unicodeWords(string) : asciiWords(string);
-  }
-  return string.match(pattern) || [];
-}
-
-/** Used to compose unicode capture groups. */
-var rsApos$1 = "['\u2019]";
-
-/** Used to match apostrophes. */
-var reApos = RegExp(rsApos$1, 'g');
-
-/**
- * Creates a function like `_.camelCase`.
- *
- * @private
- * @param {Function} callback The function to combine each word.
- * @returns {Function} Returns the new compounder function.
- */
-function createCompounder(callback) {
-  return function(string) {
-    return arrayReduce(words(deburr(string).replace(reApos, '')), callback, '');
-  };
-}
-
-/**
- * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash modularize exports="es" include="camelCase,debounce"`
- * Copyright JS Foundation and other contributors <https://js.foundation/>
- * Released under MIT license <https://lodash.com/license>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- */
-
-/**
- * Converts `string` to [camel case](https://en.wikipedia.org/wiki/CamelCase).
- *
- * @static
- * @memberOf _
- * @since 3.0.0
- * @category String
- * @param {string} [string=''] The string to convert.
- * @returns {string} Returns the camel cased string.
- * @example
- *
- * _.camelCase('Foo Bar');
- * // => 'fooBar'
- *
- * _.camelCase('--foo-bar--');
- * // => 'fooBar'
- *
- * _.camelCase('__FOO_BAR__');
- * // => 'fooBar'
- */
-var camelCase = createCompounder(function(result, word, index) {
-  word = word.toLowerCase();
-  return result + (index ? capitalize(word) : word);
-});
 
 /**
  * Checks if `value` is the
@@ -804,6 +206,8 @@ function isObject(value) {
   return value != null && (type == 'object' || type == 'function');
 }
 
+var isObject_1 = isObject;
+
 /**
  * Gets the timestamp of the number of milliseconds that have elapsed since
  * the Unix epoch (1 January 1970 00:00:00 UTC).
@@ -821,8 +225,10 @@ function isObject(value) {
  * // => Logs the number of milliseconds it took for the deferred invocation.
  */
 var now = function() {
-  return root.Date.now();
+  return _root.Date.now();
 };
+
+var now_1 = now;
 
 /** Used as references for various `Number` constants. */
 var NAN = 0 / 0;
@@ -869,12 +275,12 @@ function toNumber(value) {
   if (typeof value == 'number') {
     return value;
   }
-  if (isSymbol(value)) {
+  if (isSymbol_1(value)) {
     return NAN;
   }
-  if (isObject(value)) {
+  if (isObject_1(value)) {
     var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
-    value = isObject(other) ? (other + '') : other;
+    value = isObject_1(other) ? (other + '') : other;
   }
   if (typeof value != 'string') {
     return value === 0 ? value : +value;
@@ -886,14 +292,7 @@ function toNumber(value) {
     : (reIsBadHex.test(value) ? NAN : +value);
 }
 
-/**
- * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash modularize exports="es" include="camelCase,debounce"`
- * Copyright JS Foundation and other contributors <https://js.foundation/>
- * Released under MIT license <https://lodash.com/license>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- */
+var toNumber_1 = toNumber;
 
 /** Error message constants. */
 var FUNC_ERROR_TEXT = 'Expected a function';
@@ -971,11 +370,11 @@ function debounce(func, wait, options) {
   if (typeof func != 'function') {
     throw new TypeError(FUNC_ERROR_TEXT);
   }
-  wait = toNumber(wait) || 0;
-  if (isObject(options)) {
+  wait = toNumber_1(wait) || 0;
+  if (isObject_1(options)) {
     leading = !!options.leading;
     maxing = 'maxWait' in options;
-    maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
+    maxWait = maxing ? nativeMax(toNumber_1(options.maxWait) || 0, wait) : maxWait;
     trailing = 'trailing' in options ? !!options.trailing : trailing;
   }
 
@@ -1020,7 +419,7 @@ function debounce(func, wait, options) {
   }
 
   function timerExpired() {
-    var time = now();
+    var time = now_1();
     if (shouldInvoke(time)) {
       return trailingEdge(time);
     }
@@ -1049,11 +448,11 @@ function debounce(func, wait, options) {
   }
 
   function flush() {
-    return timerId === undefined ? result : trailingEdge(now());
+    return timerId === undefined ? result : trailingEdge(now_1());
   }
 
   function debounced() {
-    var time = now(),
+    var time = now_1(),
         isInvoking = shouldInvoke(time);
 
     lastArgs = arguments;
@@ -1066,6 +465,7 @@ function debounce(func, wait, options) {
       }
       if (maxing) {
         // Handle invocations in a tight loop.
+        clearTimeout(timerId);
         timerId = setTimeout(timerExpired, wait);
         return invokeFunc(lastCallTime);
       }
@@ -1080,42 +480,46 @@ function debounce(func, wait, options) {
   return debounced;
 }
 
-// does not play well with rollup yet. TODO: revisit once js-cookie ES out of beta
-let Cookies
+var debounce_1 = debounce;
 
-/*!
- * JavaScript Cookie v2.2.1
- * https://github.com/js-cookie/js-cookie
- *
- * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
- * Released under the MIT license
- */
-;
+var js_cookie = createCommonjsModule(function (module, exports) {
 (function (factory) {
-	Cookies = factory();
+	var registeredInModuleLoader;
+	{
+		module.exports = factory();
+		registeredInModuleLoader = true;
+	}
+	if (!registeredInModuleLoader) {
+		var OldCookies = window.Cookies;
+		var api = window.Cookies = factory();
+		api.noConflict = function () {
+			window.Cookies = OldCookies;
+			return api;
+		};
+	}
 }(function () {
 	function extend () {
 		var i = 0;
 		var result = {};
 		for (; i < arguments.length; i++) {
-			var attributes = arguments[i];
+			var attributes = arguments[ i ];
 			for (var key in attributes) {
 				result[key] = attributes[key];
 			}
 		}
-		return result
+		return result;
 	}
 
 	function decode (s) {
-		return s.replace(/(%[0-9A-Z]{2})+/g, decodeURIComponent)
+		return s.replace(/(%[0-9A-Z]{2})+/g, decodeURIComponent);
 	}
 
 	function init (converter) {
-		function api () {}
+		function api() {}
 
 		function set (key, value, attributes) {
 			if (typeof document === 'undefined') {
-				return
+				return;
 			}
 
 			attributes = extend({
@@ -1136,8 +540,10 @@ let Cookies
 				}
 			} catch (e) {}
 
-			value = converter.write ? converter.write(value, key) : encodeURIComponent(String(value))
-				.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
+			value = converter.write ?
+				converter.write(value, key) :
+				encodeURIComponent(String(value))
+					.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
 
 			key = encodeURIComponent(String(key))
 				.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent)
@@ -1146,11 +552,11 @@ let Cookies
 			var stringifiedAttributes = '';
 			for (var attributeName in attributes) {
 				if (!attributes[attributeName]) {
-					continue
+					continue;
 				}
 				stringifiedAttributes += '; ' + attributeName;
 				if (attributes[attributeName] === true) {
-					continue
+					continue;
 				}
 
 				// Considers RFC 6265 section 5.2:
@@ -1163,12 +569,12 @@ let Cookies
 				stringifiedAttributes += '=' + attributes[attributeName].split(';')[0];
 			}
 
-			return (document.cookie = key + '=' + value + stringifiedAttributes)
+			return (document.cookie = key + '=' + value + stringifiedAttributes);
 		}
 
 		function get (key, json) {
 			if (typeof document === 'undefined') {
-				return
+				return;
 			}
 
 			var jar = {};
@@ -1199,20 +605,20 @@ let Cookies
 					jar[name] = cookie;
 
 					if (key === name) {
-						break
+						break;
 					}
 				} catch (e) {}
 			}
 
-			return key ? jar[key] : jar
+			return key ? jar[key] : jar;
 		}
 
 		api.set = set;
 		api.get = function (key) {
-			return get(key, false /* read as raw */)
+			return get(key, false /* read as raw */);
 		};
 		api.getJSON = function (key) {
-			return get(key, true /* read as json */)
+			return get(key, true /* read as json */);
 		};
 		api.remove = function (key, attributes) {
 			set(key, '', extend(attributes, {
@@ -1224,11 +630,12 @@ let Cookies
 
 		api.withConverter = init;
 
-		return api
+		return api;
 	}
 
-	return init(function () {})
+	return init(function () {});
 }));
+});
 
 /**
 	Utility routines for Sargasso classes
@@ -1283,21 +690,6 @@ const _inViewPort = (element, container = window) => {
 	return (visible && !belowTheFold && !aboveTheTop)
 };
 
-/*
-	element: element to apply to
-	css: JSON object with properties in kebab-case or camelCase (or even in snake_case and seperate words)
-*/
-
-const _css = (element, css) => {
-	for (const prop in css) {
-		let key = prop;
-		if (key.match(/_- /)) {
-			key = camelCase(prop);
-		}
-		element.style[key] = css[prop];
-	}
-};
-
 const elementTools = {
 	hasClass: _hasClass,
 	addClass: _addClass,
@@ -1322,11 +714,6 @@ const elementTools = {
 	EG. watchDOM, watchScroll, watchResize, watchOrientation
 **/
 
-const tracing = false;
-const trace = (obj, message, blob) => {
-	console.log(obj.constructor.name, obj.uid, message, blob || null);
-};
-
 class ObserverSubscriptionManager {
 	constructor (options) {
 		this.options = options;
@@ -1343,7 +730,6 @@ class ObserverSubscriptionManager {
 	}
 
 	unSubscribe (observer) {
-		if (tracing) trace(this, 'unSubscribe', observer);
 
 		if (this.observers.indexOf(observer) !== -1) {
 			this.observers.splice(this.observers.indexOf(observer), 1);
@@ -1355,11 +741,9 @@ class ObserverSubscriptionManager {
 	}
 
 	sleep () {
-		if (tracing) trace(this, 'sleep');
 	}
 
 	wakeup () {
-		if (tracing) trace(this, 'wakeup');
 	}
 
 	notifyObservers (event, params) {
@@ -1402,7 +786,7 @@ class DOMWatcher extends ObserverSubscriptionManager {
 		super(options);
 
 		// debounce - just need to know if a change occured, not every change
-		this.mutationHandler = debounce((mutations, observer) => {
+		this.mutationHandler = debounce_1((mutations, observer) => {
 			this.observeDOM(mutations, observer);
 		}, 100, {
 			maxWait: 250
@@ -1508,7 +892,7 @@ class ResizeWatcher extends ObserverSubscriptionManager {
 	constructor (options) {
 		super(options);
 
-		this.debounce = debounce(() => {
+		this.debounce = debounce_1(() => {
 			this.watchResize();
 		}, 250);
 	}
@@ -1543,7 +927,7 @@ class OrientationWatcher extends ObserverSubscriptionManager {
 			elementTools.addClass(document.body, 'no-orientation');
 		}
 
-		this.debounce = debounce(() => {
+		this.debounce = debounce_1(() => {
 			this.watchOrientation();
 		}, 250);
 	}
@@ -1699,11 +1083,6 @@ const registerSargassoClass = (className, object) => {
 	registeredClasses[className] = object;
 };
 
-const tracing$1 = false;
-const trace$1 = (obj, message, blob) => {
-	console.log(obj.constructor.name, obj.uid, message, blob || null);
-};
-
 const eventNames = [
 	'DOMChanged', 'didScroll', 'didResize', 'didBreakpoint', 'enterViewport', 'exitViewport', 'enterFullscreen', 'exitFullscreen', 'newPage', 'elementEvent'
 ];
@@ -1728,7 +1107,6 @@ class Sargasso {
 	}
 
 	start () {
-		if (tracing$1) trace$1(this, 'start');
 
 		// subscribe to desired event services
 
@@ -1856,7 +1234,6 @@ class Sargasso {
 	// called when this.element is removed from the DOM
 	// you normally don't need to call this
 	destroy () {
-		if (tracing$1) trace$1(this, 'destroy');
 
 		this.flushQueue();
 
@@ -2371,7 +1748,7 @@ class Breakpoints extends Sargasso {
 	};
 
 	getCookie (key) {
-		return Cookies.get(key)
+		return js_cookie.get(key)
 	};
 
 	setCookie (key, value, expires) {
@@ -2380,14 +1757,13 @@ class Breakpoints extends Sargasso {
 			domain: this.options.cookieDomain || null,
 			expires: expires
 		};
-		Cookies.set(key, value, options);
+		js_cookie.set(key, value, options);
 	};
 
 	deleteCookie (key) {
 		this.setCookie(key, null);
 	};
-};
-
+}
 registerSargassoClass('Breakpoints', Breakpoints);
 
 /**
@@ -2660,4 +2036,3 @@ if (window) {
 }
 
 export { Sargasso, bootSargasso, registerSargassoClass };
-//# sourceMappingURL=sargasso.es.js.map

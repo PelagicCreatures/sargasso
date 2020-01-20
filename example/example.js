@@ -1,7 +1,6 @@
-import {
-	Sargasso, registerSargassoClass, bootSargasso
-}
-	from '../index.js'
+/*
+	example bootstrap and class definition for pages using /dist/sargasso.xxx.js libs
+*/
 
 class myClass extends Sargasso {
 	constructor (element, options = {}) {
@@ -56,6 +55,4 @@ const loadPageHandler = bootSargasso({
 	scrollElement: document.getElementById('scroll-wrapper')
 })
 
-export {
-	loadPageHandler
-}
+window.loadPageHandler = loadPageHandler

@@ -5,7 +5,7 @@ const entry = {
 
 const legacy = {
 	output: {
-		filename: './sargasso.common.js'
+		filename: './sargasso.cjs.js'
 	},
 	name: 'antique',
 	entry,

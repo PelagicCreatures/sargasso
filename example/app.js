@@ -1,3 +1,12 @@
+/*
+	example ES6 app entrypoint for bundling a site app
+*/
+
+import {
+	Sargasso, registerSargassoClass, bootSargasso
+}
+	from '../index.js' // or more likely from '@pelagiccreatures/sargasso'
+
 class myClass extends Sargasso {
 	constructor (element, options = {}) {
 		options.watchViewport = true
@@ -51,4 +60,6 @@ const loadPageHandler = bootSargasso({
 	scrollElement: document.getElementById('scroll-wrapper')
 })
 
-window.loadPageHandler = loadPageHandler
+export {
+	loadPageHandler
+}

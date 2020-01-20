@@ -26,6 +26,9 @@
 	"devDependencies": {
 		"@babel/core": "^7.7.7",
 		"@babel/preset-env": "^7.7.7",
+		"@rollup/plugin-commonjs": "^11.0.1",
+		"@rollup/plugin-json": "^4.0.1",
+		"@rollup/plugin-node-resolve": "^7.0.0",
 		"babel-loader": "^8.0.6",
 		"babel-plugin-lodash": "^3.3.4",
 		"babel-preset-env": "^1.7.0",
@@ -40,6 +43,7 @@
 		"webpack-cli": "^3.3.10"
 	},
 	"dependencies": {
+		"js-cookie": "^2.2.1",
 		"lodash": "^4.17.15"
 	},
 	"directories": {
