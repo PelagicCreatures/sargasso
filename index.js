@@ -39,6 +39,11 @@ import {
 }
 	from './lib/Services.js'
 
+import {
+	elementTools
+}
+	from './lib/utils.js'
+
 let loadPage
 
 const bootSargasso = (options = {}) => {
@@ -68,8 +73,9 @@ if (window) {
 	window.Sargasso = Sargasso
 	window.registerSargassoClass = registerSargassoClass
 	window.bootSargasso = bootSargasso
+	window.elementTools = elementTools
 }
 
 export {
-	Sargasso, registerSargassoClass, bootSargasso
+	Sargasso, registerSargassoClass, bootSargasso, elementTools
 }

@@ -90,7 +90,7 @@
 /*!******************!*\
   !*** ./index.js ***!
   \******************/
-/*! exports provided: Sargasso, registerSargassoClass, bootSargasso */
+/*! exports provided: Sargasso, registerSargassoClass, bootSargasso, elementTools */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -106,6 +106,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_HijaxLoader_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./lib/HijaxLoader.js */ "./lib/HijaxLoader.js");
 /* harmony import */ var _lib_LazyBackground_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./lib/LazyBackground.js */ "./lib/LazyBackground.js");
 /* harmony import */ var _lib_Services_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./lib/Services.js */ "./lib/Services.js");
+/* harmony import */ var _lib_utils_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./lib/utils.js */ "./lib/utils.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "elementTools", function() { return _lib_utils_js__WEBPACK_IMPORTED_MODULE_6__["elementTools"]; });
+
 /*
 	Sargasso
 
@@ -116,6 +119,7 @@ __webpack_require__.r(__webpack_exports__);
 	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
 
 	*/
+
 
 
 
@@ -154,6 +158,7 @@ if (window) {
   window.Sargasso = _lib_Sargasso_js__WEBPACK_IMPORTED_MODULE_0__["Sargasso"];
   window.registerSargassoClass = _lib_Sargasso_js__WEBPACK_IMPORTED_MODULE_0__["registerSargassoClass"];
   window.bootSargasso = bootSargasso;
+  window.elementTools = _lib_utils_js__WEBPACK_IMPORTED_MODULE_6__["elementTools"];
 }
 
 
@@ -2201,8 +2206,8 @@ var elementTools = {
   addClass: _addClass,
   removeClass: _removeClass,
   isVisible: _isVisible,
-  inViewPort: _inViewPort // setCSS: _css
-
+  inViewPort: _inViewPort,
+  setCSS: _css
 };
 
 
