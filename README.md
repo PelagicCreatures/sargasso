@@ -168,14 +168,13 @@ To avoid any chaotic repaints you should only make DOM changes inside animation 
 
 ```
 class MyButtonClass extends Sargasso {
-
-	constructor(element, options = {}) {
+	constructor (element, options = {}) {
 		options.watchViewport = true // tell me when I am visible
 		super(element, options) // important!
 	}
 
 	// listen for click
-	start() {
+	start () {
 		super.start() // important!
 		this.clicker = (e) => {
 			this.clicked()
@@ -184,27 +183,30 @@ class MyButtonClass extends Sargasso {
 	}
 
 	// cleanup listener
-	sleep() {
+	sleep () {
 		this.element.removeEventListener('click', this.clicker)
 		super.sleep() // important!
 	}
 
 	// use an animation frame to mutate the DOM
-	clicked() {
-		let frame = () { // set up a DOM mutation
+	clicked () {
+		const frame = () => { // set up a DOM mutation
 			this.addClass('clicked')
+			this.element.textContent = 'Clicked!'
 		}
 		this.queueFrame(frame) // schedule it
 	}
 
-	enterViewport() {
+	enterViewport () {
 		// do some stuff such as modify element html or classes
-		let frame = () => {
-			this.element.innerHTML = '<p>Hello viewport! Please click me!'
+		const frame = () => {
+			this.element.textContent = 'Hello viewport! Click me!'
 		}
 		this.queueFrame(frame)
 	}
 }
+
+registerSargassoClass('MyButtonClass', MyButtonClass)
 
 Then in HTML:
 
