@@ -2,18 +2,31 @@
 	<head>
 		<title>Bundled App Example</title>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"/>
+		<style>
+			.clicked { background-color: pink; }
+		</style>
 	</head>
-	<body style="position: fixed; overflow: hidden;">
+	<body style="position: fixed; overflow: hidden; ">
 		<script type="module">
 			import { loadPageHandler } from "/app-bundle.es.js"
 			window.loadPageHandler = loadPageHandler
 		</script>
 		<div id="scroll-wrapper" style="width:100vw; height:100vh; overflow-y:scroll;">
-			<h1>This is static</h1>
-			<p>Once loaded it stays the same no matter what page you go to. The main advantages of this approach are speed and letting javascript hold state between pages making it more like an app than a web site. A web app.</p>
-			<div id="content" data-hijax>
-				<p>But this HIJAX container's content changes from page to page. <a href="/page1.html">Click Here!</a></p>
-				<p>The clicks are captured but the HIJAX controller so they mostly deal with it. If you need to programatically load a page call the loadPageHandler <span style="text-decoration:underline;cursor:pointer;" onClick="loadPageHandler('/page2.html')">Like This</span>
+			<div style="padding:1em;">
+				<h1>This is static</h1>
+				<p>Once loaded it stays the same no matter what page you go to. The main advantages of this approach are speed and letting javascript hold state between pages making it more like an app than a web site. A web app.</p>
+				<div id="content" data-hijax style="border:thin dashed red;padding:1em; margin:1em;">
+					<p>But this HIJAX container's content changes from page to page. <a href="/page1.html">Click Here!</a></p>
+					<p>The clicks are captured but the HIJAX controller so they mostly deal with it. If you need to programatically load a page call the loadPageHandler <span style="text-decoration:underline;cursor:pointer;" onClick="loadPageHandler('/page2.html')">Like This</span>
+					<div data-sargasso-class="Noisy" id="index"><em>I'm Noisy (#index)... Look in browser console to see what I see. I'm dynamic and die when new page is loaded.</em></div>
+				</div>
+				<p>Also static down here.</p>
+
+				<div id="content-footer" data-hijax style="border:thin dashed red;padding:1em; margin:1em;">
+						<p>more dynamic stuff, index page</p>
+				</div>
+
+				<div data-sargasso-class="Noisy" id="static"><em>I'm Noisy (#static)... Look in browser console to see what I see. I persists from page to page.</em></div>
 			</div>
 		</div>
 	</body>

@@ -2035,6 +2035,115 @@ if (window) {
 	window.bootSargasso = bootSargasso;
 }
 
+class Noisy extends Sargasso {
+	constructor (element, options = {}) {
+		super(element, {
+			watchDOM: true,
+			watchScroll: true,
+			watchResize: true,
+			watchViewport: true,
+			watchOrientation: true
+		});
+		this.logIt('constructor');
+	}
+
+	start () {
+		super.start();
+		this.logIt('start');
+
+		const task = `let counters= {}
+			onmessage = async (e) => {
+				if(!counters[e.data.uid]) { counters[e.data.uid] = e.data.count }
+
+				setInterval(()=>{
+					self.postMessage({ uid: e.data.uid, count: ++counters[e.data.uid] })
+				},4000)
+			}`;
+
+		this.workerStart('noisy', task);
+
+		this.workerPostMessage('noisy', {
+			count: 0
+		});
+	}
+
+	sleep () {
+		super.sleep();
+		this.logIt('sleep');
+	}
+
+	destroy () {
+		this.logIt('destroy');
+		super.destroy();
+	}
+
+	DOMChanged () {
+		super.DOMChanged();
+		this.logIt('DOMChanged');
+	}
+
+	didScroll () {
+		super.didScroll();
+		this.logIt('didScroll');
+	}
+
+	didResize () {
+		super.didResize();
+		this.logIt('didResize');
+	}
+
+	enterViewport () {
+		super.enterViewport();
+		this.logIt('enterViewport');
+	}
+
+	exitViewport () {
+		super.exitViewport();
+		this.logIt('exitViewport');
+	}
+
+	enterFullscreen () {
+		super.enterFullscreen();
+		this.logIt('enterFullscreen');
+	}
+
+	exitFullscreen () {
+		super.exitFullscreen();
+		this.logIt('exitFullscreen');
+	}
+
+	newPage (old, newPage) {
+		super.newPage();
+		this.logIt('newPage');
+	}
+
+	didBreakpoint () {
+		super.didBreakpoint();
+		this.logIt('didBreakpoint');
+	}
+
+	elementEvent (e) {
+		super.elementEvent();
+		this.logIt('elementEvent');
+	}
+
+	workerOnMessage (id, data) {
+		this.logIt('workerOnMessage ' + id + ' slowly counting... ' + data.count);
+		super.workerOnMessage(id, data);
+	}
+
+	stopWorker (id) {
+		this.logIt('stopWorker ' + id);
+		super.stopWorker(id);
+	}
+
+	logIt (message) {
+		console.log(this.constructor.name, this.element.id, this.uid, message);
+	}
+}
+
+registerSargassoClass('Noisy', Noisy);
+
 /*
 	example ES6 app entrypoint for bundling a site app
 */
@@ -2078,6 +2187,47 @@ class myClass extends Sargasso {
 }
 
 registerSargassoClass('myClass', myClass);
+
+class MyButtonClass extends Sargasso {
+	constructor (element, options = {}) {
+		options.watchViewport = true; // tell me when I am visible
+		super(element, options); // important!
+	}
+
+	// listen for click
+	start () {
+		super.start(); // important!
+		this.clicker = (e) => {
+			this.clicked();
+		};
+		this.element.addEventListener('click', this.clicker, false);
+	}
+
+	// cleanup listener
+	sleep () {
+		this.element.removeEventListener('click', this.clicker);
+		super.sleep(); // important!
+	}
+
+	// use an animation frame to mutate the DOM
+	clicked () {
+		const frame = () => { // set up a DOM mutation
+			this.addClass('clicked');
+			this.element.textContent = 'Clicked!';
+		};
+		this.queueFrame(frame); // schedule it
+	}
+
+	enterViewport () {
+		// do some stuff such as modify element html or classes
+		const frame = () => {
+			this.element.textContent = 'Hello viewport! Click me!';
+		};
+		this.queueFrame(frame);
+	}
+}
+
+registerSargassoClass('MyButtonClass', MyButtonClass);
 
 const loadPageHandler = bootSargasso({
 	hijax: {

@@ -7,6 +7,11 @@ import {
 }
 	from '../index.js' // or more likely from '@pelagiccreatures/sargasso'
 
+import {
+	Noisy
+}
+	from './lib/Noisy.js'
+
 class myClass extends Sargasso {
 	constructor (element, options = {}) {
 		options.watchViewport = true
@@ -46,6 +51,47 @@ class myClass extends Sargasso {
 }
 
 registerSargassoClass('myClass', myClass)
+
+class MyButtonClass extends Sargasso {
+	constructor (element, options = {}) {
+		options.watchViewport = true // tell me when I am visible
+		super(element, options) // important!
+	}
+
+	// listen for click
+	start () {
+		super.start() // important!
+		this.clicker = (e) => {
+			this.clicked()
+		}
+		this.element.addEventListener('click', this.clicker, false)
+	}
+
+	// cleanup listener
+	sleep () {
+		this.element.removeEventListener('click', this.clicker)
+		super.sleep() // important!
+	}
+
+	// use an animation frame to mutate the DOM
+	clicked () {
+		const frame = () => { // set up a DOM mutation
+			this.addClass('clicked')
+			this.element.textContent = 'Clicked!'
+		}
+		this.queueFrame(frame) // schedule it
+	}
+
+	enterViewport () {
+		// do some stuff such as modify element html or classes
+		const frame = () => {
+			this.element.textContent = 'Hello viewport! Click me!'
+		}
+		this.queueFrame(frame)
+	}
+}
+
+registerSargassoClass('MyButtonClass', MyButtonClass)
 
 const loadPageHandler = bootSargasso({
 	hijax: {
