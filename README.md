@@ -32,7 +32,7 @@ The ES and the CommonJS bundles both expose:
 
 ```
 <script type="module" src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.es.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.cjs.js" nomodule></script>
+<script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.cjs.js" nomodule defer></script>
 <script defer>
 	... your code here ...
 </script>
@@ -103,9 +103,9 @@ New pages are loaded via AJAX and are merged with the current page only replacin
 <html>
 ```
 
-Note that data-hijax elements must have well formed child html elements. **Not** like this:
+Note that data-hijax elements must have well formed child html elements. **Not** raw text like this:
 
-```<div>I'm just text. No child elements. Won't work.</div>```
+```<div id="nope" data-hijax>I'm just text. No child elements. Won't work.</div>```
 
 
 ### Sargasso Object Lifecycle
@@ -133,7 +133,7 @@ Your Sargasso subclasses subscribe to event feeds to be notified of events.
 | newPage(old, new) | on a new page |
 | didBreakpoint() | new screen width breakpoint |
 | elementEvent(e) | this.element received an 'sargasso' event |
-| workerOnMessage (id, e) | id is the worker sending the message. Any payload from the worker `postMessage` is in e.data.xxx as defined by the worker |
+| workerOnMessage (id, data = {}) | id is the worker sending the message. Any payload from the worker `postMessage` is in data.xxx as defined by the worker |
 
 
 **Properties**
@@ -156,9 +156,10 @@ Your Sargasso subclasses subscribe to event feeds to be notified of events.
 | scrollTop(newTop) | get and set the current scroll position |
 | queueFrame(function) | queue a function to execute that changes the DOM |
 | workerStart(id, codeOrURL) | start a web worker with id. Ignored if worker id already installed (see lib/LazyBackground.js for a shared worker example)|
+| workerPostMessage(id, data {}) | send the worker tagged with `id` a message. the message must be an object which can have any structure you want to pass to the worker |
 
 
-You need to let sargasso know about your class:
+Don't forget you need to let sargasso know about your class:
 ```registerSargassoClass('MyClass', MyClass)```
 
 ### Using Animation Frames
@@ -217,9 +218,9 @@ Then in HTML:
 ### Using managed Web Workers
 You should offload compute heavy tasks to a new thread when possible.
 
-Sargasso controllers have build in managed Web Workers that can be defined in external scripts or inline code blobs simplifying the management of running workers.
+Sargasso controllers have built in managed Web Workers that can be defined in external scripts or inline code blobs simplifying the management of running workers.
 
-The worker code runs when it receives an onmessage event
+The worker code runs when it receives an onmessage event.
 
 A web worker, once installed, could be used by many instances so sargasso sets e.data.uid to the id on the instance that is invoking the worker which we need to pass back in the postMessage so we know who is who.
 
@@ -257,14 +258,14 @@ class MySubClass extends Sargasso {
 	}
 
 	// listen for worker result
-	workerOnMessage (id, e) {
+	workerOnMessage (id, data) {
 		if (id === 'pointlessMath') {
 			const frame = () => {
-				this.element.innerHTML = e.data
+				this.element.innerHTML = data.result
 			}
 			this.queueFrame(frame)
 		}
-		super.workerOnMessage(id, e)
+		super.workerOnMessage(id, data)
 	}
 }
 ```

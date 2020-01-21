@@ -1412,12 +1412,12 @@ class Sargasso {
 
 	workerMessage (id, e) {
 		if (e.data.uid === this.uid) {
-			this.workerOnMessage(id, e);
+			this.workerOnMessage(id, e.data);
 		}
 	}
 
 	// subclass should overide this to listen to workers
-	workerOnMessage (id, e) {
+	workerOnMessage (id, data) {
 
 	}
 
@@ -1969,10 +1969,10 @@ class LazyBackground extends Sargasso {
 	}
 
 	// we got a message back from a worker
-	workerOnMessage (id, e) {
+	workerOnMessage (id, data) {
 		if (id === 'loader') {
-			if (e.data.uid === this.uid) {
-				this.blobURL = URL.createObjectURL(e.data.blob);
+			if (data.uid === this.uid) {
+				this.blobURL = URL.createObjectURL(data.blob);
 				const frame = () => {
 					this.element.style.backgroundImage = 'url(' + this.blobURL + ')';
 					this.sleep(); // We're done. That was easy.
@@ -1980,7 +1980,7 @@ class LazyBackground extends Sargasso {
 				this.queueFrame(frame);
 			}
 		}
-		super.workerOnMessage(id, e);
+		super.workerOnMessage(id, data);
 	}
 
 	destroy () {
@@ -2066,14 +2066,14 @@ class myClass extends Sargasso {
 		});
 	}
 
-	workerOnMessage (id, e) {
+	workerOnMessage (id, data) {
 		if (id === 'myworkId') {
 			const frame = () => {
-				this.element.innerHTML = e.data.result;
+				this.element.innerHTML = data.result;
 			};
 			this.queueFrame(frame);
 		}
-		super.workerOnMessage(id, e);
+		super.workerOnMessage(id, data);
 	}
 }
 

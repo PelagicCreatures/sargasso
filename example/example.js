@@ -29,14 +29,14 @@ class myClass extends Sargasso {
 		})
 	}
 
-	workerOnMessage (id, e) {
+	workerOnMessage (id, data) {
 		if (id === 'myworkId') {
 			const frame = () => {
-				this.element.innerHTML = e.data.result
+				this.element.innerHTML = data.result
 			}
 			this.queueFrame(frame)
 		}
-		super.workerOnMessage(id, e)
+		super.workerOnMessage(id, data)
 	}
 }
 

@@ -769,12 +769,12 @@ function (_Sargasso) {
 
   }, {
     key: "workerOnMessage",
-    value: function workerOnMessage(id, e) {
+    value: function workerOnMessage(id, data) {
       var _this2 = this;
 
       if (id === 'loader') {
-        if (e.data.uid === this.uid) {
-          this.blobURL = URL.createObjectURL(e.data.blob);
+        if (data.uid === this.uid) {
+          this.blobURL = URL.createObjectURL(data.blob);
 
           var frame = function frame() {
             _this2.element.style.backgroundImage = 'url(' + _this2.blobURL + ')';
@@ -787,7 +787,7 @@ function (_Sargasso) {
         }
       }
 
-      _get(_getPrototypeOf(LazyBackground.prototype), "workerOnMessage", this).call(this, id, e);
+      _get(_getPrototypeOf(LazyBackground.prototype), "workerOnMessage", this).call(this, id, data);
     }
   }, {
     key: "destroy",
@@ -1349,13 +1349,13 @@ function () {
     key: "workerMessage",
     value: function workerMessage(id, e) {
       if (e.data.uid === this.uid) {
-        this.workerOnMessage(id, e);
+        this.workerOnMessage(id, e.data);
       }
     } // subclass should overide this to listen to workers
 
   }, {
     key: "workerOnMessage",
-    value: function workerOnMessage(id, e) {} // stop a worker
+    value: function workerOnMessage(id, data) {} // stop a worker
 
   }, {
     key: "stopWorker",
