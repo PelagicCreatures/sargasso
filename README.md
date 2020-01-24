@@ -155,7 +155,7 @@ Your Sargasso subclasses subscribe to event feeds to be notified of events.
 | css({})  | set css pairs defined in object on this.element |
 | scrollTop(newTop) | get and set the current scroll position |
 | queueFrame(function) | queue a function to execute that changes the DOM |
-| workerStart(id, codeOrURL) | start a web worker with id. Ignored if worker id already installed (see lib/LazyBackground.js for a shared worker example)|
+| workerStart(id, codeOrURL) | start a web worker with id. Ignored if worker id already installed (see https://github.com/PelagicCreatures/flyingfish for a shared worker example)|
 | workerPostMessage(id, data {}) | send the worker tagged with `id` a message. the message must be an object which can have any structure you want to pass to the worker |
 
 
@@ -304,20 +304,4 @@ export default {
 
 ```
 
-Just run `rollup -c rollup.config.app.js` and you have an ES6 bundle which includes all your dependancies
-
-### Example directory
-
-To use Hijax you have to serve the files (window.popstate can't deal with file://...) so run SimpleHTTPServer in the project example directory to see demo pages which provide examples of how to integrate with html.
-
-```
-python -m localhost.py
-```
-
-There are 3 entry points:
-
-`http://localhost:8000/index.html` - use ES6 example.js app bundled with sargasso
-
-`http://localhost:8000/index-cjs.html` - use common js library from /dist
-
-`http://localhost:8000/index-es.html` - use ES6 library from /dist
+Run `rollup -c rollup.config.app.js` and you have an ES6 bundle which includes all your dependancies

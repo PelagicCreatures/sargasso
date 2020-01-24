@@ -6,7 +6,8 @@ export default {
 	input: './index.js',
 	output: [{
 		format: 'es',
-		file: './dist/sargasso.es.js'
+		file: './dist/sargasso.es.js',
+		sourcemap: true
 	}],
 
 	plugins: [

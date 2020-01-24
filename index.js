@@ -30,11 +30,6 @@ import {
 	from './lib/HijaxLoader.js'
 
 import {
-	LazyBackground
-}
-	from './lib/LazyBackground.js'
-
-import {
 	startServices
 }
 	from './lib/Services.js'

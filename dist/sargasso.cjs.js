@@ -104,10 +104,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_SargassoSupervisor_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./lib/SargassoSupervisor.js */ "./lib/SargassoSupervisor.js");
 /* harmony import */ var _lib_Breakpoints_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./lib/Breakpoints.js */ "./lib/Breakpoints.js");
 /* harmony import */ var _lib_HijaxLoader_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./lib/HijaxLoader.js */ "./lib/HijaxLoader.js");
-/* harmony import */ var _lib_LazyBackground_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./lib/LazyBackground.js */ "./lib/LazyBackground.js");
-/* harmony import */ var _lib_Services_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./lib/Services.js */ "./lib/Services.js");
-/* harmony import */ var _lib_utils_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./lib/utils.js */ "./lib/utils.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "elementTools", function() { return _lib_utils_js__WEBPACK_IMPORTED_MODULE_6__["elementTools"]; });
+/* harmony import */ var _lib_Services_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./lib/Services.js */ "./lib/Services.js");
+/* harmony import */ var _lib_utils_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./lib/utils.js */ "./lib/utils.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "elementTools", function() { return _lib_utils_js__WEBPACK_IMPORTED_MODULE_5__["elementTools"]; });
 
 /*
 	Sargasso
@@ -125,12 +124,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 var loadPage;
 
 var bootSargasso = function bootSargasso() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  Object(_lib_Services_js__WEBPACK_IMPORTED_MODULE_5__["startServices"])(options);
+  Object(_lib_Services_js__WEBPACK_IMPORTED_MODULE_4__["startServices"])(options);
   var supervisor = new _lib_SargassoSupervisor_js__WEBPACK_IMPORTED_MODULE_1__["SargassoSupervisor"](document.body, options);
   supervisor.start(options);
 
@@ -158,7 +156,7 @@ if (window) {
   window.Sargasso = _lib_Sargasso_js__WEBPACK_IMPORTED_MODULE_0__["Sargasso"];
   window.registerSargassoClass = _lib_Sargasso_js__WEBPACK_IMPORTED_MODULE_0__["registerSargassoClass"];
   window.bootSargasso = bootSargasso;
-  window.elementTools = _lib_utils_js__WEBPACK_IMPORTED_MODULE_6__["elementTools"];
+  window.elementTools = _lib_utils_js__WEBPACK_IMPORTED_MODULE_5__["elementTools"];
 }
 
 
@@ -673,146 +671,6 @@ var makeFragment = function makeFragment(html) {
 
 /***/ }),
 
-/***/ "./lib/LazyBackground.js":
-/*!*******************************!*\
-  !*** ./lib/LazyBackground.js ***!
-  \*******************************/
-/*! exports provided: LazyBackground */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LazyBackground", function() { return LazyBackground; });
-/* harmony import */ var _Sargasso_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Sargasso.js */ "./lib/Sargasso.js");
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
-
-function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-/**
-	LazyBackground
-
-	Sargasso class that impelments lazy loaded images using background-image which always
-	fits image within its container's dimensions
-
-	@author Michael Rhodes (except where noted)
-	@license MIT
-	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
-
-	The image is not loaded until visible in viewport
-
-	<div class="my-container">
-		div class="my-responsive-image" data-sargasso-class="LazyBackground" data-src="/path-to-image.jpg"></div>
-	</div>
-
-	.my-container { width: 30vw; height: 30vh; }
-	.my-responsive-image {
-		width:100%; height:100%; background-size: contain; background-repeat: no-repeat; background-position: center center;
-	}
-
-	To make image crop to fill the frame use:
-		background-size: cover;
-
-**/
-
-
-var LazyBackground =
-/*#__PURE__*/
-function (_Sargasso) {
-  _inherits(LazyBackground, _Sargasso);
-
-  function LazyBackground(element) {
-    var _this;
-
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-    _classCallCheck(this, LazyBackground);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(LazyBackground).call(this, element, {
-      watchViewport: true
-    }));
-    _this.triggered = false;
-    return _this;
-  }
-
-  _createClass(LazyBackground, [{
-    key: "enterViewport",
-    value: function enterViewport() {
-      if (!this.triggered) {
-        this.triggered = true;
-        var offload = "onmessage = async (e) => {\n\t\t\t  const response = await fetch(e.data.url)\n\t\t\t  const blob = await response.blob()\n\t\t\t  self.postMessage({ uid: e.data.uid, blob: blob })\n\t\t\t}";
-        this.workerStart('loader', offload);
-        var imgUrl = this.element.getAttribute('data-src'); // not fully qualified...
-
-        if (!imgUrl.match(/^http/)) {
-          imgUrl = new URL(imgUrl, location.href).href;
-        } // hand the url to the worker for loading
-
-
-        this.workerPostMessage('loader', {
-          url: imgUrl
-        });
-      }
-    } // we got a message back from a worker
-
-  }, {
-    key: "workerOnMessage",
-    value: function workerOnMessage(id, data) {
-      var _this2 = this;
-
-      if (id === 'loader') {
-        if (data.uid === this.uid) {
-          this.blobURL = URL.createObjectURL(data.blob);
-
-          var frame = function frame() {
-            _this2.element.style.backgroundImage = 'url(' + _this2.blobURL + ')';
-
-            _this2.sleep(); // We're done. That was easy.
-
-          };
-
-          this.queueFrame(frame);
-        }
-      }
-
-      _get(_getPrototypeOf(LazyBackground.prototype), "workerOnMessage", this).call(this, id, data);
-    }
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      if (this.blobURL) {
-        URL.revokeObjectURL(this.blobURL);
-      }
-
-      _get(_getPrototypeOf(LazyBackground.prototype), "destroy", this).call(this);
-    }
-  }]);
-
-  return LazyBackground;
-}(_Sargasso_js__WEBPACK_IMPORTED_MODULE_0__["Sargasso"]);
-
-Object(_Sargasso_js__WEBPACK_IMPORTED_MODULE_0__["registerSargassoClass"])('LazyBackground', LazyBackground);
-
-
-/***/ }),
-
 /***/ "./lib/LazyInstantiate.js":
 /*!********************************!*\
   !*** ./lib/LazyInstantiate.js ***!
@@ -953,7 +811,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 	Base class for responsive Sargasso element controllers. Subclass this to
 	define specific behavior. If you mutate the DOM in your code you
-	should use frames for best results. EG. LazyBackground
+	should use frames for best results.
 
 	@author Michael Rhodes (except where noted)
 	@license MIT
