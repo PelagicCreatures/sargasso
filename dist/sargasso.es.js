@@ -1735,6 +1735,8 @@ const startServices = (options) => {
 let unique = 0;
 const liveElements = [];
 
+const elementMetaData = new WeakMap();
+
 /*
 	All subclasses of Sargasso must register the class so that
 	the SargassoSupervisor can instantiate them.
@@ -1770,10 +1772,11 @@ class Sargasso {
 		this.isInViewport = false;
 		this.workers = {};
 
-		if (!this.element.registeredResponsiveControllers) {
-			this.element.registeredResponsiveControllers = [];
+		// use weakMap to extend property elements
+		if (!this.getMetaData('registeredResponsiveControllers')) {
+			this.setMetaData('registeredResponsiveControllers', []);
 		}
-		this.element.registeredResponsiveControllers.push(this);
+		this.setMetaData(this.constructor.name, this);
 
 		liveElements.push(this);
 	}
@@ -1814,6 +1817,17 @@ class Sargasso {
 		this.element.addEventListener('sargasso', this.elementListener);
 	}
 
+	setMetaData (k, v) {
+		const data = elementMetaData.get(this.element) || {};
+		data[k] = v;
+		elementMetaData.set(this.element, data);
+	}
+
+	getMetaData (k) {
+		const data = elementMetaData.get(this.element) || {};
+		return data[k]
+	}
+
 	notifyAll (event, params) {
 		if (eventNames.indexOf(event) === -1) {
 			throw (new Error('invalid event name ' + event))
@@ -1830,10 +1844,14 @@ class Sargasso {
 		if (eventNames.indexOf(event) === -1) {
 			throw (new Error('invalid event name ' + event))
 		}
-		for (let i = 0; i < this.element.registeredResponsiveControllers.length; i++) {
-			const peer = this.element.registeredResponsiveControllers[i];
-			if (peer !== this && peer[event]) {
-				peer[event].apply(peer, params);
+
+		const registeredResponsiveControllers = this.getMetaData('registeredResponsiveControllers');
+		if (registeredResponsiveControllers) {
+			for (let i = 0; i < registeredResponsiveControllers.length; i++) {
+				const peer = registeredResponsiveControllers[i];
+				if (peer !== this && peer[event]) {
+					peer[event].apply(peer, params);
+				}
 			}
 		}
 	}
@@ -1913,9 +1931,11 @@ class Sargasso {
 
 		this.stopAllWorkers();
 
-		if (this.element.registeredResponsiveControllers) {
-			if (this.element.registeredResponsiveControllers.indexOf(this) !== -1) {
-				this.element.registeredResponsiveControllers.splice(this.element.registeredResponsiveControllers.indexOf(this), 1);
+		const registeredResponsiveControllers = this.getMetaData('registeredResponsiveControllers');
+		if (registeredResponsiveControllers) {
+			if (registeredResponsiveControllers.indexOf(this) !== -1) {
+				registeredResponsiveControllers.splice(registeredResponsiveControllers.indexOf(this), 1);
+				this.setMetaData('registeredResponsiveControllers', registeredResponsiveControllers);
 			}
 		}
 
@@ -2485,7 +2505,7 @@ class HijaxLoader extends Sargasso {
 			if (href &&
 				!link.getAttribute('data-hijaxed') &&
 				!link.getAttribute('target') &&
-				!link.getAttribute('data-no-hijax') &&
+				!link.hasAttribute('data-no-hijax') &&
 				!this.excludeRegex.exec(href)
 			) {
 				link.setAttribute('data-hijaxed', true);

@@ -34,7 +34,7 @@ The ES and the CommonJS bundles both expose:
 <script type="module" src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.es.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.cjs.js" nomodule defer></script>
 <script defer>
-	... your code here ...
+  ... your code here ...
 </script>
 ```
 
@@ -45,18 +45,18 @@ For the '... your code here ...' part, it's the same in both cases. You need to 
 ```
 <script>
 
-	let options = {
-		hijax: {
-			onError: (level, message) => { alert('Something went wrong. ' + message) }
-		}
-	}
+  let options = {
+    hijax: {
+      onError: (level, message) => { alert('Something went wrong. ' + message) }
+    }
+  }
 
-	// boot supervisors and HIJAX loader
-	window.loadPageHandler = bootSargasso(options)
+  // boot supervisors and HIJAX loader
+  window.loadPageHandler = bootSargasso(options)
 
-	// define a custom class and register the classname.
-	class MyClass extends Sargasso {} // This won't do very much...
-	registerSargassoClass('MyClass',MyClass)
+  // define a custom class and register the classname.
+  class MyClass extends Sargasso {} // This won't do very much...
+  registerSargassoClass('MyClass',MyClass)
 
 </script>
 ```
@@ -82,24 +82,24 @@ New pages are loaded via AJAX and are merged with the current page only replacin
 
 ```
 <html>
-	<head>
-	</head>
-	<body>
-		static stuff
+  <head>
+  </head>
+  <body>
+    static stuff
 
-		<div id="page-body" data-hijax>
-			<p>this changes from page to page</p>
-			<div>lots of html here</div>
-		</div>
+    <div id="page-body" data-hijax>
+      <p>this changes from page to page</p>
+      <div>lots of html here</div>
+    </div>
 
-		more static stuff
+    more static stuff
 
-		<div id="some-element" data-hijax>
-			<p>this also changes from page to page</p>
-		</div>
+    <div id="some-element" data-hijax>
+      <p>this also changes from page to page</p>
+    </div>
 
-		more static stuff
-	</body>
+    more static stuff
+  </body>
 <html>
 ```
 
@@ -149,6 +149,8 @@ Your Sargasso subclasses subscribe to event feeds to be notified of events.
 
 | method | description |
 | ------ | ----------- |
+| getMetaData | return sargasso metadata associated with element (weak map) |
+| setMetaData(key,value) | set a sargasso metadata property |
 | hasClass('cssclass') | returns true if this.element has cssclass |
 | addClass('cssclass') | add cssclass to this.element |
 | removeClass('cssclass')  | remove cssclass to this.element |
@@ -168,42 +170,42 @@ To avoid any chaotic repaints you should only make DOM changes inside animation 
 
 ```
 class MyButtonClass extends Sargasso {
-	constructor (element, options = {}) {
-		options.watchViewport = true // tell me when I am visible
-		super(element, options) // important!
-	}
+  constructor (element, options = {}) {
+    options.watchViewport = true // tell me when I am visible
+    super(element, options) // important!
+  }
 
-	// listen for click
-	start () {
-		super.start() // important!
-		this.clicker = (e) => {
-			this.clicked()
-		}
-		this.element.addEventListener('click', this.clicker, false)
-	}
+  // listen for click
+  start () {
+    super.start() // important!
+    this.clicker = (e) => {
+      this.clicked()
+    }
+    this.element.addEventListener('click', this.clicker, false)
+  }
 
-	// cleanup listener
-	sleep () {
-		this.element.removeEventListener('click', this.clicker)
-		super.sleep() // important!
-	}
+  // cleanup listener
+  sleep () {
+    this.element.removeEventListener('click', this.clicker)
+    super.sleep() // important!
+  }
 
-	// use an animation frame to mutate the DOM
-	clicked () {
-		const frame = () => { // set up a DOM mutation
-			this.addClass('clicked')
-			this.element.textContent = 'Clicked!'
-		}
-		this.queueFrame(frame) // schedule it
-	}
+  // use an animation frame to mutate the DOM
+  clicked () {
+    const frame = () => { // set up a DOM mutation
+      this.addClass('clicked')
+      this.element.textContent = 'Clicked!'
+    }
+    this.queueFrame(frame) // schedule it
+  }
 
-	enterViewport () {
-		// do some stuff such as modify element html or classes
-		const frame = () => {
-			this.element.textContent = 'Hello viewport! Click me!'
-		}
-		this.queueFrame(frame)
-	}
+  enterViewport () {
+    // do some stuff such as modify element html or classes
+    const frame = () => {
+      this.element.textContent = 'Hello viewport! Click me!'
+    }
+    this.queueFrame(frame)
+  }
 }
 
 registerSargassoClass('MyButtonClass', MyButtonClass)
@@ -211,7 +213,7 @@ registerSargassoClass('MyButtonClass', MyButtonClass)
 Then in HTML:
 
 <style>
-	.clicked { background-color:red; }
+  .clicked { background-color:red; }
 </style>
 
 <button data-sargasso-class="MyButtonClass">Click me and I'll turn red!</button>
@@ -229,46 +231,46 @@ A web worker, once installed, could be used by many instances so sargasso sets e
 ```
 class MySubClass extends Sargasso {
 
-	...
+  ...
 
-	someMethod() {
+  someMethod() {
 
-		/*
-			myWorker can be the url of a worker script or
-			inline code as in this example
-		*/
+    /*
+      myWorker can be the url of a worker script or
+      inline code as in this example
+    */
 
-		let pointlessMath = `onmessage = function (e) {
-			const baseNumber = e.data.power
-			let result = 0
-			for (var i = Math.pow(baseNumber, 7); i >= 0; i--) {
-				result += Math.atan(i) * Math.tan(i)
-			};
-			postMessage({
-				uid: e.data.uid, // Important! always pass this back in the message
-				result: 'Done doing pointless math: ' + result
-			})
-		}`
+    let pointlessMath = `onmessage = function (e) {
+      const baseNumber = e.data.power
+      let result = 0
+      for (var i = Math.pow(baseNumber, 7); i >= 0; i--) {
+        result += Math.atan(i) * Math.tan(i)
+      };
+      postMessage({
+        uid: e.data.uid, // Important! always pass this back in the message
+        result: 'Done doing pointless math: ' + result
+      })
+    }`
 
-		// create the worker to be managed by sargasso and give it an id
-		// the id can be unique to your task or shared by many sargasso
-		// controller
-		this.workerStart('pointlessMath', pointlessMath)
+    // create the worker to be managed by sargasso and give it an id
+    // the id can be unique to your task or shared by many sargasso
+    // controller
+    this.workerStart('pointlessMath', pointlessMath)
 
-		let data = { power: 12 }
-		this.workerPostMessage('pointlessMath', data) // send message to the worker
-	}
+    let data = { power: 12 }
+    this.workerPostMessage('pointlessMath', data) // send message to the worker
+  }
 
-	// listen for worker result
-	workerOnMessage (id, data) {
-		if (id === 'pointlessMath') {
-			const frame = () => {
-				this.element.innerHTML = data.result
-			}
-			this.queueFrame(frame)
-		}
-		super.workerOnMessage(id, data)
-	}
+  // listen for worker result
+  workerOnMessage (id, data) {
+    if (id === 'pointlessMath') {
+      const frame = () => {
+        this.element.innerHTML = data.result
+      }
+      this.queueFrame(frame)
+    }
+    super.workerOnMessage(id, data)
+  }
 }
 ```
 
@@ -285,21 +287,21 @@ import nodeResolve from '@rollup/plugin-node-resolve'
 import json from '@rollup/plugin-json'
 
 export default {
-	input: './example/app.js', // load the app root
-	output: [{
-		format: 'es',
-		file: './example/app-bundle.es.js' // output the bundle
-	}],
+  input: './example/app.js', // load the app root
+  output: [{
+    format: 'es',
+    file: './example/app-bundle.es.js' // output the bundle
+  }],
 
-	plugins: [
-		json(),
-		nodeResolve({
-			preferBuiltins: false
-		}),
-		commonjs({
-			namedExports: {}
-		})
-	]
+  plugins: [
+    json(),
+    nodeResolve({
+      preferBuiltins: false
+    }),
+    commonjs({
+      namedExports: {}
+    })
+  ]
 }
 
 ```

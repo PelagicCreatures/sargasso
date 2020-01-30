@@ -537,7 +537,7 @@ function (_Sargasso) {
         var link = links[i];
         var href = link.getAttribute('href');
 
-        if (href && !link.getAttribute('data-hijaxed') && !link.getAttribute('target') && !link.getAttribute('data-no-hijax') && !_this3.excludeRegex.exec(href)) {
+        if (href && !link.getAttribute('data-hijaxed') && !link.getAttribute('target') && !link.hasAttribute('data-no-hijax') && !_this3.excludeRegex.exec(href)) {
           link.setAttribute('data-hijaxed', true);
           link.addEventListener('click', function (e) {
             e.preventDefault();
@@ -821,6 +821,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 var unique = 0;
 var liveElements = [];
+var elementMetaData = new WeakMap();
 /*
 	All subclasses of Sargasso must register the class so that
 	the SargassoSupervisor can instantiate them.
@@ -865,13 +866,13 @@ function () {
     this.frameQueue = [];
     this.mortal = true;
     this.isInViewport = false;
-    this.workers = {};
+    this.workers = {}; // use weakMap to extend property elements
 
-    if (!this.element.registeredResponsiveControllers) {
-      this.element.registeredResponsiveControllers = [];
+    if (!this.getMetaData('registeredResponsiveControllers')) {
+      this.setMetaData('registeredResponsiveControllers', []);
     }
 
-    this.element.registeredResponsiveControllers.push(this);
+    this.setMetaData(this.constructor.name, this);
     liveElements.push(this);
   }
 
@@ -914,6 +915,19 @@ function () {
       this.element.addEventListener('sargasso', this.elementListener);
     }
   }, {
+    key: "setMetaData",
+    value: function setMetaData(k, v) {
+      var data = elementMetaData.get(this.element) || {};
+      data[k] = v;
+      elementMetaData.set(this.element, data);
+    }
+  }, {
+    key: "getMetaData",
+    value: function getMetaData(k) {
+      var data = elementMetaData.get(this.element) || {};
+      return data[k];
+    }
+  }, {
     key: "notifyAll",
     value: function notifyAll(event, params) {
       if (eventNames.indexOf(event) === -1) {
@@ -935,11 +949,15 @@ function () {
         throw new Error('invalid event name ' + event);
       }
 
-      for (var i = 0; i < this.element.registeredResponsiveControllers.length; i++) {
-        var peer = this.element.registeredResponsiveControllers[i];
+      var registeredResponsiveControllers = this.getMetaData('registeredResponsiveControllers');
 
-        if (peer !== this && peer[event]) {
-          peer[event].apply(peer, params);
+      if (registeredResponsiveControllers) {
+        for (var i = 0; i < registeredResponsiveControllers.length; i++) {
+          var peer = registeredResponsiveControllers[i];
+
+          if (peer !== this && peer[event]) {
+            peer[event].apply(peer, params);
+          }
         }
       }
     }
@@ -1023,10 +1041,12 @@ function () {
       this.flushQueue();
       this.sleep();
       this.stopAllWorkers();
+      var registeredResponsiveControllers = this.getMetaData('registeredResponsiveControllers');
 
-      if (this.element.registeredResponsiveControllers) {
-        if (this.element.registeredResponsiveControllers.indexOf(this) !== -1) {
-          this.element.registeredResponsiveControllers.splice(this.element.registeredResponsiveControllers.indexOf(this), 1);
+      if (registeredResponsiveControllers) {
+        if (registeredResponsiveControllers.indexOf(this) !== -1) {
+          registeredResponsiveControllers.splice(registeredResponsiveControllers.indexOf(this), 1);
+          this.setMetaData('registeredResponsiveControllers', registeredResponsiveControllers);
         }
       }
 
