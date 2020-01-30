@@ -1302,6 +1302,8 @@ var js_cookie = createCommonjsModule(function (module, exports) {
 	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
 **/
 
+const elementMetaData = new WeakMap();
+
 const _hasClass = (element, cssClass) => {
 	const className = element.className || '';
 	const classes = className.split(/\s+/);
@@ -1362,13 +1364,30 @@ const _css = (element, css) => {
 	}
 };
 
+const _setMetaData = (element, k, v) => {
+	const data = elementMetaData.get(element) || {};
+	if (v) {
+		data[k] = v;
+	} else {
+		delete data[k];
+	}
+	elementMetaData.set(element, data);
+};
+
+const _getMetaData = (element, k) => {
+	const data = elementMetaData.get(element) || {};
+	return data[k]
+};
+
 const elementTools = {
 	hasClass: _hasClass,
 	addClass: _addClass,
 	removeClass: _removeClass,
 	isVisible: _isVisible,
 	inViewPort: _inViewPort,
-	setCSS: _css
+	setCSS: _css,
+	setMetaData: _setMetaData,
+	getMetaData: _getMetaData
 };
 
 /**
@@ -1735,8 +1754,6 @@ const startServices = (options) => {
 let unique = 0;
 const liveElements = [];
 
-const elementMetaData = new WeakMap();
-
 /*
 	All subclasses of Sargasso must register the class so that
 	the SargassoSupervisor can instantiate them.
@@ -1772,10 +1789,9 @@ class Sargasso {
 		this.isInViewport = false;
 		this.workers = {};
 
-		// use weakMap to extend property elements
-		if (!this.getMetaData('registeredResponsiveControllers')) {
-			this.setMetaData('registeredResponsiveControllers', []);
-		}
+		const registeredResponsiveControllers = this.getMetaData('registeredResponsiveControllers') || [];
+		registeredResponsiveControllers.push(this);
+		this.setMetaData('registeredResponsiveControllers', registeredResponsiveControllers);
 		this.setMetaData(this.constructor.name, this);
 
 		liveElements.push(this);
@@ -1818,14 +1834,11 @@ class Sargasso {
 	}
 
 	setMetaData (k, v) {
-		const data = elementMetaData.get(this.element) || {};
-		data[k] = v;
-		elementMetaData.set(this.element, data);
+		elementTools.setMetaData(this.element, k, v);
 	}
 
 	getMetaData (k) {
-		const data = elementMetaData.get(this.element) || {};
-		return data[k]
+		return elementTools.getMetaData(this.element, k)
 	}
 
 	notifyAll (event, params) {
@@ -1938,6 +1951,8 @@ class Sargasso {
 				this.setMetaData('registeredResponsiveControllers', registeredResponsiveControllers);
 			}
 		}
+
+		this.setMetaData(this.constructor.name, null);
 
 		this.element = null;
 

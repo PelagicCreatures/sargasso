@@ -821,7 +821,6 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 var unique = 0;
 var liveElements = [];
-var elementMetaData = new WeakMap();
 /*
 	All subclasses of Sargasso must register the class so that
 	the SargassoSupervisor can instantiate them.
@@ -866,12 +865,10 @@ function () {
     this.frameQueue = [];
     this.mortal = true;
     this.isInViewport = false;
-    this.workers = {}; // use weakMap to extend property elements
-
-    if (!this.getMetaData('registeredResponsiveControllers')) {
-      this.setMetaData('registeredResponsiveControllers', []);
-    }
-
+    this.workers = {};
+    var registeredResponsiveControllers = this.getMetaData('registeredResponsiveControllers') || [];
+    registeredResponsiveControllers.push(this);
+    this.setMetaData('registeredResponsiveControllers', registeredResponsiveControllers);
     this.setMetaData(this.constructor.name, this);
     liveElements.push(this);
   }
@@ -917,15 +914,12 @@ function () {
   }, {
     key: "setMetaData",
     value: function setMetaData(k, v) {
-      var data = elementMetaData.get(this.element) || {};
-      data[k] = v;
-      elementMetaData.set(this.element, data);
+      _utils_js__WEBPACK_IMPORTED_MODULE_0__["elementTools"].setMetaData(this.element, k, v);
     }
   }, {
     key: "getMetaData",
     value: function getMetaData(k) {
-      var data = elementMetaData.get(this.element) || {};
-      return data[k];
+      return _utils_js__WEBPACK_IMPORTED_MODULE_0__["elementTools"].getMetaData(this.element, k);
     }
   }, {
     key: "notifyAll",
@@ -1050,6 +1044,7 @@ function () {
         }
       }
 
+      this.setMetaData(this.constructor.name, null);
       this.element = null;
 
       if (liveElements.indexOf(this) !== -1) {
@@ -2012,6 +2007,7 @@ __webpack_require__.r(__webpack_exports__);
 	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
 **/
 
+var elementMetaData = new WeakMap();
 
 var _hasClass = function _hasClass(element, cssClass) {
   var className = element.className || '';
@@ -2079,13 +2075,32 @@ var _css = function _css(element, css) {
   }
 };
 
+var _setMetaData = function _setMetaData(element, k, v) {
+  var data = elementMetaData.get(element) || {};
+
+  if (v) {
+    data[k] = v;
+  } else {
+    delete data[k];
+  }
+
+  elementMetaData.set(element, data);
+};
+
+var _getMetaData = function _getMetaData(element, k) {
+  var data = elementMetaData.get(element) || {};
+  return data[k];
+};
+
 var elementTools = {
   hasClass: _hasClass,
   addClass: _addClass,
   removeClass: _removeClass,
   isVisible: _isVisible,
   inViewPort: _inViewPort,
-  setCSS: _css
+  setCSS: _css,
+  setMetaData: _setMetaData,
+  getMetaData: _getMetaData
 };
 
 
