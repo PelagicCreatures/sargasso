@@ -619,10 +619,27 @@ function (_Sargasso) {
       xhr.send();
     }
   }, {
+    key: "processScripts",
+    value: function processScripts(scripts) {
+      Array.from(scripts).forEach(function (script) {
+        script.remove();
+        var id = script.getAttribute('id');
+
+        if (!document.getElementById(id)) {
+          // script.onload = function () {}
+          document.getElementsByTagName('head')[0].appendChild(script);
+        }
+      });
+    }
+  }, {
     key: "mergePage",
     value: function mergePage(html) {
       var _this5 = this;
 
+      var ephemerals = document.querySelectorAll('[data-ephemeral]');
+      Array.from(ephemerals).forEach(function (ephemeral) {
+        ephemeral.remove();
+      });
       var doc = html.split(/(<body[^>]*>|<\/body>)/ig);
       var fragment = makeFragment(doc[2]);
       var containers = document.querySelectorAll('[data-hijax]');
@@ -631,6 +648,8 @@ function (_Sargasso) {
         var container = containers[i];
         var id = containers[i].getAttribute('id');
         var replace = fragment.getElementById(id);
+
+        _this5.processScripts(replace.querySelectorAll('script'));
 
         var frame = function frame() {
           container.parentNode.replaceChild(replace, container);
