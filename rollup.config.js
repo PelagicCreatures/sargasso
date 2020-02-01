@@ -5,8 +5,9 @@ import json from '@rollup/plugin-json'
 export default {
 	input: './index.js',
 	output: [{
-		format: 'es',
-		file: './dist/sargasso.es.js',
+		format: 'iife',
+		name: 'PelagicCreatures.Sargasso',
+		file: './dist/sargasso.iife.js',
 		sourcemap: true
 	}],
 

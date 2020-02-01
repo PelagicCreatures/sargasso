@@ -25,26 +25,31 @@ Bootstrap Sargasso:
 The ES and the CommonJS bundles both expose:
 
 * Sargasso - the sargasso super class
-* registerSargassoClass - function to register your sub classes
-* bootSargasso - start sargasso services and HIHAX
+* utils.registerSargassoClass - function to register your sub classes
+* utils.bootSargasso - start sargasso services and HIHAX
 
 [Most browsers](https://caniuse.com/#search=modules) are aware of ES6 and modules these days but but you can use the module/nomodule scheme to fall back to the common js bundle if needed.
 
 ```
-<script type="module" src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.es.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.cjs.js" nomodule defer></script>
 <script defer>
   ... your code here ...
 </script>
 ```
 
-In production you probably want to host the bundles yourself instead of using the CDN and probably even make your own bundles including your subclasses using webpack or rollup or something. See rollup section below.
+In production you probably won't use the prepackaged bundles but should build own bundles including your subclasses using rollup or something. See rollup section below. In this example we use the bundles for expediency. The prepackaged bundles expose the exports from the module as globals scoped under `PelagicCreatures`
 
-For the '... your code here ...' part, it's the same in both cases. You need to at least start up the services.
+```javascript
+PelagicCreatures.Sargasso - the superclass for all Sargasso classes
+PelagicCreatures.utils.registerSargassoClass - tell sargasso about your subclass
+PelagicCreatures.utils.bootSargasso - start it up
+PelagicCreatures.utils.elementTools - some utilities
+PelagicCreatures.utils.loadPageHandler - the bottle neck for loading a page
+```
 
 ```
-<script>
-
+<script defer>
   let options = {
     hijax: {
       onError: (level, message) => { alert('Something went wrong. ' + message) }
@@ -52,13 +57,20 @@ For the '... your code here ...' part, it's the same in both cases. You need to 
   }
 
   // boot supervisors and HIJAX loader
-  window.loadPageHandler = bootSargasso(options)
+  PelagicCreatures.utils.bootSargasso(options)
 
   // define a custom class and register the classname.
-  class MyClass extends Sargasso {} // This won't do very much...
-  registerSargassoClass('MyClass',MyClass)
+  class MyClass extends PelagicCreatures.Sargasso {} // This won't do very much...
+  PelagicCreatures.utils.registerSargassoClass('MyClass',MyClass)
 
 </script>
+```
+
+**In pure ES6** you don't need the 'PelagicCreatures.' bit, instead you would use import directly from the module.
+
+```javascript
+import {Sargasso, utils} from '@PelagicCreatures/sargasso'
+utils.bootSargasso(options)
 ```
 
 ### Adding Your Sargasso class to an HTML element
@@ -287,23 +299,25 @@ import nodeResolve from '@rollup/plugin-node-resolve'
 import json from '@rollup/plugin-json'
 
 export default {
-  input: './example/app.js', // load the app root
-  output: [{
-    format: 'es',
-    file: './example/app-bundle.es.js' // output the bundle
-  }],
+	input: './example/app.js',
+	output: [{
+		format: 'iife',
+		name: 'App',
+		file: './example/app-bundle.iife.js',
+		sourcemap: true
+	}],
 
-  plugins: [
-    json(),
-    nodeResolve({
-      preferBuiltins: false
-    }),
-    commonjs({
-      namedExports: {}
-    })
-  ]
+	plugins: [
+		json(),
+		nodeResolve({
+			preferBuiltins: false
+		}),
+		commonjs({
+			namedExports: {}
+		})
+	]
 }
 
-```
 
-Run `rollup -c rollup.config.app.js` and you have an ES6 bundle which includes all your dependancies
+```
+Run `rollup -c rollup.config.app.js` and you have an ES6 bundle which includes all your dependancies and code.

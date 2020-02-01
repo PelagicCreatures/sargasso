@@ -5,8 +5,10 @@ import json from '@rollup/plugin-json'
 export default {
 	input: './example/app.js',
 	output: [{
-		format: 'es',
-		file: './example/app-bundle.es.js'
+		format: 'iife',
+		name: 'App',
+		file: './example/app-bundle.iife.js',
+		sourcemap: true
 	}],
 
 	plugins: [

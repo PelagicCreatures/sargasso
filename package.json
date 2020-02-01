@@ -16,9 +16,9 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "npx webpack; rollup -c rollup.config.js",
+		"build": "rollup -c rollup.config.js",
 		"build-example": "rollup -c rollup.config.app.js",
-		"package-lodash": "lodash modularize exports=es include=camelCase,debounce;rm -r lib/lodash-modularize;mv modularize lib/lodash-modularize"
+		"build-cjs": "npx webpack"
 	},
 	"author": "Michael Rhodes",
 	"license": "MIT",

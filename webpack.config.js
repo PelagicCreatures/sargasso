@@ -1,6 +1,6 @@
 const webpack = require('webpack')
 const entry = {
-	main: './index.js'
+	main: './index.globals.js'
 }
 
 const legacy = {

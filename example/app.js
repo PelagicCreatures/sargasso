@@ -3,14 +3,14 @@
 */
 
 import {
-	Sargasso, registerSargassoClass, bootSargasso
+	Sargasso, utils
 }
 	from '../index.js' // or more likely from '@pelagiccreatures/sargasso'
 
 import {
 	Noisy
 }
-	from './lib/Noisy.js'
+	from '../lib/Noisy.js'
 
 class myClass extends Sargasso {
 	constructor (element, options = {}) {
@@ -50,7 +50,7 @@ class myClass extends Sargasso {
 	}
 }
 
-registerSargassoClass('myClass', myClass)
+utils.registerSargassoClass('myClass', myClass)
 
 class MyButtonClass extends Sargasso {
 	constructor (element, options = {}) {
@@ -91,9 +91,9 @@ class MyButtonClass extends Sargasso {
 	}
 }
 
-registerSargassoClass('MyButtonClass', MyButtonClass)
+utils.registerSargassoClass('MyButtonClass', MyButtonClass)
 
-const loadPageHandler = bootSargasso({
+utils.bootSargasso({
 	hijax: {
 		onError: (level, message) => {
 			alert('hijax error: ' + message)
@@ -105,7 +105,3 @@ const loadPageHandler = bootSargasso({
 	breakpoints: {},
 	scrollElement: document.getElementById('scroll-wrapper')
 })
-
-export {
-	loadPageHandler
-}
