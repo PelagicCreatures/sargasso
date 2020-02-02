@@ -1733,7 +1733,7 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 
 	// build subscription services
 
-	let theDOMWatcher, theScrollWatcher, theResizeWatcher, theOrientationWatcher, theWorkerWatcher;
+	var theDOMWatcher, theScrollWatcher, theResizeWatcher, theOrientationWatcher, theWorkerWatcher;
 
 	const startServices = (options) => {
 		theDOMWatcher = new DOMWatcher(options);
@@ -2636,8 +2636,6 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 		return fragment
 	};
 
-	let loadPageHandler;
-
 	const bootSargasso = (options = {}) => {
 		startServices(options);
 		const supervisor = new SargassoSupervisor(document.body, options);
@@ -2649,9 +2647,9 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 		if (options.hijax) {
 			const hijax = new HijaxLoader(document.body, options.hijax);
 			hijax.start();
-			loadPageHandler = hijax.setPage.bind(hijax);
+			exports.loadPageHandler = hijax.setPage.bind(hijax);
 		} else {
-			loadPageHandler = (url) => {
+			exports.loadPageHandler = (url) => {
 				document.location.href = url;
 			};
 		}
@@ -2671,8 +2669,7 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 	const utils = {
 		registerSargassoClass: registerSargassoClass,
 		bootSargasso: bootSargasso,
-		elementTools: elementTools,
-		loadPageHandler: loadPageHandler
+		elementTools: elementTools
 	};
 
 	exports.Sargasso = Sargasso;

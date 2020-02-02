@@ -27,10 +27,9 @@ import {
 const utils = {
 	registerSargassoClass: registerSargassoClass,
 	bootSargasso: bootSargasso,
-	elementTools: elementTools,
-	loadPageHandler: loadPageHandler
+	elementTools: elementTools
 }
 
 export {
-	Sargasso, utils
+	Sargasso, utils, loadPageHandler
 }

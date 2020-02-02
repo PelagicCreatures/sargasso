@@ -3,7 +3,7 @@
 */
 
 import {
-	Sargasso, utils
+	Sargasso, utils, loadPageHandler
 }
 	from '../index.js' // or more likely from '@pelagiccreatures/sargasso'
 
@@ -105,3 +105,5 @@ utils.bootSargasso({
 	breakpoints: {},
 	scrollElement: document.getElementById('scroll-wrapper')
 })
+
+window.loadPageHandler = loadPageHandler

@@ -45,7 +45,7 @@ PelagicCreatures.Sargasso - the superclass for all Sargasso classes
 PelagicCreatures.utils.registerSargassoClass - tell sargasso about your subclass
 PelagicCreatures.utils.bootSargasso - start it up
 PelagicCreatures.utils.elementTools - some utilities
-PelagicCreatures.utils.loadPageHandler - the bottle neck for loading a page
+PelagicCreatures.loadPageHandler - the bottle neck for loading a page
 ```
 
 ```

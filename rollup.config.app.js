@@ -8,7 +8,8 @@ export default {
 		format: 'iife',
 		name: 'App',
 		file: './example/app-bundle.iife.js',
-		sourcemap: true
+		sourcemap: true,
+		treeshake: false
 	}],
 
 	plugins: [

@@ -1732,7 +1732,7 @@
 
 	// build subscription services
 
-	let theDOMWatcher, theScrollWatcher, theResizeWatcher, theOrientationWatcher, theWorkerWatcher;
+	var theDOMWatcher, theScrollWatcher, theResizeWatcher, theOrientationWatcher, theWorkerWatcher;
 
 	const startServices = (options) => {
 		theDOMWatcher = new DOMWatcher(options);
@@ -2635,7 +2635,7 @@
 		return fragment
 	};
 
-	let loadPageHandler;
+	var loadPageHandler;
 
 	const bootSargasso = (options = {}) => {
 		startServices(options);
@@ -2670,8 +2670,7 @@
 	const utils = {
 		registerSargassoClass: registerSargassoClass,
 		bootSargasso: bootSargasso,
-		elementTools: elementTools,
-		loadPageHandler: loadPageHandler
+		elementTools: elementTools
 	};
 
 	class Noisy extends Sargasso {
@@ -2880,6 +2879,8 @@
 		breakpoints: {},
 		scrollElement: document.getElementById('scroll-wrapper')
 	});
+
+	window.loadPageHandler = loadPageHandler;
 
 }());
 //# sourceMappingURL=app-bundle.iife.js.map
