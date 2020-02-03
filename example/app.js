@@ -99,11 +99,17 @@ utils.bootSargasso({
 			alert('hijax error: ' + message)
 		},
 		onLoading: function () {},
-		onExitPage: () => {},
+		onExitPage: () => {
+			utils.elementTools.off(document.body, 'click', '.event-target')
+		},
 		onEnterPage: () => {}
 	},
 	breakpoints: {},
 	scrollElement: document.getElementById('scroll-wrapper')
+})
+
+utils.elementTools.on(document.body, 'click', '.event-target', (e) => {
+	console.log(e)
 })
 
 window.loadPageHandler = loadPageHandler

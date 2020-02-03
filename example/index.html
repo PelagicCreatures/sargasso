@@ -10,7 +10,7 @@
 		<div id="scroll-wrapper" style="width:100vw; height:100vh; overflow-y:scroll;">
 			<div style="padding:1em;">
 				<h1>This is static</h1>
-				<p>Once loaded it stays the same no matter what page you go to. The main advantages of this approach are speed and letting javascript hold state between pages making it more like an app than a web site. A web app.</p>
+				<p class="event-target">Once loaded it stays the same no matter what page you go to. The main advantages of this approach are speed and letting javascript hold state between pages making it more like an app than a web site. A web app.</p>
 				<div id="content" data-hijax style="border:thin dashed red;padding:1em; margin:1em;">
 					<p>But this HIJAX container's content changes from page to page. <a href="/page1.html">Click Here!</a></p>
 					<p>The clicks are captured but the HIJAX controller so they mostly deal with it. If you need to programatically load a page call the loadPageHandler <span style="text-decoration:underline;cursor:pointer;" onClick="loadPageHandler('/page1.html')">Like This</span>

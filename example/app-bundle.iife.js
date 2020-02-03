@@ -1382,6 +1382,43 @@
 		return data[k]
 	};
 
+	function isFunction (functionToCheck) {
+		return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]'
+	}
+
+	const on = function (container, events, selector, fn) {
+		const k = 'on:' + events + '-' + selector;
+		const handler = (e) => {
+			if (isFunction(selector)) {
+				fn = selector;
+				if (e.target === container) {
+					fn(e);
+				}
+			} else {
+				Array.from(container.querySelectorAll(selector)).forEach((el) => {
+					if (e.target === el) {
+						fn(e);
+					}
+				});
+			}
+		};
+		_setMetaData(container, k, handler);
+		events.split(/[\s,]+/).forEach((evt) => {
+			container.addEventListener(evt, handler);
+		});
+	};
+
+	const off = function (container, events, selector) {
+		const k = 'on:' + events + '-' + selector;
+		const handler = _getMetaData(container, k);
+		if (handler) {
+			events.split(/[\s,]+/).forEach((evt) => {
+				container.removeEventListener(evt, handler);
+			});
+			_setMetaData(container, k);
+		}
+	};
+
 	const elementTools = {
 		hasClass: _hasClass,
 		addClass: _addClass,
@@ -1390,7 +1427,9 @@
 		inViewPort: _inViewPort,
 		setCSS: _css,
 		setMetaData: _setMetaData,
-		getMetaData: _getMetaData
+		getMetaData: _getMetaData,
+		on: on,
+		off: off
 	};
 
 	/**
@@ -1842,6 +1881,14 @@
 
 		getMetaData (k) {
 			return elementTools.getMetaData(this.element, k)
+		}
+
+		on (evt, selector, fn) {
+			elementTools.on(this.element, evt, selector, fn);
+		}
+
+		off (evt, selector, fn) {
+			elementTools.off(this.element, evt, selector, fn);
 		}
 
 		notifyAll (event, params) {
@@ -2873,11 +2920,17 @@
 				alert('hijax error: ' + message);
 			},
 			onLoading: function () {},
-			onExitPage: () => {},
+			onExitPage: () => {
+				utils.elementTools.off(document.body, 'click', '.event-target');
+			},
 			onEnterPage: () => {}
 		},
 		breakpoints: {},
 		scrollElement: document.getElementById('scroll-wrapper')
+	});
+
+	utils.elementTools.on(document.body, 'click', '.event-target', (e) => {
+		console.log(e);
 	});
 
 	window.loadPageHandler = loadPageHandler;

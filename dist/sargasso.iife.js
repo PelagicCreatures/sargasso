@@ -1383,6 +1383,32 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 		return data[k]
 	};
 
+	const on = function (container, events, selector, fn) {
+		const k = 'on:' + events + '-' + selector;
+		const handler = (e) => {
+			Array.from(container.querySelectorAll(selector)).forEach((el) => {
+				if (e.target === el) {
+					fn(e);
+				}
+			});
+		};
+		_setMetaData(container, k, handler);
+		events.split(/[\s,]+/).forEach((evt) => {
+			container.addEventListener(evt, handler);
+		});
+	};
+
+	const off = function (container, events, selector) {
+		const k = 'on:' + events + '-' + selector;
+		const handler = _getMetaData(container, k);
+		if (handler) {
+			events.split(/[\s,]+/).forEach((evt) => {
+				container.removeEventListener(evt, handler);
+			});
+			_setMetaData(container, k);
+		}
+	};
+
 	const elementTools = {
 		hasClass: _hasClass,
 		addClass: _addClass,
@@ -1391,7 +1417,9 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 		inViewPort: _inViewPort,
 		setCSS: _css,
 		setMetaData: _setMetaData,
-		getMetaData: _getMetaData
+		getMetaData: _getMetaData,
+		on: on,
+		off: off
 	};
 
 	/**
@@ -1843,6 +1871,14 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 
 		getMetaData (k) {
 			return elementTools.getMetaData(this.element, k)
+		}
+
+		on (evt, selector, fn) {
+			elementTools.on(this.element, evt, selector, fn);
+		}
+
+		off (evt, selector, fn) {
+			elementTools.off(this.element, evt, selector, fn);
 		}
 
 		notifyAll (event, params) {
