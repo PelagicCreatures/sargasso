@@ -87,7 +87,7 @@ You can also defer the instantiation using the lazy method by tagging it with `d
 Many browsers support custom elements so the (faster and cleaner) syntax for sargasso elements is to use a custom element tag. The class name is the kebabCase of your subclass so MyClass becomes sargasso-my-class:
 
 ```html
-<sargasso-my-class>This also works for MyClass in most browsers</sargasso-myclass>
+<sargasso-my-class>This also works for MyClass in most browsers</sargasso-my-class>
 ```
 
 ### HIJAX
