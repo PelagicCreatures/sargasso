@@ -38,7 +38,7 @@ The ES and the CommonJS bundles both expose:
 </script>
 ```
 
-In production you probably won't use the prepackaged bundles but should build own bundles including your subclasses using rollup or something. See rollup section below. In this example we use the bundles for expediency. The prepackaged bundles expose the exports from the module as globals scoped under `PelagicCreatures`
+In production you probably won't use the prepackaged bundles. You should build own bundles including your subclasses using rollup or something. See rollup section below. In this example we use the bundles for expediency. The prepackaged bundles expose the exports from the module as globals scoped under `PelagicCreatures`
 
 ```javascript
 PelagicCreatures.Sargasso - the superclass for all Sargasso classes
@@ -82,6 +82,13 @@ Sargasso watches the DOM for any elements tagged with the `data-sargasso-class` 
 ```
 
 You can also defer the instantiation using the lazy method by tagging it with `data-lazy-sargasso-class` instead of `data-sargasso-class` which will only start up the class when the element is visible in the viewport
+
+### Custom Elements ([Bleeding Edge-ish](https://caniuse.com/#feat=custom-elementsv1))
+Many browsers support custom elements so the (faster and cleaner) syntax for sargasso elements is to use a custom element tag. The class name is the kebabCase of your subclass so MyClass becomes sargasso-my-class:
+
+```html
+<sargasso-my-class>This also works for MyClass in most browsers</sargasso-myclass>
+```
 
 ### HIJAX
 Sargasso automatically captures `<a href="..">` tags and calls the LoadPageHandler instead of letting the browser load pages. You can make a link be ignored by hijax by setting the `<a href=".." data-no-hijax>`. Offsite links and links with targets are automatically ignored. bootSargasso also returns the function `LoadPageHandler(href)`. You must call this to load a new page programatically.

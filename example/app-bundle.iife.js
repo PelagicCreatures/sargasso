@@ -1142,6 +1142,33 @@
 
 	var debounce_1 = debounce;
 
+	/**
+	 * Converts `string` to
+	 * [kebab case](https://en.wikipedia.org/wiki/Letter_case#Special_case_styles).
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 3.0.0
+	 * @category String
+	 * @param {string} [string=''] The string to convert.
+	 * @returns {string} Returns the kebab cased string.
+	 * @example
+	 *
+	 * _.kebabCase('Foo Bar');
+	 * // => 'foo-bar'
+	 *
+	 * _.kebabCase('fooBar');
+	 * // => 'foo-bar'
+	 *
+	 * _.kebabCase('__FOO_BAR__');
+	 * // => 'foo-bar'
+	 */
+	var kebabCase = _createCompounder(function(result, word, index) {
+	  return result + (index ? '-' : '') + word.toLowerCase();
+	});
+
+	var kebabCase_1 = kebabCase;
+
 	var js_cookie = createCommonjsModule(function (module, exports) {
 	(function (factory) {
 		var registeredInModuleLoader;
@@ -1382,14 +1409,14 @@
 		return data[k]
 	};
 
-	function isFunction (functionToCheck) {
-		return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]'
+	function isFunction (fn) {
+		return fn && {}.toString.call(fn) === '[object Function]'
 	}
 
 	const on = function (container, events, selector, fn) {
 		const k = 'on:' + events + '-' + selector;
 		const handler = (e) => {
-			if (isFunction(selector)) {
+			if (isFunction(selector)) { // no selector, 3rd param is function
 				fn = selector;
 				if (e.target === container) {
 					fn(e);
@@ -1552,7 +1579,7 @@
 	}
 
 	class ScrollWatcher extends ObserverSubscriptionManager {
-		constructor (options) {
+		constructor (options = {}) {
 			super(options);
 
 			this.scrollElement = this.options.scrollElement || window;
@@ -1579,6 +1606,12 @@
 					this.scrolling = false; // exit the scroll loop and wait for next 'scroll' event
 				}
 			};
+		}
+
+		setOptions (options = {}) {
+			this.sleep();
+			this.scrollElement = options.scrollElement || window;
+			this.wakeup();
 		}
 
 		subscribe (observer) {
@@ -1773,13 +1806,11 @@
 
 	var theDOMWatcher, theScrollWatcher, theResizeWatcher, theOrientationWatcher, theWorkerWatcher;
 
-	const startServices = (options) => {
-		theDOMWatcher = new DOMWatcher(options);
-		theScrollWatcher = new ScrollWatcher(options);
-		theResizeWatcher = new ResizeWatcher(options);
-		theOrientationWatcher = new OrientationWatcher(options);
-		theWorkerWatcher = new WorkerWatcher(options);
-	};
+	theDOMWatcher = new DOMWatcher();
+	theScrollWatcher = new ScrollWatcher();
+	theResizeWatcher = new ResizeWatcher();
+	theOrientationWatcher = new OrientationWatcher();
+	theWorkerWatcher = new WorkerWatcher();
 
 	/**
 		Sargasso
@@ -1795,6 +1826,8 @@
 
 	let unique = 0;
 	const liveElements = [];
+
+	const supportsCustomElements = ('registerElement' in document);
 
 	/*
 		All subclasses of Sargasso must register the class so that
@@ -1814,32 +1847,37 @@
 	const registeredClasses = {};
 	const registerSargassoClass = (className, object) => {
 		registeredClasses[className] = object;
+		if (supportsCustomElements) {
+			customElements.define('sargasso-' + kebabCase_1(className), object);
+		}
 	};
 
 	const eventNames = [
 		'DOMChanged', 'didScroll', 'didResize', 'didBreakpoint', 'enterViewport', 'exitViewport', 'enterFullscreen', 'exitFullscreen', 'newPage', 'elementEvent'
 	];
 
-	class Sargasso {
+	class Sargasso extends HTMLElement {
 		constructor (element, options = {}) {
+			super();
 			this.uid = ++unique;
-			this.element = element;
+			this.element = element || this;
+			this.isCustomElement = (this.element.tagName.toLowerCase() === 'sargasso-' + kebabCase_1(this.constructor.name));
 			this.options = options;
 			this.pendingAnimationFrame = undefined;
 			this.frameQueue = [];
 			this.mortal = true;
 			this.isInViewport = false;
 			this.workers = {};
+			this.started = false;
+		}
 
+		start () {
 			const registeredResponsiveControllers = this.getMetaData('registeredResponsiveControllers') || [];
 			registeredResponsiveControllers.push(this);
 			this.setMetaData('registeredResponsiveControllers', registeredResponsiveControllers);
 			this.setMetaData(this.constructor.name, this);
 
 			liveElements.push(this);
-		}
-
-		start () {
 
 			// subscribe to desired event services
 
@@ -1873,6 +1911,8 @@
 			};
 
 			this.element.addEventListener('sargasso', this.elementListener);
+
+			this.started = true;
 		}
 
 		setMetaData (k, v) {
@@ -1982,17 +2022,20 @@
 			}
 
 			this.element.removeEventListener('sargasso', this.elementListener);
+
+			this.started = false;
 		}
 
 		// called when this.element is removed from the DOM
 		// you normally don't need to call this
 		destroy () {
+			this.stopAllWorkers();
 
 			this.flushQueue();
 
-			this.sleep();
-
-			this.stopAllWorkers();
+			if (this.started) {
+				this.sleep();
+			}
 
 			const registeredResponsiveControllers = this.getMetaData('registeredResponsiveControllers');
 			if (registeredResponsiveControllers) {
@@ -2211,6 +2254,21 @@
 				document.exitFullscreen();
 			}
 		}
+
+		// playing with web components / custom elements
+		connectedCallback () {
+			this.start();
+		}
+
+		disconnectedCallback () {
+			this.destroy();
+		}
+
+		adoptedCallback () {
+		}
+
+		attributeChangedCallback (name, oldValue, newValue) {
+		}
 	}
 
 	/**
@@ -2320,7 +2378,7 @@
 			// check for dangling live elements and kill them
 			const toCleanup = [];
 			for (let i = 0; i < liveElements.length; i++) {
-				if (liveElements[i].mortal && !document.body.contains(liveElements[i].element)) {
+				if (liveElements[i].mortal && !liveElements[i].isCustomElement && !document.body.contains(liveElements[i].element)) {
 					toCleanup.push(liveElements[i]);
 				}
 			}
@@ -2685,7 +2743,9 @@
 	var loadPageHandler;
 
 	const bootSargasso = (options = {}) => {
-		startServices(options);
+		if (options.scrollElement) {
+			theScrollWatcher.setOptions(options);
+		}
 		const supervisor = new SargassoSupervisor(document.body, options);
 		supervisor.start(options);
 		if (options.breakpoints) {
@@ -2733,16 +2793,15 @@
 		}
 
 		start () {
-			super.start();
 			this.logIt('start');
-
+			super.start();
 			const task = `let counters= {}
 			onmessage = async (e) => {
 				if(!counters[e.data.uid]) { counters[e.data.uid] = e.data.count }
 
 				setInterval(()=>{
 					self.postMessage({ uid: e.data.uid, count: ++counters[e.data.uid] })
-				},4000)
+				},30000)
 			}`;
 
 			this.workerStart('noisy', task);
@@ -2758,58 +2817,58 @@
 		}
 
 		destroy () {
-			this.logIt('destroy');
+			this.logIt('will destroy');
 			super.destroy();
 		}
 
 		DOMChanged () {
-			super.DOMChanged();
 			this.logIt('DOMChanged');
+			super.DOMChanged();
 		}
 
 		didScroll () {
-			super.didScroll();
 			this.logIt('didScroll');
+			super.didScroll();
 		}
 
 		didResize () {
-			super.didResize();
 			this.logIt('didResize');
+			super.didResize();
 		}
 
 		enterViewport () {
-			super.enterViewport();
 			this.logIt('enterViewport');
+			super.enterViewport();
 		}
 
 		exitViewport () {
-			super.exitViewport();
 			this.logIt('exitViewport');
+			super.exitViewport();
 		}
 
 		enterFullscreen () {
-			super.enterFullscreen();
 			this.logIt('enterFullscreen');
+			super.enterFullscreen();
 		}
 
 		exitFullscreen () {
-			super.exitFullscreen();
 			this.logIt('exitFullscreen');
+			super.exitFullscreen();
 		}
 
 		newPage (old, newPage) {
-			super.newPage();
 			this.logIt('newPage');
+			super.newPage();
 		}
 
 		didBreakpoint () {
-			super.didBreakpoint();
 			this.logIt('didBreakpoint');
+			super.didBreakpoint();
 		}
 
 		elementEvent (e) {
-			super.elementEvent();
 			this.logIt('elementEvent');
+			super.elementEvent();
 		}
 
 		workerOnMessage (id, data) {

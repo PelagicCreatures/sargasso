@@ -1143,6 +1143,33 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 
 	var debounce_1 = debounce;
 
+	/**
+	 * Converts `string` to
+	 * [kebab case](https://en.wikipedia.org/wiki/Letter_case#Special_case_styles).
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 3.0.0
+	 * @category String
+	 * @param {string} [string=''] The string to convert.
+	 * @returns {string} Returns the kebab cased string.
+	 * @example
+	 *
+	 * _.kebabCase('Foo Bar');
+	 * // => 'foo-bar'
+	 *
+	 * _.kebabCase('fooBar');
+	 * // => 'foo-bar'
+	 *
+	 * _.kebabCase('__FOO_BAR__');
+	 * // => 'foo-bar'
+	 */
+	var kebabCase = _createCompounder(function(result, word, index) {
+	  return result + (index ? '-' : '') + word.toLowerCase();
+	});
+
+	var kebabCase_1 = kebabCase;
+
 	var js_cookie = createCommonjsModule(function (module, exports) {
 	(function (factory) {
 		var registeredInModuleLoader;
@@ -1383,14 +1410,25 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 		return data[k]
 	};
 
+	function isFunction (fn) {
+		return fn && {}.toString.call(fn) === '[object Function]'
+	}
+
 	const on = function (container, events, selector, fn) {
 		const k = 'on:' + events + '-' + selector;
 		const handler = (e) => {
-			Array.from(container.querySelectorAll(selector)).forEach((el) => {
-				if (e.target === el) {
+			if (isFunction(selector)) { // no selector, 3rd param is function
+				fn = selector;
+				if (e.target === container) {
 					fn(e);
 				}
-			});
+			} else {
+				Array.from(container.querySelectorAll(selector)).forEach((el) => {
+					if (e.target === el) {
+						fn(e);
+					}
+				});
+			}
 		};
 		_setMetaData(container, k, handler);
 		events.split(/[\s,]+/).forEach((evt) => {
@@ -1542,7 +1580,7 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 	}
 
 	class ScrollWatcher extends ObserverSubscriptionManager {
-		constructor (options) {
+		constructor (options = {}) {
 			super(options);
 
 			this.scrollElement = this.options.scrollElement || window;
@@ -1569,6 +1607,12 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 					this.scrolling = false; // exit the scroll loop and wait for next 'scroll' event
 				}
 			};
+		}
+
+		setOptions (options = {}) {
+			this.sleep();
+			this.scrollElement = options.scrollElement || window;
+			this.wakeup();
 		}
 
 		subscribe (observer) {
@@ -1763,13 +1807,11 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 
 	var theDOMWatcher, theScrollWatcher, theResizeWatcher, theOrientationWatcher, theWorkerWatcher;
 
-	const startServices = (options) => {
-		theDOMWatcher = new DOMWatcher(options);
-		theScrollWatcher = new ScrollWatcher(options);
-		theResizeWatcher = new ResizeWatcher(options);
-		theOrientationWatcher = new OrientationWatcher(options);
-		theWorkerWatcher = new WorkerWatcher(options);
-	};
+	theDOMWatcher = new DOMWatcher();
+	theScrollWatcher = new ScrollWatcher();
+	theResizeWatcher = new ResizeWatcher();
+	theOrientationWatcher = new OrientationWatcher();
+	theWorkerWatcher = new WorkerWatcher();
 
 	/**
 		Sargasso
@@ -1785,6 +1827,8 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 
 	let unique = 0;
 	const liveElements = [];
+
+	const supportsCustomElements = ('registerElement' in document);
 
 	/*
 		All subclasses of Sargasso must register the class so that
@@ -1804,32 +1848,37 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 	const registeredClasses = {};
 	const registerSargassoClass = (className, object) => {
 		registeredClasses[className] = object;
+		if (supportsCustomElements) {
+			customElements.define('sargasso-' + kebabCase_1(className), object);
+		}
 	};
 
 	const eventNames = [
 		'DOMChanged', 'didScroll', 'didResize', 'didBreakpoint', 'enterViewport', 'exitViewport', 'enterFullscreen', 'exitFullscreen', 'newPage', 'elementEvent'
 	];
 
-	class Sargasso {
+	class Sargasso extends HTMLElement {
 		constructor (element, options = {}) {
+			super();
 			this.uid = ++unique;
-			this.element = element;
+			this.element = element || this;
+			this.isCustomElement = (this.element.tagName.toLowerCase() === 'sargasso-' + kebabCase_1(this.constructor.name));
 			this.options = options;
 			this.pendingAnimationFrame = undefined;
 			this.frameQueue = [];
 			this.mortal = true;
 			this.isInViewport = false;
 			this.workers = {};
+			this.started = false;
+		}
 
+		start () {
 			const registeredResponsiveControllers = this.getMetaData('registeredResponsiveControllers') || [];
 			registeredResponsiveControllers.push(this);
 			this.setMetaData('registeredResponsiveControllers', registeredResponsiveControllers);
 			this.setMetaData(this.constructor.name, this);
 
 			liveElements.push(this);
-		}
-
-		start () {
 
 			// subscribe to desired event services
 
@@ -1863,6 +1912,8 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 			};
 
 			this.element.addEventListener('sargasso', this.elementListener);
+
+			this.started = true;
 		}
 
 		setMetaData (k, v) {
@@ -1972,17 +2023,20 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 			}
 
 			this.element.removeEventListener('sargasso', this.elementListener);
+
+			this.started = false;
 		}
 
 		// called when this.element is removed from the DOM
 		// you normally don't need to call this
 		destroy () {
+			this.stopAllWorkers();
 
 			this.flushQueue();
 
-			this.sleep();
-
-			this.stopAllWorkers();
+			if (this.started) {
+				this.sleep();
+			}
 
 			const registeredResponsiveControllers = this.getMetaData('registeredResponsiveControllers');
 			if (registeredResponsiveControllers) {
@@ -2201,6 +2255,21 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 				document.exitFullscreen();
 			}
 		}
+
+		// playing with web components / custom elements
+		connectedCallback () {
+			this.start();
+		}
+
+		disconnectedCallback () {
+			this.destroy();
+		}
+
+		adoptedCallback () {
+		}
+
+		attributeChangedCallback (name, oldValue, newValue) {
+		}
 	}
 
 	/**
@@ -2310,7 +2379,7 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 			// check for dangling live elements and kill them
 			const toCleanup = [];
 			for (let i = 0; i < liveElements.length; i++) {
-				if (liveElements[i].mortal && !document.body.contains(liveElements[i].element)) {
+				if (liveElements[i].mortal && !liveElements[i].isCustomElement && !document.body.contains(liveElements[i].element)) {
 					toCleanup.push(liveElements[i]);
 				}
 			}
@@ -2673,7 +2742,9 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 	};
 
 	const bootSargasso = (options = {}) => {
-		startServices(options);
+		if (options.scrollElement) {
+			theScrollWatcher.setOptions(options);
+		}
 		const supervisor = new SargassoSupervisor(document.body, options);
 		supervisor.start(options);
 		if (options.breakpoints) {

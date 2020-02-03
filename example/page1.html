@@ -8,11 +8,13 @@
 			<h1>This is static</h1>
 			<p>Once loaded it stays the same no matter what page you go to.</p>
 			<div id="content" data-hijax>
-				<script id="injected" src="/injected.js" type="module"></script>
-				<script id="ephemeral" type="module" data-ephemeral>
-					import {doIt} from "/injected.js"
-					doIt()
-				</script>
+				<!--
+					<script id="injected" src="/injected.js" type="module"></script>
+					<script id="ephemeral" type="module" data-ephemeral>
+						import {doIt} from "/injected.js"
+						doIt()
+					</script>
+				-->
 				<p><a href="/index.html">See!</a> I changed!. You can have as many updating containers on the page as you need.</p>
 				<pre>
 					scroll down there to see a lazy thing load
@@ -59,7 +61,7 @@
 				</pre>
 
 				<div style="text-align:center;">
-					<div data-sargasso-class="myClass" style="margin:0 auto;display:inline-block;padding:2em;border:thin solid #333;">I'm off stage. This text will change when I scroll into view.</div>
+					<sargasso-my-class style="margin:0 auto;display:inline-block;padding:2em;border:thin solid #333;">I'm off stage. This text will change when I scroll into view.</sargasso-myclass>
 				</div>
 				<pre>
 
@@ -78,7 +80,7 @@
 
 				</pre>
 
-				<div data-sargasso-class="Noisy" id="page1"><em>I'm Noisy (#page1)...</em></div>
+				<sargasso-noisy id="page1"><em>I'm Noisy (#page1)...</em></sargasso-noisy>
 				<pre>
 
 				</pre>
