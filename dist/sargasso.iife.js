@@ -1828,7 +1828,7 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 	let unique = 0;
 	const liveElements = [];
 
-	const supportsCustomElements = ('registerElement' in document);
+	const supportsCustomElements = ('customElements' in window);
 
 	/*
 		All subclasses of Sargasso must register the class so that
@@ -2271,6 +2271,8 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 		attributeChangedCallback (name, oldValue, newValue) {
 		}
 	}
+
+	registerSargassoClass('Sargasso', Sargasso);
 
 	/**
 		LazyInstantiate

@@ -1827,7 +1827,7 @@
 	let unique = 0;
 	const liveElements = [];
 
-	const supportsCustomElements = ('registerElement' in document);
+	const supportsCustomElements = ('customElements' in window);
 
 	/*
 		All subclasses of Sargasso must register the class so that
@@ -2270,6 +2270,8 @@
 		attributeChangedCallback (name, oldValue, newValue) {
 		}
 	}
+
+	registerSargassoClass('Sargasso', Sargasso);
 
 	/**
 		LazyInstantiate
