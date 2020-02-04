@@ -100,7 +100,7 @@ utils.bootSargasso({
 		},
 		onLoading: function () {},
 		onExitPage: () => {
-			utils.elementTools.off(document.body, 'click', '.event-target')
+			utils.elementTools.off('myid', document.body, 'click', '.event-target')
 		},
 		onEnterPage: () => {}
 	},
@@ -108,8 +108,12 @@ utils.bootSargasso({
 	scrollElement: document.getElementById('scroll-wrapper')
 })
 
-utils.elementTools.on(document.body, 'click', '.event-target', (e) => {
-	console.log(e)
-})
+utils.elementTools.on('myid', document.body, 'click', '.event-target', (e) => {
+	console.log('delegated')
+}, true)
+
+utils.elementTools.on('myid', document.querySelector('.event-target'), 'click', '', (e) => {
+	console.log('undelegated')
+}, true)
 
 window.loadPageHandler = loadPageHandler

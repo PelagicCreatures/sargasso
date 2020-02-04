@@ -1409,15 +1409,11 @@
 		return data[k]
 	};
 
-	function isFunction (fn) {
-		return fn && {}.toString.call(fn) === '[object Function]'
-	}
+	const on = function (owner, container, events, selector, fn, options) {
+		const k = 'on:' + owner + events + '-' + selector;
 
-	const on = function (container, events, selector, fn) {
-		const k = 'on:' + events + '-' + selector;
 		const handler = (e) => {
-			if (isFunction(selector)) { // no selector, 3rd param is function
-				fn = selector;
+			if (!selector) {
 				if (e.target === container) {
 					fn(e);
 				}
@@ -1429,14 +1425,16 @@
 				});
 			}
 		};
+
 		_setMetaData(container, k, handler);
+
 		events.split(/[\s,]+/).forEach((evt) => {
-			container.addEventListener(evt, handler);
+			container.addEventListener(evt, handler, options);
 		});
 	};
 
-	const off = function (container, events, selector) {
-		const k = 'on:' + events + '-' + selector;
+	const off = function (owner, container, events, selector) {
+		const k = 'on:' + owner + '-' + events + '-' + selector;
 		const handler = _getMetaData(container, k);
 		if (handler) {
 			events.split(/[\s,]+/).forEach((evt) => {
@@ -1923,12 +1921,12 @@
 			return elementTools.getMetaData(this.element, k)
 		}
 
-		on (evt, selector, fn) {
-			elementTools.on(this.element, evt, selector, fn);
+		on (evt, selector, fn, options) {
+			elementTools.on(this.uid, this.element, evt, selector, fn, options);
 		}
 
 		off (evt, selector, fn) {
-			elementTools.off(this.element, evt, selector, fn);
+			elementTools.off(this.uid, this.element, evt, selector, fn);
 		}
 
 		notifyAll (event, params) {
@@ -2982,7 +2980,7 @@
 			},
 			onLoading: function () {},
 			onExitPage: () => {
-				utils.elementTools.off(document.body, 'click', '.event-target');
+				utils.elementTools.off('myid', document.body, 'click', '.event-target');
 			},
 			onEnterPage: () => {}
 		},
@@ -2990,9 +2988,13 @@
 		scrollElement: document.getElementById('scroll-wrapper')
 	});
 
-	utils.elementTools.on(document.body, 'click', '.event-target', (e) => {
-		console.log(e);
-	});
+	utils.elementTools.on('myid', document.body, 'click', '.event-target', (e) => {
+		console.log('delegated');
+	}, true);
+
+	utils.elementTools.on('myid', document.querySelector('.event-target'), 'click', '', (e) => {
+		console.log('undelegated');
+	}, true);
 
 	window.loadPageHandler = loadPageHandler;
 

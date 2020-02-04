@@ -99,9 +99,11 @@ export default {
 </html>
 ```
 
+When you load the page the content of sargasso-my-class will be "MyClass instance **Started!**"
+
 #### Custom Elements
-[Bleeding Edge-ish](https://caniuse.com/#feat=custom-elementsv1)
-Many browsers support custom elements so the preferred (faster and cleaner) syntax for sargasso elements is to use a custom element tag. The class name is the kebab-case of your subclass name so MyClass becomes sargasso-my-class:
+
+Many browsers support custom elements ([current compatibility](https://caniuse.com/#feat=custom-elementsv1) so the preferred (faster and cleaner) syntax for sargasso elements is to use a custom element tag. The class name is the kebab-case of your subclass name so MyClass becomes sargasso-my-class:
 
 ```html
 <sargasso-my-class>This works for MyClass in <em>most</em> browsers</sargasso-my-class>
@@ -216,11 +218,13 @@ Your Sargasso subclasses subscribe to event feeds to be notified of events.
 | addClass('cssclass') | add cssclass to this.element |
 | removeClass('cssclass')  | remove cssclass to this.element |
 | css({})  | set css pairs defined in object on this.element |
+| isVisible() | true if element is visible |
 | scrollTop(newTop) | get and set the current scroll position |
 | queueFrame(function) | queue a function to execute that changes the DOM |
 | workerStart(id, codeOrURL) | start a web worker with id. Ignored if worker id already installed (see https://github.com/PelagicCreatures/flyingfish for a shared worker example)|
 | workerPostMessage(id, data {}) | send the worker tagged with `id` a message. the message must be an object which can have any structure you want to pass to the worker |
-
+| on(container,selector,fn) | attach delegated event handler to container scoped to a css selector |
+| off(container,selector) | remove delegated event handler to container scoped to css selector |
 
 Don't forget you need to let sargasso know about your class:
 ```registerSargassoClass('MyClass', MyClass)```
