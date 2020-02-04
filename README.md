@@ -18,82 +18,119 @@ Progressive Web Apps and modern websites need a HIJAX scheme. One of the core fe
 
 Performance is further enhanced with shared event listening services which are fully debounced during large updates. Services are also provided to schedule content changes using the browser's **animation frame** event loop and managed **web workers** for offloading computation heavy tasks to a dedicated thread resulting in highly performant pages.
 
-```npm install @pelagiccreatures/sargasso```
+```npm install @pelagiccreatures/sargasso --save```
 
-Bootstrap Sargasso:
--------------------
-The ES and the CommonJS bundles both expose:
+### An example Sargasso app:
+
+The @PelagicCreatures/sargasso package exports:
 
 * Sargasso - the sargasso super class
 * utils.registerSargassoClass - function to register your sub classes
 * utils.bootSargasso - start sargasso services and HIHAX
 
-[Most browsers](https://caniuse.com/#search=modules) are aware of ES6 and modules these days but but you can use the module/nomodule scheme to fall back to the common js bundle if needed.
-
-```
-<script type="module" src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.cjs.js" nomodule defer></script>
-<script defer>
-  ... your code here ...
-</script>
-```
-
-In production you probably won't use the prepackaged bundles. You should build own bundles including your subclasses using rollup or something. See rollup section below. In this example we use the bundles for expediency. The prepackaged bundles expose the exports from the module as globals scoped under `PelagicCreatures`
-
-```javascript
-PelagicCreatures.Sargasso - the superclass for all Sargasso classes
-PelagicCreatures.utils.registerSargassoClass - tell sargasso about your subclass
-PelagicCreatures.utils.bootSargasso - start it up
-PelagicCreatures.utils.elementTools - some utilities
-PelagicCreatures.loadPageHandler - the bottle neck for loading a page
-```
-
-```
-<script defer>
-  let options = {
-    hijax: {
-      onError: (level, message) => { alert('Something went wrong. ' + message) }
-    }
-  }
-
-  // boot supervisors and HIJAX loader
-  PelagicCreatures.utils.bootSargasso(options)
-
-  // define a custom class and register the classname.
-  class MyClass extends PelagicCreatures.Sargasso {} // This won't do very much...
-  PelagicCreatures.utils.registerSargassoClass('MyClass',MyClass)
-
-</script>
-```
-
-**In pure ES6** you don't need the 'PelagicCreatures.' bit, instead you would use import directly from the module.
-
+myApp.js
 ```javascript
 import {Sargasso, utils} from '@PelagicCreatures/sargasso'
+let options = {}
 utils.bootSargasso(options)
+
+class MyClass extends Sargasso { // This won't do very much...
+  start() {
+    this.element.innerHTML += ' <strong>Started!</strong>'
+    super.start()
+  }
+}
+utils.registerSargassoClass('MyClass',MyClass)
 ```
 
-### Adding Your Sargasso class to an HTML element
+### Rollup your app and add script tag to HTML
 
-Sargasso watches the DOM for any elements tagged with the `data-sargasso-class` attribute and instantiates the Sargasso class specified while hooking up the appropriate services. When the underlying element is removed from the DOM (loading a new page or something) it automatically destroys any dangling Sargasso objects.
-
+1. Install rollup
 ```
-<div data-sargasso-class="MyClass">This element has a MyClass Sargasso controller</div>
+npm install --global rollup
+npm install @rollup/plugin-commonjs --save-dev
+npm install @rollup/plugin-json --save-dev
+npm install @rollup/plugin-node-resolve --save-dev
 ```
 
-You can also defer the instantiation using the lazy method by tagging it with `data-lazy-sargasso-class` instead of `data-sargasso-class` which will only start up the class when the element is visible in the viewport
+2. Define your bundle build options.
 
-### Custom Elements ([Bleeding Edge-ish](https://caniuse.com/#feat=custom-elementsv1))
-Many browsers support custom elements so the (faster and cleaner) syntax for sargasso elements is to use a custom element tag. The class name is the kebabCase of your subclass so MyClass becomes sargasso-my-class:
+rollup.config.js
+```javascript
+Learn more or give us feedback
+import commonjs from '@rollup/plugin-commonjs'
+import nodeResolve from '@rollup/plugin-node-resolve'
+import json from '@rollup/plugin-json'
+
+export default {
+  input: './myApp.js', // <<< your app
+  output: [{
+    format: 'iife',
+    name: 'App',
+    file: './app-bundle.iife.js', // <<< script file to include in html
+    sourcemap: true,
+    treeshake: false
+  }],
+
+  plugins: [
+    json(),
+    nodeResolve({
+      preferBuiltins: false
+    }),
+    commonjs({
+      namedExports: {}
+    })
+  ]
+}
+```
+
+3. Build it: `Run rollup -c rollup.config.js`
+
+4. Add it to your html
 
 ```html
-<sargasso-my-class>This also works for MyClass in most browsers</sargasso-my-class>
+<html>
+  <head>
+    <script src="/app-bundle.iife.js" defer></script>
+  </head>
+  <body>
+    <sargasso-my-class>MyClass instance</sargasso-my-class>
+  </body>
+</html>
 ```
 
+#### Custom Elements
+[Bleeding Edge-ish](https://caniuse.com/#feat=custom-elementsv1)
+Many browsers support custom elements so the preferred (faster and cleaner) syntax for sargasso elements is to use a custom element tag. The class name is the kebab-case of your subclass name so MyClass becomes sargasso-my-class:
+
+```html
+<sargasso-my-class>This works for MyClass in <em>most</em> browsers</sargasso-my-class>
+```
+
+#### Using data-sargasso-class
+Alternately, Sargasso watches the DOM for any elements tagged with the `data-sargasso-class` attribute and instantiates the Sargasso class specified while hooking up the appropriate services. When the underlying element is removed from the DOM (loading a new page or something) it automatically destroys any dangling Sargasso objects.
+
+```html
+<div data-sargasso-class="MyClass">This works for MyClass in all browsers</div>
+```
+
+You can also defer the instantiation using the lazy method by tagging it with `data-lazy-sargasso-class` instead of `data-sargasso-class` which will only start up the class when the element is visible in the viewport.
+
 ### HIJAX
-Sargasso automatically captures `<a href="..">` tags and calls the LoadPageHandler instead of letting the browser load pages. You can make a link be ignored by hijax by setting the `<a href=".." data-no-hijax>`. Offsite links and links with targets are automatically ignored. bootSargasso also returns the function `LoadPageHandler(href)`. You must call this to load a new page programatically.
+
+When HIJAX is enabled, Sargasso automatically captures `<a href="..">` tags and calls the LoadPageHandler instead of letting the browser load pages. You can make a link be ignored by hijax by setting the `<a href=".." data-no-hijax>`. Offsite links and links with targets are automatically ignored.  
+
+`loadPageHandler(href)` is a utility function for programmatically loading a new page.
 
 EG. instead of `location.href= '/home'`, use `LoadPageHandler('/home')`
+
+```javascript
+import {Sargasso, utils, loadPageHandler} from '@PelagicCreatures/sargasso'
+let options = {
+  hijax: { onError: (level, message) => { alert('Something went wrong. ' + message) } }
+}
+utils.bootSargasso(options)
+```
 
 #### Mark dynamic content
 
@@ -122,10 +159,15 @@ New pages are loaded via AJAX and are merged with the current page only replacin
 <html>
 ```
 
-Note that data-hijax elements must have well formed child html elements. **Not** raw text like this:
+Note that data-hijax elements must have and ID and contain well formed child html elements.
 
-```<div id="nope" data-hijax>I'm just text. No child elements. Won't work.</div>```
+```
+<div id="nope" data-hijax>I'm just text. No child elements. Won't work.</div>
+```
 
+```
+<div id="yup" data-hijax><p>I'm html. This works.</div>
+```
 
 ### Sargasso Object Lifecycle
 
@@ -306,23 +348,23 @@ import nodeResolve from '@rollup/plugin-node-resolve'
 import json from '@rollup/plugin-json'
 
 export default {
-	input: './example/app.js',
-	output: [{
-		format: 'iife',
-		name: 'App',
-		file: './example/app-bundle.iife.js',
-		sourcemap: true
-	}],
+  input: './example/app.js',
+  output: [{
+    format: 'iife',
+    name: 'App',
+    file: './example/app-bundle.iife.js',
+    sourcemap: true
+  }],
 
-	plugins: [
-		json(),
-		nodeResolve({
-			preferBuiltins: false
-		}),
-		commonjs({
-			namedExports: {}
-		})
-	]
+  plugins: [
+    json(),
+    nodeResolve({
+      preferBuiltins: false
+    }),
+    commonjs({
+      namedExports: {}
+    })
+  ]
 }
 
 
