@@ -1409,8 +1409,8 @@
 		return data[k]
 	};
 
-	const on = function (owner, container, events, selector, fn, options) {
-		const k = 'on:' + owner + '-' + events + '-' + selector;
+	const on = function (uid, container, events, selector, fn, options) {
+		const k = 'on:' + uid + '-' + events + '-' + selector;
 
 		const handler = (e) => {
 			if (!selector) {
@@ -1433,8 +1433,8 @@
 		});
 	};
 
-	const off = function (owner, container, events, selector) {
-		const k = 'on:' + owner + '-' + events + '-' + selector;
+	const off = function (uid, container, events, selector) {
+		const k = 'on:' + uid + '-' + events + '-' + selector;
 		const handler = _getMetaData(container, k);
 		if (handler) {
 			events.split(/[\s,]+/).forEach((evt) => {
@@ -1922,11 +1922,11 @@
 		}
 
 		on (evt, selector, fn, options) {
-			elementTools.on(this.uid, this.element, evt, selector, fn, options);
+			elementTools.on(this.constructor.name + '-' + this.uid, this.element, evt, selector, fn, options);
 		}
 
 		off (evt, selector, fn) {
-			elementTools.off(this.uid, this.element, evt, selector, fn);
+			elementTools.off(this.constructor.name + '-' + this.uid, this.element, evt, selector, fn);
 		}
 
 		notifyAll (event, params) {
@@ -2763,6 +2763,62 @@
 		}
 	};
 
+	let unique$1 = 0;
+
+	class LiveValue {
+		constructor (watch) {
+			this.uid = ++unique$1;
+			this._value = undefined;
+			this.subscribers = {};
+			if (watch) {
+				this.watch = watch;
+				if (this.watch.value !== this._value) {
+					this.value = this.watch.value;
+				}
+				elementTools.on(this.constructor.name + '-' + this.uid, this.watch, 'keyup change click', '', (e) => {
+					if (this.watch.value !== this._value) {
+						this.value = this.watch.value;
+					}
+				}, true);
+			}
+		}
+
+		destroy () {
+			if (this.watch) {
+				elementTools.off(this.constructor.name + '-' + this.uid, this.watch, 'keyup change click');
+			}
+		}
+
+		set value (val) {
+			this._value = val;
+			this.notify();
+			if (this.watch) {
+				this.watch.value = this._value.toString();
+			}
+		}
+
+		get value () {
+			return this._value
+		}
+
+		subscribe (id, fn) {
+			this.subscribers[id] = fn;
+			fn(this._value);
+		}
+
+		unSubscribe (id) {
+			if (this.subscribers[id]) {
+				delete this.subscribers[id];
+			}
+		}
+
+		notify () {
+			Object.keys(this.subscribers).forEach((k) => {
+				this.subscribers[k](this._value);
+			});
+		}
+	}
+
 	/*
 		Sargasso
 
@@ -2997,6 +3053,12 @@
 	}, true);
 
 	window.loadPageHandler = loadPageHandler;
+
+	window.live = new LiveValue(document.querySelector('[name="live"]'));
+	live.subscribe('subscriptionId', (val) => {
+		console.log(val);
+	});
+	live.value = 100;
 
 }());
 //# sourceMappingURL=app-bundle.iife.js.map

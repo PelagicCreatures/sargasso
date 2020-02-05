@@ -3,7 +3,7 @@
 */
 
 import {
-	Sargasso, utils, loadPageHandler
+	Sargasso, utils, loadPageHandler, LiveValue
 }
 	from '../index.js' // or more likely from '@pelagiccreatures/sargasso'
 
@@ -117,3 +117,9 @@ utils.elementTools.on('myid', document.querySelector('.event-target'), 'click', 
 }, true)
 
 window.loadPageHandler = loadPageHandler
+
+window.live = new LiveValue(document.querySelector('[name="live"]'))
+live.subscribe('subscriptionId', (val) => {
+	console.log(val)
+})
+live.value = 100
