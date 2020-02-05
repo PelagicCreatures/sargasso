@@ -45,7 +45,7 @@ utils.registerSargassoClass('MyClass',MyClass)
 
 ### Rollup your app and add script tag to HTML
 
-1. Install rollup
+#### 1. Install rollup
 ```
 npm install --global rollup
 npm install @rollup/plugin-commonjs --save-dev
@@ -53,7 +53,7 @@ npm install @rollup/plugin-json --save-dev
 npm install @rollup/plugin-node-resolve --save-dev
 ```
 
-2. Define your bundle build options.
+#### 2. Define your bundle build options.
 
 rollup.config.js
 ```javascript
@@ -84,9 +84,9 @@ export default {
 }
 ```
 
-3. Build it: `Run rollup -c rollup.config.js`
+#### 3. Build it: `Run rollup -c rollup.config.js`
 
-4. Add it to your html
+#### 4. Add it to your html
 
 ```html
 <html>
@@ -338,39 +338,3 @@ class MySubClass extends Sargasso {
   }
 }
 ```
-
-### Rollup ES6 Bundling
-
-While you can use the libs in /dist in you project you would typically want to bundle your own ES6 (and perhaps commonJS) bundles to serve with your pages.
-
-The example below is for the /example directory pages.
-
-rollup.config.app.js
-```
-import commonjs from '@rollup/plugin-commonjs'
-import nodeResolve from '@rollup/plugin-node-resolve'
-import json from '@rollup/plugin-json'
-
-export default {
-  input: './example/app.js',
-  output: [{
-    format: 'iife',
-    name: 'App',
-    file: './example/app-bundle.iife.js',
-    sourcemap: true
-  }],
-
-  plugins: [
-    json(),
-    nodeResolve({
-      preferBuiltins: false
-    }),
-    commonjs({
-      namedExports: {}
-    })
-  ]
-}
-
-
-```
-Run `rollup -c rollup.config.app.js` and you have an ES6 bundle which includes all your dependancies and code.
