@@ -1410,7 +1410,7 @@
 	};
 
 	const on = function (owner, container, events, selector, fn, options) {
-		const k = 'on:' + owner + events + '-' + selector;
+		const k = 'on:' + owner + '-' + events + '-' + selector;
 
 		const handler = (e) => {
 			if (!selector) {
