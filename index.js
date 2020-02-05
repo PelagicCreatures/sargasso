@@ -24,11 +24,6 @@ import {
 }
 	from './lib/boot.js'
 
-import {
-	LiveValue
-}
-	from './lib/LiveValue.js'
-
 const utils = {
 	registerSargassoClass: registerSargassoClass,
 	bootSargasso: bootSargasso,
@@ -36,5 +31,5 @@ const utils = {
 }
 
 export {
-	Sargasso, utils, loadPageHandler, LiveValue
+	Sargasso, utils, loadPageHandler
 }

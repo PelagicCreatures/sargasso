@@ -1410,15 +1410,11 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 		return data[k]
 	};
 
-	function isFunction (fn) {
-		return fn && {}.toString.call(fn) === '[object Function]'
-	}
+	const on = function (uid, container, events, selector, fn, options) {
+		const k = 'on:' + uid + '-' + events + '-' + selector;
 
-	const on = function (container, events, selector, fn) {
-		const k = 'on:' + events + '-' + selector;
 		const handler = (e) => {
-			if (isFunction(selector)) { // no selector, 3rd param is function
-				fn = selector;
+			if (!selector) {
 				if (e.target === container) {
 					fn(e);
 				}
@@ -1430,14 +1426,16 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 				});
 			}
 		};
+
 		_setMetaData(container, k, handler);
+
 		events.split(/[\s,]+/).forEach((evt) => {
-			container.addEventListener(evt, handler);
+			container.addEventListener(evt, handler, options);
 		});
 	};
 
-	const off = function (container, events, selector) {
-		const k = 'on:' + events + '-' + selector;
+	const off = function (uid, container, events, selector) {
+		const k = 'on:' + uid + '-' + events + '-' + selector;
 		const handler = _getMetaData(container, k);
 		if (handler) {
 			events.split(/[\s,]+/).forEach((evt) => {
@@ -1924,12 +1922,12 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 			return elementTools.getMetaData(this.element, k)
 		}
 
-		on (evt, selector, fn) {
-			elementTools.on(this.element, evt, selector, fn);
+		on (evt, selector, fn, options) {
+			elementTools.on(this.constructor.name + '-' + this.uid, this.element, evt, selector, fn, options);
 		}
 
 		off (evt, selector, fn) {
-			elementTools.off(this.element, evt, selector, fn);
+			elementTools.off(this.constructor.name + '-' + this.uid, this.element, evt, selector, fn);
 		}
 
 		notifyAll (event, params) {
