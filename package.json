@@ -1,6 +1,6 @@
 {
 	"name": "@pelagiccreatures/sargasso",
-	"version": "0.8.3",
+	"version": "0.8.4",
 	"description": "Simple, Fast, Reactive, supervised Javascript controllers for html elements.",
 	"keywords": [
 		"javascript",
