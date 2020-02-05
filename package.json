@@ -1,7 +1,7 @@
 {
 	"name": "@pelagiccreatures/sargasso",
 	"version": "0.8.4",
-	"description": "Simple, Fast, Reactive, supervised Javascript controllers for html elements.",
+	"description": "Simple, Fast, Reactive, Supervised Javascript controllers for custom html elements.",
 	"keywords": [
 		"javascript",
 		"es6",
@@ -11,7 +11,9 @@
 		"lazy load",
 		"pwa",
 		"web app",
-		"hijax"
+		"hijax",
+		"animation-frame",
+		"custom-elements"
 	],
 	"main": "index.js",
 	"scripts": {

@@ -1409,8 +1409,8 @@
 		return data[k]
 	};
 
-	const on = function (owner, container, events, selector, fn, options) {
-		const k = 'on:' + owner + '-' + events + '-' + selector;
+	const on = function (uid, container, events, selector, fn, options) {
+		const k = 'on:' + uid + '-' + events + '-' + selector;
 
 		const handler = (e) => {
 			if (!selector) {
@@ -1433,8 +1433,8 @@
 		});
 	};
 
-	const off = function (owner, container, events, selector) {
-		const k = 'on:' + owner + '-' + events + '-' + selector;
+	const off = function (uid, container, events, selector) {
+		const k = 'on:' + uid + '-' + events + '-' + selector;
 		const handler = _getMetaData(container, k);
 		if (handler) {
 			events.split(/[\s,]+/).forEach((evt) => {
@@ -1922,11 +1922,11 @@
 		}
 
 		on (evt, selector, fn, options) {
-			elementTools.on(this.uid, this.element, evt, selector, fn, options);
+			elementTools.on(this.constructor.name + '-' + this.uid, this.element, evt, selector, fn, options);
 		}
 
 		off (evt, selector, fn) {
-			elementTools.off(this.uid, this.element, evt, selector, fn);
+			elementTools.off(this.constructor.name + '-' + this.uid, this.element, evt, selector, fn);
 		}
 
 		notifyAll (event, params) {
