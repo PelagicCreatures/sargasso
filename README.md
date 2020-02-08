@@ -19,14 +19,16 @@ I am currently building out a fairly large web app based on this framework and I
 This will all be in production on a pretty large web site later this spring but the code is already pretty solid. I'm still working on the unit testing but have over 80% coverage at the moment.
 
 If you are curious, have questions, want to help or have any feedback feel free to contact me by opening an issue.
- 
+
 ```
 @author Michael Rhodes (except where noted)
 @license MIT
 Made in Barbados 🇧🇧
 ```
 
-Progressive Web Apps and modern websites need a HIJAX scheme to load pages. One of the core features of this framework is to implement an asynchronous page loading scheme which supports deep linking and lightning fast page loads where only dynamic content areas are merged between page loads leaving css, js, web workers and wrapper elements intact. Sargasso controller instances are automatically created as needed when their element appears in the DOM and destroyed when their element is removed so everything is cleanly destroyed and all the trash is collected.
+### The reason for all of this
+
+Progressive Web Apps and modern websites need a HIJAX scheme to load pages that is integrated with and can manage element behavior. One of the core features of this framework is to implement an asynchronous page loading scheme which supports deep linking and lightning fast page loads where only dynamic content areas are merged between page loads leaving css, js, web workers and wrapper elements intact. Sargasso controller instances are automatically created as needed when their element appears in the DOM and destroyed when their element is removed so everything is cleanly destroyed and all the trash is collected.
 
 Performance is further enhanced with shared event listening services which are fully debounced during large updates. Services are also provided to schedule content changes using the browser's **animation frame** event loop and managed **web workers** for simplified offloading of computation heavy tasks to a dedicated thread resulting in highly performant pages.
 
