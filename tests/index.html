@@ -15,25 +15,27 @@
 		  var expect = chai.expect;
 		</script>
 		<style>
+			#spacer.below-the-fold { height:100vh; }
 			.hidden-display { display: none; }
-			.offscreen { position: fixed; top: 200%; height: 1px;}
-			.below-the-fold { position: absolute; top: 101%; height: 1px;}
 		</style>
 	</head>
 	<body style="height:200vh;">
 		<div id="hijaxed" data-hijax>
 			<div>
-				jihaxed content here
+				HiJaxed content here. index.html
 			</div>
 		</div>
-		<div id="test-element" style="border:thin dashed silver;min-height:33vh;width:33vw;">
-			<div class="nested-element"></div>
-			<div class="nested-element"></div>
+		<div style="text-align:center;">
+			<div id="spacer"></div>
+			<div id="test-element" style="border:thin dashed silver;min-height:33vh;width:33vw;">
+				<div class="nested-element"></div>
+				<div class="nested-element"></div>
+			</div>
 		</div>
 		<script src="../dist/sargasso.iife.js"></script>
 		<script src="./spec.js"></script>
 		<script defer>
-			PelagicCreatures.Sargasso.utils.bootSargasso({hijax:{}})
+			PelagicCreatures.Sargasso.utils.bootSargasso({hijax:{},breakpoints:{}})
 			mocha.run();
 		</script>
 	</body>

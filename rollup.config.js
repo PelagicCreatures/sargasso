@@ -1,6 +1,10 @@
 import commonjs from '@rollup/plugin-commonjs'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import json from '@rollup/plugin-json'
+import {
+	terser
+}
+	from 'rollup-plugin-terser'
 
 export default {
 	input: './index.js',
@@ -14,6 +18,11 @@ export default {
 	plugins: [
 		json(),
 		nodeResolve(),
-		commonjs()
+		commonjs(),
+		terser({
+			output: {
+				comments: false
+			}
+		})
 	]
 }

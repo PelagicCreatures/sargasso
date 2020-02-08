@@ -30,23 +30,21 @@ describe('Sargasso', function () {
 	})
 	it('utils.inViewPort', function (done) {
 		expect(elementTools.inViewPort(testElement)).to.be.true
-		elementTools.addClass(testElement, 'offscreen')
+		elementTools.addClass(document.querySelector('#spacer'), 'below-the-fold')
 		expect(elementTools.inViewPort(testElement)).to.be.false
-		elementTools.removeClass(testElement, 'offscreen')
+		elementTools.removeClass(document.querySelector('#spacer'), 'below-the-fold')
 		setImmediate(done)
 	})
 	it('utils.css', function (done) {
 		const css = {
-			backgroundColor: 'black',
-			color: 'red',
-			'border-color': 'pink',
-			margin: 0
+			backgroundColor: 'rgb(238, 238, 238)',
+			color: 'black',
+			'border-color': 'pink'
 		}
 		elementTools.setCSS(testElement, css)
-		expect(testElement.style.backgroundColor, 'background-color').to.equal('black')
-		expect(testElement.style.color, 'color').to.equal('red')
+		expect(testElement.style.backgroundColor, 'background-color').to.equal('rgb(238, 238, 238)')
+		expect(testElement.style.color, 'color').to.equal('black')
 		expect(testElement.style.borderColor, 'border-color').to.equal('pink')
-		expect(testElement.style.margin, 'margin').to.equal('0px')
 		setImmediate(done)
 	})
 	it('utils.setMetaData', function (done) {
@@ -232,7 +230,7 @@ describe('Sargasso', function () {
 				done()
 			}
 		}
-		elementTools.addClass(testElement, 'below-the-fold')
+		elementTools.addClass(document.querySelector('#spacer'), 'below-the-fold')
 		PelagicCreatures.Sargasso.utils.registerSargassoClass('InstrumentedLazyTest', InstrumentedLazyTest)
 		testElement.innerHTML = '<div id="my-element" data-lazy-sargasso-class="InstrumentedLazyTest"></div>'
 		window.scrollTo(0, window.innerHeight)

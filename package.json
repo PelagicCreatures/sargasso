@@ -43,6 +43,7 @@
 		"eslint-plugin-standard": "^4.0.1",
 		"mocha": "^7.0.1",
 		"mocha-chrome": "^2.2.0",
+		"rollup-plugin-terser": "^5.2.0",
 		"setimmediate": "^1.0.5",
 		"sinon": "^8.1.1",
 		"webpack": "^4.41.5",

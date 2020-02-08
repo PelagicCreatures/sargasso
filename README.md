@@ -4,9 +4,14 @@
 
 [Demo Page](https://blog.myanti.social/demos/sargasso)
 
-Sargasso Makes HTML elements aware of events such as Document (DOM) insertions and deletions, HIJAX Page load, Scrolling, Resizing, Orientation and messages Managed Web Workers allowing them to efficiently implement any behavior they need to perform.
+Sargasso Makes HTML elements aware of events such as Document (DOM) insertions and deletions, HIJAX Page load, Scrolling, Resizing, Orientation and messages Managed Web Workers and elements allowing them to efficiently implement any behavior they need to perform.
 
-This is a very lightweight, pure ES6 framework (with only few dependencies) which aims to use the most advanced stable features of modern browsers to maximum effect leaving the historical cruft, kludges and code barnacles infesting older web frameworks behind. The result is lean, highly performant and clean library that simplifies the complex technologies behind modern progressive web apps and web sites.
+This is a very lightweight (27kb), pure ES6 framework (with only few dependencies) which aims to use the most advanced stable features of modern browsers to maximum effect leaving the historical cruft, kludges and code barnacles infesting older web frameworks behind. The result is lean, highly performant and clean library that simplifies the complex technologies behind modern progressive web apps and web sites.
+
+Other Sargasso modules that build on this framework:
+* [@pelagiccreatures/flyingfish: Lazy Loading Images](https://github.com/PelagicCreatures/flyingfish)
+* [@pelagiccreatures/tropicbird: Material Design Element Controllers](https://github.com/PelagicCreatures/tropicbird)
+* [@pelagiccreatures/molamola: Forms & Form Validation](https://github.com/PelagicCreatures/molamola)
 
 ```
 @author Michael Rhodes (except where noted)
@@ -14,9 +19,9 @@ This is a very lightweight, pure ES6 framework (with only few dependencies) whic
 Made in Barbados 🇧🇧
 ```
 
-Progressive Web Apps and modern websites need a HIJAX scheme. One of the core features of this framework is to implement an asynchronous page loading scheme which supports deep linking and lightning fast page loads where only dynamic content areas are merged between page loads leaving css, js, web workers and wrapper elements intact. Sargasso controller instances are automatically created as needed when their element appears in the DOM and destroyed when their element is removed so everything is cleanly destroyed and all the trash is collected.
+Progressive Web Apps and modern websites need a HIJAX scheme to load pages. One of the core features of this framework is to implement an asynchronous page loading scheme which supports deep linking and lightning fast page loads where only dynamic content areas are merged between page loads leaving css, js, web workers and wrapper elements intact. Sargasso controller instances are automatically created as needed when their element appears in the DOM and destroyed when their element is removed so everything is cleanly destroyed and all the trash is collected.
 
-Performance is further enhanced with shared event listening services which are fully debounced during large updates. Services are also provided to schedule content changes using the browser's **animation frame** event loop and managed **web workers** for offloading computation heavy tasks to a dedicated thread resulting in highly performant pages.
+Performance is further enhanced with shared event listening services which are fully debounced during large updates. Services are also provided to schedule content changes using the browser's **animation frame** event loop and managed **web workers** for simplified offloading of computation heavy tasks to a dedicated thread resulting in highly performant pages.
 
 ```npm install @pelagiccreatures/sargasso --save```
 
@@ -336,4 +341,20 @@ class MySubClass extends Sargasso {
     super.workerOnMessage(id, data)
   }
 }
+```
+
+### Tests
+
+The hijax scheme does not work for file://xxx URIs so start a simple server on localhost:
+```
+python example/localhost.py
+```
+
+Then run the tests:
+```
+npm test
+
+-or-
+
+point your browser to http://localhost/tests/index.html to see it all in action
 ```
