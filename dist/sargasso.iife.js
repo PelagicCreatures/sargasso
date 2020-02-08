@@ -2621,8 +2621,8 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 			}
 		}
 
-		hijaxLinks () {
-			const links = this.element.getElementsByTagName('a');
+		hijaxLinks (fragment) {
+			const links = fragment ? fragment.getElementsByTagName('a') : this.element.getElementsByTagName('a');
 			for (let i = 0; i < links.length; i++) {
 				const link = links[i];
 				const href = link.getAttribute('href');
@@ -2719,6 +2719,7 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 					if (this.options.onEnterPage) {
 						this.options.onEnterPage();
 					}
+					this.hijaxLinks(replace);
 				};
 				this.queueFrame(frame);
 			}

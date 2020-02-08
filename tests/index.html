@@ -4,6 +4,8 @@
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="../node_modules/mocha/mocha.css">
 		<div id="mocha"></div>
+		<script src="../node_modules/setimmediate/setimmediate.js"></script>
+
 		<script src="../node_modules/mocha/mocha.js"></script>
 		<script src="../node_modules/chai/chai.js"></script>
 		<script src="../node_modules/sinon/pkg/sinon.js"></script>
@@ -14,15 +16,24 @@
 		</script>
 		<style>
 			.hidden-display { display: none; }
-			.offscreen { position: fixed; top: 101%; height: 1px;}
+			.offscreen { position: fixed; top: 200%; height: 1px;}
+			.below-the-fold { position: absolute; top: 101%; height: 1px;}
 		</style>
 	</head>
-	<body>
-		<div id="test-element"><div class="nested-element"></div><div class="nested-element"></div></div>
+	<body style="height:200vh;">
+		<div id="hijaxed" data-hijax>
+			<div>
+				jihaxed content here
+			</div>
+		</div>
+		<div id="test-element" style="border:thin dashed silver;min-height:33vh;width:33vw;">
+			<div class="nested-element"></div>
+			<div class="nested-element"></div>
+		</div>
 		<script src="../dist/sargasso.iife.js"></script>
 		<script src="./spec.js"></script>
 		<script defer>
-			PelagicCreatures.Sargasso.utils.bootSargasso()
+			PelagicCreatures.Sargasso.utils.bootSargasso({hijax:{}})
 			mocha.run();
 		</script>
 	</body>
