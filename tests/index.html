@@ -1,0 +1,26 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="../node_modules/mocha/mocha.css">
+		<div id="mocha"></div>
+		<script src="../node_modules/mocha/mocha.js"></script>
+		<script src="../node_modules/chai/chai.js"></script>
+		<script src="../node_modules/sinon/pkg/sinon.js"></script>
+		<script>
+		  mocha.ui('bdd');
+		  mocha.reporter('html');
+		  var expect = chai.expect;
+		</script>
+		<script src="./spec.js"></script>
+		<style>
+			.hidden-display { display: none; }
+			.offscreen { position: fixed; top: 101%; height: 1px;}
+		</style>
+	</head>
+	<body>
+		<script src="../dist/sargasso.iife.js"></script>
+		<div id="test-element"></div>
+		<script defer>
+		    mocha.run();
+		</script>
+	</body>
+</html>

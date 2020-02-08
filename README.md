@@ -22,7 +22,7 @@ Performance is further enhanced with shared event listening services which are f
 
 ### An example Sargasso app:
 
-The @PelagicCreatures/sargasso package exports:
+The @pelagiccreatures/sargasso package exports:
 
 * Sargasso - the sargasso super class
 * utils.registerSargassoClass - function to register your sub classes
@@ -30,7 +30,7 @@ The @PelagicCreatures/sargasso package exports:
 
 myApp.js
 ```javascript
-import {Sargasso, utils} from '@PelagicCreatures/sargasso'
+import {Sargasso, utils} from '@pelagiccreatures/sargasso'
 let options = {}
 utils.bootSargasso(options)
 
@@ -57,7 +57,6 @@ npm install @rollup/plugin-node-resolve --save-dev
 
 rollup.config.js
 ```javascript
-Learn more or give us feedback
 import commonjs from '@rollup/plugin-commonjs'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import json from '@rollup/plugin-json'
@@ -127,7 +126,7 @@ When HIJAX is enabled, Sargasso automatically captures `<a href="..">` tags and 
 EG. instead of `location.href= '/home'`, use `LoadPageHandler('/home')`
 
 ```javascript
-import {Sargasso, utils, loadPageHandler} from '@PelagicCreatures/sargasso'
+import {Sargasso, utils, loadPageHandler} from '@pelagiccreatures/sargasso'
 let options = {
   hijax: { onError: (level, message) => { alert('Something went wrong. ' + message) } }
 }
