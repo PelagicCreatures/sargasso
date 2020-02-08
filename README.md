@@ -33,8 +33,7 @@ Made in Barbados 🇧🇧
 
 ### Why?
 
-Progressive Web Apps and modern websites need a HIJAX scheme to load pages that is integrated with and can manage element behavior. The big name frameworks out there at the moment are not a very good fit for the work I am doing so I decided to roll my own and.
-
+Progressive Web Apps and modern websites need a HIJAX scheme to load pages that is integrated with and can manage element behavior. The big name frameworks out there at the moment are not a very good fit for the work I am doing so I decided to roll my own to investigate the current state of browser capabilities.
 
 
 ```npm install @pelagiccreatures/sargasso --save```
@@ -370,5 +369,5 @@ npm test
 
 -or-
 
-point your browser to http://localhost/tests/index.html to see it all in action
+point your browser to http://localhost:8000/tests/index.html to see it all in action
 ```
