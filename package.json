@@ -17,7 +17,7 @@
 	],
 	"main": "index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "npx mocha-chrome ./tests/index.html",
 		"build": "rollup -c rollup.config.js",
 		"build-example": "rollup -c rollup.config.app.js",
 		"build-cjs": "npx webpack"
@@ -42,6 +42,7 @@
 		"eslint-plugin-promise": "^4.2.1",
 		"eslint-plugin-standard": "^4.0.1",
 		"mocha": "^7.0.1",
+		"mocha-chrome": "^2.2.0",
 		"sinon": "^8.1.1",
 		"webpack": "^4.41.5",
 		"webpack-cli": "^3.3.10"

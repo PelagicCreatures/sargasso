@@ -2779,7 +2779,16 @@ this.PelagicCreatures.Sargasso = (function (exports) {
 		elementTools: elementTools
 	};
 
+	const services = {
+		theDOMWatcher: theDOMWatcher,
+		theScrollWatcher: theScrollWatcher,
+		theResizeWatcher: theResizeWatcher,
+		theOrientationWatcher: theOrientationWatcher,
+		theWorkerWatcher: theWorkerWatcher
+	};
+
 	exports.Sargasso = Sargasso;
+	exports.services = services;
 	exports.utils = utils;
 
 	return exports;

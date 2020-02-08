@@ -1,5 +1,7 @@
+<!doctype>
 <html>
 	<head>
+		<meta charset="utf-8">
 		<link rel="stylesheet" href="../node_modules/mocha/mocha.css">
 		<div id="mocha"></div>
 		<script src="../node_modules/mocha/mocha.js"></script>
@@ -10,17 +12,18 @@
 		  mocha.reporter('html');
 		  var expect = chai.expect;
 		</script>
-		<script src="./spec.js"></script>
 		<style>
 			.hidden-display { display: none; }
 			.offscreen { position: fixed; top: 101%; height: 1px;}
 		</style>
 	</head>
 	<body>
+		<div id="test-element"><div class="nested-element"></div><div class="nested-element"></div></div>
 		<script src="../dist/sargasso.iife.js"></script>
-		<div id="test-element"></div>
+		<script src="./spec.js"></script>
 		<script defer>
-		    mocha.run();
+			PelagicCreatures.Sargasso.utils.bootSargasso()
+			mocha.run();
 		</script>
 	</body>
 </html>

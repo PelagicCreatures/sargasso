@@ -24,12 +24,25 @@ import {
 }
 	from './lib/boot.js'
 
+import {
+	theDOMWatcher, theScrollWatcher, theResizeWatcher, theOrientationWatcher, theWorkerWatcher
+}
+	from './lib/Services.js'
+
 const utils = {
 	registerSargassoClass: registerSargassoClass,
 	bootSargasso: bootSargasso,
 	elementTools: elementTools
 }
 
+const services = {
+	theDOMWatcher: theDOMWatcher,
+	theScrollWatcher: theScrollWatcher,
+	theResizeWatcher: theResizeWatcher,
+	theOrientationWatcher: theOrientationWatcher,
+	theWorkerWatcher: theWorkerWatcher
+}
+
 export {
-	Sargasso, utils, loadPageHandler
+	Sargasso, utils, loadPageHandler, services
 }
