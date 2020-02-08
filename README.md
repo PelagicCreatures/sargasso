@@ -13,6 +13,13 @@ Other Sargasso modules that build on this framework:
 * [@pelagiccreatures/tropicbird: Material Design Element Controllers](https://github.com/PelagicCreatures/tropicbird)
 * [@pelagiccreatures/molamola: Forms & Form Validation](https://github.com/PelagicCreatures/molamola)
 
+### Status
+I am currently building out a fairly large web app based on this framework and I will be adding the more generalizable functionality to the @pelagiccreatures org as I go.
+
+This will all be in production on a pretty large web site later this spring but the code is already pretty solid. I'm still working on the unit testing but have over 80% coverage at the moment.
+
+If you are curious, have questions, want to help or have any feedback feel free to contact me by opening an issue.
+ 
 ```
 @author Michael Rhodes (except where noted)
 @license MIT
