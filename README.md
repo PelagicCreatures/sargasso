@@ -2,7 +2,7 @@
 
 ### Simple, Fast, Supervised Javascript Controllers for HTML Elements.
 
-[Demo Page](https://blog.myanti.social/demos/sargasso)
+[Demo Page](https://blog.PelagicCreatures.com/demos/sargasso)
 
 Sargasso Makes HTML elements aware of events such as Document (DOM) insertions and deletions, HIJAX Page load, Scrolling, Resizing, Orientation and messages Managed Web Workers and elements allowing them to efficiently implement any behavior they need to perform.
 
