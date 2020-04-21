@@ -360,7 +360,7 @@ class MySubClass extends Sargasso {
 
 The hijax scheme does not work for file://xxx URIs so start a simple server on localhost:
 ```
-python example/localhost.py
+python tests/localhost.py
 ```
 
 Then run the tests:
