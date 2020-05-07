@@ -1,6 +1,6 @@
 const elementTools = PelagicCreatures.Sargasso.utils.elementTools
 const testElement = document.getElementById('test-element')
-
+const testElement1 = document.getElementById('test-element1')
 describe('Sargasso', function () {
 	it('utils.hasClass', function (done) {
 		expect(elementTools.hasClass(testElement, 'test-class')).to.be.false
@@ -234,5 +234,23 @@ describe('Sargasso', function () {
 		PelagicCreatures.Sargasso.utils.registerSargassoClass('InstrumentedLazyTest', InstrumentedLazyTest)
 		testElement.innerHTML = '<div id="my-element" data-lazy-sargasso-class="InstrumentedLazyTest"></div>'
 		window.scrollTo(0, window.innerHeight)
+	})
+
+	/*
+		excercises
+			LazyInstantiate - container not visible, instantiate on reveal
+	*/
+	it('Sargasso LazyInstantiate by data-lazy-sargasso-class in hidden container', function (done) {
+		class InstrumentedLazyRevealTest extends PelagicCreatures.Sargasso.Sargasso {
+			start () {
+				super.start()
+				testElement1.innerHTML = '' // kill it
+				elementTools.addClass(testElement1, 'hidden-display')
+				done()
+			}
+		}
+		PelagicCreatures.Sargasso.utils.registerSargassoClass('InstrumentedLazyRevealTest', InstrumentedLazyRevealTest)
+		testElement1.innerHTML = '<div id="my-element" data-lazy-sargasso-class="InstrumentedLazyRevealTest"></div>'
+		elementTools.removeClass(testElement1, 'hidden-display')
 	})
 })

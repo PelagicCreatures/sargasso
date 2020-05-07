@@ -2287,6 +2287,7 @@
 		constructor (element, options = {}) {
 			options.watchScroll = true;
 			options.watchResize = true;
+			options.watchDOM = true;
 			super(element, options);
 			this.mortal = false;
 		}
@@ -2298,6 +2299,11 @@
 
 		didScroll () {
 			super.didScroll();
+			this.lazyHandler();
+		}
+
+		DOMChanged () {
+			super.DOMChanged();
 			this.lazyHandler();
 		}
 
@@ -2655,12 +2661,14 @@
 			}
 			const xhr = new XMLHttpRequest();
 			xhr.open('GET', url);
+			xhr.setRequestHeader('Sargasso-Hijax', 1);
+			xhr.setRequestHeader('x-digitopia-hijax', 1);
 			if (this.options.onLoading) {
 				xhr.onreadystatechange = this.options.onLoading;
 			}
 			xhr.onload = () => {
 				if (xhr.status === 301 || xhr.status === 302 || xhr.getResponseHeader('Sargasso-Location')) {
-					const loc = xhr.getResponseHeader('Sargasso-Location');
+					const loc = xhr.getResponseHeader('Location') ? xhr.getResponseHeader('Location') : xhr.getResponseHeader('Sargasso-Location');
 					this.setPage(loc);
 				} else if (xhr.status === 200) {
 					this.scrollTop(0);
