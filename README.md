@@ -17,13 +17,11 @@ Other Sargasso modules that build on this framework:
 
 ### Status
 
-I am currently building out a fairly large web app based on this framework and I will be adding the more generalizable functionality to the @pelagiccreatures org as I go.
-
-This will all be in production on a pretty large web site later this spring but the code is already pretty solid and is usable today. I'm still working on the unit testing but have over 80% coverage at the moment.
+Stable
 
 If you are curious, have questions, want to help or have any feedback feel free to contact me by opening an issue.
 
-I am being rather strict about trying to keep this technologically forward looking so as to not burden this framework with lots of obsolete junk and polyfills so while it will not work on *every* browser, it should work on any *reasonably* modern one. If you run into any problems let me know. I am actively working on this so you are likely to get my attention pretty quickly.
+I am being rather strict about trying to keep this module forward looking so as to not burden this framework with lots of obsolete junk and polyfills so while it will certainly not work on *every* browser, it should work on any *reasonably* modern one. If you run into any problems let me know. I am actively working on this so you are likely to get my attention pretty quickly by opening issues.
 
 ```
 @author Michael Rhodes (except where noted)
@@ -34,7 +32,6 @@ Made in Barbados 🇧🇧
 ### Why?
 
 Progressive Web Apps and modern websites need a HIJAX scheme to load pages that is integrated with and can manage element behavior. The big name frameworks out there at the moment are not a very good fit for the work I am doing so I decided to roll my own to investigate the current state of browser capabilities.
-
 
 ```npm install @pelagiccreatures/sargasso --save```
 
