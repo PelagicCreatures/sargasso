@@ -31,7 +31,7 @@ class myClass extends Sargasso {
 
 	offLoadTask () {
 		// create the worker. managed by sargasso
-		this.workerStart('myworkId', '/test-worker.js')
+		this.workerStart('myworkId', '/example/test-worker.js')
 
 		// make the worker do work
 		this.workerPostMessage('myworkId', {

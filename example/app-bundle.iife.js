@@ -1827,26 +1827,41 @@
 
 	const supportsCustomElements = ('customElements' in window);
 
-	/*
-		All subclasses of Sargasso must register the class so that
-		the SargassoSupervisor can instantiate them.
-
-		EG.
-			class mySubclass extends Sargasso {}
-			registerSargassoClass('mySubclass',mySubclass)
-
-		Then an instance of mySubclass will be attached to the element
-		when it appears in the DOM:
-
-			<div data-sargasso-class="mySubclass"></div>
-
-	*/
-
 	const registeredClasses = {};
+	window.registeredClasses = registeredClasses; // new function() scope is global so....
 	const registerSargassoClass = (className, object) => {
 		registeredClasses[className] = object;
 		if (supportsCustomElements) {
-			customElements.define('sargasso-' + kebabCase_1(className), object);
+			/*
+				for custom html element scheme <sargasso-class-name></sargasso-class-name>
+				we define a little helper class that is a subclass of HTMLElement.
+				The browser will instantiate this when the element appears in the DOM
+				allowing us to instantiate the required sargasso controller
+				and cleanup when the html element is removed from the dom.
+
+				This helper oobject scheme allows us to keep the namespace of
+				the element clean.
+			*/
+			const customElementFactory =
+				`
+			return class ${className}Element extends HTMLElement {
+				constructor(element, options = {}) {
+					super()
+					this.helperClass= '${className}'
+				}
+
+				connectedCallback () {
+					this.helper = new registeredClasses[this.helperClass](this)
+					this.helper.start()
+				}
+
+				disconnectedCallback () {
+					this.helper.destroy()
+					this.helper = null // nuke the reference for trash collection
+				}
+			}`;
+
+			customElements.define('sargasso-' + kebabCase_1(className), new Function(customElementFactory)());
 		}
 	};
 
@@ -1854,9 +1869,8 @@
 		'DOMChanged', 'didScroll', 'didResize', 'didBreakpoint', 'enterViewport', 'exitViewport', 'enterFullscreen', 'exitFullscreen', 'newPage', 'elementEvent'
 	];
 
-	class Sargasso extends HTMLElement {
+	class Sargasso {
 		constructor (element, options = {}) {
-			super();
 			this.uid = ++unique;
 			this.element = element || this;
 			this.isCustomElement = (this.element.tagName.toLowerCase() === 'sargasso-' + kebabCase_1(this.constructor.name));
@@ -2176,21 +2190,17 @@
 
 			Offload compute heavy tasks to a new thread and listen for result
 
-			Pass it a url of a web worker js file or create an inine web worker
+			Pass it a url of a web worker js file or create an inline web worker
 			from string of raw code such as:
 
 			let mycode = `onmessage = function (e) {
-				const baseNumber = e.data
-				let result = 0
-				for (var i = Math.pow(baseNumber, 7); i >= 0; i--) {
-					result += Math.atan(i) * Math.tan(i)
-				};
-				postMessage('Done doing pointless math: ' + result)
+				// do something. when done:
+				postMessage('Done doing pointless stuff: ' + result)
 			}`
 
-			this.workerStart('pointless-math', mycode)
+			this.workerStart('pointless-stuff', mycode)
 
-			this.workerPostMessage('pointless-math', 16)
+			this.workerPostMessage('pointless-stuff', 16)
 		*/
 
 		workerStart (id, codeOrURL) {
@@ -2251,21 +2261,6 @@
 			if (document.fullscreenElement && document.fullscreenElement === this.element) {
 				document.exitFullscreen();
 			}
-		}
-
-		// playing with web components / custom elements
-		connectedCallback () {
-			this.start();
-		}
-
-		disconnectedCallback () {
-			this.destroy();
-		}
-
-		adoptedCallback () {
-		}
-
-		attributeChangedCallback (name, oldValue, newValue) {
 		}
 	}
 
@@ -2924,7 +2919,7 @@
 
 		offLoadTask () {
 			// create the worker. managed by sargasso
-			this.workerStart('myworkId', '/test-worker.js');
+			this.workerStart('myworkId', '/example/test-worker.js');
 
 			// make the worker do work
 			this.workerPostMessage('myworkId', {
