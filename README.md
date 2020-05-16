@@ -140,6 +140,8 @@ When HIJAX is enabled, Sargasso automatically captures `<a href="..">` tags and 
 
 EG. instead of `location.href= '/home'`, use `LoadPageHandler('/home')`
 
+This can be called to reload the page as well (won't add to history if same url as current url)
+
 ```javascript
 import {Sargasso, utils, loadPageHandler} from '@pelagiccreatures/sargasso'
 let options = {
@@ -182,7 +184,7 @@ Note that data-hijax elements must have and ID and contain well formed child htm
 ```
 
 ```
-<div id="yup" data-hijax><p>I'm html. This works.</div>
+<div id="yup" data-hijax><p>I'm html. This works.</p></div>
 ```
 
 ### Sargasso Object Lifecycle

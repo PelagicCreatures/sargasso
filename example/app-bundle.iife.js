@@ -2646,9 +2646,13 @@
 			}
 		}
 
-		setPage (url) {
-			history.pushState(null, null, url);
-			this.watchPopState();
+		setPage (url, reload) {
+			if (url === this.currentPage || reload) {
+				this.loadPage(url);
+			} else {
+				history.pushState(null, null, url);
+				this.watchPopState();
+			}
 		}
 
 		loadPage (url) {
