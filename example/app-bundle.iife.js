@@ -1386,11 +1386,10 @@
 
 	const _css = (element, css) => {
 		for (const prop in css) {
-			let key = prop;
-			if (key.match(/_- /)) {
-				key = camelCase_1(prop);
+			if (css.hasOwnProperty(prop)) {
+				const key = camelCase_1(prop);
+				element.style[key] = css[prop];
 			}
-			element.style[key] = css[prop];
 		}
 	};
 
@@ -2190,7 +2189,7 @@
 		}
 
 		setCSS (cssObject) {
-			// elementTools.setCSS(this.element, cssObject)
+			elementTools.setCSS(this.element, cssObject);
 		}
 
 		isVisible () {
