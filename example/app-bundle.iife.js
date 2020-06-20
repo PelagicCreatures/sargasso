@@ -2771,7 +2771,7 @@
 
 		watchPopState (e) {
 			if (location.pathname + location.search !== this.currentPage) {
-				this.loadPage(location.pathname + location.search);
+				this.preFlight(location.pathname + location.search);
 			}
 		}
 
@@ -2797,11 +2797,30 @@
 
 		setPage (url, reload) {
 			if (url === this.currentPage || reload) {
-				this.loadPage(url);
+				this.preFlight(url);
 			} else {
 				history.pushState(null, null, url);
 				this.watchPopState();
 			}
+		}
+
+		preFlight (url) {
+			if (!this.options.preFlight) {
+				return this.loadPage(url)
+			}
+
+			this.options.preFlight(url, (err, handled) => {
+				if (err) {
+					if (this.options.onError) {
+						this.options.onError('danger', err);
+					} else {
+						alert('Error loading page: ' + err);
+					}
+				}
+				if (!handled) {
+					this.loadPage(url);
+				}
+			});
 		}
 
 		loadPage (url) {
@@ -3135,6 +3154,10 @@
 
 	utils.registerSargassoClass('MyButtonClass', MyButtonClass);
 
+	const testPreFlight = (url, cb) => {
+		console.log('pre flight:', url);
+		cb(null, url === '/test-pre-flight');
+	};
 	utils.bootSargasso({
 		hijax: {
 			onError: (level, message) => {
@@ -3144,7 +3167,8 @@
 			onExitPage: () => {
 				utils.elementTools.off('myid', document.body, 'click', '.event-target');
 			},
-			onEnterPage: () => {}
+			onEnterPage: () => {},
+			preFlight: testPreFlight
 		},
 		breakpoints: {},
 		scrollElement: document.getElementById('scroll-wrapper')

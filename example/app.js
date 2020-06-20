@@ -93,6 +93,10 @@ class MyButtonClass extends Sargasso {
 
 utils.registerSargassoClass('MyButtonClass', MyButtonClass)
 
+const testPreFlight = (url, cb) => {
+	console.log('pre flight:', url)
+	cb(null, url === '/test-pre-flight')
+}
 utils.bootSargasso({
 	hijax: {
 		onError: (level, message) => {
@@ -102,7 +106,8 @@ utils.bootSargasso({
 		onExitPage: () => {
 			utils.elementTools.off('myid', document.body, 'click', '.event-target')
 		},
-		onEnterPage: () => {}
+		onEnterPage: () => {},
+		preFlight: testPreFlight
 	},
 	breakpoints: {},
 	scrollElement: document.getElementById('scroll-wrapper')

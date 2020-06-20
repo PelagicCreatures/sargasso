@@ -233,7 +233,7 @@ Your Sargasso subclasses subscribe to event feeds to be notified of events.
 | hasClass('cssclass') | returns true if this.element has cssclass |
 | addClass('cssclass') | add cssclass to this.element |
 | removeClass('cssclass')  | remove cssclass to this.element |
-| css({})  | set css pairs defined in object on this.element |
+| setCSS({})  | set css pairs defined in object on this.element |
 | isVisible() | true if element is visible |
 | scrollTop(newTop) | get and set the current scroll position |
 | queueFrame(function) | queue a function to execute that changes the DOM |
