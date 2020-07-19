@@ -2817,7 +2817,9 @@
 						alert('Error loading page: ' + err);
 					}
 				}
-				if (!handled) {
+				if (handled) {
+					this.currentPage = location.pathname + location.search;
+				} else {
 					this.loadPage(url);
 				}
 			});
