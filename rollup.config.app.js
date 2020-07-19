@@ -17,8 +17,6 @@ export default {
 		nodeResolve({
 			preferBuiltins: false
 		}),
-		commonjs({
-			namedExports: {}
-		})
+		commonjs({})
 	]
 }

@@ -144,8 +144,21 @@ This can be called to reload the page as well (won't add to history if same url 
 
 ```javascript
 import {Sargasso, utils, loadPageHandler} from '@pelagiccreatures/sargasso'
+
+const preflightHandler = (url, cb) => {
+	if(url === '/handled-by-pre-flight') {
+		// special case page, we will handle it here
+		return cb(null, true)
+	}
+
+	cb(null, false)
+}
+
 let options = {
-  hijax: { onError: (level, message) => { alert('Something went wrong. ' + message) } }
+  hijax: {
+		onError: (level, message) => { alert('Something went wrong. ' + message) }
+	},
+	preFlight: preflightHandler
 }
 utils.bootSargasso(options)
 ```
