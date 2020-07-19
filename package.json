@@ -18,13 +18,14 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "npx mocha-chrome http://localhost:8000/tests/index.html",
-		"build": "rollup -c rollup.config.js",
-		"build-example": "rollup -c rollup.config.app.js",
+		"build": "npx rollup --no-treeshake -c rollup.config.js",
+		"build-example": "npx rollup --no-treeshake -c rollup.config.app.js",
 		"build-cjs": "npx webpack"
 	},
 	"author": "Michael Rhodes",
 	"license": "MIT",
 	"devDependencies": {
+		"rollup": "^2.22.1",
 		"@babel/core": "^7.10.5",
 		"@babel/preset-env": "^7.10.4",
 		"@rollup/plugin-commonjs": "^14.0.0",

@@ -82,8 +82,7 @@ export default {
     format: 'iife',
     name: 'App',
     file: './app-bundle.iife.js', // <<< script file to include in html
-    sourcemap: true,
-    treeshake: false
+    sourcemap: true
   }],
 
   plugins: [

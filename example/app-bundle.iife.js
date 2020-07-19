@@ -13,6 +13,10 @@
 		}, fn(module, module.exports), module.exports;
 	}
 
+	function getCjsExportFromNamespace (n) {
+		return n && n['default'] || n;
+	}
+
 	function commonjsRequire () {
 		throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
 	}
@@ -1180,9 +1184,20 @@
 	var kebabCase_1 = kebabCase;
 
 	var js_cookie = createCommonjsModule(function (module, exports) {
-	(function (factory) {
+	/*!
+	 * JavaScript Cookie v2.2.1
+	 * https://github.com/js-cookie/js-cookie
+	 *
+	 * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
+	 * Released under the MIT license
+	 */
+	;(function (factory) {
 		var registeredInModuleLoader;
-		{
+		if (typeof undefined === 'function' && undefined.amd) {
+			undefined(factory);
+			registeredInModuleLoader = true;
+		}
+		if ('object' === 'object') {
 			module.exports = factory();
 			registeredInModuleLoader = true;
 		}
@@ -2743,7 +2758,8 @@
 		deleteCookie (key) {
 			this.setCookie(key, null);
 		};
-	}
+	};
+
 	registerSargassoClass('Breakpoints', Breakpoints);
 
 	/**
@@ -2971,6 +2987,14 @@
 		registerSargassoClass: registerSargassoClass,
 		bootSargasso: bootSargasso,
 		elementTools: elementTools
+	};
+
+	const services = {
+		theDOMWatcher: theDOMWatcher,
+		theScrollWatcher: theScrollWatcher,
+		theResizeWatcher: theResizeWatcher,
+		theOrientationWatcher: theOrientationWatcher,
+		theWorkerWatcher: theWorkerWatcher
 	};
 
 	class Noisy extends Sargasso {
