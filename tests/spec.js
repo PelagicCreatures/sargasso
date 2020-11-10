@@ -54,7 +54,7 @@ describe('Sargasso', function () {
 		expect(elementTools.getMetaData(testElement, 'key')).to.be.an('undefined')
 		setImmediate(done)
 	})
-	it('util.on util.off', function (done) {
+	it('util.on util.off util.once', function (done) {
 		const fn = sinon.spy()
 
 		// test un delegated events
@@ -64,6 +64,15 @@ describe('Sargasso', function () {
 
 		fn.resetHistory()
 		elementTools.off('myid', testElement, 'click', null)
+		testElement.click()
+		expect(fn.called).to.be.false
+
+		// test once events
+		fn.resetHistory()
+		elementTools.once('myid', testElement, 'click', null, fn)
+		testElement.click()
+		expect(fn.called).to.be.true
+		fn.resetHistory()
 		testElement.click()
 		expect(fn.called).to.be.false
 

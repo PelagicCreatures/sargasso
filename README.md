@@ -252,6 +252,7 @@ Your Sargasso subclasses subscribe to event feeds to be notified of events.
 | workerStart(id, codeOrURL) | start a web worker with id. Ignored if worker id already installed (see https://github.com/PelagicCreatures/flyingfish for a shared worker example)|
 | workerPostMessage(id, data {}) | send the worker tagged with `id` a message. the message must be an object which can have any structure you want to pass to the worker |
 | on(container,selector,fn) | attach delegated event handler to container scoped to a css selector |
+| once(container,selector,fn) | attach delegated event handler to container scoped to a css selector that executes only once (automatically removes event handler on first call) |
 | off(container,selector) | remove delegated event handler to container scoped to css selector |
 
 Don't forget you need to let sargasso know about your class:
