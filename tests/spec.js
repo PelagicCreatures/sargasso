@@ -82,7 +82,8 @@ describe('Sargasso', function () {
 		testElement.click() // click on container (ignored)
 		document.querySelectorAll('.nested-element')[0].click()
 		document.querySelectorAll('.nested-element')[1].click()
-		expect(fn.callCount).to.equal(2)
+		document.querySelectorAll('.deep-nested-element')[0].click()
+		expect(fn.callCount).to.equal(3)
 
 		fn.resetHistory()
 		elementTools.off('myid', testElement, 'click', '.nested-element')
