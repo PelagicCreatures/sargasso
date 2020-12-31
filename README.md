@@ -242,9 +242,9 @@ Your Sargasso subclasses subscribe to event feeds to be notified of events.
 | ------ | ----------- |
 | getMetaData | return sargasso metadata associated with element (weak map) |
 | setMetaData(key,value) | set a sargasso metadata property |
-| hasClass('cssclass') | returns true if this.element has cssclass |
-| addClass('cssclass') | add cssclass to this.element |
-| removeClass('cssclass')  | remove cssclass to this.element |
+| hasClass('classname') | returns true if this.element has cssclass |
+| addClass('classname') | add classname or array of classnames to this.element |
+| removeClass('classname')  | remove classname or array of classnames to this.element |
 | setCSS({})  | set css pairs defined in object on this.element |
 | isVisible() | true if element is visible |
 | scrollTop(newTop) | get and set the current scroll position |

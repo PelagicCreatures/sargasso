@@ -1367,37 +1367,63 @@
 
 	const elementMetaData = new WeakMap();
 
-	const _hasClass = (element, cssClass) => {
+	const hasClass = (element, cssClass) => {
 		const className = element.className || '';
 		const classes = className.split(/\s+/);
 		return classes.indexOf(cssClass) !== -1
 	};
 
-	const _addClass = (element, cssClass) => {
+	// addClasses can be:
+	// a string 'someclass'
+	// a list delimited by comma or space 'class1 class3 class4'
+	// an array ['class1','class2']
+	const addClass = (element, addClasses) => {
 		const className = element.className || '';
 		const classes = className.split(/\s+/);
-		if (classes.indexOf(cssClass) === -1) {
-			classes.push(cssClass);
-			element.className = classes.join(' ');
+
+		if (!Array.isArray(addClasses)) {
+			addClasses = addClasses.split(/[\s,]/);
 		}
+
+		addClasses.forEach((c) => {
+			c = c.trim();
+			if (classes.indexOf(c) === -1) {
+				classes.push(c);
+			}
+		});
+
+		element.className = classes.join(' ');
 	};
 
-	const _removeClass = (element, cssClass) => {
+	// removeClasses can be:
+	// a string 'someclass'
+	// a list delimited by comma or space 'class1 class3 class4'
+	// an array ['class1','class2']
+	const removeClass = (element, removeClasses) => {
 		const className = element.className || '';
 		const classes = className.split(/\s+/);
-		if (classes.indexOf(cssClass) !== -1) {
-			classes.splice(classes.indexOf(cssClass), 1);
-			element.className = classes.join(' ');
+
+		if (!Array.isArray(removeClasses)) {
+			removeClasses = removeClasses.split(/[\s,]/);
 		}
+
+		removeClasses.forEach((c) => {
+			c = c.trim();
+			if (classes.indexOf(c) !== -1) {
+				classes.splice(classes.indexOf(c), 1);
+			}
+		});
+
+		element.className = classes.join(' ');
 	};
 
-	const _isVisible = (element) => {
+	const isVisible = (element) => {
 		return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length)
 	};
 
-	const _inViewPort = (element, container = window) => {
+	const inViewPort = (element, container = window) => {
 		const rect = element.getBoundingClientRect();
-		const visible = _isVisible(element);
+		const visible = isVisible(element);
 		const aboveTheTop = (rect.bottom < 0);
 		let belowTheFold;
 
@@ -1407,7 +1433,7 @@
 			belowTheFold = (rect.top > container.clientHeight);
 		}
 
-		// console.log('_inViewPort', visible, belowTheFold, aboveTheTop)
+		// console.log('inViewPort', visible, belowTheFold, aboveTheTop)
 
 		return (visible && !belowTheFold && !aboveTheTop)
 	};
@@ -1417,16 +1443,16 @@
 		css: JSON object with properties in kebab-case or camelCase (or even in snake_case and seperate words)
 	*/
 
-	const _css = (element, css) => {
+	const css = (element, css) => {
 		for (const prop in css) {
-			if (css.hasOwnProperty(prop)) {
+			if (Object.prototype.hasOwnProperty.call(css, prop)) {
 				const key = camelCase_1(prop);
 				element.style[key] = css[prop];
 			}
 		}
 	};
 
-	const _setMetaData = (element, k, v) => {
+	const setMetaData = (element, k, v) => {
 		const data = elementMetaData.get(element) || {};
 		if (v) {
 			data[k] = v;
@@ -1436,23 +1462,32 @@
 		elementMetaData.set(element, data);
 	};
 
-	const _getMetaData = (element, k) => {
+	const getMetaData = (element, k) => {
 		const data = elementMetaData.get(element) || {};
 		return data[k]
 	};
 
-	const on = function (uid, container, events, selector, fn, options) {
+	const on = function (uid, container, events, selector, fn, options, once) {
 		const k = 'on:' + uid + '-' + events + '-' + selector;
 
+		if (typeof selector === 'function') {
+			once = options;
+			options = fn;
+			fn = selector;
+			selector = null;
+		}
+
 		const handler = (e) => {
+			if (once) {
+				off(uid, container, events, selector);
+			}
+
 			if (!selector) {
-				if (e.target === container) {
-					fn(e);
-				}
+				fn(e);
 			} else {
 				Array.from(container.querySelectorAll(selector)).forEach((el) => {
-					if (e.target === el) {
-						fn(e);
+					if (e.target === el || el.contains(e.target)) {
+						fn(e, el);
 					}
 				});
 			}
@@ -1463,35 +1498,40 @@
 			options: options || false
 		};
 
-		_setMetaData(container, k, data);
+		setMetaData(container, k, data);
 
 		events.split(/[\s,]+/).forEach((evt) => {
-			container.addEventListener(evt, data.fn, data.options);
+			container.addEventListener(evt.trim(), data.fn, data.options);
 		});
 	};
 
 	const off = function (uid, container, events, selector) {
 		const k = 'on:' + uid + '-' + events + '-' + selector;
-		const data = _getMetaData(container, k);
+		const data = getMetaData(container, k);
 		if (data) {
 			events.split(/[\s,]+/).forEach((evt) => {
-				container.removeEventListener(evt, data.fn, data.options);
+				container.removeEventListener(evt.trim(), data.fn, data.options);
 			});
-			_setMetaData(container, k);
+			setMetaData(container, k);
 		}
 	};
 
+	const once = function (uid, container, events, selector, fn, options) {
+		on(uid, container, events, selector, fn, options, true);
+	};
+
 	const elementTools = {
-		hasClass: _hasClass,
-		addClass: _addClass,
-		removeClass: _removeClass,
-		isVisible: _isVisible,
-		inViewPort: _inViewPort,
-		setCSS: _css,
-		setMetaData: _setMetaData,
-		getMetaData: _getMetaData,
+		hasClass: hasClass,
+		addClass: addClass,
+		removeClass: removeClass,
+		isVisible: isVisible,
+		inViewPort: inViewPort,
+		setCSS: css,
+		setMetaData: setMetaData,
+		getMetaData: getMetaData,
 		on: on,
-		off: off
+		off: off,
+		once: once
 	};
 
 	/**
@@ -2135,6 +2175,17 @@
 		}
 
 		/*
+			@function once - add delegated event handler for this.element witch executes only once
+			@param { String} evt - HTML element event name
+			@param { String } selector - optional element query selector
+			@param { Function } fn - event handler function
+			@param { Object } [options] - for addEventListener
+			*/
+		once (evt, selector, fn, options) {
+			elementTools.once(this.constructor.name + '-' + this.uid, this.element, evt, selector, fn, options);
+		}
+
+		/*
 			@function notifyAll - broadcast 'event' to all instantiated sargasso controllers
 			@param { String } event - name of sargasso event
 			@param { Object } params - array of params to attach to event
@@ -2218,12 +2269,12 @@
 			return elementTools.hasClass(this.element, cssClass)
 		}
 
-		addClass (cssClass) {
-			elementTools.addClass(this.element, cssClass);
+		addClass (cssClasses) {
+			elementTools.addClass(this.element, cssClasses);
 		}
 
-		removeClass (cssClass) {
-			elementTools.removeClass(this.element, cssClass);
+		removeClass (cssClasses) {
+			elementTools.removeClass(this.element, cssClasses);
 		}
 
 		setCSS (cssObject) {
@@ -2398,7 +2449,7 @@
 			@function watchOrientation - hook called if options.watchOrientation set and orientation changes
 			*/
 		watchOrientation () {
-			if (window.orientation && (window.orientation === 90 || window.orientation === 270)) {
+			if (window.orientation && (window.orientation === 90 || window.orientation === -90)) {
 				this.wantFullscreen(true);
 			} else {
 				this.wantFullscreen(false);
@@ -2843,7 +2894,7 @@
 				return this.loadPage(url)
 			}
 
-			this.options.preFlight(url, (err, handled) => {
+			this.options.preFlight(url, (err, handled, rewrite) => {
 				if (err) {
 					if (this.options.onError) {
 						this.options.onError('danger', err);
@@ -2854,7 +2905,7 @@
 				if (handled) {
 					this.currentPage = location.pathname + location.search;
 				} else {
-					this.loadPage(url);
+					this.loadPage(rewrite || url);
 				}
 			});
 		}
@@ -2872,6 +2923,7 @@
 			xhr.setRequestHeader('Sargasso-Hijax', 1);
 			xhr.setRequestHeader('x-digitopia-hijax', 1);
 			if (this.options.onLoading) {
+				this.options.onLoading();
 				xhr.onreadystatechange = this.options.onLoading;
 			}
 			xhr.onload = () => {

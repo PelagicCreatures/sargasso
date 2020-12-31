@@ -8,17 +8,19 @@ describe('Sargasso', function () {
 	})
 	it('utils.addClass', function (done) {
 		elementTools.addClass(testElement, 'test-class')
-		elementTools.addClass(testElement, 'test-class2')
+		elementTools.addClass(testElement, ['test-class2', 'test-class3'])
 		expect(elementTools.hasClass(testElement, 'test-class')).to.be.true
 		expect(elementTools.hasClass(testElement, 'test-class2')).to.be.true
+		expect(elementTools.hasClass(testElement, 'test-class3')).to.be.true
 		setImmediate(done)
 	})
 	it('utils.removeClass', function (done) {
 		elementTools.removeClass(testElement, 'test-class')
 		expect(elementTools.hasClass(testElement, 'test-class')).to.be.false
 		expect(elementTools.hasClass(testElement, 'test-class2')).to.be.true
-		elementTools.removeClass(testElement, 'test-class2')
+		elementTools.removeClass(testElement, ['test-class2', 'test-class3'])
 		expect(elementTools.hasClass(testElement, 'test-class2')).to.be.false
+		expect(elementTools.hasClass(testElement, 'test-class3')).to.be.false
 		setImmediate(done)
 	})
 	it('utils.isVisible', function (done) {
