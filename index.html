@@ -27,7 +27,7 @@
 
     <script defer>
       // define MyClass
-      class MyClass extends PelagicCreatures.Sargasso {
+      class MyClass extends SargassoModule.Sargasso {
         start() {
           this.queueFrame(() => {
             this.element.innerHTML += ' <strong>Started!</strong>'
@@ -37,9 +37,9 @@
       }
 
       // Register MyClass to the Sargasso framework
-      PelagicCreatures.utils.registerSargassoClass('MyClass',MyClass)
+      SargassoModule.utils.registerSargassoClass('MyClass',MyClass)
 
-      class MyButtonClass extends PelagicCreatures.Sargasso {
+      class MyButtonClass extends SargassoModule.Sargasso {
         constructor (element, options = {}) {
           options.watchViewport = true // tell me when I am visible
           super(element, options) // important!
@@ -78,10 +78,10 @@
         }
       }
 
-      PelagicCreatures.utils.registerSargassoClass('MyButtonClass', MyButtonClass)
+      SargassoModule.utils.registerSargassoClass('MyButtonClass', MyButtonClass)
 
       // Start Sargasso
-      PelagicCreatures.utils.bootSargasso()
+      SargassoModule.utils.bootSargasso()
     </script>
   </body>
 </html>

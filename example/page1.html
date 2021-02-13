@@ -9,13 +9,13 @@
 			<p>Once loaded it stays the same no matter what page you go to.</p>
 			<div id="content" data-hijax>
 				<p><a href="/test-pre-flight">test pre flight</a></p>
-				<!--
-					<script id="injected" src="/injected.js" type="module"></script>
-					<script id="ephemeral" type="module" data-ephemeral>
-						import {doIt} from "/injected.js"
-						doIt()
-					</script>
-				-->
+
+				<script id="injected" src="/example/injected.js" type="module"></script>
+				<script id="ephemeral" type="module" data-ephemeral>
+					import {doIt} from "/example/injected.js"
+					doIt()
+				</script>
+
 				<p><a href="/example/index.html">See!</a> I changed!. You can have as many updating containers on the page as you need.</p>
 				<p><span style="text-decoration:underline;cursor:pointer;" onClick="loadPageHandler('/example/page1.html',true)">You can also reload this page</span>
 				<pre>

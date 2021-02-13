@@ -31,7 +31,7 @@ We are trying to keep this project as forward looking so as to not burden this f
 
 Progressive Web Apps and modern websites need a HIJAX scheme to load pages that is integrated with and can manage element behavior. The big name frameworks out there at the moment are not a very good fit for the work I am doing so I decided to roll my own to investigate the current state of browser capabilities.
 
-### Usage Overview (Using CDN)
+### Usage Overview (Using CDN iife modules)
 
 ```html
 <!DOCTYPE html>
@@ -47,7 +47,7 @@ Progressive Web Apps and modern websites need a HIJAX scheme to load pages that 
 
   <script defer>
     // define MyClass as a subclass of Sargasso
-    class MyClass extends PelagicCreatures.Sargasso {
+    class MyClass extends SargassoModule.Sargasso {
       start() {
         this.queueFrame(() => {
           this.element.innerHTML += ' <strong>Started!</strong>'
@@ -57,10 +57,10 @@ Progressive Web Apps and modern websites need a HIJAX scheme to load pages that 
     }
 
     // Register MyClass to the Sargasso framework
-    PelagicCreatures.utils.registerSargassoClass('MyClass',MyClass)
+    SargassoModule.utils.registerSargassoClass('MyClass',MyClass)
 
     // Start Sargasso
-    PelagicCreatures.utils.bootSargasso()
+    SargassoModule.utils.bootSargasso()
   </script>
 </body>
 </html>
@@ -76,7 +76,7 @@ When the object is instantiated, the framework supervisor will call the `start()
 ### Example with event handlers
 
 ```javascript
-class MyButtonClass extends PelagicCreatures.Sargasso {
+class MyButtonClass extends SargassoModule.Sargasso {
   constructor (element, options = {}) {
     options.watchViewport = true // tell me when I am visible
     super(element, options) // important!
@@ -115,7 +115,7 @@ class MyButtonClass extends PelagicCreatures.Sargasso {
   }
 }
 
-PelagicCreatures.utils.registerSargassoClass('MyButtonClass', MyButtonClass)
+SargassoModule.utils.registerSargassoClass('MyButtonClass', MyButtonClass)
 ```
 
 ### Sargasso Base Class:

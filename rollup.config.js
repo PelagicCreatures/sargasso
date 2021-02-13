@@ -10,19 +10,23 @@ export default {
 	input: './index.js',
 	output: [{
 		format: 'iife',
-		name: 'PelagicCreatures',
-		file: './dist/sargasso.iife.js',
-		sourcemap: true
+		name: 'SargassoModule',
+		file: './dist/sargasso.iife.js'
+	}, {
+		format: 'iife',
+		name: 'SargassoModule',
+		file: './dist/sargasso.iife.min.js',
+		sourcemap: true,
+		plugins: [terser({
+			output: {
+				comments: false
+			}
+		})]
 	}],
 
 	plugins: [
 		json(),
 		nodeResolve(),
-		commonjs(),
-		terser({
-			output: {
-				comments: false
-			}
-		})
+		commonjs()
 	]
 }
