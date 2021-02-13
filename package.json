@@ -1,6 +1,6 @@
 {
 	"name": "@pelagiccreatures/sargasso",
-	"version": "0.11.0",
+	"version": "1.0.0",
 	"description": "Simple, Fast, Reactive, Supervised Javascript controllers for custom html elements.",
 	"keywords": [
 		"javascript",
@@ -19,36 +19,28 @@
 	"scripts": {
 		"test": "npx mocha-chrome http://localhost:8000/tests/index.html",
 		"build": "npx rollup --no-treeshake -c rollup.config.js",
-		"build-example": "npx rollup --no-treeshake -c rollup.config.app.js",
-		"build-cjs": "npx webpack"
+		"build-example": "npx rollup --no-treeshake -c rollup.config.app.js"
 	},
 	"author": "Michael Rhodes",
 	"license": "MIT",
 	"devDependencies": {
-		"@babel/core": "^7.11.6",
-		"@babel/preset-env": "^7.11.5",
-		"@rollup/plugin-commonjs": "^15.0.0",
+		"@rollup/plugin-commonjs": "^17.1.0",
 		"@rollup/plugin-json": "^4.1.0",
-		"@rollup/plugin-node-resolve": "^9.0.0",
-		"babel-loader": "^8.1.0",
-		"babel-plugin-lodash": "^3.3.4",
-		"babel-preset-env": "^1.7.0",
-		"chai": "^4.2.0",
-		"core-js": "^3.6.5",
-		"eslint": "^7.9.0",
-		"eslint-config-standard": "^14.1.1",
-		"eslint-plugin-import": "^2.22.0",
+		"@rollup/plugin-node-resolve": "^11.1.1",
+		"chai": "^4.3.0",
+		"core-js": "^3.8.3 ",
+		"eslint": "^7.20.0",
+		"eslint-config-standard": "^16.0.2",
+		"eslint-plugin-import": "^2.22.1",
 		"eslint-plugin-node": "^11.1.0",
-		"eslint-plugin-promise": "^4.2.1",
-		"eslint-plugin-standard": "^4.0.1",
-		"mocha": "^8.1.3",
+		"eslint-plugin-promise": "^4.3.1",
+		"eslint-plugin-standard": "^5.0.0",
+		"mocha": "^8.3.0",
 		"mocha-chrome": "^2.2.0",
-		"rollup": "^2.27.1",
+		"rollup": "^2.39.0",
 		"rollup-plugin-terser": "^7.0.2",
 		"setimmediate": "^1.0.5",
-		"sinon": "^9.0.3",
-		"webpack": "^4.44.2",
-		"webpack-cli": "^3.3.12"
+		"sinon": "^9.2.4"
 	},
 	"dependencies": {
 		"js-cookie": "^2.2.1",

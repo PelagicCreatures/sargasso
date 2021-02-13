@@ -10,7 +10,7 @@ export default {
 	input: './index.js',
 	output: [{
 		format: 'iife',
-		name: 'PelagicCreatures.Sargasso',
+		name: 'PelagicCreatures',
 		file: './dist/sargasso.iife.js',
 		sourcemap: true
 	}],

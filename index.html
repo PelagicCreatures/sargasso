@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example Sargasso Element</title>
+    <style>
+      .clicked { background-color:red; }
+    </style>
+  </head>
+  <body>
+
+    <h3>First Sargasso Element</h3>
+
+    <div data-sargasso-class="MyClass">Hello World</div>
+
+    <p>scroll down</p>
+    <pre>
+      v
+      v
+      v
+      v
+    </pre>
+    <div style="margin-top:150vh";></div>
+
+    <sargasso-my-button-class>Will only start if in viewport</sargasso-my-button-class>
+
+    <script src='dist/sargasso.iife.js'></script>
+
+    <script defer>
+      // define MyClass
+      class MyClass extends PelagicCreatures.Sargasso {
+        start() {
+          this.queueFrame(() => {
+            this.element.innerHTML += ' <strong>Started!</strong>'
+          })
+          super.start()
+        }
+      }
+
+      // Register MyClass to the Sargasso framework
+      PelagicCreatures.utils.registerSargassoClass('MyClass',MyClass)
+
+      class MyButtonClass extends PelagicCreatures.Sargasso {
+        constructor (element, options = {}) {
+          options.watchViewport = true // tell me when I am visible
+          super(element, options) // important!
+        }
+
+        // listen for click
+        start () {
+          super.start() // important!
+
+          this.on('click', (e) => {
+            this.clicked()
+          })
+        }
+
+        // cleanup listener
+        sleep () {
+          this.off('click')
+          super.sleep() // important!
+        }
+
+        // use an animation frame to mutate the DOM
+        clicked () {
+          const frame = () => { // set up a DOM mutation
+            this.addClass('clicked')
+            this.element.textContent = 'Clicked!'
+          }
+          this.queueFrame(frame) // schedule it
+        }
+
+        enterViewport () {
+          // do some stuff such as modify element html or classes
+          const frame = () => {
+            this.element.textContent = 'Hello! Click me!'
+          }
+          this.queueFrame(frame)
+        }
+      }
+
+      PelagicCreatures.utils.registerSargassoClass('MyButtonClass', MyButtonClass)
+
+      // Start Sargasso
+      PelagicCreatures.utils.bootSargasso()
+    </script>
+  </body>
+</html>
