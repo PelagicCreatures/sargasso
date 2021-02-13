@@ -7,16 +7,6 @@
 		return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
 	}
 
-	function createCommonjsModule(fn, basedir, module) {
-		return module = {
-		  path: basedir,
-		  exports: {},
-		  require: function (path, base) {
-	      return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
-	    }
-		}, fn(module, module.exports), module.exports;
-	}
-
 	function getDefaultExportFromNamespaceIfPresent (n) {
 		return n && Object.prototype.hasOwnProperty.call(n, 'default') ? n['default'] : n;
 	}
@@ -25,11 +15,32 @@
 		return n && Object.prototype.hasOwnProperty.call(n, 'default') && Object.keys(n).length === 1 ? n['default'] : n;
 	}
 
-	function commonjsRequire () {
-		throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
+	function getAugmentedNamespace(n) {
+		if (n.__esModule) return n;
+		var a = Object.defineProperty({}, '__esModule', {value: true});
+		Object.keys(n).forEach(function (k) {
+			var d = Object.getOwnPropertyDescriptor(n, k);
+			Object.defineProperty(a, k, d.get ? d : {
+				enumerable: true,
+				get: function () {
+					return n[k];
+				}
+			});
+		});
+		return a;
+	}
+
+	function createCommonjsModule(fn) {
+	  var module = { exports: {} };
+		return fn(module, module.exports), module.exports;
+	}
+
+	function commonjsRequire (target) {
+		throw new Error('Could not dynamically require "' + target + '". Please configure the dynamicRequireTargets option of @rollup/plugin-commonjs appropriately for this require call to behave properly.');
 	}
 
 	/** Detect free variable `global` from Node.js. */
+
 	var freeGlobal = typeof commonjsGlobal == 'object' && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
 
 	var _freeGlobal = freeGlobal;
@@ -1191,7 +1202,6 @@
 
 	var kebabCase_1 = kebabCase;
 
-	var js_cookie = createCommonjsModule(function (module, exports) {
 	/*!
 	 * JavaScript Cookie v2.2.1
 	 * https://github.com/js-cookie/js-cookie
@@ -1199,6 +1209,8 @@
 	 * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
 	 * Released under the MIT license
 	 */
+
+	var js_cookie = createCommonjsModule(function (module, exports) {
 	;(function (factory) {
 		var registeredInModuleLoader;
 		if (typeof undefined === 'function' && undefined.amd) {

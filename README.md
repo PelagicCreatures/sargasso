@@ -71,7 +71,7 @@ When you load the page the content of the Element will be "Hello World **Started
 
 ### Sargasso Object Lifecycle
 
-When the object is instantiated, the framework supervisor will call the `start()` method of the object.  Beyond responding to scrolling, resize and other responsive events, you will probably want to interact with your element in some way. You should use this hook to set up any element events you need to respond to such as clicking a button, responding to touch events or key presses, etc.
+When the object is instantiated, the framework supervisor will call the `start()` method of the object. When removed from the DOM 'sleep()' will be called allowing you can cleanup any handlers.  Beyond responding to scrolling, resize and other responsive events, you will probably want to interact with your element in some way. You should use the start hook to set up any element events you need to respond to such as clicking a button, responding to touch events or key presses, etc.
 
 ### Example with event handlers
 
