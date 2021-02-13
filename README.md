@@ -1,6 +1,12 @@
-# @PelagicCreatures/Sargasso
+# @pelagiccreatures/sargasso
 
-### Simple, Fast, Supervised Javascript Controllers for HTML Elements.
+### Simple, Fast, Supervised Javascript Controller framework for Web Sites and Progressive Web Apps.
+
+```
+@author Michael Rhodes (except where noted)
+@license MIT
+Made in Barbados 🇧🇧 Copyright © 2020-2021 Michael Rhodes
+```
 
 [Demo Page](https://blog.PelagicCreatures.com/demos/sargasso)
 
@@ -17,102 +23,155 @@ Other Sargasso modules that build on this framework:
 
 ### Status
 
-Stable
+API Stable
 
-If you are curious, have questions, want to help or have any feedback feel free to contact me by opening an issue.
-
-I am being rather strict about trying to keep this module forward looking so as to not burden this framework with lots of obsolete junk and polyfills so while it will certainly not work on *every* browser, it should work on any *reasonably* modern one. If you run into any problems let me know. I am actively working on this so you are likely to get my attention pretty quickly by opening issues.
-
-```
-@author Michael Rhodes (except where noted)
-@license MIT
-Made in Barbados 🇧🇧
-```
+We are trying to keep this project as forward looking so as to not burden this framework with lots of obsolete junk and polyfills so while it will certainly not work on *every* ancient browser, it should work on any *reasonably* modern one. If you run into any problems, have questions, want to help or have any feedback let me know by opening a github issue.
 
 ### Why?
 
 Progressive Web Apps and modern websites need a HIJAX scheme to load pages that is integrated with and can manage element behavior. The big name frameworks out there at the moment are not a very good fit for the work I am doing so I decided to roll my own to investigate the current state of browser capabilities.
 
-```npm install @pelagiccreatures/sargasso --save```
-
-### An example Sargasso app:
-
-The @pelagiccreatures/sargasso package exports:
-
-* Sargasso - the sargasso super class
-* utils.registerSargassoClass - function to register your sub classes
-* utils.bootSargasso - start sargasso services and HIHAX
-
-myApp.js
-```javascript
-import {Sargasso, utils} from '@pelagiccreatures/sargasso'
-let options = {}
-utils.bootSargasso(options)
-
-class MyClass extends Sargasso { // This won't do very much...
-  start() {
-    this.element.innerHTML += ' <strong>Started!</strong>'
-    super.start()
-  }
-}
-utils.registerSargassoClass('MyClass',MyClass)
-```
-
-### Rollup your app and add script tag to HTML
-
-#### 1. Install rollup
-```
-npm install --global rollup
-npm install @rollup/plugin-commonjs --save-dev
-npm install @rollup/plugin-json --save-dev
-npm install @rollup/plugin-node-resolve --save-dev
-```
-
-#### 2. Define your bundle build options.
-
-rollup.config.js
-```javascript
-import commonjs from '@rollup/plugin-commonjs'
-import nodeResolve from '@rollup/plugin-node-resolve'
-import json from '@rollup/plugin-json'
-
-export default {
-  input: './myApp.js', // <<< your app
-  output: [{
-    format: 'iife',
-    name: 'App',
-    file: './app-bundle.iife.js', // <<< script file to include in html
-    sourcemap: true
-  }],
-
-  plugins: [
-    json(),
-    nodeResolve({
-      preferBuiltins: false
-    }),
-    commonjs({
-      namedExports: {}
-    })
-  ]
-}
-```
-
-#### 3. Build it: `Run rollup -c rollup.config.js`
-
-#### 4. Add it to your html
+### Usage Overview (Using CDN)
 
 ```html
-<html>
-  <head>
-    <script src="/app-bundle.iife.js" defer></script>
-  </head>
-  <body>
-    <sargasso-my-class>MyClass instance</sargasso-my-class>
-  </body>
+<!DOCTYPE html>
+<head>
+  <title>Example Sargasso Element</title>
+<body>
+
+  <h3>First Sargasso Element</h3>
+
+  <div data-sargasso-class="MyClass">Hello World</div>
+
+  <script src='https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.js'></script>
+
+  <script defer>
+    // define MyClass as a subclass of Sargasso
+    class MyClass extends PelagicCreatures.Sargasso {
+      start() {
+        this.queueFrame(() => {
+          this.element.innerHTML += ' <strong>Started!</strong>'
+        })
+        super.start()
+      }
+    }
+
+    // Register MyClass to the Sargasso framework
+    PelagicCreatures.utils.registerSargassoClass('MyClass',MyClass)
+
+    // Start Sargasso
+    PelagicCreatures.utils.bootSargasso()
+  </script>
+</body>
 </html>
+
 ```
 
-When you load the page the content of sargasso-my-class will be "MyClass instance **Started!**"
+When you load the page the content of the Element will be "Hello World **Started!**"
+
+### Sargasso Object Lifecycle
+
+When the object is instantiated, the framework supervisor will call the `start()` method of the object.  Beyond responding to scrolling, resize and other responsive events, you will probably want to interact with your element in some way. You should use this hook to set up any element events you need to respond to such as clicking a button, responding to touch events or key presses, etc.
+
+### Example with event handlers
+
+```javascript
+class MyButtonClass extends PelagicCreatures.Sargasso {
+  constructor (element, options = {}) {
+    options.watchViewport = true // tell me when I am visible
+    super(element, options) // important!
+  }
+
+  // listen for click
+  start () {
+    super.start() // important!
+
+    this.on('click', (e) => {
+      this.clicked()
+    })
+  }
+
+  // cleanup listener
+  sleep () {
+    this.off('click')
+    super.sleep() // important!
+  }
+
+  // use an animation frame to mutate the DOM
+  clicked () {
+    const frame = () => { // set up a DOM mutation
+      this.addClass('clicked')
+      this.element.textContent = 'Clicked!'
+    }
+    this.queueFrame(frame) // schedule it
+  }
+
+  enterViewport () {
+    // do some stuff such as modify element html or classes
+    const frame = () => {
+      this.element.textContent = 'Hello! Click me!'
+    }
+    this.queueFrame(frame)
+  }
+}
+
+PelagicCreatures.utils.registerSargassoClass('MyButtonClass', MyButtonClass)
+```
+
+### Sargasso Base Class:
+
+Your Sargasso subclasses can subscribe to event feeds in order to be notified of events
+
+**Methods to override as needed:** *don't forget to call super.xxx() in your subclass*
+
+| method | description |
+| ------ | ----------- |
+| constructor(element, options = {}) | subscribe to services by setting options properties. All default to false so only set the ones you need `watchDOM`, `watchScroll`, `watchResize`, `watchOrientation`, `watchViewport` eg. {watchResize:true} |
+| start() | set up any interactions and event handlers |
+| sleep() | remove any event handlers defined in start() and cleanup references |
+| DOMChanged() | called when DOM changes if options 'watchDOM: true' was set in constructor |
+| didScroll() | called when scroll occurs if options 'watchScroll: true' was set in constructor |
+| didResize() | called when resize changes if options 'watchResize: true' was set in constructor |
+| enterViewport() | called  when element is entering viewport if options 'watchViewport: true' was set in constructor |
+| exitViewport() | called when element is exiting viewport if options 'watchViewport: true' was set in constructor |
+| newPage(old, new) | on a new page |
+| didBreakpoint() | new screen width breakpoint |
+| elementEvent(e) | this.element received an 'sargasso' event |
+| workerOnMessage (id, data = {}) | id is the worker sending the message. Any payload from the worker `postMessage` is in data.xxx as defined by the worker |
+| enterFullscreen() | called if options 'watchOrientation: true' when user rotates phone or if setFullscreen is called |
+| exitFullscreen() | called on exit fullscreen |
+
+**Properties**
+
+| property | description |
+| ------ | ----------- |
+| this.element | the element we are controlling |
+
+
+**Utility Methods:**
+
+| method | description |
+| ------ | ----------- |
+| getMetaData | return sargasso metadata associated with element (weak map) |
+| setMetaData(key,value) | set a sargasso metadata property |
+| hasClass('classname') | returns true if this.element has cssclass |
+| addClass('classname') | add classname or array of classnames to this.element |
+| removeClass('classname')  | remove classname or array of classnames to this.element |
+| setCSS({})  | set css pairs defined in object on this.element |
+| isVisible() | true if element is visible |
+| scrollTop(newTop) | get and set the current scroll position |
+| queueFrame(function) | queue a function to execute that changes the DOM |
+| workerStart(id, codeOrURL) | start a web worker with id. Ignored if worker id already installed (see https://github.com/PelagicCreatures/flyingfish for a shared worker example)|
+| workerPostMessage(id, data {}) | send the worker tagged with `id` a message. the message must be an object which can have any structure you want to pass to the worker |
+| on(container,fn) | attach undelegated event handler to container scoped to a css selector |
+| once(container,fn) | attach undelegated event handler to container scoped to a css selector that executes only once (automatically removes event handler on first call) |
+| off(container) | remove undelegated event handler to container scoped to css selector |
+| on(container,selector,fn) | attach delegated event handler to container scoped to a css selector |
+| once(container,selector,fn) | attach delegated event handler to container scoped to a css selector that executes only once (automatically removes event handler on first call) |
+| off(container,selector) | remove delegated event handler to container scoped to css selector |
+
+Don't forget you need to let sargasso know about your class:
+```registerSargassoClass('MyClass', MyClass)```
 
 #### Custom Elements
 
@@ -145,19 +204,19 @@ This can be called to reload the page as well (won't add to history if same url 
 import {Sargasso, utils, loadPageHandler} from '@pelagiccreatures/sargasso'
 
 const preflightHandler = (url, cb) => {
-	if(url === '/handled-by-pre-flight') {
-		// special case page, we will handle it here
-		return cb(null, true)
-	}
+  if(url === '/handled-by-pre-flight') {
+    // special case page, we will handle it here
+    return cb(null, true)
+  }
 
-	cb(null, false)
+  cb(null, false)
 }
 
 let options = {
   hijax: {
-		onError: (level, message) => { alert('Something went wrong. ' + message) }
-	},
-	preFlight: preflightHandler
+    onError: (level, message) => { alert('Something went wrong. ' + message) }
+  },
+  preFlight: preflightHandler
 }
 utils.bootSargasso(options)
 ```
@@ -199,119 +258,9 @@ Note that data-hijax elements must have and ID and contain well formed child htm
 <div id="yup" data-hijax><p>I'm html. This works.</p></div>
 ```
 
-### Sargasso Object Lifecycle
-
-When the object is instantiated, the supervisor will call the `start()` method of the object.  Beyond responding to scrolling, resize and other responsive events, you will probably want to interact with your element in some way. You should use this hook to set up any element events you need to respond to such as clicking a button, responding to touch events or key presses, etc.
-
-### Defining SubClasses:
-
-Your Sargasso subclasses subscribe to event feeds to be notified of events.
-
-**Methods to override as needed:** *don't forget to call super.xxx() in your subclass*
-
-| method | description |
-| ------ | ----------- |
-| constructor(element, options = {}) | subscribe to services by setting options properties. All default to false so only set the ones you need `watchDOM`, `watchScroll`, `watchResize`, `watchOrientation`, `watchViewport` {xxx:true} |
-| start() | set up any interactions and event handlers |
-| sleep() | remove any event handlers defined in start() and cleanup references |
-| DOMChanged() | called if options 'watchDOM: true' when DOM changes |
-| didScroll() | called if options 'watchScroll: true' when scroll occurs |
-| didResize() | called if options 'watchResize: true' when resize changes |
-| enterViewport() | called if options 'watchViewport: true' when element is entering viewport |
-| exitViewport() | called if options 'watchViewport: true' when element is exiting viewport |
-| enterFullscreen()  | called if options 'watchOrientation: true' when user rotates phone or if setFullscreen is called |
-| exitFullscreen()  | called on exit fullscreen |
-| newPage(old, new) | on a new page |
-| didBreakpoint() | new screen width breakpoint |
-| elementEvent(e) | this.element received an 'sargasso' event |
-| workerOnMessage (id, data = {}) | id is the worker sending the message. Any payload from the worker `postMessage` is in data.xxx as defined by the worker |
-
-
-**Properties**
-
-
-| property | description |
-| ------ | ----------- |
-| this.element | the element we are controlling |
-
-
-**Utility Methods:**
-
-
-| method | description |
-| ------ | ----------- |
-| getMetaData | return sargasso metadata associated with element (weak map) |
-| setMetaData(key,value) | set a sargasso metadata property |
-| hasClass('classname') | returns true if this.element has cssclass |
-| addClass('classname') | add classname or array of classnames to this.element |
-| removeClass('classname')  | remove classname or array of classnames to this.element |
-| setCSS({})  | set css pairs defined in object on this.element |
-| isVisible() | true if element is visible |
-| scrollTop(newTop) | get and set the current scroll position |
-| queueFrame(function) | queue a function to execute that changes the DOM |
-| workerStart(id, codeOrURL) | start a web worker with id. Ignored if worker id already installed (see https://github.com/PelagicCreatures/flyingfish for a shared worker example)|
-| workerPostMessage(id, data {}) | send the worker tagged with `id` a message. the message must be an object which can have any structure you want to pass to the worker |
-| on(container,selector,fn) | attach delegated event handler to container scoped to a css selector |
-| once(container,selector,fn) | attach delegated event handler to container scoped to a css selector that executes only once (automatically removes event handler on first call) |
-| off(container,selector) | remove delegated event handler to container scoped to css selector |
-
-Don't forget you need to let sargasso know about your class:
-```registerSargassoClass('MyClass', MyClass)```
-
 ### Using Animation Frames
 
 To avoid any chaotic repaints you should only make DOM changes inside animation frames - don't do any long processes in the responsive callbacks or things might bog down the browser UI.
-
-```
-class MyButtonClass extends Sargasso {
-  constructor (element, options = {}) {
-    options.watchViewport = true // tell me when I am visible
-    super(element, options) // important!
-  }
-
-  // listen for click
-  start () {
-    super.start() // important!
-    this.clicker = (e) => {
-      this.clicked()
-    }
-    this.element.addEventListener('click', this.clicker, false)
-  }
-
-  // cleanup listener
-  sleep () {
-    this.element.removeEventListener('click', this.clicker)
-    super.sleep() // important!
-  }
-
-  // use an animation frame to mutate the DOM
-  clicked () {
-    const frame = () => { // set up a DOM mutation
-      this.addClass('clicked')
-      this.element.textContent = 'Clicked!'
-    }
-    this.queueFrame(frame) // schedule it
-  }
-
-  enterViewport () {
-    // do some stuff such as modify element html or classes
-    const frame = () => {
-      this.element.textContent = 'Hello viewport! Click me!'
-    }
-    this.queueFrame(frame)
-  }
-}
-
-registerSargassoClass('MyButtonClass', MyButtonClass)
-
-Then in HTML:
-
-<style>
-  .clicked { background-color:red; }
-</style>
-
-<button data-sargasso-class="MyButtonClass">Click me and I'll turn red!</button>
-```
 
 ### Using managed Web Workers
 You should offload compute heavy tasks to a new thread when possible.
