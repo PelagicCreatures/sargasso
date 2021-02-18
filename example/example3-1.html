@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Example Sargasso Element</title>
+</head>
+
+<body>
+  <p>This is static wrapper content which does not change from page to page because it's not in a hijaxed container.</p>
+
+  <div id="navigation" data-hijax>
+    <a href="example3.html">Home</a> | <strong><a href="example3-1.html">Page 1</a></strong> | <a href="example3-2.html">Page 2</a>
+  </div>
+  <hr>
+
+  <div id="page-body" data-hijax>
+    <p>Page content <strong>changed on this page</strong></p>
+    <sargasso-noisy id="content-page-1" data-log-it="newPage,sleep,stopWorker,destroy"></sargasso-noisy>
+  </div>
+
+  <div id="some-element" data-hijax>
+    <p>This Content also changes from page to page, <strong>Hi from page 1</strong></p>
+  </div>
+
+  <hr>
+  <p>This is also static wrapper content. Maybe a footer.</p>
+
+  <sargasso-noisy id="static-page-1" data-log-it="newPage,sleep,stopWorker,destroy"></sargasso-noisy>
+
+  <script src='https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.js'></script>
+
+  <script defer>
+    window.onload = () => {
+      let options = {
+        hijax: {
+          onError: (level, message) => {
+            alert('Something went wrong. ' + message)
+          }
+        }
+      }
+      SargassoModule.utils.bootSargasso(options)
+    }
+  </script>
+</body>
+
+</html>

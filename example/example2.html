@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Example Sargasso Element</title>
+  <style>
+    .container {
+      margin-top: 150vh;
+      margin-bottom: 33vh;
+    }
+
+    .container span {
+      border: thin solid #333;
+      border-radius: 1em;
+      padding: 1em;
+    }
+
+    .clicked {
+      color: red;
+    }
+
+    .float {
+      position: fixed;
+      bottom: 0px;
+      right: 0px;
+      width: 50%;
+      float: right;
+    }
+
+    .float>pre {
+      text-align: right;
+    }
+  </style>
+</head>
+
+<body>
+  <h3>Sargasso Element Example</h3>
+  <p>Element is aware of when it is scrolled into the viewport, removed from the document and implements a delegated click event which removes the element when triggered.</p>
+
+  <p>Scroll down to see it in action</p>
+
+  <div class='container'>
+    <button data-sargasso-class="MyButtonClass">
+      Hello World! Click me!
+    </button>
+  </div>
+
+  <script src='https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.js'></script>
+
+  <script defer>
+    window.onload = () => {
+      class MyButtonClass extends SargassoModule.Sargasso {
+        constructor(element, options = {}) {
+          options.watchViewport = true // tell me when I am visible
+          super(element, options) // important!
+        }
+
+        start() {
+          super.start() // important!
+
+          this.on('click', (e) => { // add click event handler
+            e.preventDefault()
+            this.clicked()
+          })
+
+          this.debug('MyButtonClass starting')
+        }
+
+        sleep() {
+          this.debug('MyButtonClass sleep called')
+          this.off('click') // cleanup click event handler
+          super.sleep() // important!
+        }
+
+        enterViewport() {
+          this.debug('MyButtonClass entered viewport!')
+        }
+
+        // use an animation frame to mutate the DOM
+        clicked() {
+          const frame = () => { // set up a DOM mutation
+            this.debug('clicked!')
+            this.addClass('clicked')
+          }
+          this.queueFrame(frame) // schedule it
+
+          // remove it from the document to illustrate Sargasso lifecycle
+          setTimeout(() => {
+            this.debug('removing MyButtonClass element')
+            this.element.remove()
+          }, 2000)
+        }
+
+        debug(message) {
+          document.getElementById('debug').append(message + '\n')
+        }
+      }
+
+      SargassoModule.utils.registerSargassoClass('MyButtonClass', MyButtonClass)
+
+      // Start Sargasso
+      SargassoModule.utils.bootSargasso()
+    }
+  </script>
+
+  <div class="float">
+    <pre id="debug">
+      Sargasso element event log
+      ------
+      ready
+    </pre>
+  </div>
+</body>
+
+</html>

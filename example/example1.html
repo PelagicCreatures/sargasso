@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Example Sargasso Element</title>
+</head>
+<body>
+  <h3>First Sargasso Element</h3>
+
+  <sargasso-my-class id="custom">Using a custom element</sargasso-my-class>
+
+  <div data-sargasso-class="MyClass" id="data-attribute">Using data attribute</div>
+
+  <script src='https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.js'></script>
+  <script defer>
+    window.onload = () => {
+
+      // define MyClass as a subclass of Sargasso
+      class MyClass extends SargassoModule.Sargasso {
+        start() {
+          // use an animation frame to set the element content
+          this.queueFrame(() => {
+            this.element.innerHTML = 'Hello World! (' + this.element.getAttribute('id') + ')'
+          })
+          super.start()
+        }
+      }
+
+      // Register MyClass to the Sargasso framework
+      SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
+
+      // Start Sargasso
+      SargassoModule.utils.bootSargasso()
+    }
+  </script>
+</body>
+</html>
