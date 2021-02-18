@@ -8,8 +8,6 @@
 Made in Barbados 🇧🇧 Copyright © 2020-2021 Michael Rhodes
 ```
 
-[Demo Page](https://blog.PelagicCreatures.com/demos/sargasso)
-
 Sargasso Makes HTML elements aware of events such as Document (DOM) insertions and deletions, HIJAX Page load, Scrolling, Resizing, Orientation and messages Managed Web Workers and elements allowing them to efficiently implement any behavior they need to perform.
 
 One of the core features of this framework is to implement an asynchronous page loading scheme which supports deep linking and lightning fast page loads where only dynamic content areas are merged between page loads leaving css, js, web workers and wrapper elements intact. Sargasso controller instances are automatically created as needed when their element appears in the DOM and destroyed when their element is removed so everything is cleanly destroyed and all the trash is collected. Performance is further enhanced with shared event listening services which are fully debounced during large updates. Services are also provided to schedule content changes using the browser's **animation frame** event loop and managed **web workers** for simplified offloading of computation heavy tasks to a dedicated thread resulting in highly performant pages.
@@ -33,7 +31,7 @@ Progressive Web Apps and modern websites need a HIJAX scheme to load pages that 
 
 ### Usage Overview (Using CDN iife modules)
 
-This simple example loads Sargasso using the CDN and defines a simple Sargasso element controller that says "Hi World!".
+This simple example loads the framework using the CDN and defines a simple Sargasso element controller that says "Hi World!".
 
 example/example1.html
 ```html
@@ -76,11 +74,28 @@ example/example1.html
 ```
 [Try It](https://jsfiddle.net/PelagicCreatures/yafdt2h1/10/)
 
-When you load the page the content of the Elements will be set to "Hello World!"
+Sargasso element controllers are javascript Objects that are subclasses of the framework's Sargasso class. Custom behavior is defined by overriding various methods of the base class.
+
+#### Using data-sargasso-class to specify Sargasso classname
+Alternately, Sargasso watches the DOM for any elements tagged with the `data-sargasso-class` attribute which can be one classname or a list of classnames
+
+```html
+<div data-sargasso-class="MyClass, MyOtherClass">This works in all browsers</div>
+```
+
+#### Custom Element tags to specify classname
+
+Many browsers support custom elements ([current compatibility](https://caniuse.com/#feat=custom-elementsv1) so the preferred (faster and cleaner) syntax for sargasso elements is to use a custom element tag. The class name is the kebab-case of your subclass name so MyClass becomes sargasso-my-class:
+
+```html
+<sargasso-my-class>This works in <em>most</em> browsers</sargasso-my-class>
+```
+
+You can also defer the instantiation using the lazy method by tagging it with `data-lazy-sargasso-class` instead of `data-sargasso-class` which will only start up the class when the element is visible in the viewport.
 
 ### Sargasso Object Lifecycle
 
-After the object is instantiated when it appears in the document, the framework supervisor will call the `start()` method of the object. When removed from the DOM 'sleep()' will be called allowing you can cleanup any resources or handlers you set up in start.  Beyond responding to scrolling, resize and other responsive events, you will probably want to interact with your element in some way. You should use the start hook to set up any element events you need to respond to such as clicking a button, responding to touch events or key presses, etc.
+When a Sargasso element appears in the document, the framework supervisor will instantiate an object and call the `start()` method of the object. When removed from the DOM, 'sleep()' will be called allowing you can cleanup any resources or handlers you set up in start.  Beyond responding to scrolling, resize and other responsive events, you will probably want to interact with your element in some way. You should use the start hook to set up any element events you need to respond to such as clicking a button, responding to touch events or key presses, etc.
 
 ### Example with event handlers
 
@@ -233,22 +248,6 @@ Your Sargasso subclasses can subscribe to event feeds in order to be notified of
 Don't forget you need to let sargasso know about your class:
 ```registerSargassoClass('MyClass', MyClass)```
 
-#### Custom Elements
-
-Many browsers support custom elements ([current compatibility](https://caniuse.com/#feat=custom-elementsv1) so the preferred (faster and cleaner) syntax for sargasso elements is to use a custom element tag. The class name is the kebab-case of your subclass name so MyClass becomes sargasso-my-class:
-
-```html
-<sargasso-my-class>This works in <em>most</em> browsers</sargasso-my-class>
-```
-
-#### Using data-sargasso-class
-Alternately, Sargasso watches the DOM for any elements tagged with the `data-sargasso-class` attribute which can be one classname or a list of classnames
-
-```html
-<div data-sargasso-class="MyClass, MyOtherClass">This works in all browsers</div>
-```
-
-You can also defer the instantiation using the lazy method by tagging it with `data-lazy-sargasso-class` instead of `data-sargasso-class` which will only start up the class when the element is visible in the viewport.
 
 ### Progressive Web App HIJAX Page Load
 
