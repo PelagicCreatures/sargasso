@@ -33,90 +33,152 @@ Progressive Web Apps and modern websites need a HIJAX scheme to load pages that 
 
 ### Usage Overview (Using CDN iife modules)
 
+This simple example loads Sargasso using the CDN and defines a simple Sargasso element controller that says "Hi World!".
+
+example/example1.html
 ```html
 <!DOCTYPE html>
+<html>
 <head>
   <title>Example Sargasso Element</title>
+</head>
 <body>
-
   <h3>First Sargasso Element</h3>
 
-  <div data-sargasso-class="MyClass">Hello World</div>
+  <sargasso-my-class id="custom">Using a custom element</sargasso-my-class>
+
+  <div data-sargasso-class="MyClass" id="data-attribute">Using data attribute</div>
+
+  <script src='https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.js'></script>
+  <script defer>
+    window.onload = () => {
+
+      // define MyClass as a subclass of Sargasso
+      class MyClass extends SargassoModule.Sargasso {
+        start() {
+          // use an animation frame to set the element content
+          this.queueFrame(() => {
+            this.element.innerHTML = 'Hello World! (' + this.element.getAttribute('id') + ')'
+          })
+          super.start()
+        }
+      }
+
+      // Register MyClass to the Sargasso framework
+      SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
+
+      // Start Sargasso
+      SargassoModule.utils.bootSargasso()
+    }
+  </script>
+</body>
+</html>
+```
+[Try It](https://jsfiddle.net/PelagicCreatures/yafdt2h1/10/)
+
+When you load the page the content of the Elements will be set to "Hello World!"
+
+### Sargasso Object Lifecycle
+
+After the object is instantiated when it appears in the document, the framework supervisor will call the `start()` method of the object. When removed from the DOM 'sleep()' will be called allowing you can cleanup any resources or handlers you set up in start.  Beyond responding to scrolling, resize and other responsive events, you will probably want to interact with your element in some way. You should use the start hook to set up any element events you need to respond to such as clicking a button, responding to touch events or key presses, etc.
+
+### Example with event handlers
+
+example/example2.html
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Example Sargasso Element</title>
+  <style>
+    .container { margin-top: 150vh; margin-bottom: 33vh; }
+    .container span { border: thin solid #333; border-radius: 1em; padding: 1em; }
+    .clicked { color: red; }
+    .float { position: fixed; bottom: 0px; right: 0px; width: 50%; float: right; }
+    .float>pre { text-align: right; }
+  </style>
+</head>
+<body>
+  <h3>Sargasso Element Example</h3>
+  <p>Element is aware of when it is scrolled into the viewport, removed from the document and implements a delegated click event which removes the element when triggered.</p>
+
+  <p>Scroll down to see it in action</p>
+
+  <div class='container'>
+    <button data-sargasso-class="MyButtonClass">
+      Hello World! Click me!
+    </button>
+  </div>
 
   <script src='https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.js'></script>
 
   <script defer>
-    // define MyClass as a subclass of Sargasso
-    class MyClass extends SargassoModule.Sargasso {
-      start() {
-        this.queueFrame(() => {
-          this.element.innerHTML += ' <strong>Started!</strong>'
-        })
-        super.start()
+    window.onload = () => {
+      class MyButtonClass extends SargassoModule.Sargasso {
+        constructor(element, options = {}) {
+          options.watchViewport = true // tell me when I am visible
+          super(element, options) // important!
+        }
+
+        start() {
+          super.start() // important!
+
+          this.on('click', (e) => { // add click event handler
+            e.preventDefault()
+            this.clicked()
+          })
+
+          this.debug('MyButtonClass starting')
+        }
+
+        sleep() {
+          this.debug('MyButtonClass sleep called')
+          this.off('click') // cleanup click event handler
+          super.sleep() // important!
+        }
+
+        enterViewport() {
+          this.debug('MyButtonClass entered viewport!')
+        }
+
+        // use an animation frame to mutate the DOM
+        clicked() {
+          const frame = () => { // set up a DOM mutation
+            this.debug('clicked!')
+            this.addClass('clicked')
+          }
+          this.queueFrame(frame) // schedule it
+
+          // remove it from the document to illustrate Sargasso lifecycle
+          setTimeout(() => {
+            this.debug('removing MyButtonClass element')
+            this.element.remove()
+          }, 2000)
+        }
+
+        debug(message) {
+          document.getElementById('debug').append(message + '\n')
+        }
       }
+
+      SargassoModule.utils.registerSargassoClass('MyButtonClass', MyButtonClass)
+
+      // Start Sargasso
+      SargassoModule.utils.bootSargasso()
     }
-
-    // Register MyClass to the Sargasso framework
-    SargassoModule.utils.registerSargassoClass('MyClass',MyClass)
-
-    // Start Sargasso
-    SargassoModule.utils.bootSargasso()
   </script>
+
+  <div class="float">
+    <pre id="debug">
+      Sargasso element event log
+      ------
+      ready
+    </pre>
+  </div>
 </body>
 </html>
-
 ```
-
-When you load the page the content of the Element will be "Hello World **Started!**"
-
-### Sargasso Object Lifecycle
-
-When the object is instantiated, the framework supervisor will call the `start()` method of the object. When removed from the DOM 'sleep()' will be called allowing you can cleanup any handlers.  Beyond responding to scrolling, resize and other responsive events, you will probably want to interact with your element in some way. You should use the start hook to set up any element events you need to respond to such as clicking a button, responding to touch events or key presses, etc.
-
-### Example with event handlers
-
-```javascript
-class MyButtonClass extends SargassoModule.Sargasso {
-  constructor (element, options = {}) {
-    options.watchViewport = true // tell me when I am visible
-    super(element, options) // important!
-  }
-
-  // listen for click
-  start () {
-    super.start() // important!
-
-    this.on('click', (e) => {
-      this.clicked()
-    })
-  }
-
-  // cleanup listener
-  sleep () {
-    this.off('click')
-    super.sleep() // important!
-  }
-
-  // use an animation frame to mutate the DOM
-  clicked () {
-    const frame = () => { // set up a DOM mutation
-      this.addClass('clicked')
-      this.element.textContent = 'Clicked!'
-    }
-    this.queueFrame(frame) // schedule it
-  }
-
-  enterViewport () {
-    // do some stuff such as modify element html or classes
-    const frame = () => {
-      this.element.textContent = 'Hello! Click me!'
-    }
-    this.queueFrame(frame)
-  }
-}
-
-SargassoModule.utils.registerSargassoClass('MyButtonClass', MyButtonClass)
-```
+[Try It](https://jsfiddle.net/PelagicCreatures/chfpkvs3/17/)
 
 ### Sargasso Base Class:
 
@@ -126,7 +188,7 @@ Your Sargasso subclasses can subscribe to event feeds in order to be notified of
 
 | method | description |
 | ------ | ----------- |
-| constructor(element, options = {}) | subscribe to services by setting options properties. All default to false so only set the ones you need `watchDOM`, `watchScroll`, `watchResize`, `watchOrientation`, `watchViewport` eg. {watchResize:true} |
+| constructor(element, options = {}) | subscribe to services by setting options properties. All default to false so only set the ones you need `watchDOM`, `watchScroll`, `watchResize`, `watchOrientation`, `watchViewport` eg. {watchScroll:true} |
 | start() | set up any interactions and event handlers |
 | sleep() | remove any event handlers defined in start() and cleanup references |
 | DOMChanged() | called when DOM changes if options 'watchDOM: true' was set in constructor |
@@ -136,7 +198,6 @@ Your Sargasso subclasses can subscribe to event feeds in order to be notified of
 | exitViewport() | called when element is exiting viewport if options 'watchViewport: true' was set in constructor |
 | newPage(old, new) | on a new page |
 | didBreakpoint() | new screen width breakpoint |
-| elementEvent(e) | this.element received an 'sargasso' event |
 | workerOnMessage (id, data = {}) | id is the worker sending the message. Any payload from the worker `postMessage` is in data.xxx as defined by the worker |
 | enterFullscreen() | called if options 'watchOrientation: true' when user rotates phone or if setFullscreen is called |
 | exitFullscreen() | called on exit fullscreen |
@@ -159,7 +220,6 @@ Your Sargasso subclasses can subscribe to event feeds in order to be notified of
 | removeClass('classname')  | remove classname or array of classnames to this.element |
 | setCSS({})  | set css pairs defined in object on this.element |
 | isVisible() | true if element is visible |
-| scrollTop(newTop) | get and set the current scroll position |
 | queueFrame(function) | queue a function to execute that changes the DOM |
 | workerStart(id, codeOrURL) | start a web worker with id. Ignored if worker id already installed (see https://github.com/PelagicCreatures/flyingfish for a shared worker example)|
 | workerPostMessage(id, data {}) | send the worker tagged with `id` a message. the message must be an object which can have any structure you want to pass to the worker |
@@ -190,77 +250,38 @@ Alternately, Sargasso watches the DOM for any elements tagged with the `data-sar
 
 You can also defer the instantiation using the lazy method by tagging it with `data-lazy-sargasso-class` instead of `data-sargasso-class` which will only start up the class when the element is visible in the viewport.
 
-### HIJAX
+### Progressive Web App HIJAX Page Load
 
-When HIJAX is enabled, Sargasso automatically captures `<a href="..">` tags and calls the LoadPageHandler instead of letting the browser load pages. You can make a link be ignored by hijax by setting the `<a href=".." data-no-hijax>`. Offsite links and links with targets are automatically ignored.  
+When HIJAX is enabled, Sargasso automatically captures `<a href="..">` tags and calls the LoadPageHandler instead of allowing the browser load and replace entire pages natively. Usually a web site or app has a boilerplate html wrapper that is the same for every page and well defined content areas that change from page to page. When pages are loaded via HIJAX only the changed content is merged with the current page, replacing elements marked with `data-hijax` leaving heavy weight wrapper elements, persistent javascript, css and sargasso elements intact. You can define as many dynamic elements in the wrapper as needed. Following this scheme allows for deep linking, and search engine discovery while also speeding page load for real browsers.
 
-`loadPageHandler(href)` is a utility function for programmatically loading a new page.
+The Sargasso supervisor takes care of cleaning up any instantiated Sargasso element controllers in the old content by calling sleep() before the content is removed then sargasso elements in the new content are instantiated and start() is called. That way Sargasso element controllers can be cleanly managed on progressive web app pages without leaving dangling event handlers and memory leaks.
+
+You can optionally make any link be ignored by hijax by setting the `<a href=".." data-no-hijax>`. Offsite links and links with targets are automatically ignored.  
+
+example/example3.html
+```javascript
+```
+
+TODO: need example
+
+`loadPageHandler(href)` is the utility function for programmatically loading a new page.
 
 EG. instead of `location.href= '/home'`, use `LoadPageHandler('/home')`
 
-This can be called to reload the page as well (won't add to history if same url as current url)
+This can be called to reload the page as well.
 
-```javascript
-import {Sargasso, utils, loadPageHandler} from '@pelagiccreatures/sargasso'
-
-const preflightHandler = (url, cb) => {
-  if(url === '/handled-by-pre-flight') {
-    // special case page, we will handle it here
-    return cb(null, true)
-  }
-
-  cb(null, false)
-}
-
-let options = {
-  hijax: {
-    onError: (level, message) => { alert('Something went wrong. ' + message) }
-  },
-  preFlight: preflightHandler
-}
-utils.bootSargasso(options)
-```
-
-#### Mark dynamic content
-
-New pages are loaded via AJAX and are merged with the current page only replacing elements marked with `data-hijax` from the new page.
-
-```
-<html>
-  <head>
-  </head>
-  <body>
-    static stuff
-
-    <div id="page-body" data-hijax>
-      <p>this changes from page to page</p>
-      <div>lots of html here</div>
-    </div>
-
-    more static stuff
-
-    <div id="some-element" data-hijax>
-      <p>this also changes from page to page</p>
-    </div>
-
-    more static stuff
-  </body>
-<html>
-```
-
-Note that data-hijax elements must have and ID and contain well formed child html elements.
+Note: data-hijax elements must have and ID and contain well formed child html elements.
 
 ```
 <div id="nope" data-hijax>I'm just text. No child elements. Won't work.</div>
-```
-
-```
 <div id="yup" data-hijax><p>I'm html. This works.</p></div>
 ```
 
 ### Using Animation Frames
 
 To avoid any chaotic repaints you should only make DOM changes inside animation frames - don't do any long processes in the responsive callbacks or things might bog down the browser UI.
+
+TODO: need example
 
 ### Using managed Web Workers
 You should offload compute heavy tasks to a new thread when possible.
@@ -271,51 +292,7 @@ The worker code runs when it receives an onmessage event.
 
 A web worker, once installed, could be used by many instances so sargasso sets e.data.uid to the id on the instance that is invoking the worker which we need to pass back in the postMessage so we know who is who.
 
-```
-class MySubClass extends Sargasso {
-
-  ...
-
-  someMethod() {
-
-    /*
-      myWorker can be the url of a worker script or
-      inline code as in this example
-    */
-
-    let pointlessMath = `onmessage = function (e) {
-      const baseNumber = e.data.power
-      let result = 0
-      for (var i = Math.pow(baseNumber, 7); i >= 0; i--) {
-        result += Math.atan(i) * Math.tan(i)
-      };
-      postMessage({
-        uid: e.data.uid, // Important! always pass this back in the message
-        result: 'Done doing pointless math: ' + result
-      })
-    }`
-
-    // create the worker to be managed by sargasso and give it an id
-    // the id can be unique to your task or shared by many sargasso
-    // controller
-    this.workerStart('pointlessMath', pointlessMath)
-
-    let data = { power: 12 }
-    this.workerPostMessage('pointlessMath', data) // send message to the worker
-  }
-
-  // listen for worker result
-  workerOnMessage (id, data) {
-    if (id === 'pointlessMath') {
-      const frame = () => {
-        this.element.innerHTML = data.result
-      }
-      this.queueFrame(frame)
-    }
-    super.workerOnMessage(id, data)
-  }
-}
-```
+TODO: need example
 
 ### Serving modules from your project
 ```
@@ -348,6 +325,18 @@ const boot = () => {
   utils.bootSargasso({})
 }
 
+class MyClass extends Sargasso {
+  start() {
+    this.queueFrame(() => {
+      this.element.innerHTML += ' <strong>Started!</strong>'
+    })
+    super.start()
+  }
+}
+
+// Register MyClass to the Sargasso framework
+utils.registerSargassoClass('MyClass',MyClass)
+
 export {
   boot
 }
@@ -357,7 +346,8 @@ html
 ```html
 <!DOCTYPE html>
   <body>
-    <img data-jsclass="FlyingFish" data-src="/some-image.jpg">
+    <div data-sargasso-class="MyClass">Hello World</div>
+
     <script src="public/dist/js/userapp.iife.js" defer></script>
     <script defer>
       window.onload= () => {

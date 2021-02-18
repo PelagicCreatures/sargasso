@@ -13,7 +13,8 @@
 		"web app",
 		"hijax",
 		"animation-frame",
-		"custom-elements"
+		"custom-elements",
+		"progressive-enhancement"
 	],
 	"main": "index.js",
 	"scripts": {

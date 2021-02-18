@@ -1,31 +1,14 @@
+<!DOCTYPE html>
 <html>
-	<head>
-		<title>Bundled App Example</title>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"/>
-		<style>
-			.clicked { background-color: pink; }
-		</style>
-	</head>
-	<body style="position: fixed; overflow: hidden; ">
-		<div id="scroll-wrapper" style="width:100vw; height:100vh; overflow-y:scroll;">
-			<div style="padding:1em;">
-				<h1>This is static</h1>
-				<p class="event-target">Once loaded it stays the same no matter what page you go to. The main advantages of this approach are speed and letting javascript hold state between pages making it more like an app than a web site. A web app.</p>
-
-				<div id="content" data-hijax style="border:thin dashed red;padding:1em; margin:1em;">
-					<p>But this HIJAX container's content changes from page to page. <a href="/example/page1.html">Click Here!</a></p>
-					<p>The clicks are captured but the HIJAX controller so they mostly deal with it. If you need to programatically load a page call the loadPageHandler <span style="text-decoration:underline;cursor:pointer;" onClick="loadPageHandler('/example/page1.html')">Like This</span>
-					<div data-sargasso-class="Noisy" id="index"><em>I'm Noisy (#index)... Look in browser console to see what I see. I'm dynamic and die when new page is loaded.</em></div>
-				</div>
-				<p>Also static down here.</p>
-
-				<div id="content-footer" data-hijax style="border:thin dashed red;padding:1em; margin:1em;">
-						<p>more dynamic stuff, index page</p>
-				</div>
-
-				<sargasso-noisy id="static"><em>I'm Noisy (#static)... Look in browser console to see what I see. I persists from page to page.</em></sargasso-noisy>
-			</div>
-		</div>
-		<script src="/example/app-bundle.iife.js"></script>
-	</body>
+<head>
+  <title>Example Sargasso Element</title>
+</head>
+<body>
+	<h3>Sargasso examples</h3>
+	<ul>
+		<li><a href="example1.html">Example 1</a></li>
+		<li><a href="example2.html">Example 2</a></li>
+		<li><a href="example3.html">Example 3</a></li>
+	</ul>
+</body>
 </html>

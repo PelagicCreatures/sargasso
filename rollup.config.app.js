@@ -7,8 +7,7 @@ export default {
 	output: [{
 		format: 'iife',
 		name: 'App',
-		file: './example/app-bundle.iife.js',
-		sourcemap: true
+		file: './example/app-bundle.iife.js'
 	}],
 
 	plugins: [

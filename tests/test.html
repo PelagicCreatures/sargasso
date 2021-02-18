@@ -29,18 +29,18 @@
 		<div id="log"></div>
 		<script src="../dist/sargasso.iife.js"></script>
 		<script defer>
-			PelagicCreaturesSargasso.utils.bootSargasso()
+			SargassoModule.utils.bootSargasso()
 
 			let log = document.getElementById('log')
-			PelagicCreaturesSargasso.utils.elementTools.on('myid1', document.getElementById('test-element'), 'click', '.clickable', (e,elem)=>{
+			SargassoModule.utils.elementTools.on('myid1', document.getElementById('test-element'), 'click', '.clickable', (e,elem)=>{
 				log.innerHTML +='<p>delegated ' + elem.getAttribute('id') + ' ' + e.target.tagName + ' ' + e.target.getAttribute('id') + '</p>'
 			})
 
-			PelagicCreaturesSargasso.utils.elementTools.on('myid2', document.getElementById('p-nested1'), 'click', (e)=>{
+			SargassoModule.utils.elementTools.on('myid2', document.getElementById('p-nested1'), 'click', (e)=>{
 				log.innerHTML +='<p>undelegated ' + e.currentTarget.getAttribute('id') + '</p>'
 			})
 
-			PelagicCreaturesSargasso.utils.elementTools.on('myid3', document.getElementById('test-element'), 'click', (e)=>{
+			SargassoModule.utils.elementTools.on('myid3', document.getElementById('test-element'), 'click', (e)=>{
 				log.innerHTML +='<p>undelegated ' + e.currentTarget.getAttribute('id') + '</p>'
 			})
 

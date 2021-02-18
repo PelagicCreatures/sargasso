@@ -1561,6 +1561,12 @@ var SargassoModule = (function (exports) {
 		EG. watchDOM, watchScroll, watchResize, watchOrientation
 	**/
 
+	let theDOMWatcher;
+	let theScrollWatcher;
+	let theResizeWatcher;
+	let theOrientationWatcher;
+	let theWorkerWatcher;
+
 	class ObserverSubscriptionManager {
 		constructor (options) {
 			this.options = options;
@@ -1617,9 +1623,9 @@ var SargassoModule = (function (exports) {
 
 		processQueue () {
 			this.pendingAnimationFrame = undefined;
-			var toProcess = this.frameQueue.slice(0);
+			const toProcess = this.frameQueue.slice(0);
 			this.frameQueue = [];
-			for (var i = 0; i < toProcess.length; i++) {
+			for (let i = 0; i < toProcess.length; i++) {
 				toProcess[i]();
 			}
 		}
@@ -1667,29 +1673,29 @@ var SargassoModule = (function (exports) {
 			super(options);
 
 			this.scrollElement = this.options.scrollElement || window;
-			this.lastscroll = this.scrollTop();
+			this.lastscroll = 0;
 			this.scrolling = false;
+		}
 
-			// use 'scroll' event to start scroll loop unless it's already looping
-			this.trigger = () => {
-				if (!this.scrolling) {
+		// use 'scroll' event to start scroll loop unless it's already looping
+		trigger () {
+			if (!this.scrolling) {
+				this.scrollLoop();
+			}
+		}
+
+		scrollLoop () {
+			if (this.lastscroll !== this.scrollTop()) { // are we still scrolling?
+				this.scrolling = true;
+				this.lastscroll = this.scrollTop();
+				this.watchScroll(); // tell our observers
+				const frame = () => {
 					this.scrollLoop();
-				}
-			};
-
-			this.scrollLoop = () => {
-				if (this.lastscroll !== this.scrollTop()) { // are we still scrolling?
-					this.scrolling = true;
-					this.lastscroll = this.scrollTop();
-					this.watchScroll(); // tell our observers
-					const frame = () => {
-						this.scrollLoop();
-					};
-					this.queueFrame(frame);
-				} else {
-					this.scrolling = false; // exit the scroll loop and wait for next 'scroll' event
-				}
-			};
+				};
+				this.queueFrame(frame);
+			} else {
+				this.scrolling = false; // exit the scroll loop and wait for next 'scroll' event
+			}
 		}
 
 		setOptions (options = {}) {
@@ -1705,12 +1711,14 @@ var SargassoModule = (function (exports) {
 
 		wakeup () {
 			super.wakeup();
-			this.scrollElement.addEventListener('scroll', this.trigger, false);
+			elementTools.on('theScrollWatcher', this.scrollElement, 'scroll', () => {
+				this.trigger();
+			});
 		}
 
 		sleep () {
 			super.sleep();
-			this.scrollElement.removeEventListener('scroll', this.trigger);
+			elementTools.off('theScrollWatcher', this.scrollElement, 'scroll');
 		}
 
 		inViewPort (element) {
@@ -1887,8 +1895,6 @@ var SargassoModule = (function (exports) {
 	}
 
 	// build subscription services
-
-	var theDOMWatcher, theScrollWatcher, theResizeWatcher, theOrientationWatcher, theWorkerWatcher;
 
 	theDOMWatcher = new DOMWatcher();
 	theScrollWatcher = new ScrollWatcher();
@@ -2297,11 +2303,6 @@ var SargassoModule = (function (exports) {
 			return elementTools.isVisible(this.element)
 		}
 
-		// TODO: refactor - kludge - should not be here
-		scrollTop (newTop) {
-			return theScrollWatcher.scrollTop(newTop)
-		}
-
 		/*
 			@function workerStart - start a web worker
 			@param { String } id - id of worker
@@ -2369,9 +2370,9 @@ var SargassoModule = (function (exports) {
 			*/
 		processQueue () {
 			this.pendingAnimationFrame = undefined;
-			var toProcess = this.frameQueue.slice(0);
+			const toProcess = this.frameQueue.slice(0);
 			this.frameQueue = [];
-			for (var i = 0; i < toProcess.length; i++) {
+			for (let i = 0; i < toProcess.length; i++) {
 				toProcess[i]();
 			}
 		}
@@ -2943,7 +2944,7 @@ var SargassoModule = (function (exports) {
 					const loc = xhr.getResponseHeader('Location') ? xhr.getResponseHeader('Location') : xhr.getResponseHeader('Sargasso-Location');
 					this.setPage(loc);
 				} else if (xhr.status === 200) {
-					this.scrollTop(0);
+					theScrollWatcher.scrollTop(0);
 					this.mergePage(xhr.responseText);
 					const oldPage = this.currentPage;
 					const frame = () => {

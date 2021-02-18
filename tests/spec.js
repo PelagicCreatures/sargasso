@@ -1,4 +1,4 @@
-const elementTools = PelagicCreaturesSargasso.utils.elementTools
+const elementTools = SargassoModule.utils.elementTools
 const testElement = document.getElementById('test-element')
 const testElement1 = document.getElementById('test-element1')
 describe('Sargasso', function () {
@@ -109,7 +109,7 @@ describe('Sargasso', function () {
 		let destroy = false
 		const didScroll = 0
 
-		class InstrumentedSubclass extends PelagicCreaturesSargasso.Sargasso {
+		class InstrumentedSubclass extends SargassoModule.Sargasso {
 			constructor (element, options) {
 				super(element, {
 					watchScroll: true
@@ -133,7 +133,7 @@ describe('Sargasso', function () {
 			}
 		}
 
-		PelagicCreaturesSargasso.utils.registerSargassoClass('InstrumentedSubclass', InstrumentedSubclass)
+		SargassoModule.utils.registerSargassoClass('InstrumentedSubclass', InstrumentedSubclass)
 		testElement.innerHTML = '<sargasso-instrumented-subclass id="my-element"></sargasso-instrumented-subclass>'
 		const myElement = document.querySelector('#my-element')
 		const myClassInstance = elementTools.getMetaData(myElement, 'InstrumentedSubclass')
@@ -155,7 +155,7 @@ describe('Sargasso', function () {
 	it('Sargasso watchScroll callback', function (done) {
 		let didScroll = 0
 
-		class InstrumentedScrollClass extends PelagicCreaturesSargasso.Sargasso {
+		class InstrumentedScrollClass extends SargassoModule.Sargasso {
 			constructor (element, options) {
 				super(element, {
 					watchScroll: true
@@ -174,20 +174,20 @@ describe('Sargasso', function () {
 				++didScroll
 				if (didScroll > 1) {
 					expect(didScroll).to.equal(2)
-					expect(this.scrollTop()).to.equal(10)
+					expect(SargassoModule.services.theScrollWatcher.scrollTop()).to.equal(10)
 					testElement.innerHTML = '' // kill it
-					expect(PelagicCreaturesSargasso.services.theScrollWatcher.observers.length).to.equal(1)
+					expect(SargassoModule.services.theScrollWatcher.observers.length).to.equal(1)
 					window.scrollTo(0, 0)
 					done()
 				}
 			}
 		}
 
-		PelagicCreaturesSargasso.utils.registerSargassoClass('InstrumentedScrollClass', InstrumentedScrollClass)
+		SargassoModule.utils.registerSargassoClass('InstrumentedScrollClass', InstrumentedScrollClass)
 		testElement.innerHTML = '<sargasso-instrumented-scroll-class id="my-element"></sargasso-instrumented-scroll-class>'
 		const myElement = document.querySelector('#my-element')
 		const myClassInstance = elementTools.getMetaData(myElement, 'InstrumentedScrollClass')
-		expect(PelagicCreaturesSargasso.services.theScrollWatcher.observers.length).to.equal(2)
+		expect(SargassoModule.services.theScrollWatcher.observers.length).to.equal(2)
 		expect(didScroll).to.equal(1)
 		window.scrollTo(0, 10)
 	})
@@ -197,7 +197,7 @@ describe('Sargasso', function () {
 			HijaxLoader
 	*/
 	it('Sargasso HijaxLoader', function (done) {
-		class InstrumentedHijaxClass extends PelagicCreaturesSargasso.Sargasso {
+		class InstrumentedHijaxClass extends SargassoModule.Sargasso {
 			newPage (oldPage, newPage) {
 				if (newPage === '/tests/page1.html') {
 					document.getElementById('back-link').click()
@@ -206,11 +206,11 @@ describe('Sargasso', function () {
 				}
 			}
 		}
-		PelagicCreaturesSargasso.utils.registerSargassoClass('InstrumentedHijaxClass', InstrumentedHijaxClass)
+		SargassoModule.utils.registerSargassoClass('InstrumentedHijaxClass', InstrumentedHijaxClass)
 		testElement.innerHTML = '<sargasso-instrumented-hijax-class id="my-element"></sargasso-instrumented-hijax-class>'
 		const myElement = document.querySelector('#my-element')
 		const myClassInstance = elementTools.getMetaData(myElement, 'InstrumentedHijaxClass')
-		PelagicCreaturesSargasso.loadPageHandler('./page1.html')
+		SargassoModule.loadPageHandler('./page1.html')
 	})
 
 	/*
@@ -218,14 +218,14 @@ describe('Sargasso', function () {
 			Supervisor
 	*/
 	it('Sargasso Supervisor Instantiate by data-sargasso-class', function (done) {
-		class InstrumentedSupervisorTest extends PelagicCreaturesSargasso.Sargasso {
+		class InstrumentedSupervisorTest extends SargassoModule.Sargasso {
 			start () {
 				super.start()
 				testElement.innerHTML = '' // kill it
 				setImmediate(done)
 			}
 		}
-		PelagicCreaturesSargasso.utils.registerSargassoClass('InstrumentedSupervisorTest', InstrumentedSupervisorTest)
+		SargassoModule.utils.registerSargassoClass('InstrumentedSupervisorTest', InstrumentedSupervisorTest)
 		testElement.innerHTML = '<div id="my-element" data-sargasso-class="InstrumentedSupervisorTest"></div>'
 	})
 
@@ -234,7 +234,7 @@ describe('Sargasso', function () {
 			LazyInstantiate - insert element and scroll it into viewport to instantiate it
 	*/
 	it('Sargasso LazyInstantiate by data-lazy-sargasso-class', function (done) {
-		class InstrumentedLazyTest extends PelagicCreaturesSargasso.Sargasso {
+		class InstrumentedLazyTest extends SargassoModule.Sargasso {
 			start () {
 				super.start()
 				testElement.innerHTML = '' // kill it
@@ -243,7 +243,7 @@ describe('Sargasso', function () {
 			}
 		}
 		elementTools.addClass(document.querySelector('#spacer'), 'below-the-fold')
-		PelagicCreaturesSargasso.utils.registerSargassoClass('InstrumentedLazyTest', InstrumentedLazyTest)
+		SargassoModule.utils.registerSargassoClass('InstrumentedLazyTest', InstrumentedLazyTest)
 		testElement.innerHTML = '<div id="my-element" data-lazy-sargasso-class="InstrumentedLazyTest"></div>'
 		window.scrollTo(0, window.innerHeight)
 	})
@@ -253,7 +253,7 @@ describe('Sargasso', function () {
 			LazyInstantiate - container not visible, instantiate on reveal
 	*/
 	it('Sargasso LazyInstantiate by data-lazy-sargasso-class in hidden container', function (done) {
-		class InstrumentedLazyRevealTest extends PelagicCreaturesSargasso.Sargasso {
+		class InstrumentedLazyRevealTest extends SargassoModule.Sargasso {
 			start () {
 				super.start()
 				testElement1.innerHTML = '' // kill it
@@ -261,7 +261,7 @@ describe('Sargasso', function () {
 				done()
 			}
 		}
-		PelagicCreaturesSargasso.utils.registerSargassoClass('InstrumentedLazyRevealTest', InstrumentedLazyRevealTest)
+		SargassoModule.utils.registerSargassoClass('InstrumentedLazyRevealTest', InstrumentedLazyRevealTest)
 		testElement1.innerHTML = '<div id="my-element" data-lazy-sargasso-class="InstrumentedLazyRevealTest"></div>'
 		elementTools.removeClass(testElement1, 'hidden-display')
 	})

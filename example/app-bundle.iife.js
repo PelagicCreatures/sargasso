@@ -1,4 +1,4 @@
-(function () {
+var App = (function (exports) {
 	'use strict';
 
 	var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
@@ -1561,6 +1561,12 @@
 		EG. watchDOM, watchScroll, watchResize, watchOrientation
 	**/
 
+	let theDOMWatcher;
+	let theScrollWatcher;
+	let theResizeWatcher;
+	let theOrientationWatcher;
+	let theWorkerWatcher;
+
 	class ObserverSubscriptionManager {
 		constructor (options) {
 			this.options = options;
@@ -1617,9 +1623,9 @@
 
 		processQueue () {
 			this.pendingAnimationFrame = undefined;
-			var toProcess = this.frameQueue.slice(0);
+			const toProcess = this.frameQueue.slice(0);
 			this.frameQueue = [];
-			for (var i = 0; i < toProcess.length; i++) {
+			for (let i = 0; i < toProcess.length; i++) {
 				toProcess[i]();
 			}
 		}
@@ -1667,29 +1673,29 @@
 			super(options);
 
 			this.scrollElement = this.options.scrollElement || window;
-			this.lastscroll = this.scrollTop();
+			this.lastscroll = 0;
 			this.scrolling = false;
+		}
 
-			// use 'scroll' event to start scroll loop unless it's already looping
-			this.trigger = () => {
-				if (!this.scrolling) {
+		// use 'scroll' event to start scroll loop unless it's already looping
+		trigger () {
+			if (!this.scrolling) {
+				this.scrollLoop();
+			}
+		}
+
+		scrollLoop () {
+			if (this.lastscroll !== this.scrollTop()) { // are we still scrolling?
+				this.scrolling = true;
+				this.lastscroll = this.scrollTop();
+				this.watchScroll(); // tell our observers
+				const frame = () => {
 					this.scrollLoop();
-				}
-			};
-
-			this.scrollLoop = () => {
-				if (this.lastscroll !== this.scrollTop()) { // are we still scrolling?
-					this.scrolling = true;
-					this.lastscroll = this.scrollTop();
-					this.watchScroll(); // tell our observers
-					const frame = () => {
-						this.scrollLoop();
-					};
-					this.queueFrame(frame);
-				} else {
-					this.scrolling = false; // exit the scroll loop and wait for next 'scroll' event
-				}
-			};
+				};
+				this.queueFrame(frame);
+			} else {
+				this.scrolling = false; // exit the scroll loop and wait for next 'scroll' event
+			}
 		}
 
 		setOptions (options = {}) {
@@ -1705,12 +1711,14 @@
 
 		wakeup () {
 			super.wakeup();
-			this.scrollElement.addEventListener('scroll', this.trigger, false);
+			elementTools.on('theScrollWatcher', this.scrollElement, 'scroll', () => {
+				this.trigger();
+			});
 		}
 
 		sleep () {
 			super.sleep();
-			this.scrollElement.removeEventListener('scroll', this.trigger);
+			elementTools.off('theScrollWatcher', this.scrollElement, 'scroll');
 		}
 
 		inViewPort (element) {
@@ -1887,8 +1895,6 @@
 	}
 
 	// build subscription services
-
-	var theDOMWatcher, theScrollWatcher, theResizeWatcher, theOrientationWatcher, theWorkerWatcher;
 
 	theDOMWatcher = new DOMWatcher();
 	theScrollWatcher = new ScrollWatcher();
@@ -2297,11 +2303,6 @@
 			return elementTools.isVisible(this.element)
 		}
 
-		// TODO: refactor - kludge - should not be here
-		scrollTop (newTop) {
-			return theScrollWatcher.scrollTop(newTop)
-		}
-
 		/*
 			@function workerStart - start a web worker
 			@param { String } id - id of worker
@@ -2369,9 +2370,9 @@
 			*/
 		processQueue () {
 			this.pendingAnimationFrame = undefined;
-			var toProcess = this.frameQueue.slice(0);
+			const toProcess = this.frameQueue.slice(0);
 			this.frameQueue = [];
-			for (var i = 0; i < toProcess.length; i++) {
+			for (let i = 0; i < toProcess.length; i++) {
 				toProcess[i]();
 			}
 		}
@@ -2943,7 +2944,7 @@
 					const loc = xhr.getResponseHeader('Location') ? xhr.getResponseHeader('Location') : xhr.getResponseHeader('Sargasso-Location');
 					this.setPage(loc);
 				} else if (xhr.status === 200) {
-					this.scrollTop(0);
+					theScrollWatcher.scrollTop(0);
 					this.mergePage(xhr.responseText);
 					const oldPage = this.currentPage;
 					const frame = () => {
@@ -3021,7 +3022,7 @@
 		return fragment
 	};
 
-	var loadPageHandler;
+	exports.loadPageHandler = void 0;
 
 	const bootSargasso = (options = {}) => {
 		if (options.scrollElement) {
@@ -3036,9 +3037,9 @@
 		if (options.hijax) {
 			const hijax = new HijaxLoader(document.body, options.hijax);
 			hijax.start();
-			loadPageHandler = hijax.setPage.bind(hijax);
+			exports.loadPageHandler = hijax.setPage.bind(hijax);
 		} else {
-			loadPageHandler = (url) => {
+			exports.loadPageHandler = (url) => {
 				document.location.href = url;
 			};
 		}
@@ -3181,116 +3182,12 @@
 		example ES6 app entrypoint for bundling a site app
 	*/
 
-	class myClass extends Sargasso {
-		constructor (element, options = {}) {
-			options.watchViewport = true;
-			super(element, options);
-		}
+	exports.Sargasso = Sargasso;
+	exports.utils = utils;
 
-		enterViewport () { // do some stuff such as modify element html or classes
-			const frame = () => {
-				this.element.innerHTML = '<p>Hello There Viewport! Now starting an offloaded task in web worker so things are still responsive here while I think.';
-				this.element.style.color = 'red';
-				this.addClass('animated');
-				this.addClass('tada');
-			};
-			this.queueFrame(frame);
-			this.offLoadTask();
-		}
+	Object.defineProperty(exports, '__esModule', { value: true });
 
-		offLoadTask () {
-			// create the worker. managed by sargasso
-			this.workerStart('myworkId', '/example/test-worker.js');
+	return exports;
 
-			// make the worker do work
-			this.workerPostMessage('myworkId', {
-				power: 12
-			});
-		}
-
-		workerOnMessage (id, data) {
-			if (id === 'myworkId') {
-				const frame = () => {
-					this.element.innerHTML = data.result;
-				};
-				this.queueFrame(frame);
-			}
-			super.workerOnMessage(id, data);
-		}
-	}
-
-	utils.registerSargassoClass('myClass', myClass);
-
-	class MyButtonClass extends Sargasso {
-		constructor (element, options = {}) {
-			options.watchViewport = true; // tell me when I am visible
-			super(element, options); // important!
-		}
-
-		// listen for click
-		start () {
-			super.start(); // important!
-			this.clicker = (e) => {
-				this.clicked();
-			};
-			this.element.addEventListener('click', this.clicker, false);
-		}
-
-		// cleanup listener
-		sleep () {
-			this.element.removeEventListener('click', this.clicker);
-			super.sleep(); // important!
-		}
-
-		// use an animation frame to mutate the DOM
-		clicked () {
-			const frame = () => { // set up a DOM mutation
-				this.addClass('clicked');
-				this.element.textContent = 'Clicked!';
-			};
-			this.queueFrame(frame); // schedule it
-		}
-
-		enterViewport () {
-			// do some stuff such as modify element html or classes
-			const frame = () => {
-				this.element.textContent = 'Hello viewport! Click me!';
-			};
-			this.queueFrame(frame);
-		}
-	}
-
-	utils.registerSargassoClass('MyButtonClass', MyButtonClass);
-
-	const testPreFlight = (url, cb) => {
-		console.log('pre flight:', url);
-		cb(null, url === '/test-pre-flight');
-	};
-	utils.bootSargasso({
-		hijax: {
-			onError: (level, message) => {
-				alert('hijax error: ' + message);
-			},
-			onLoading: function () {},
-			onExitPage: () => {
-				utils.elementTools.off('myid', document.body, 'click', '.event-target');
-			},
-			onEnterPage: () => {},
-			preFlight: testPreFlight
-		},
-		breakpoints: {},
-		scrollElement: document.getElementById('scroll-wrapper')
-	});
-
-	utils.elementTools.on('myid', document.body, 'click', '.event-target', (e) => {
-		console.log('delegated');
-	}, true);
-
-	utils.elementTools.on('myid', document.querySelector('.event-target'), 'click', '', (e) => {
-		console.log('undelegated');
-	}, true);
-
-	window.loadPageHandler = loadPageHandler;
-
-}());
+}({}));
 //# sourceMappingURL=app-bundle.iife.js.map
