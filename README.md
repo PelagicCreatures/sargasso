@@ -178,11 +178,11 @@ example/example2.html
 </body>
 </html>
 ```
-[Try It](https://jsfiddle.net/PelagicCreatures/chfpkvs3/17/)
+[Try It](https://jsfiddle.net/PelagicCreatures/chfpkvs3/18/)
 
 ### Sargasso Base Class:
 
-Your Sargasso subclasses can subscribe to event feeds in order to be notified of events
+Your Sargasso subclasses can subscribe to event feeds in order to be notified of events.
 
 **Methods to override as needed:** *don't forget to call super.xxx() in your subclass*
 
@@ -213,7 +213,7 @@ Your Sargasso subclasses can subscribe to event feeds in order to be notified of
 
 | method | description |
 | ------ | ----------- |
-| getMetaData | return sargasso metadata associated with element (weak map) |
+| getMetaData(key) | return sargasso metadata associated with element (weak map) |
 | setMetaData(key,value) | set a sargasso metadata property |
 | hasClass('classname') | returns true if this.element has cssclass |
 | addClass('classname') | add classname or array of classnames to this.element |
@@ -238,14 +238,14 @@ Don't forget you need to let sargasso know about your class:
 Many browsers support custom elements ([current compatibility](https://caniuse.com/#feat=custom-elementsv1) so the preferred (faster and cleaner) syntax for sargasso elements is to use a custom element tag. The class name is the kebab-case of your subclass name so MyClass becomes sargasso-my-class:
 
 ```html
-<sargasso-my-class>This works for MyClass in <em>most</em> browsers</sargasso-my-class>
+<sargasso-my-class>This works in <em>most</em> browsers</sargasso-my-class>
 ```
 
 #### Using data-sargasso-class
-Alternately, Sargasso watches the DOM for any elements tagged with the `data-sargasso-class` attribute and instantiates the Sargasso class specified while hooking up the appropriate services. When the underlying element is removed from the DOM (loading a new page or something) it automatically destroys any dangling Sargasso objects.
+Alternately, Sargasso watches the DOM for any elements tagged with the `data-sargasso-class` attribute which can be one classname or a list of classnames
 
 ```html
-<div data-sargasso-class="MyClass">This works for MyClass in all browsers</div>
+<div data-sargasso-class="MyClass, MyOtherClass">This works in all browsers</div>
 ```
 
 You can also defer the instantiation using the lazy method by tagging it with `data-lazy-sargasso-class` instead of `data-sargasso-class` which will only start up the class when the element is visible in the viewport.
@@ -259,16 +259,54 @@ The Sargasso supervisor takes care of cleaning up any instantiated Sargasso elem
 You can optionally make any link be ignored by hijax by setting the `<a href=".." data-no-hijax>`. Offsite links and links with targets are automatically ignored.  
 
 example/example3.html
-```javascript
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Example Sargasso Element</title>
+</head>
+<body>
+  <p>This is static wrapper content which does not change from page to page because it's not in a hijaxed container.</p>
+
+  <div id="navigation" data-hijax>
+    <strong><a href="example3.html">Home</a></strong> | <a href="example3-1.html">Page 1</a> | <a href="example3-2.html">Page 2</a>
+  </div>
+  <hr>
+
+  <div id="page-body" data-hijax>
+    <p>Page content for home page</p>
+    <sargasso-noisy id="content-home" data-log-it="newPage,sleep,stopWorker,destroy"></sargasso-noisy>
+  </div>
+
+  <div id="some-element" data-hijax>
+    <p>This content also changes from page to page.</p>
+  </div>
+
+  <hr>
+
+  <p>This is also static wrapper content. Maybe a footer.</p>
+
+  <sargasso-noisy id="static-home" data-log-it="newPage,sleep,stopWorker,destroy"></sargasso-noisy>
+
+  <script src='app-bundle.iife.js'></script>
+
+  <script defer>
+    window.onload = () => {
+      let options = {
+        hijax: {
+          onError: (level, message) => {
+            alert('Something went wrong. ' + message)
+          }
+        }
+      }
+      App.utils.bootSargasso(options)
+    }
+  </script>
+</body>
+</html>
 ```
 
-TODO: need example
-
-`loadPageHandler(href)` is the utility function for programmatically loading a new page.
-
-EG. instead of `location.href= '/home'`, use `LoadPageHandler('/home')`
-
-This can be called to reload the page as well.
+Note: Hijax pages must be served over http/https. In the example directory of this repository is a python script for a simple server. Run `python localhost.py` then connect using a web browser `http://localhost:8000/example3.html` This example has an instrumented Sargasso class which logs events to illustrate the object lifecycle as pages come and go.
 
 Note: data-hijax elements must have and ID and contain well formed child html elements.
 
@@ -277,11 +315,22 @@ Note: data-hijax elements must have and ID and contain well formed child html el
 <div id="yup" data-hijax><p>I'm html. This works.</p></div>
 ```
 
+### Programatic page loading
+
+`loadPageHandler(href)` is the utility function for programmatically loading a new page. EG. instead of `location.href= '/home'`, use `LoadPageHandler('/home')` This can be called to reload the page as well.
+
+
 ### Using Animation Frames
 
-To avoid any chaotic repaints you should only make DOM changes inside animation frames - don't do any long processes in the responsive callbacks or things might bog down the browser UI.
+To avoid any chaotic repaints you should only make Content or DOM changes inside animation frames - don't do any long processes in the responsive callbacks or things might bog down the browser UI. Sargasso.queueFrame maintains a list of pending page updates which are executed in order using the animation frame loop.
 
-TODO: need example
+```javascript
+this.queueFrame(()=>{
+  this.removeClass('css-class,some-other-css-class')
+  this.addClass('css-class,some-other-css-class')
+  this.element.innerHTML = 'changed!'
+})
+```
 
 ### Using managed Web Workers
 You should offload compute heavy tasks to a new thread when possible.
@@ -292,7 +341,35 @@ The worker code runs when it receives an onmessage event.
 
 A web worker, once installed, could be used by many instances so sargasso sets e.data.uid to the id on the instance that is invoking the worker which we need to pass back in the postMessage so we know who is who.
 
-TODO: need example
+```javascript
+startTask () {
+  // this worker increments a counter every 3 seconds and posts a message back us
+  const task = `let counters= {}
+    onmessage = async (e) => {
+      if(!counters[e.data.uid]) { counters[e.data.uid] = e.data.count }
+      setInterval(()=>{
+        self.postMessage({ uid: e.data.uid, count: ++counters[e.data.uid] })
+      },30000)
+    }`
+
+  // register the worker
+  this.workerStart('mytask', task)
+
+  // start the worker working
+  this.workerPostMessage('mytask', {
+    count: 0
+  })
+}
+
+workerOnMessage (id, data) {
+  if(id === 'mytask') {
+    this.queueFrame(()=>{
+      this.element.innerHTML = data.count
+    })
+  }
+  super.workerOnMessage(id, data)
+}
+```
 
 ### Serving modules from your project
 ```
