@@ -2853,9 +2853,18 @@ var SargassoModule = (function (exports) {
 			super(element, options);
 			this.excludeRegex = new RegExp('^(//|http|javascript|mailto|#)', 'i');
 			this.currentPage = location.pathname + location.search;
+			this.cachedMarkup = {};
 		}
 
 		start () {
+			// set up hijax markup cache
+			const containers = document.querySelectorAll('[data-hijax-skip-unchanged]');
+			for (let i = 0; i < containers.length; i++) {
+				const container = containers[i];
+				const id = container.getAttribute('id');
+				this.cachedMarkup[id] = container.innerHTML;
+			}
+
 			super.start();
 			window.addEventListener('popstate', (e) => {
 				this.watchPopState(e);
@@ -2991,8 +3000,25 @@ var SargassoModule = (function (exports) {
 			const containers = document.querySelectorAll('[data-hijax]');
 			for (let i = 0; i < containers.length; i++) {
 				const container = containers[i];
-				const id = containers[i].getAttribute('id');
+				const id = container.getAttribute('id');
 				const replace = fragment.getElementById(id);
+
+				// compare raw markup for changes
+				if (container.hasAttribute('data-hijax-skip-unchanged')) {
+					if (this.cachedMarkup[id] === replace.innerHTML) { // unchanged
+						continue
+					}
+					this.cachedMarkup[id] = replace.innerHTML;
+				}
+
+				// use a key found in data-hijax-cache-key on a child element with id defined in data-hijax-cache-key-id
+				const k = container.getAttribute('data-hijax-cache-key-selector');
+				if (k) {
+					if (replace.querySelector(k) && container.querySelector(k) && container.querySelector(k).getAttribute('data-hijax-cache-key') === replace.querySelector(k).getAttribute('data-hijax-cache-key')) {
+						continue
+					}
+				}
+
 				this.processScripts(replace.querySelectorAll('script'));
 				const frame = () => {
 					container.parentNode.replaceChild(replace, container);
@@ -3028,8 +3054,6 @@ var SargassoModule = (function (exports) {
 		if (options.scrollElement) {
 			theScrollWatcher.setOptions(options);
 		}
-		const supervisor = new SargassoSupervisor(document.body, options);
-		supervisor.start(options);
 		if (options.breakpoints) {
 			const breakpoints = new Breakpoints(document.body, options.breakpoints);
 			breakpoints.start();
@@ -3043,6 +3067,9 @@ var SargassoModule = (function (exports) {
 				document.location.href = url;
 			};
 		}
+
+		const supervisor = new SargassoSupervisor(document.body, options);
+		supervisor.start(options);
 	};
 
 	/*

@@ -18,9 +18,13 @@
     <sargasso-noisy id="content-page-2" data-log-it="newPage,sleep,stopWorker,destroy"></sargasso-noisy>
   </div>
 
-  <div id="some-element" data-hijax>
-    <p>This Content also changes from page to page, <strong>Hi from page 2</strong></p>
+	<div id="some-element" data-hijax data-hijax-skip-unchanged>
+    <p>This Content also changes from page to page, <strong>It changed! Hi from page 2.</strong></p>
   </div>
+
+	<div id="some-element-key" data-hijax data-hijax-cache-key-selector="#sub-element">
+		<p id="sub-element" data-hijax-cache-key="222">This content uses a cache key to signal changes, otherwise leave it alone. The key changed.</p>
+	</div>
 
   <hr>
   <p>This is also static wrapper content. Maybe a footer.</p>
