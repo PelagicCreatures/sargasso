@@ -277,7 +277,7 @@ example/example3.html
     <sargasso-noisy id="content-home" data-log-it="newPage,sleep,stopWorker,destroy"></sargasso-noisy>
   </div>
 
-  <div id="some-element" data-hijax>
+  <div id="some-other-element" data-hijax>
     <p>This content also changes from page to page.</p>
   </div>
 
@@ -305,19 +305,31 @@ example/example3.html
 </html>
 ```
 
-Note: Hijax pages must be served over http/https. In the example directory of this repository is a python script for a simple server. Run `python localhost.py` then connect using a web browser `http://localhost:8000/example3.html` This example has an instrumented Sargasso class which logs events to illustrate the object lifecycle as pages come and go.
+**Note**: Hijax pages must be served over http/https. In the example directory of this repository is a python script for a simple server. Run `python localhost.py` then connect using a web browser `http://localhost:8000/example3.html` This example has an instrumented Sargasso class which logs events to illustrate the object lifecycle as pages come and go.
 
-Note: data-hijax elements must have and ID and contain well formed child html elements.
-
+**Note**: data-hijax elements must have and ID and contain well formed child html elements.
 ```
 <div id="nope" data-hijax>I'm just text. No child elements. Won't work.</div>
 <div id="yup" data-hijax><p>I'm html. This works.</p></div>
 ```
 
-### Programatic page loading
-
+#### Programatic page loading
 `loadPageHandler(href)` is the utility function for programmatically loading a new page. EG. instead of `location.href= '/home'`, use `LoadPageHandler('/home')` This can be called to reload the page as well.
 
+#### Finer content merging control
+Set the `data-hijax-skip-unchanged` attribute on the hijax container and the content will remain static unless the markup is changed. This is useful if you have a Sargasso element that should remain instantiated and hold state when traversing several pages in a section.
+```
+<div id="test" data-hijax data-hijax-skip-unchanged>
+	<p>This content also sometimes changes from page to page, otherwise leave it alone.</p>
+</div>
+```
+
+Set `data-hijax-cache-key-selector` to a css selector of an element within the hijax container which has defined `data-hijax-cache-key-selector` to leave the content intact across pages until the key changes.
+```
+<div id="test" data-hijax data-hijax-cache-key-selector="#sub-element">
+	<p id="sub-element" data-hijax-cache-key="some-key">This content uses a cache key to signal changes, otherwise leave it alone.</p>
+</div>
+```
 
 ### Using Animation Frames
 
