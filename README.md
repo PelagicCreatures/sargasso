@@ -320,14 +320,14 @@ example/example3.html
 Set the `data-hijax-skip-unchanged` attribute on the hijax container and the content will remain static unless the markup is changed. This is useful if you have a Sargasso element that should remain instantiated and hold state when traversing several pages in a section.
 ```
 <div id="test" data-hijax data-hijax-skip-unchanged>
-	<p>This content also sometimes changes from page to page, otherwise leave it alone.</p>
+  <p>This content also sometimes changes from page to page, otherwise leave it alone.</p>
 </div>
 ```
 
 Set `data-hijax-cache-key-selector` to a css selector of an element within the hijax container which has defined `data-hijax-cache-key-selector` to leave the content intact across pages until the key changes.
 ```
 <div id="test" data-hijax data-hijax-cache-key-selector="#sub-element">
-	<p id="sub-element" data-hijax-cache-key="some-key">This content uses a cache key to signal changes, otherwise leave it alone.</p>
+  <p id="sub-element" data-hijax-cache-key="some-key">This content uses a cache key to signal changes, otherwise leave it alone.</p>
 </div>
 ```
 
