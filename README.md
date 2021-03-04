@@ -95,7 +95,7 @@ You can also defer the instantiation using the lazy method by tagging it with `d
 
 ### Sargasso Object Lifecycle
 
-When a Sargasso element appears in the document, the framework supervisor will instantiate an object and call the `start()` method of the object. When removed from the DOM, 'sleep()' will be called allowing you can cleanup any resources or handlers you set up in start.  Beyond responding to scrolling, resize and other responsive events, you will probably want to interact with your element in some way. You should use the start hook to set up any element events you need to respond to such as clicking a button, responding to touch events or key presses, etc.
+When a Sargasso element appears in the document, the framework supervisor will instantiate an object and call the `start()` method of the object. When removed from the DOM, 'sleep()' will be called allowing you can cleanup any resources or handlers you set up in start (note that event listeners created with 'this.on' and 'this.once' are automatically cleaned up).  Beyond responding to scrolling, resize and other responsive events, you will probably want to interact with your element in some way. You should use the start hook to set up any element events you need to respond to such as clicking a button, responding to touch events or key presses, etc.
 
 ### Example with event handlers
 
@@ -148,7 +148,6 @@ example/example2.html
 
         sleep() {
           this.debug('MyButtonClass sleep called')
-          this.off('click') // cleanup click event handler
           super.sleep() // important!
         }
 
@@ -205,7 +204,7 @@ Your Sargasso subclasses can subscribe to event feeds in order to be notified of
 | ------ | ----------- |
 | constructor(element, options = {}) | subscribe to services by setting options properties. All default to false so only set the ones you need `watchDOM`, `watchScroll`, `watchResize`, `watchOrientation`, `watchViewport` eg. {watchScroll:true} |
 | start() | set up any interactions and event handlers |
-| sleep() | remove any event handlers defined in start() and cleanup references |
+| sleep() | remove any event foreign handlers defined in start() and cleanup references - event handlers created with 'this.on' and 'this.once' are automatically removed by sargasso.|
 | DOMChanged() | called when DOM changes if options 'watchDOM: true' was set in constructor |
 | didScroll() | called when scroll occurs if options 'watchScroll: true' was set in constructor |
 | didResize() | called when resize changes if options 'watchResize: true' was set in constructor |

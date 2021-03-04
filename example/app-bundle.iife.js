@@ -108,20 +108,20 @@ var App = (function (exports) {
 	var isArray_1 = isArray;
 
 	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
+	var objectProto$1 = Object.prototype;
 
 	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
+	var hasOwnProperty = objectProto$1.hasOwnProperty;
 
 	/**
 	 * Used to resolve the
 	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
 	 * of values.
 	 */
-	var nativeObjectToString = objectProto.toString;
+	var nativeObjectToString$1 = objectProto$1.toString;
 
 	/** Built-in value references. */
-	var symToStringTag = _Symbol ? _Symbol.toStringTag : undefined;
+	var symToStringTag$1 = _Symbol ? _Symbol.toStringTag : undefined;
 
 	/**
 	 * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
@@ -131,20 +131,20 @@ var App = (function (exports) {
 	 * @returns {string} Returns the raw `toStringTag`.
 	 */
 	function getRawTag(value) {
-	  var isOwn = hasOwnProperty.call(value, symToStringTag),
-	      tag = value[symToStringTag];
+	  var isOwn = hasOwnProperty.call(value, symToStringTag$1),
+	      tag = value[symToStringTag$1];
 
 	  try {
-	    value[symToStringTag] = undefined;
+	    value[symToStringTag$1] = undefined;
 	    var unmasked = true;
 	  } catch (e) {}
 
-	  var result = nativeObjectToString.call(value);
+	  var result = nativeObjectToString$1.call(value);
 	  if (unmasked) {
 	    if (isOwn) {
-	      value[symToStringTag] = tag;
+	      value[symToStringTag$1] = tag;
 	    } else {
-	      delete value[symToStringTag];
+	      delete value[symToStringTag$1];
 	    }
 	  }
 	  return result;
@@ -153,14 +153,14 @@ var App = (function (exports) {
 	var _getRawTag = getRawTag;
 
 	/** Used for built-in method references. */
-	var objectProto$1 = Object.prototype;
+	var objectProto = Object.prototype;
 
 	/**
 	 * Used to resolve the
 	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
 	 * of values.
 	 */
-	var nativeObjectToString$1 = objectProto$1.toString;
+	var nativeObjectToString = objectProto.toString;
 
 	/**
 	 * Converts `value` to a string using `Object.prototype.toString`.
@@ -170,7 +170,7 @@ var App = (function (exports) {
 	 * @returns {string} Returns the converted string.
 	 */
 	function objectToString(value) {
-	  return nativeObjectToString$1.call(value);
+	  return nativeObjectToString.call(value);
 	}
 
 	var _objectToString = objectToString;
@@ -180,7 +180,7 @@ var App = (function (exports) {
 	    undefinedTag = '[object Undefined]';
 
 	/** Built-in value references. */
-	var symToStringTag$1 = _Symbol ? _Symbol.toStringTag : undefined;
+	var symToStringTag = _Symbol ? _Symbol.toStringTag : undefined;
 
 	/**
 	 * The base implementation of `getTag` without fallbacks for buggy environments.
@@ -193,7 +193,7 @@ var App = (function (exports) {
 	  if (value == null) {
 	    return value === undefined ? undefinedTag : nullTag;
 	  }
-	  return (symToStringTag$1 && symToStringTag$1 in Object(value))
+	  return (symToStringTag && symToStringTag in Object(value))
 	    ? _getRawTag(value)
 	    : _objectToString(value);
 	}
@@ -367,18 +367,18 @@ var App = (function (exports) {
 	var _castSlice = castSlice;
 
 	/** Used to compose unicode character classes. */
-	var rsAstralRange = '\\ud800-\\udfff',
-	    rsComboMarksRange = '\\u0300-\\u036f',
-	    reComboHalfMarksRange = '\\ufe20-\\ufe2f',
-	    rsComboSymbolsRange = '\\u20d0-\\u20ff',
-	    rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange,
-	    rsVarRange = '\\ufe0e\\ufe0f';
+	var rsAstralRange$2 = '\\ud800-\\udfff',
+	    rsComboMarksRange$3 = '\\u0300-\\u036f',
+	    reComboHalfMarksRange$3 = '\\ufe20-\\ufe2f',
+	    rsComboSymbolsRange$3 = '\\u20d0-\\u20ff',
+	    rsComboRange$3 = rsComboMarksRange$3 + reComboHalfMarksRange$3 + rsComboSymbolsRange$3,
+	    rsVarRange$2 = '\\ufe0e\\ufe0f';
 
 	/** Used to compose unicode capture groups. */
-	var rsZWJ = '\\u200d';
+	var rsZWJ$2 = '\\u200d';
 
 	/** Used to detect strings with [zero-width joiners or code points from the astral planes](http://eev.ee/blog/2015/09/12/dark-corners-of-unicode/). */
-	var reHasUnicode = RegExp('[' + rsZWJ + rsAstralRange  + rsComboRange + rsVarRange + ']');
+	var reHasUnicode = RegExp('[' + rsZWJ$2 + rsAstralRange$2  + rsComboRange$3 + rsVarRange$2 + ']');
 
 	/**
 	 * Checks if `string` contains Unicode symbols.
@@ -408,31 +408,31 @@ var App = (function (exports) {
 
 	/** Used to compose unicode character classes. */
 	var rsAstralRange$1 = '\\ud800-\\udfff',
-	    rsComboMarksRange$1 = '\\u0300-\\u036f',
-	    reComboHalfMarksRange$1 = '\\ufe20-\\ufe2f',
-	    rsComboSymbolsRange$1 = '\\u20d0-\\u20ff',
-	    rsComboRange$1 = rsComboMarksRange$1 + reComboHalfMarksRange$1 + rsComboSymbolsRange$1,
+	    rsComboMarksRange$2 = '\\u0300-\\u036f',
+	    reComboHalfMarksRange$2 = '\\ufe20-\\ufe2f',
+	    rsComboSymbolsRange$2 = '\\u20d0-\\u20ff',
+	    rsComboRange$2 = rsComboMarksRange$2 + reComboHalfMarksRange$2 + rsComboSymbolsRange$2,
 	    rsVarRange$1 = '\\ufe0e\\ufe0f';
 
 	/** Used to compose unicode capture groups. */
 	var rsAstral = '[' + rsAstralRange$1 + ']',
-	    rsCombo = '[' + rsComboRange$1 + ']',
-	    rsFitz = '\\ud83c[\\udffb-\\udfff]',
-	    rsModifier = '(?:' + rsCombo + '|' + rsFitz + ')',
-	    rsNonAstral = '[^' + rsAstralRange$1 + ']',
-	    rsRegional = '(?:\\ud83c[\\udde6-\\uddff]){2}',
-	    rsSurrPair = '[\\ud800-\\udbff][\\udc00-\\udfff]',
+	    rsCombo$2 = '[' + rsComboRange$2 + ']',
+	    rsFitz$1 = '\\ud83c[\\udffb-\\udfff]',
+	    rsModifier$1 = '(?:' + rsCombo$2 + '|' + rsFitz$1 + ')',
+	    rsNonAstral$1 = '[^' + rsAstralRange$1 + ']',
+	    rsRegional$1 = '(?:\\ud83c[\\udde6-\\uddff]){2}',
+	    rsSurrPair$1 = '[\\ud800-\\udbff][\\udc00-\\udfff]',
 	    rsZWJ$1 = '\\u200d';
 
 	/** Used to compose unicode regexes. */
-	var reOptMod = rsModifier + '?',
-	    rsOptVar = '[' + rsVarRange$1 + ']?',
-	    rsOptJoin = '(?:' + rsZWJ$1 + '(?:' + [rsNonAstral, rsRegional, rsSurrPair].join('|') + ')' + rsOptVar + reOptMod + ')*',
-	    rsSeq = rsOptVar + reOptMod + rsOptJoin,
-	    rsSymbol = '(?:' + [rsNonAstral + rsCombo + '?', rsCombo, rsRegional, rsSurrPair, rsAstral].join('|') + ')';
+	var reOptMod$1 = rsModifier$1 + '?',
+	    rsOptVar$1 = '[' + rsVarRange$1 + ']?',
+	    rsOptJoin$1 = '(?:' + rsZWJ$1 + '(?:' + [rsNonAstral$1, rsRegional$1, rsSurrPair$1].join('|') + ')' + rsOptVar$1 + reOptMod$1 + ')*',
+	    rsSeq$1 = rsOptVar$1 + reOptMod$1 + rsOptJoin$1,
+	    rsSymbol = '(?:' + [rsNonAstral$1 + rsCombo$2 + '?', rsCombo$2, rsRegional$1, rsSurrPair$1, rsAstral].join('|') + ')';
 
 	/** Used to match [string symbols](https://mathiasbynens.be/notes/javascript-unicode). */
-	var reUnicode = RegExp(rsFitz + '(?=' + rsFitz + ')|' + rsSymbol + rsSeq, 'g');
+	var reUnicode = RegExp(rsFitz$1 + '(?=' + rsFitz$1 + ')|' + rsSymbol + rsSeq$1, 'g');
 
 	/**
 	 * Converts a Unicode `string` to an array.
@@ -649,13 +649,13 @@ var App = (function (exports) {
 	var reLatin = /[\xc0-\xd6\xd8-\xf6\xf8-\xff\u0100-\u017f]/g;
 
 	/** Used to compose unicode character classes. */
-	var rsComboMarksRange$2 = '\\u0300-\\u036f',
-	    reComboHalfMarksRange$2 = '\\ufe20-\\ufe2f',
-	    rsComboSymbolsRange$2 = '\\u20d0-\\u20ff',
-	    rsComboRange$2 = rsComboMarksRange$2 + reComboHalfMarksRange$2 + rsComboSymbolsRange$2;
+	var rsComboMarksRange$1 = '\\u0300-\\u036f',
+	    reComboHalfMarksRange$1 = '\\ufe20-\\ufe2f',
+	    rsComboSymbolsRange$1 = '\\u20d0-\\u20ff',
+	    rsComboRange$1 = rsComboMarksRange$1 + reComboHalfMarksRange$1 + rsComboSymbolsRange$1;
 
 	/** Used to compose unicode capture groups. */
-	var rsCombo$1 = '[' + rsComboRange$2 + ']';
+	var rsCombo$1 = '[' + rsComboRange$1 + ']';
 
 	/**
 	 * Used to match [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks) and
@@ -721,11 +721,11 @@ var App = (function (exports) {
 	var _hasUnicodeWord = hasUnicodeWord;
 
 	/** Used to compose unicode character classes. */
-	var rsAstralRange$2 = '\\ud800-\\udfff',
-	    rsComboMarksRange$3 = '\\u0300-\\u036f',
-	    reComboHalfMarksRange$3 = '\\ufe20-\\ufe2f',
-	    rsComboSymbolsRange$3 = '\\u20d0-\\u20ff',
-	    rsComboRange$3 = rsComboMarksRange$3 + reComboHalfMarksRange$3 + rsComboSymbolsRange$3,
+	var rsAstralRange = '\\ud800-\\udfff',
+	    rsComboMarksRange = '\\u0300-\\u036f',
+	    reComboHalfMarksRange = '\\ufe20-\\ufe2f',
+	    rsComboSymbolsRange = '\\u20d0-\\u20ff',
+	    rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange,
 	    rsDingbatRange = '\\u2700-\\u27bf',
 	    rsLowerRange = 'a-z\\xdf-\\xf6\\xf8-\\xff',
 	    rsMathOpRange = '\\xac\\xb1\\xd7\\xf7',
@@ -733,37 +733,37 @@ var App = (function (exports) {
 	    rsPunctuationRange = '\\u2000-\\u206f',
 	    rsSpaceRange = ' \\t\\x0b\\f\\xa0\\ufeff\\n\\r\\u2028\\u2029\\u1680\\u180e\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u202f\\u205f\\u3000',
 	    rsUpperRange = 'A-Z\\xc0-\\xd6\\xd8-\\xde',
-	    rsVarRange$2 = '\\ufe0e\\ufe0f',
+	    rsVarRange = '\\ufe0e\\ufe0f',
 	    rsBreakRange = rsMathOpRange + rsNonCharRange + rsPunctuationRange + rsSpaceRange;
 
 	/** Used to compose unicode capture groups. */
-	var rsApos = "['\u2019]",
+	var rsApos$1 = "['\u2019]",
 	    rsBreak = '[' + rsBreakRange + ']',
-	    rsCombo$2 = '[' + rsComboRange$3 + ']',
+	    rsCombo = '[' + rsComboRange + ']',
 	    rsDigits = '\\d+',
 	    rsDingbat = '[' + rsDingbatRange + ']',
 	    rsLower = '[' + rsLowerRange + ']',
-	    rsMisc = '[^' + rsAstralRange$2 + rsBreakRange + rsDigits + rsDingbatRange + rsLowerRange + rsUpperRange + ']',
-	    rsFitz$1 = '\\ud83c[\\udffb-\\udfff]',
-	    rsModifier$1 = '(?:' + rsCombo$2 + '|' + rsFitz$1 + ')',
-	    rsNonAstral$1 = '[^' + rsAstralRange$2 + ']',
-	    rsRegional$1 = '(?:\\ud83c[\\udde6-\\uddff]){2}',
-	    rsSurrPair$1 = '[\\ud800-\\udbff][\\udc00-\\udfff]',
+	    rsMisc = '[^' + rsAstralRange + rsBreakRange + rsDigits + rsDingbatRange + rsLowerRange + rsUpperRange + ']',
+	    rsFitz = '\\ud83c[\\udffb-\\udfff]',
+	    rsModifier = '(?:' + rsCombo + '|' + rsFitz + ')',
+	    rsNonAstral = '[^' + rsAstralRange + ']',
+	    rsRegional = '(?:\\ud83c[\\udde6-\\uddff]){2}',
+	    rsSurrPair = '[\\ud800-\\udbff][\\udc00-\\udfff]',
 	    rsUpper = '[' + rsUpperRange + ']',
-	    rsZWJ$2 = '\\u200d';
+	    rsZWJ = '\\u200d';
 
 	/** Used to compose unicode regexes. */
 	var rsMiscLower = '(?:' + rsLower + '|' + rsMisc + ')',
 	    rsMiscUpper = '(?:' + rsUpper + '|' + rsMisc + ')',
-	    rsOptContrLower = '(?:' + rsApos + '(?:d|ll|m|re|s|t|ve))?',
-	    rsOptContrUpper = '(?:' + rsApos + '(?:D|LL|M|RE|S|T|VE))?',
-	    reOptMod$1 = rsModifier$1 + '?',
-	    rsOptVar$1 = '[' + rsVarRange$2 + ']?',
-	    rsOptJoin$1 = '(?:' + rsZWJ$2 + '(?:' + [rsNonAstral$1, rsRegional$1, rsSurrPair$1].join('|') + ')' + rsOptVar$1 + reOptMod$1 + ')*',
+	    rsOptContrLower = '(?:' + rsApos$1 + '(?:d|ll|m|re|s|t|ve))?',
+	    rsOptContrUpper = '(?:' + rsApos$1 + '(?:D|LL|M|RE|S|T|VE))?',
+	    reOptMod = rsModifier + '?',
+	    rsOptVar = '[' + rsVarRange + ']?',
+	    rsOptJoin = '(?:' + rsZWJ + '(?:' + [rsNonAstral, rsRegional, rsSurrPair].join('|') + ')' + rsOptVar + reOptMod + ')*',
 	    rsOrdLower = '\\d*(?:1st|2nd|3rd|(?![123])\\dth)(?=\\b|[A-Z_])',
 	    rsOrdUpper = '\\d*(?:1ST|2ND|3RD|(?![123])\\dTH)(?=\\b|[a-z_])',
-	    rsSeq$1 = rsOptVar$1 + reOptMod$1 + rsOptJoin$1,
-	    rsEmoji = '(?:' + [rsDingbat, rsRegional$1, rsSurrPair$1].join('|') + ')' + rsSeq$1;
+	    rsSeq = rsOptVar + reOptMod + rsOptJoin,
+	    rsEmoji = '(?:' + [rsDingbat, rsRegional, rsSurrPair].join('|') + ')' + rsSeq;
 
 	/** Used to match complex or compound words. */
 	var reUnicodeWord = RegExp([
@@ -822,10 +822,10 @@ var App = (function (exports) {
 	var words_1 = words;
 
 	/** Used to compose unicode capture groups. */
-	var rsApos$1 = "['\u2019]";
+	var rsApos = "['\u2019]";
 
 	/** Used to match apostrophes. */
-	var reApos = RegExp(rsApos$1, 'g');
+	var reApos = RegExp(rsApos, 'g');
 
 	/**
 	 * Creates a function like `_.camelCase`.
@@ -923,11 +923,46 @@ var App = (function (exports) {
 
 	var now_1 = now;
 
+	/** Used to match a single whitespace character. */
+	var reWhitespace = /\s/;
+
+	/**
+	 * Used by `_.trim` and `_.trimEnd` to get the index of the last non-whitespace
+	 * character of `string`.
+	 *
+	 * @private
+	 * @param {string} string The string to inspect.
+	 * @returns {number} Returns the index of the last non-whitespace character.
+	 */
+	function trimmedEndIndex(string) {
+	  var index = string.length;
+
+	  while (index-- && reWhitespace.test(string.charAt(index))) {}
+	  return index;
+	}
+
+	var _trimmedEndIndex = trimmedEndIndex;
+
+	/** Used to match leading whitespace. */
+	var reTrimStart = /^\s+/;
+
+	/**
+	 * The base implementation of `_.trim`.
+	 *
+	 * @private
+	 * @param {string} string The string to trim.
+	 * @returns {string} Returns the trimmed string.
+	 */
+	function baseTrim(string) {
+	  return string
+	    ? string.slice(0, _trimmedEndIndex(string) + 1).replace(reTrimStart, '')
+	    : string;
+	}
+
+	var _baseTrim = baseTrim;
+
 	/** Used as references for various `Number` constants. */
 	var NAN = 0 / 0;
-
-	/** Used to match leading and trailing whitespace. */
-	var reTrim = /^\s+|\s+$/g;
 
 	/** Used to detect bad signed hexadecimal string values. */
 	var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
@@ -978,7 +1013,7 @@ var App = (function (exports) {
 	  if (typeof value != 'string') {
 	    return value === 0 ? value : +value;
 	  }
-	  value = value.replace(reTrim, '');
+	  value = _baseTrim(value);
 	  var isBinary = reIsBinary.test(value);
 	  return (isBinary || reIsOctal.test(value))
 	    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
@@ -1480,13 +1515,19 @@ var App = (function (exports) {
 	};
 
 	const on = function (uid, container, events, selector, fn, options, once) {
-		const k = 'on:' + uid + '-' + events + '-' + selector;
-
+		// selector is optional
 		if (typeof selector === 'function') {
 			once = options;
 			options = fn;
 			fn = selector;
 			selector = null;
+		}
+
+		const k = 'on:' + uid + '-' + events + '-' + selector;
+
+		if (getMetaData(container, k)) { // duplicate event handler.
+			console.error('Error: Sargasso utils.on: duplicate event handler specification. %o %s', container, k);
+			return
 		}
 
 		const handler = (e) => {
@@ -1505,7 +1546,11 @@ var App = (function (exports) {
 			}
 		};
 
+		// store handler spec in metadata so we can gracefully remove it later
 		const data = {
+			uid: uid,
+			events: events,
+			selector: selector,
 			fn: handler,
 			options: options || false
 		};
@@ -1528,6 +1573,24 @@ var App = (function (exports) {
 		}
 	};
 
+	// remove all (on,once) event handlers for element
+	const offAll = function (container) {
+		const data = elementMetaData.get(container) || {};
+		const handlers = [];
+
+		for (const k in data) {
+			if (Object.prototype.hasOwnProperty.call(data, k)) {
+				if (k.match(/^on:/)) {
+					handlers.push(k);
+				}
+			}
+		}
+
+		handlers.forEach((k) => {
+			off(data[k].uid, container, data[k].events, data[k].selector);
+		});
+	};
+
 	const once = function (uid, container, events, selector, fn, options) {
 		on(uid, container, events, selector, fn, options, true);
 	};
@@ -1543,7 +1606,8 @@ var App = (function (exports) {
 		getMetaData: getMetaData,
 		on: on,
 		off: off,
-		once: once
+		once: once,
+		offAll: offAll
 	};
 
 	/**
@@ -2077,6 +2141,8 @@ var App = (function (exports) {
 			}
 
 			this.element.removeEventListener('sargasso', this.elementListener);
+
+			elementTools.offAll(this.element); // remove all dangling event listeners created with on/once
 
 			this.started = false;
 		}
@@ -3011,7 +3077,7 @@ var App = (function (exports) {
 					this.cachedMarkup[id] = replace.innerHTML;
 				}
 
-				// use a key found in data-hijax-cache-key on a child element with id defined in data-hijax-cache-key-id
+				// use a key found in data-hijax-cache-key on a child element found by css selector defined in data-hijax-cache-key-selector
 				const k = container.getAttribute('data-hijax-cache-key-selector');
 				if (k) {
 					if (replace.querySelector(k) && container.querySelector(k) && container.querySelector(k).getAttribute('data-hijax-cache-key') === replace.querySelector(k).getAttribute('data-hijax-cache-key')) {

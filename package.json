@@ -27,7 +27,7 @@
 	"devDependencies": {
 		"@rollup/plugin-commonjs": "^17.1.0",
 		"@rollup/plugin-json": "^4.1.0",
-		"@rollup/plugin-node-resolve": "^11.1.1",
+		"@rollup/plugin-node-resolve": "^11.2.0",
 		"chai": "^4.3.0",
 		"core-js": "^3.8.3 ",
 		"eslint": "^7.20.0",
@@ -38,14 +38,14 @@
 		"eslint-plugin-standard": "^5.0.0",
 		"mocha": "^8.3.0",
 		"mocha-chrome": "^2.2.0",
-		"rollup": "^2.39.0",
+		"rollup": "^2.40.0",
 		"rollup-plugin-terser": "^7.0.2",
 		"setimmediate": "^1.0.5",
 		"sinon": "^9.2.4"
 	},
 	"dependencies": {
 		"js-cookie": "^2.2.1",
-		"lodash": "^4.17.20"
+		"lodash": "^4.17.21"
 	},
 	"directories": {
 		"example": "example",

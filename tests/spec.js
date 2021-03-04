@@ -49,13 +49,14 @@ describe('Sargasso', function () {
 		expect(testElement.style.borderColor, 'border-color').to.equal('pink')
 		setImmediate(done)
 	})
-	it('utils.setMetaData', function (done) {
+	it('utils.setMetaData utils.getMetaData', function (done) {
 		elementTools.setMetaData(testElement, 'key', 'test')
 		expect(elementTools.getMetaData(testElement, 'key')).to.equal('test')
 		elementTools.setMetaData(testElement, 'key')
 		expect(elementTools.getMetaData(testElement, 'key')).to.be.an('undefined')
 		setImmediate(done)
 	})
+
 	it('util.on util.off util.once', function (done) {
 		const fn = sinon.spy()
 
