@@ -374,12 +374,54 @@ this.queueFrame(()=>{
 })
 ```
 
-### Observable Data
+### ObservableObjects
 
-### Templates and Rendering
+Observable objects implement a notification scheme for data changes. (implementation is javascript Proxy and reflect) These objects can be shared across elements for real-time sharing and display of information.
+
+```javascript
+let args = {
+	name: 'World!',
+	cssClass: 'red'
+}
+let observable = new SargassoModule.ObservableObject('shared-data', args)
+```
+
+You can bind a function to the observable instance which is called on change:
+```javascript
+let watch = (id, property, value, source) => {
+	console.log('id:' + id + ' property:' + property + ' is now:' + value)
+}
+
+// you can optionally provide a property as a third parameter if you only want to be notified if 'cssClass' changes, for instance. In this case we want all changes.
+observable.bind('uniqueID', watch)
+
+// now changes to the data will trigger the watch function
+observable.set('name','New Name')
+observable.data.name = 'New Name' // same thing different syntax
+```
+
+Sargasso Elements can subscribe to notifications from ObservableObjects that are defined externally or owned by the element.
+```javascript
+class MyClass extends SargassoModule.Sargasso {
+	start() {
+		super.start()
+		this.observableStart('shared-data'); // find or create an observable with id 'shared-data'
+	}
+
+	observableChanged(id, property, value, source) {
+		// do something with the change
+	}
+}
+
+```
+`observableStart` called with just an id will find or create an observableObject with the id
+
+
+### Observables, Templates and Rendering
+Complete example of an element that renders on data update using an ObservableObject and li-html templates.
 
 examples/example5.html
-```
+```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -410,12 +452,14 @@ examples/example5.html
         start() {
           super.start()
 
-          this.observableStart('shared-data', observed);
+          // define a template
           this.setTemplate((args) => SargassoModule.utils.html`<p class=${args.cssClass}>Hello ${args.name} (${args.cssClass})</p>`)
-          this.setTemplateArgs(observed.data)
+
+          // hook up observable data
+          this.setTemplateArgs(this.observableStart('shared-data'))
         }
 
-        // observable changed, re-render
+        // observable changed, re-render the template with new values
         observableChanged(id, property, value, source) {
           this.render()
         }
@@ -442,7 +486,7 @@ examples/example5.html
 </body>
 </html>
 ```
-[Try It](https://jsfiddle.net/PelagicCreatures/gbL5y7xq/1/)
+[Try It](https://jsfiddle.net/PelagicCreatures/gbL5y7xq/3/)
 
 ### Using managed Web Workers
 You should offload compute heavy tasks to a new thread when possible.
