@@ -14,7 +14,7 @@
 	<script src="../dist/sargasso.iife.js"></script>
 	<script defer>
 
-		let observed = SargassoModule.services.theObservableObjectWatcher.register('shared-data')
+		let observed = new SargassoModule.ObservableObject('shared-data')
 		observed.set('name','World!')
 
 		class MyClass extends SargassoModule.Sargasso {
@@ -24,19 +24,17 @@
 
 			start() {
 				super.start()
-				this.observableObjectStart('shared-data');
-
-				this.setTemplate((args) => SargassoModule.utils.html`<p>Hello ${args.name}</p>`)
+				this.observableStart('shared-data',observed);
+				this.setTemplate((args) => SargassoModule.utils.litHTML.html`<p>Hello ${args.name}</p>`)
 				this.setTemplateArgs(observed.data)
 			}
 
 			sleep() {
-				this.observableObjectStop('shared-data');
 				super.sleep()
 			}
 
-			observableChanged(id, property, source) {
-				console.log('somone changed observable: ',id,property,source)
+			observableChanged(id, property,value, source) {
+				console.log('somone changed observable: ',id,property,value,source)
 				this.render()
 			}
 		}

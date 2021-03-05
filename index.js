@@ -30,7 +30,12 @@ import {
 	from './lib/Services.js'
 
 import {
-	html, render
+	ObservableObject
+}
+	from './lib/ObservableObject'
+
+import {
+	litHTML
 }
 	from './lib/dependencies'
 
@@ -38,8 +43,7 @@ const utils = {
 	registerSargassoClass: registerSargassoClass,
 	bootSargasso: bootSargasso,
 	elementTools: elementTools,
-	html: html,
-	render: render
+	litHTML: litHTML
 }
 
 const services = {
@@ -52,5 +56,5 @@ const services = {
 }
 
 export {
-	Sargasso, utils, loadPageHandler, services
+	Sargasso, utils, loadPageHandler, services, ObservableObject
 }
