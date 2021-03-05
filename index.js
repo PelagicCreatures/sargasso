@@ -25,7 +25,7 @@ import {
 	from './lib/boot.js'
 
 import {
-	theDOMWatcher, theScrollWatcher, theResizeWatcher, theOrientationWatcher, theWorkerWatcher
+	theObservableObjectWatcher, theDOMWatcher, theScrollWatcher, theResizeWatcher, theOrientationWatcher, theWorkerWatcher
 }
 	from './lib/Services.js'
 
@@ -40,7 +40,8 @@ const services = {
 	theScrollWatcher: theScrollWatcher,
 	theResizeWatcher: theResizeWatcher,
 	theOrientationWatcher: theOrientationWatcher,
-	theWorkerWatcher: theWorkerWatcher
+	theWorkerWatcher: theWorkerWatcher,
+	theObservableObjectWatcher: theObservableObjectWatcher
 }
 
 export {

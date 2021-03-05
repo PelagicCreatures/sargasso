@@ -10,5 +10,32 @@
 		<li><a href="example2.html">Example 2</a></li>
 		<li><a href="example3.html">Example 3</a></li>
 	</ul>
+	<sargasso-my-class></sargasso-my-class>
+	<script src="../dist/sargasso.iife.js"></script>
+	<script defer>
+
+		let observed = SargassoModule.services.theObservableObjectWatcher.register('shared-data')
+
+		class MyClass extends SargassoModule.Sargasso {
+			start() {
+				this.observableObjectStart('shared-data');
+			}
+
+			sleep() {
+				this.observableObjectStop('shared-data');
+			}
+
+			observableChanged(id, property, source) {
+				console.log('somone changed observable: ',id,property,source)
+			}
+		}
+
+		SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
+
+		SargassoModule.utils.bootSargasso()
+
+		observed.set('prop','val')
+
+	</script>
 </body>
 </html>
