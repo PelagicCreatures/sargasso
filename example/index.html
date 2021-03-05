@@ -25,7 +25,7 @@
 			start() {
 				super.start()
 				this.observableStart('shared-data',observed);
-				this.setTemplate((args) => SargassoModule.utils.litHTML.html`<p>Hello ${args.name}</p>`)
+				this.setTemplate((args) => SargassoModule.utils.html`<p>Hello ${args.name}</p>`)
 				this.setTemplateArgs(observed.data)
 			}
 
@@ -33,8 +33,8 @@
 				super.sleep()
 			}
 
-			observableChanged(id, property,value, source) {
-				console.log('somone changed observable: ',id,property,value,source)
+			observableChanged(id, property, value, source) {
+				console.log('somone changed observable: ',id, property, value, source)
 				this.render()
 			}
 		}

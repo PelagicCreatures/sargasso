@@ -35,7 +35,7 @@ import {
 	from './lib/ObservableObject'
 
 import {
-	litHTML
+	html, render
 }
 	from './lib/dependencies'
 
@@ -43,7 +43,9 @@ const utils = {
 	registerSargassoClass: registerSargassoClass,
 	bootSargasso: bootSargasso,
 	elementTools: elementTools,
-	litHTML: litHTML
+	html: html,
+	render: render
+
 }
 
 const services = {

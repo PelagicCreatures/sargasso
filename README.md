@@ -10,7 +10,9 @@ Made in Barbados 🇧🇧 Copyright © 2020-2021 Michael Rhodes
 
 Sargasso Makes HTML elements aware of events such as Document (DOM) insertions and deletions, HIJAX Page load, Scrolling, Resizing, Orientation and messages Managed Web Workers and elements allowing them to efficiently implement any behavior they need to perform.
 
-One of the core features of this framework is to implement an asynchronous page loading scheme which supports deep linking and lightning fast page loads where only dynamic content areas are merged between page loads leaving css, js, web workers and wrapper elements intact. Sargasso controller instances are automatically created as needed when their element appears in the DOM and destroyed when their element is removed so everything is cleanly destroyed and all the trash is collected. Performance is further enhanced with shared event listening services which are fully debounced during large updates. Services are also provided to schedule content changes using the browser's **animation frame** event loop and managed **web workers** for simplified offloading of computation heavy tasks to a dedicated thread resulting in highly performant pages.
+One of the core features of this framework is to implement an asynchronous page loading scheme which supports deep linking and lightning fast page loads where only dynamic content areas are merged between page loads leaving css, js, web workers and wrapper elements intact. Sargasso controller instances are automatically created as needed when their element appears in the DOM and destroyed when their element is removed so everything is cleanly destroyed and all the trash is collected. Performance is further enhanced with shared event listening services which are fully debounced during updates. Services are also provided to schedule content changes using the browser's **animation frame** event loop and managed **web workers** for simplified offloading of computation heavy tasks to a dedicated thread resulting in highly performant pages.
+
+Sargasso elements can also track changes to underlying data and re-render as needed using [lit-html](https://lit-html.polymer-project.org/) templates.
 
 This is a very lightweight (27kb), pure ES6 framework (with only few dependencies) which aims to use the most advanced stable features of modern browsers to maximum effect leaving the historical cruft, kludges and code barnacles infesting older web frameworks behind. The result is lean, highly performant and clean library that simplifies the complex technologies behind modern progressive web apps and web sites.
 
@@ -196,15 +198,25 @@ example/example2.html
 
 ### Sargasso Base Class:
 
+**Properties**
+| property | description |
+| -------- | ----------- |
+| this.element | the element we are controlling |
+
 Your Sargasso subclasses can subscribe to event feeds in order to be notified of events.
 
-**Methods to override as needed:** *don't forget to call super.xxx() in your subclass*
 
+**Methods to override as needed:**
 | method | description |
 | ------ | ----------- |
-| constructor(element, options = {}) | subscribe to services by setting options properties. All default to false so only set the ones you need `watchDOM`, `watchScroll`, `watchResize`, `watchOrientation`, `watchViewport` eg. {watchScroll:true} |
+| constructor(element, options = {}) | subscribe to services by setting appropriate options properties. All default to false so only set the ones you need to know about `watchDOM`, `watchScroll`, `watchResize`, `watchOrientation`, `watchViewport` eg. { watchScroll: true } |
 | start() | set up any interactions and event handlers |
 | sleep() | remove any event foreign handlers defined in start() and cleanup references - event handlers created with 'this.on' and 'this.once' are automatically removed by sargasso.|
+*don't forget to call super.xxx() in your subclass*
+
+**Handlers for sargasso events, override as needed:**
+| method | description |
+| ------ | ----------- |
 | DOMChanged() | called when DOM changes if options 'watchDOM: true' was set in constructor |
 | didScroll() | called when scroll occurs if options 'watchScroll: true' was set in constructor |
 | didResize() | called when resize changes if options 'watchResize: true' was set in constructor |
@@ -213,30 +225,49 @@ Your Sargasso subclasses can subscribe to event feeds in order to be notified of
 | newPage(old, new) | on a new page |
 | didBreakpoint() | new screen width breakpoint |
 | workerOnMessage (id, data = {}) | id is the worker sending the message. Any payload from the worker `postMessage` is in data.xxx as defined by the worker |
-| enterFullscreen() | called if options 'watchOrientation: true' when user rotates phone or if setFullscreen is called |
-| exitFullscreen() | called on exit fullscreen |
-
-**Properties**
-
-| property | description |
-| ------ | ----------- |
-| this.element | the element we are controlling |
-
+| observableChanged(id, property, value, source) | called on data change if watching an observable object |
+| enterFullscreen() | *experimental* called if options 'watchOrientation: true' when user rotates phone or if setFullscreen is called |
+| exitFullscreen() | *experimental* called on exit fullscreen |
 
 **Utility Methods:**
-
 | method | description |
 | ------ | ----------- |
 | getMetaData(key) | return sargasso metadata associated with element (weak map) |
 | setMetaData(key,value) | set a sargasso metadata property |
+| isVisible() | true if element is visible |
+| queueFrame(function) | queue a function to execute that changes the DOM |
+
+**CSS Methods**
+| method | description |
+| ------ | ----------- |
 | hasClass('classname') | returns true if this.element has cssclass |
 | addClass('classname') | add classname or array of classnames to this.element |
 | removeClass('classname')  | remove classname or array of classnames to this.element |
 | setCSS({})  | set css pairs defined in object on this.element |
-| isVisible() | true if element is visible |
-| queueFrame(function) | queue a function to execute that changes the DOM |
+
+**Web Worker Methods**
+| method | description |
+| ------ | ----------- |
 | workerStart(id, codeOrURL) | start a web worker with id. Ignored if worker id already installed (see https://github.com/PelagicCreatures/flyingfish for a shared worker example)|
 | workerPostMessage(id, data {}) | send the worker tagged with `id` a message. the message must be an object which can have any structure you want to pass to the worker |
+
+**Observable Data Methods**
+| method | description |
+| ------ | ----------- |
+| observableStart (id, data) | start watching for changes in observable data. `data` is an JS data object or an existing ObservableObject |
+| observableStop (id) | stop watching for changes in observable data |
+| getObservable (id) | get underlying ObservableObject instance for id |
+
+**Templates & Rendering Methods**
+| method | description |
+| ------ | ----------- |
+| setTemplate (template) | set a lit-html template function for rendering |
+| setTemplateArgs (args) | set template arguments |
+| render () | render template into element |
+
+**Register Event Methods**
+| method | description |
+| ------ | ----------- |
 | on(container,fn) | attach undelegated event handler to container scoped to a css selector |
 | once(container,fn) | attach undelegated event handler to container scoped to a css selector that executes only once (automatically removes event handler on first call) |
 | off(container) | remove undelegated event handler to container scoped to css selector |
