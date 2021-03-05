@@ -10,42 +10,8 @@
 		<li><a href="example2.html">Example 2 - viewport</a></li>
 		<li><a href="example3.html">Example 3 - hijax</a></li>
 		<li><a href="example4.html">Example 4 - worker</a></li>
+		<li><a href="example5.html">Example 5 - observed data &amp; template rendering</a></li>
 	</ul>
-	<sargasso-my-class></sargasso-my-class>
-	<script src="../dist/sargasso.iife.js"></script>
-	<script defer>
 
-		let observed = new SargassoModule.ObservableObject('shared-data')
-		observed.set('name','World!')
-
-		class MyClass extends SargassoModule.Sargasso {
-			constructor(element,options) {
-				super(element,options)
-			}
-
-			start() {
-				super.start()
-				this.observableStart('shared-data',observed);
-				this.setTemplate((args) => SargassoModule.utils.html`<p>Hello ${args.name}</p>`)
-				this.setTemplateArgs(observed.data)
-			}
-
-			sleep() {
-				super.sleep()
-			}
-
-			observableChanged(id, property, value, source) {
-				console.log('somone changed observable: ',id, property, value, source)
-				this.render()
-			}
-		}
-
-		SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
-
-		SargassoModule.utils.bootSargasso()
-
-		observed.set('name','World!!!!')
-
-	</script>
 </body>
 </html>

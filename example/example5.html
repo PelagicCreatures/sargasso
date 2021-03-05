@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Example Sargasso Element w/Data Observing &amp; Template rendering</title>
+  <style>
+    .red { color: #f00; }
+    .green { color: #0f0; }
+    .blue { color: #00f; }
+  </style>
+</head>
+<body>
+  <h3>Example Sargasso Element w/Data Observing &amp; Template rendering</h3>
+
+  <sargasso-my-class></sargasso-my-class>
+
+  <script src="../dist/sargasso.iife.js"></script>
+  <script defer>
+    window.onload = () => {
+
+      let args = {
+        name: 'World!',
+        cssClass: 'red'
+      }
+      let observed = new SargassoModule.ObservableObject('shared-data',args)
+
+      // define MyClass as a subclass of Sargasso
+      class MyClass extends SargassoModule.Sargasso {
+        start() {
+          super.start()
+
+          this.observableStart('shared-data', observed);
+          this.setTemplate((args) => SargassoModule.utils.html`<p class=${args.cssClass}>Hello ${args.name} (${args.cssClass})</p>`)
+          this.setTemplateArgs(observed.data)
+        }
+
+        // observable changed, re-render
+        observableChanged(id, property, value, source) {
+          this.render()
+        }
+      }
+
+      // Register MyClass to the Sargasso framework
+      SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
+
+      // Start Sargasso
+      SargassoModule.utils.bootSargasso()
+
+      // repeatedly randomly change the observed data
+      let classes = ['red','green','blue']
+      let named = ['Bob','Carol','Ted','Alice']
+
+      setInterval(()=>{
+        let c = classes[Math.floor(Math.random() * classes.length)]
+        let n = named[Math.floor(Math.random() * named.length)]
+        observed.data.cssClass = c;
+        observed.data.name = n;
+      },1000)
+    }
+  </script>
+</body>
+</html>
