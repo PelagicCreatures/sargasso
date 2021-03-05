@@ -20,12 +20,14 @@
 		class MyClass extends SargassoModule.Sargasso {
 			constructor(element,options) {
 				super(element,options)
-				this.template = (args) => SargassoModule.utils.html`<p>Hello ${args.name}</p>`
 			}
+
 			start() {
 				super.start()
 				this.observableObjectStart('shared-data');
-				this.templateArgs = this.observableObject('shared-data').data
+
+				this.setTemplate((args) => SargassoModule.utils.html`<p>Hello ${args.name}</p>`)
+				this.setTemplateArgs(observed.data)
 			}
 
 			sleep() {

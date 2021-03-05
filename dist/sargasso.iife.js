@@ -5714,9 +5714,7 @@ var SargassoModule = (function (exports) {
 			@param { String } property - property that changed
 			@param { String } source - source of change
 			*/
-		observableChange (id, property, source) {
-			console.log('observableChange', id, property, source);
-		}
+		observableChanged (id, property, source) {}
 
 		/****************************************************
 		UTILITY METHODS - callable but normally not overriden
@@ -5950,8 +5948,15 @@ var SargassoModule = (function (exports) {
 			this.template = template;
 		}
 
+		setTemplateArgs (args) {
+			this.templateArgs = args;
+			this.render();
+		}
+
 		render () {
-			render(this.template(this.templateArgs), this.element);
+			if (this.template) {
+				render(this.template(JSON.parse(JSON.stringify(this.templateArgs || {}))), this.element);
+			}
 		}
 
 		/************************************************
