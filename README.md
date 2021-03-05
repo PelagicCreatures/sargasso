@@ -212,6 +212,7 @@ Your Sargasso subclasses can subscribe to event feeds in order to be notified of
 | constructor(element, options = {}) | subscribe to services by setting appropriate options properties. All default to false so only set the ones you need to know about `watchDOM`, `watchScroll`, `watchResize`, `watchOrientation`, `watchViewport` eg. { watchScroll: true } |
 | start() | set up any interactions and event handlers |
 | sleep() | remove any event foreign handlers defined in start() and cleanup references - event handlers created with 'this.on' and 'this.once' are automatically removed by sargasso.|
+
 *don't forget to call super.xxx() in your subclass*
 
 **Handlers for sargasso events, override as needed:**
@@ -382,35 +383,72 @@ The worker code runs when it receives an onmessage event.
 
 A web worker, once installed, could be used by many instances so sargasso sets e.data.uid to the id on the instance that is invoking the worker which we need to pass back in the postMessage so we know who is who.
 
+example/example4.html
 ```javascript
-startTask () {
-  // this worker increments a counter every 3 seconds and posts a message back us
-  const task = `let counters= {}
-    onmessage = async (e) => {
-      if(!counters[e.data.uid]) { counters[e.data.uid] = e.data.count }
-      setInterval(()=>{
-        self.postMessage({ uid: e.data.uid, count: ++counters[e.data.uid] })
-      },30000)
-    }`
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Example Sargasso Element</title>
+</head>
+<body>
+  <h3>First Sargasso Element</h3>
 
-  // register the worker
-  this.workerStart('mytask', task)
+  <sargasso-my-class data-name="custom" data-count-to="10">Will count to 10</sargasso-my-class>
 
-  // start the worker working
-  this.workerPostMessage('mytask', {
-    count: 0
-  })
-}
+  <div data-sargasso-class="MyClass" data-name="div" data-count-to="20">Will count to 20</div>
 
-workerOnMessage (id, data) {
-  if(id === 'mytask') {
-    this.queueFrame(()=>{
-      this.element.innerHTML = data.count
-    })
-  }
-  super.workerOnMessage(id, data)
-}
+  <script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.js"></script>
+  <script defer>
+    window.onload = () => {
+
+      // define MyClass as a subclass of Sargasso
+      class MyClass extends SargassoModule.Sargasso {
+        start() {
+          super.start()
+
+          // this worker increments a counter every second and posts a message back us
+          const task = `let counters= {}
+            onmessage = async (e) => {
+              if(!counters[e.data.uid]) { counters[e.data.uid] = e.data.count }
+              setInterval(()=>{
+                self.postMessage({ uid: e.data.uid, me:e.data.me, count: ++counters[e.data.uid] })
+              },1000)
+            }`
+
+          // register the worker
+          this.workerStart('mytask', task)
+
+          // start the worker working
+          this.workerPostMessage('mytask', {
+            me: this.element.getAttribute('data-name'),
+            count: 0
+          })
+        }
+
+        workerOnMessage (id, data) {
+          if(id === 'mytask') { // only neeed to test this is running multiple workers
+            if(data.count == this.element.getAttribute('data-count-to')) {
+              this.stopWorker('mytask')
+            }
+            this.queueFrame(()=>{
+              this.element.innerHTML = data.me + ' says ' + data.count
+            })
+          }
+        }
+      }
+
+      // Register MyClass to the Sargasso framework
+      SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
+
+      // Start Sargasso
+      SargassoModule.utils.bootSargasso()
+    }
+  </script>
+</body>
+</html>
+
 ```
+[Try It](https://jsfiddle.net/PelagicCreatures/exnjtvqb/1/)
 
 ### Serving modules from your project
 ```

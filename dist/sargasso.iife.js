@@ -5357,9 +5357,9 @@ var SargassoModule = (function (exports) {
 
 		workerMessage (id, e) {
 			const workerObservers = this.workers[id].observers;
-			workerObservers.forEach((i) => {
-				if (this.workerObservers[i].workerMessage) {
-					this.observers[i].workerMessage.apply(this.observers[i], [id, e]);
+			workerObservers.forEach((observer) => {
+				if (observer.workerMessage) {
+					observer.workerMessage(id, e);
 				}
 			});
 		}
@@ -5722,8 +5722,9 @@ var SargassoModule = (function (exports) {
 
 		/*
 			@function observableChange - listen for changes to observable object
-			@param { String } id - id of worker started with this.workerStart()
+			@param { String } id - id of observable
 			@param { String } property - property that changed
+			@param { String } value - new value
 			@param { String } source - source of change
 			*/
 		observableChanged (id, property, value, source) {}
