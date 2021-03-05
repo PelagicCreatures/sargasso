@@ -4852,6 +4852,11 @@ var SargassoModule = (function (exports) {
 		build Proxy to observe changes to object properties
 		*/
 
+	const registeredObservables = {};
+	const getObservable = (id) => {
+		return registeredObservables[id]
+	};
+
 	const objectConstructor = ({}).constructor;
 
 	const buildProxy = (self) => {
@@ -4885,17 +4890,24 @@ var SargassoModule = (function (exports) {
 		constructor (id, data = {}, options = {}) {
 			this.id = id;
 
+			if (registeredObservables[this.id]) {
+				throw (new Error('ObservableObject ' + id + ' already exists.'))
+			}
+
 			this.bound = {}; // watchers to sync on value change
 
 			this.data = new Proxy(data, buildProxy(this));
 
 			this.options = options;
+
+			registeredObservables[this.id] = this;
 		}
 
 		/*
 			@function destroy - remove all bindings
 			*/
 		destroy () {
+			delete registeredObservables[this.id];
 			delete this.data;
 			Object.keys(this.bound).forEach((prop) => {
 				Object.keys(this.bound[prop]).forEach((k) => {
@@ -5384,19 +5396,22 @@ var SargassoModule = (function (exports) {
 		}
 
 		observableStart (id, data) {
-			if (this.registeredObservableObjects[id] && data !== undefined) {
-				throw (new Error('ObservableObject observableStart ' + id + ' already exists'))
+			const foundObservable = getObservable(id);
+
+			// trying to define with data but already exists
+			if (foundObservable && data !== undefined) {
+				throw (new Error('ObservableObject ' + id + ' already exists, can\'t build.'))
 			}
 
-			if (!this.registeredObservableObjects[id]) {
-				if (data && data.constructor && data.constructor.name === 'ObservableObject') {
+			if (!this.registeredObservableObjects[id]) { // not already managing observable
+				if (foundObservable) { // add to service
 					this.registeredObservableObjects[id] = {
 						id: id,
-						observable: data,
+						observable: foundObservable,
 						observers: [],
 						managed: false
 					};
-				} else {
+				} else { // make it
 					this.registeredObservableObjects[id] = {
 						id: id,
 						observable: new ObservableObject(id, data),
@@ -5940,7 +5955,9 @@ var SargassoModule = (function (exports) {
 		}
 
 		observableStart (id, data) {
-			this.observables[id] = theObservableObjectWatcher.subscribe(this, id, data);
+			theObservableObjectWatcher.subscribe(this, id, data);
+			this.observables[id] = theObservableObjectWatcher.getObservable(id);
+			return this.observables[id]
 		}
 
 		observableStop (id) {
@@ -5960,8 +5977,8 @@ var SargassoModule = (function (exports) {
 			this.template = template;
 		}
 
-		setTemplateArgs (args) {
-			this.templateArgs = args;
+		setTemplateArgs (args = {}) {
+			this.templateArgs = args.constructor && args.constructor.name === 'ObservableObject' ? args.data : args;
 			this.render();
 		}
 

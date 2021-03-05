@@ -27,10 +27,8 @@
       class MyClass extends SargassoModule.Sargasso {
         start() {
           super.start()
-
-          this.observableStart('shared-data', observed);
           this.setTemplate((args) => SargassoModule.utils.html`<p class=${args.cssClass}>Hello ${args.name} (${args.cssClass})</p>`)
-          this.setTemplateArgs(observed.data)
+          this.setTemplateArgs(this.observableStart('shared-data'))
         }
 
         // observable changed, re-render
