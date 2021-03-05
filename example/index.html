@@ -15,18 +15,27 @@
 	<script defer>
 
 		let observed = SargassoModule.services.theObservableObjectWatcher.register('shared-data')
+		observed.set('name','World!')
 
 		class MyClass extends SargassoModule.Sargasso {
+			constructor(element,options) {
+				super(element,options)
+				this.template = (args) => SargassoModule.utils.html`<p>Hello ${args.name}</p>`
+			}
 			start() {
+				super.start()
 				this.observableObjectStart('shared-data');
+				this.templateArgs = this.observableObject('shared-data').data
 			}
 
 			sleep() {
 				this.observableObjectStop('shared-data');
+				super.sleep()
 			}
 
 			observableChanged(id, property, source) {
 				console.log('somone changed observable: ',id,property,source)
+				this.render()
 			}
 		}
 
@@ -34,7 +43,7 @@
 
 		SargassoModule.utils.bootSargasso()
 
-		observed.set('prop','val')
+		observed.set('name','World!!!!')
 
 	</script>
 </body>

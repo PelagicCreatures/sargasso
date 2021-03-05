@@ -29,10 +29,17 @@ import {
 }
 	from './lib/Services.js'
 
+import {
+	html, render
+}
+	from './lib/dependencies'
+
 const utils = {
 	registerSargassoClass: registerSargassoClass,
 	bootSargasso: bootSargasso,
-	elementTools: elementTools
+	elementTools: elementTools,
+	html: html,
+	render: render
 }
 
 const services = {
