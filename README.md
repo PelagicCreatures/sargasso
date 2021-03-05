@@ -249,13 +249,13 @@ Your Sargasso subclasses can subscribe to event feeds in order to be notified of
 **Web Worker Methods**
 | method | description |
 | ------ | ----------- |
-| workerStart(id, codeOrURL) | start a web worker with id. Ignored if worker id already installed (see https://github.com/PelagicCreatures/flyingfish for a shared worker example)|
+| workerStart(id, codeOrURL) | start a web worker with id. Ignored if worker id already installed. |
 | workerPostMessage(id, data {}) | send the worker tagged with `id` a message. the message must be an object which can have any structure you want to pass to the worker |
 
 **Observable Data Methods**
 | method | description |
 | ------ | ----------- |
-| observableStart (id, data) | start watching for changes in observable data. `data` is an JS data object or an existing ObservableObject |
+| observableStart (id, data) | start watching for changes in observable data. `data` is an optional JS data object  |
 | observableStop (id) | stop watching for changes in observable data |
 | getObservable (id) | get underlying ObservableObject instance for id |
 
@@ -338,25 +338,25 @@ example/example3.html
 
 **Note**: Hijax pages must be served over http/https. In the example directory of this repository is a python script for a simple server. Run `python localhost.py` then connect using a web browser `http://localhost:8000/example3.html` This example has an instrumented Sargasso class which logs events to illustrate the object lifecycle as pages come and go.
 
-**Note**: data-hijax elements must have and ID and contain well formed child html elements.
-```
+`data-hijax` elements must have and ID and contain well formed child html elements.
+```html
 <div id="nope" data-hijax>I'm just text. No child elements. Won't work.</div>
 <div id="yup" data-hijax><p>I'm html. This works.</p></div>
 ```
 
-#### Programatic page loading
+#### Programatic Page Loading
 `loadPageHandler(href)` is the utility function for programmatically loading a new page. EG. instead of `location.href= '/home'`, use `LoadPageHandler('/home')` This can be called to reload the page as well.
 
-#### Finer content merging control
+#### Content Merging Fine Control
 Set the `data-hijax-skip-unchanged` attribute on the hijax container and the content will remain static unless the markup is changed. This is useful if you have a Sargasso element that should remain instantiated and hold state when traversing several pages in a section.
-```
+```html
 <div id="test" data-hijax data-hijax-skip-unchanged>
   <p>This content also sometimes changes from page to page, otherwise leave it alone.</p>
 </div>
 ```
 
 Set `data-hijax-cache-key-selector` to a css selector of an element within the hijax container which has defined `data-hijax-cache-key-selector` to leave the content intact across pages until the key changes.
-```
+```html
 <div id="test" data-hijax data-hijax-cache-key-selector="#sub-element">
   <p id="sub-element" data-hijax-cache-key="some-key">This content uses a cache key to signal changes, otherwise leave it alone.</p>
 </div>
@@ -412,10 +412,7 @@ class MyClass extends SargassoModule.Sargasso {
 		// do something with the change
 	}
 }
-
 ```
-`observableStart` called with just an id will find or create an observableObject with the id
-
 
 ### Observables, Templates and Rendering
 Complete example of an element that renders on data update using an ObservableObject and li-html templates.
