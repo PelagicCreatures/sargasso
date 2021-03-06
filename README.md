@@ -127,7 +127,7 @@ example/example2.html
     </button>
   </div>
 
-  <script src='https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.js'></script>
+  <script src='https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.min.js'></script>
 
   <script defer>
     window.onload = () => {
@@ -418,70 +418,53 @@ class MyClass extends SargassoModule.Sargasso {
 Complete example of an element that renders on data update using an ObservableObject and li-html templates.
 
 examples/example5.html
-```html
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Example Sargasso Element w/Data Observing &amp; Template rendering</title>
-  <style>
-    .red { color: #f00; }
-    .green { color: #0f0; }
-    .blue { color: #00f; }
-  </style>
-</head>
-<body>
-  <h3>Example Sargasso Element w/Data Observing &amp; Template rendering</h3>
+window.onload = () => {
 
-  <sargasso-my-class></sargasso-my-class>
+	let args = {
+		name: 'World!',
+		cssClass: 'red',
+		list: [{id:1,name:'one'},{id:2,name:'two'},{id:3,name:'three'}]
+	}
+	let observed = new SargassoModule.ObservableObject('shared-data',args)
 
-  <script src="../dist/sargasso.iife.js"></script>
-  <script defer>
-    window.onload = () => {
+	// define MyClass as a subclass of Sargasso
+	// sargasso will render the template when data in
+	// observed ObservableObject is changed
+	class MyClass extends SargassoModule.Sargasso {
+		start() {
+			super.start()
 
-      let args = {
-        name: 'World!',
-        cssClass: 'red'
-      }
-      let observed = new SargassoModule.ObservableObject('shared-data',args)
+			// define a template
+			this.setTemplate((args) => SargassoModule.lit.html`
+				<p class=${args.cssClass}>Hello ${args.name} (${args.cssClass})</p>
+				<strong>List</strong>
+				<ul>
+					${SargassoModule.lit.repeat(args.list, (item) => item.id, (item, index) => SargassoModule.lit.html`
+						<li>${index}: ${item.name}</li>
+				`)}
+				</ul>
+			`)
 
-      // define MyClass as a subclass of Sargasso
-      class MyClass extends SargassoModule.Sargasso {
-        start() {
-          super.start()
+			// hook up observable data
+			this.setTemplateArgs(this.observableStart('shared-data'))
+		}
+	}
 
-          // define a template
-          this.setTemplate((args) => SargassoModule.utils.html`<p class=${args.cssClass}>Hello ${args.name} (${args.cssClass})</p>`)
+	// Register MyClass to the Sargasso framework
+	SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
 
-          // hook up observable data
-          this.setTemplateArgs(this.observableStart('shared-data'))
-        }
+	// Start Sargasso
+	SargassoModule.utils.bootSargasso()
 
-        // observable changed, re-render the template with new values
-        observableChanged(id, property, value) {
-          this.render()
-        }
-      }
+	// repeatedly and randomly change the observed data
+	let classes = ['red','green','blue']
+	let named = ['Bob','Carol','Ted','Alice']
 
-      // Register MyClass to the Sargasso framework
-      SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
-
-      // Start Sargasso
-      SargassoModule.utils.bootSargasso()
-
-      // repeatedly randomly change the observed data
-      let classes = ['red','green','blue']
-      let named = ['Bob','Carol','Ted','Alice']
-
-      setInterval(()=>{
-        let c = classes[Math.floor(Math.random() * classes.length)]
-        let n = named[Math.floor(Math.random() * named.length)]
-        observed.data.cssClass = c;
-        observed.data.name = n;
-      },1000)
-    }
-  </script>
-</body>
-</html>
+	setInterval(()=>{
+		observed.data.cssClass = classes[Math.floor(Math.random() * classes.length)]
+		observed.data.name = named[Math.floor(Math.random() * named.length)]
+	},1000)
+}
 ```
 [Try It](https://jsfiddle.net/PelagicCreatures/gbL5y7xq/3/)
 
@@ -508,7 +491,7 @@ example/example4.html
 
   <div data-sargasso-class="MyClass" data-name="div" data-count-to="20">Will count to 20</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.min.js"></script>
   <script defer>
     window.onload = () => {
 

@@ -37,8 +37,8 @@
             <p class=${args.cssClass}>Hello ${args.name} (${args.cssClass})</p>
             <strong>List</strong>
             <ul>
-            ${SargassoModule.lit.repeat(args.list, (item) => item.id, (item, index) => SargassoModule.lit.html`
-              <li>${index}: ${item.name}</li>
+              ${SargassoModule.lit.repeat(args.list, (item) => item.id, (item, index) => SargassoModule.lit.html`
+                <li>${index}: ${item.name}</li>
             `)}
             </ul>
           `)
