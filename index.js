@@ -37,15 +37,49 @@ import {
 import {
 	html, render
 }
-	from './lib/dependencies'
+	from 'lit-html/lit-html.js'
+
+import {
+	repeat
+}
+	from 'lit-html/directives/repeat.js'
+import {
+	cache
+}
+	from 'lit-html/directives/cache.js'
+import {
+	classMap
+}
+	from 'lit-html/directives/class-map.js'
+import {
+	ifDefined
+}
+	from 'lit-html/directives/if-defined'
+import {
+	guard
+}
+	from 'lit-html/directives/guard'
+import {
+	styleMap
+}
+	from 'lit-html/directives/style-map.js'
+import {
+	templateContent
+}
+	from 'lit-html/directives/template-content'
+import {
+	unsafeHTML
+}
+	from 'lit-html/directives/unsafe-html.js'
+import {
+	until
+}
+	from 'lit-html/directives/until.js'
 
 const utils = {
 	registerSargassoClass: registerSargassoClass,
 	bootSargasso: bootSargasso,
-	elementTools: elementTools,
-	html: html,
-	render: render
-
+	elementTools: elementTools
 }
 
 const services = {
@@ -57,6 +91,20 @@ const services = {
 	theObservableObjectWatcher: theObservableObjectWatcher
 }
 
+const lit = {
+	html: html,
+	render: render,
+	repeat: repeat,
+	cache: cache,
+	classMap: classMap,
+	ifDefined: ifDefined,
+	guard: guard,
+	styleMap: styleMap,
+	templateContent: templateContent,
+	unsafeHTML: unsafeHTML,
+	until: until
+}
+
 export {
-	Sargasso, utils, loadPageHandler, services, ObservableObject
+	Sargasso, utils, loadPageHandler, services, ObservableObject, lit
 }

@@ -870,6 +870,212 @@ var SargassoModule = (function (exports) {
 	var camelCase_1 = camelCase;
 
 	/**
+		Utility routines for Sargasso classes
+
+		@author Michael Rhodes (except where noted)
+		@license MIT
+		Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+	**/
+
+	const elementMetaData = new WeakMap();
+
+	const hasClass = (element, cssClass) => {
+		const className = element.className || '';
+		const classes = className.split(/\s+/);
+		return classes.indexOf(cssClass) !== -1
+	};
+
+	// addClasses can be:
+	// a string 'someclass'
+	// a list delimited by comma or space 'class1 class3 class4'
+	// an array ['class1','class2']
+	const addClass = (element, addClasses) => {
+		const className = element.className || '';
+		const classes = className.split(/\s+/);
+
+		if (!Array.isArray(addClasses)) {
+			addClasses = addClasses.split(/[\s,]/);
+		}
+
+		addClasses.forEach((c) => {
+			c = c.trim();
+			if (classes.indexOf(c) === -1) {
+				classes.push(c);
+			}
+		});
+
+		element.className = classes.join(' ');
+	};
+
+	// removeClasses can be:
+	// a string 'someclass'
+	// a list delimited by comma or space 'class1 class3 class4'
+	// an array ['class1','class2']
+	const removeClass = (element, removeClasses) => {
+		const className = element.className || '';
+		const classes = className.split(/\s+/);
+
+		if (!Array.isArray(removeClasses)) {
+			removeClasses = removeClasses.split(/[\s,]/);
+		}
+
+		removeClasses.forEach((c) => {
+			c = c.trim();
+			if (classes.indexOf(c) !== -1) {
+				classes.splice(classes.indexOf(c), 1);
+			}
+		});
+
+		element.className = classes.join(' ');
+	};
+
+	const isVisible = (element) => {
+		return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length)
+	};
+
+	const inViewPort = (element, container = window) => {
+		const rect = element.getBoundingClientRect();
+		const visible = isVisible(element);
+		const aboveTheTop = (rect.bottom < 0);
+		let belowTheFold;
+
+		if (container.self === window) {
+			belowTheFold = (rect.top > (window.innerHeight || document.documentElement.clientHeight));
+		} else {
+			belowTheFold = (rect.top > container.clientHeight);
+		}
+
+		// console.log('inViewPort', visible, belowTheFold, aboveTheTop)
+
+		return (visible && !belowTheFold && !aboveTheTop)
+	};
+
+	/*
+		element: element to apply to
+		css: JSON object with properties in kebab-case or camelCase (or even in snake_case and seperate words)
+	*/
+
+	const css = (element, css) => {
+		for (const prop in css) {
+			if (Object.prototype.hasOwnProperty.call(css, prop)) {
+				const key = camelCase_1(prop);
+				element.style[key] = css[prop];
+			}
+		}
+	};
+
+	const setMetaData = (element, k, v) => {
+		const data = elementMetaData.get(element) || {};
+		if (v) {
+			data[k] = v;
+		} else {
+			delete data[k];
+		}
+		elementMetaData.set(element, data);
+	};
+
+	const getMetaData = (element, k) => {
+		const data = elementMetaData.get(element) || {};
+		return data[k]
+	};
+
+	const on = function (uid, container, events, selector, fn, options, once) {
+		// selector is optional
+		if (typeof selector === 'function') {
+			once = options;
+			options = fn;
+			fn = selector;
+			selector = null;
+		}
+
+		const k = 'on:' + uid + '-' + events + '-' + selector;
+
+		if (getMetaData(container, k)) { // duplicate event handler.
+			console.error('Error: Sargasso utils.on: duplicate event handler specification. %o %s', container, k);
+			return
+		}
+
+		const handler = (e) => {
+			if (once) {
+				off(uid, container, events, selector);
+			}
+
+			if (!selector) {
+				fn(e);
+			} else {
+				Array.from(container.querySelectorAll(selector)).forEach((el) => {
+					if (e.target === el || el.contains(e.target)) {
+						fn(e, el);
+					}
+				});
+			}
+		};
+
+		// store handler spec in metadata so we can gracefully remove it later
+		const data = {
+			uid: uid,
+			events: events,
+			selector: selector,
+			fn: handler,
+			options: options || false
+		};
+
+		setMetaData(container, k, data);
+
+		events.split(/[\s,]+/).forEach((evt) => {
+			container.addEventListener(evt.trim(), data.fn, data.options);
+		});
+	};
+
+	const off = function (uid, container, events, selector) {
+		const k = 'on:' + uid + '-' + events + '-' + selector;
+		const data = getMetaData(container, k);
+		if (data) {
+			events.split(/[\s,]+/).forEach((evt) => {
+				container.removeEventListener(evt.trim(), data.fn, data.options);
+			});
+			setMetaData(container, k);
+		}
+	};
+
+	// remove all (on,once) event handlers for element
+	const offAll = function (container) {
+		const data = elementMetaData.get(container) || {};
+		const handlers = [];
+
+		for (const k in data) {
+			if (Object.prototype.hasOwnProperty.call(data, k)) {
+				if (k.match(/^on:/)) {
+					handlers.push(k);
+				}
+			}
+		}
+
+		handlers.forEach((k) => {
+			off(data[k].uid, container, data[k].events, data[k].selector);
+		});
+	};
+
+	const once = function (uid, container, events, selector, fn, options) {
+		on(uid, container, events, selector, fn, options, true);
+	};
+
+	const elementTools = {
+		hasClass: hasClass,
+		addClass: addClass,
+		removeClass: removeClass,
+		isVisible: isVisible,
+		inViewPort: inViewPort,
+		setCSS: css,
+		setMetaData: setMetaData,
+		getMetaData: getMetaData,
+		on: on,
+		off: off,
+		once: once,
+		offAll: offAll
+	};
+
+	/**
 	 * Checks if `value` is the
 	 * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
 	 * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
@@ -1209,33 +1415,6 @@ var SargassoModule = (function (exports) {
 	}
 
 	var debounce_1 = debounce;
-
-	/**
-	 * Converts `string` to
-	 * [kebab case](https://en.wikipedia.org/wiki/Letter_case#Special_case_styles).
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 3.0.0
-	 * @category String
-	 * @param {string} [string=''] The string to convert.
-	 * @returns {string} Returns the kebab cased string.
-	 * @example
-	 *
-	 * _.kebabCase('Foo Bar');
-	 * // => 'foo-bar'
-	 *
-	 * _.kebabCase('fooBar');
-	 * // => 'foo-bar'
-	 *
-	 * _.kebabCase('__FOO_BAR__');
-	 * // => 'foo-bar'
-	 */
-	var kebabCase = _createCompounder(function(result, word, index) {
-	  return result + (index ? '-' : '') + word.toLowerCase();
-	});
-
-	var kebabCase_1 = kebabCase;
 
 	/**
 	 * Removes all key-value entries from the list cache.
@@ -3039,9 +3218,9 @@ var SargassoModule = (function (exports) {
 	var _Promise = Promise$1;
 
 	/* Built-in method references that are verified to be native. */
-	var Set = _getNative(_root, 'Set');
+	var Set$1 = _getNative(_root, 'Set');
 
-	var _Set = Set;
+	var _Set = Set$1;
 
 	/* Built-in method references that are verified to be native. */
 	var WeakMap$1 = _getNative(_root, 'WeakMap');
@@ -3234,172 +3413,659 @@ var SargassoModule = (function (exports) {
 
 	var isEqual_1 = isEqual;
 
-	/*!
-	 * JavaScript Cookie v2.2.1
-	 * https://github.com/js-cookie/js-cookie
+	/*
+		build Proxy to observe changes to object properties
+		*/
+
+	const registeredObservables = {};
+	const getObservable = (id) => {
+		return registeredObservables[id]
+	};
+
+	const objectConstructor = ({}).constructor;
+
+	const buildProxy = (self) => {
+		return {
+			get (target, property) {
+				const val = Reflect.get(target, property);
+				if (val && typeof val === 'object') return new Proxy(val, buildProxy(self))
+				return val
+			},
+			set (target, property, value) {
+				self.sync(property);
+				return Reflect.set(target, property, value)
+			},
+			deleteProperty (target, property) {
+				self.sync(property);
+				return Reflect.deleteProperty(target, property)
+			}
+		}
+	};
+
+	/*
+		@class ObservableObject
+
+		Base class for data binding. Implements Proxy and Reflect on an object so that
+		changes can be observed and manages subscribing and notifying observers.
+
+		*/
+	class ObservableObject {
+		/*
+			@param { String } id - unique id of
+			@param { Object } data - optional externally defined javascript object to observe
+			@param { Object } options - optional, used by subclasses
+			*/
+		constructor (id, data = {}, options = {}) {
+			this.id = id;
+
+			if (registeredObservables[this.id]) {
+				throw (new Error('ObservableObject ' + id + ' already exists.'))
+			}
+
+			this.bound = {}; // watchers to sync on value change
+
+			this.data = new Proxy(data, buildProxy(this));
+
+			this.options = options;
+
+			registeredObservables[this.id] = this;
+		}
+
+		/*
+			@function destroy - remove all bindings
+			*/
+		destroy () {
+			delete registeredObservables[this.id];
+			delete this.data;
+			Object.keys(this.bound).forEach((prop) => {
+				Object.keys(this.bound[prop]).forEach((k) => {
+					this.unbind(prop, k);
+				});
+			});
+		}
+
+		/*
+			@function getBoundData - return object being observed
+			*/
+		getBoundData () {
+			return this.data
+		}
+
+		/*
+			@function set - set observed object property
+			@param { String } property - observed object property to set
+			@param value - string, array, object or whatever to assign to property
+			*/
+		set (property, value) {
+			if (!isEqual_1(this.get(property), value)) {
+				this.data[property] = value;
+			}
+		}
+
+		/*
+			@function get - get observed object property
+			@param { String } property - observed object property to get
+			*/
+		get (property) {
+			return this.data[property]
+		}
+
+		/*
+			@function delete - delete observed object property
+			@param { String } property - observed object property to delete
+			*/
+		delete (property) {
+			delete this.data[property];
+		}
+
+		/*
+			@function syncAll - sync all observed object properties
+			*/
+		syncAll () {
+			Object.keys(this.data || {}).forEach((k) => {
+				this.sync(k);
+			});
+		}
+
+		/*
+			@function bind - attach a function to observe property changes
+			@param { String } id - unique id of observer function
+			@param { Function } fn - handler called when property changes
+			@param { String } property - optional name of property to observe
+
+			Handler function prototype:
+
+			If property is not supplied, callback receives property and value
+			(property, value) => {}
+
+			Otherwise just the value is supplied
+			(value) => {}
+			*/
+		bind (id, fn, property = '*') {
+			if (!this.bound[property]) {
+				this.bound[property] = {};
+			}
+			this.bound[property][id] = fn;
+			Object.keys(this.data).forEach((k) => {
+				fn(this.id, k, this.get(k));
+			});
+		}
+
+		/*
+			@function unbind - unattach observer
+			@param { String } id - unique id of observer function
+			@param { String } property - optional name of property being observed
+			*/
+		unbind (id, property = '*') {
+			if (this.bound[property][id]) {
+				delete this.bound[property][id];
+			}
+		}
+
+		/*
+			@function observers - return current observer count
+			*/
+		observers () {
+			let c = 0;
+			for (const id in this.bound) {
+				if (this.bound.hasOwnProperty(id)) {
+					c++;
+				}
+			}
+			return c
+		}
+
+		/*
+			function sync - notify observers of property value change
+			@param { String } property - property that changed
+			*/
+		sync (property) {
+			Object.keys(this.bound['*'] || {}).forEach((k) => {
+				this.bound['*'][k](this.id, property, this.get(property));
+			});
+			Object.keys(this.bound[property] || {}).forEach((k) => {
+				this.bound[property][k](this.id, property, this.get(property));
+			});
+		}
+	}
+
+	/**
+		Shared event observers used by Sargasso classes.
+
+		When these observers have subscribers they watch for events
+		and notify the subscriber's specific event handler
+		method when they occur.
+
+		@author Michael Rhodes (except where noted)
+		@license MIT
+		Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+
+		Subscribers to these services must imlement handler methods
+		EG. watchDOM, watchScroll, watchResize, watchOrientation
+	**/
+
+	let theDOMWatcher;
+	let theScrollWatcher;
+	let theResizeWatcher;
+	let theOrientationWatcher;
+	let theWorkerWatcher;
+	let theObservableObjectWatcher;
+
+	class ObserverSubscriptionManager {
+		constructor (options) {
+			this.options = options;
+			this.observers = [];
+			this.pendingAnimationFrame = undefined;
+			this.frameQueue = [];
+		}
+
+		subscribe (observer) {
+			if (!this.observers.length) {
+				this.wakeup();
+			}
+			this.observers.push(observer);
+		}
+
+		unSubscribe (observer) {
+			if (this.observers.indexOf(observer) !== -1) {
+				this.observers.splice(this.observers.indexOf(observer), 1);
+			}
+
+			if (!this.observers.length) {
+				this.sleep();
+			}
+		}
+
+		sleep () {}
+
+		wakeup () {}
+
+		notifyObservers (event, params) {
+			for (let i = 0; i < this.observers.length; i++) {
+				if (this.observers[i][event]) {
+					this.observers[i][event].apply(this.observers[i], params || []);
+				}
+			}
+		}
+
+		flushQueue () {
+			if (this.pendingAnimationFrame) {
+				cancelAnimationFrame(this.pendingAnimationFrame);
+				this.pendingAnimationFrame = undefined;
+			}
+			this.frameQueue = [];
+		}
+
+		queueFrame (frame) {
+			this.frameQueue.push(frame.bind(this));
+			if (!this.pendingAnimationFrame) {
+				this.pendingAnimationFrame = requestAnimationFrame(() => {
+					this.processQueue();
+				});
+			}
+		}
+
+		processQueue () {
+			this.pendingAnimationFrame = undefined;
+			const toProcess = this.frameQueue.slice(0);
+			this.frameQueue = [];
+			for (let i = 0; i < toProcess.length; i++) {
+				toProcess[i]();
+			}
+		}
+	}
+
+	class DOMWatcher extends ObserverSubscriptionManager {
+		constructor (options) {
+			super(options);
+
+			// debounce - just need to know if a change occured, not every change
+			this.mutationHandler = debounce_1((mutations, observer) => {
+				this.observeDOM(mutations, observer);
+			}, 100, {
+				maxWait: 250
+			});
+
+			this.mutationObserver = new MutationObserver(this.mutationHandler, false);
+		}
+
+		subscribe (observer) {
+			super.subscribe(observer);
+			observer.watchDOM();
+		}
+
+		wakeup () {
+			super.wakeup();
+			this.mutationObserver.observe(document.body, {
+				childList: true,
+				subtree: true
+			});
+		}
+
+		sleep () {
+			super.sleep();
+			this.mutationObserver.disconnect();
+		}
+
+		observeDOM () {
+			this.notifyObservers('watchDOM');
+		}
+	}
+
+	class ScrollWatcher extends ObserverSubscriptionManager {
+		constructor (options = {}) {
+			super(options);
+
+			this.scrollElement = this.options.scrollElement || window;
+			this.lastscroll = 0;
+			this.scrolling = false;
+		}
+
+		// use 'scroll' event to start scroll loop unless it's already looping
+		trigger () {
+			if (!this.scrolling) {
+				this.scrollLoop();
+			}
+		}
+
+		scrollLoop () {
+			if (this.lastscroll !== this.scrollTop()) { // are we still scrolling?
+				this.scrolling = true;
+				this.lastscroll = this.scrollTop();
+				this.watchScroll(); // tell our observers
+				const frame = () => {
+					this.scrollLoop();
+				};
+				this.queueFrame(frame);
+			} else {
+				this.scrolling = false; // exit the scroll loop and wait for next 'scroll' event
+			}
+		}
+
+		setOptions (options = {}) {
+			this.sleep();
+			this.scrollElement = options.scrollElement || window;
+			this.wakeup();
+		}
+
+		subscribe (observer) {
+			super.subscribe(observer);
+			observer.watchScroll();
+		}
+
+		wakeup () {
+			super.wakeup();
+			elementTools.on('theScrollWatcher', this.scrollElement, 'scroll', () => {
+				this.trigger();
+			});
+		}
+
+		sleep () {
+			super.sleep();
+			elementTools.off('theScrollWatcher', this.scrollElement, 'scroll');
+		}
+
+		inViewPort (element) {
+			return elementTools.inViewPort(element, this.scrollElement)
+		}
+
+		watchScroll () {
+			this.notifyObservers('watchScroll');
+		}
+
+		scrollTop (newTop) {
+			if (this.scrollElement === window) {
+				if (newTop !== undefined) {
+					window.scrollTo(0, newTop);
+				} else {
+					return window.pageYOffset
+				}
+			} else {
+				if (newTop !== undefined) {
+					this.scrollElement.scrollTop = newTop;
+				} else {
+					return this.scrollElement.scrollTop
+				}
+			}
+		}
+	}
+
+	class ResizeWatcher extends ObserverSubscriptionManager {
+		constructor (options) {
+			super(options);
+
+			this.debounce = debounce_1(() => {
+				this.watchResize();
+			}, 250);
+		}
+
+		subscribe (observer) {
+			super.subscribe(observer);
+			observer.watchResize();
+		}
+
+		wakeup () {
+			super.wakeup();
+			window.addEventListener('resize', this.debounce, false);
+		}
+
+		sleep () {
+			super.sleep();
+			window.removeEventListener('resize', this.debounce);
+		}
+
+		watchResize () {
+			this.notifyObservers('watchResize');
+		}
+	}
+
+	class OrientationWatcher extends ObserverSubscriptionManager {
+		constructor (options) {
+			super(options);
+
+			if ('onorientationchange' in window) {
+				elementTools.addClass(document.body, 'have-orientation');
+			} else {
+				elementTools.addClass(document.body, 'no-orientation');
+			}
+
+			this.debounce = debounce_1(() => {
+				this.watchOrientation();
+			}, 250);
+		}
+
+		subscribe (observer) {
+			super.subscribe(observer);
+			observer.watchOrientation();
+		}
+
+		wakeup () {
+			super.wakeup();
+			if ('onorientationchange' in window) {
+				window.addEventListener('orientationchange', this.debounce, false);
+			}
+		}
+
+		sleep () {
+			super.sleep();
+			if ('onorientationchange' in window) {
+				window.removeEventListener('orientationchange', this.debounce);
+			}
+		}
+
+		watchOrientation () {
+			this.notifyObservers('watchOrientation');
+		}
+	}
+
+	// keep track of who is using web workers and
+	// cleanup dangling worker when no subscribers remain
+	class WorkerWatcher extends ObserverSubscriptionManager {
+		constructor (options) {
+			super(options);
+			this.workers = {};
+		}
+
+		registerWorker (id, codeOrURL) {
+			if (!this.workers[id]) {
+				// create a worker for the id if worker id is unknown
+
+				let blobURL = codeOrURL;
+
+				let revoke = false;
+				if (!codeOrURL.match(/^(http|\/)/i)) {
+					const blob = new Blob([codeOrURL], {
+						type: 'text/javascript'
+					});
+					blobURL = URL.createObjectURL(blob);
+					revoke = true;
+				}
+
+				this.workers[id] = {
+					worker: new Worker(blobURL),
+					observers: []
+				};
+
+				if (revoke) {
+					URL.revokeObjectURL(blobURL);
+				}
+
+				this.workers[id].worker.onmessage = (e) => {
+					this.workerMessage(id, e);
+				};
+			}
+
+			return this.workers[id].worker
+		}
+
+		subscribe (observer, id) {
+			if (!this.workers[id]) {
+				throw (new Error('worker ' + id + ' does not exist'))
+			}
+			const workerObservers = this.workers[id].observers;
+			workerObservers.push(observer);
+			super.subscribe(observer);
+		}
+
+		unSubscribe (observer, id) {
+			if (!this.workers[id]) {
+				throw (new Error('worker ' + id + ' does not exist'))
+			}
+
+			const workerObservers = this.workers[id].observers;
+			if (workerObservers.indexOf(observer) !== -1) {
+				workerObservers.splice(workerObservers.indexOf(observer), 1);
+			}
+
+			if (!workerObservers.length) {
+				this.workers[id].worker.terminate();
+				delete this.workers[id];
+			}
+
+			super.unSubscribe(observer);
+		}
+
+		workerMessage (id, e) {
+			const workerObservers = this.workers[id].observers;
+			workerObservers.forEach((observer) => {
+				if (observer.workerMessage) {
+					observer.workerMessage(id, e);
+				}
+			});
+		}
+
+		wakeup () {
+			super.wakeup();
+		}
+
+		sleep () {
+			super.sleep();
+		}
+	}
+
+	class ObservableObjectWatcher extends ObserverSubscriptionManager {
+		constructor (options) {
+			super(options);
+			this.registeredObservableObjects = {};
+		}
+
+		getObservable (id) {
+			return this.registeredObservableObjects[id] ? this.registeredObservableObjects[id].observable : undefined
+		}
+
+		observableStart (id, data) {
+			const foundObservable = getObservable(id);
+
+			// trying to define with data but already exists
+			if (foundObservable && data !== undefined) {
+				throw (new Error('ObservableObject ' + id + ' already exists, can\'t build.'))
+			}
+
+			if (!this.registeredObservableObjects[id]) { // not already managing observable
+				if (foundObservable) { // add to service
+					this.registeredObservableObjects[id] = {
+						id: id,
+						observable: foundObservable,
+						observers: [],
+						managed: false
+					};
+				} else { // make it
+					this.registeredObservableObjects[id] = {
+						id: id,
+						observable: new ObservableObject(id, data),
+						observers: [],
+						managed: true
+					};
+				}
+				this.registeredObservableObjects[id].observable.bind(this.constructor.name, this.notify.bind(this));
+			}
+
+			return this.registeredObservableObjects[id].observable
+		}
+
+		// delete an observable
+		observableDestroy (id) {
+			if (!this.registeredObservableObjects[id]) {
+				throw (new Error('ObservableObject observableDestroy ' + id + ' does not exist'))
+			}
+			this.registeredObservableObjects[id].observable.unbind(this.constructor.name);
+			this.registeredObservableObjects[id].observable.destroy();
+			delete this.registeredObservableObjects[id];
+		}
+
+		subscribe (observer, id, data) {
+			if (!this.registeredObservableObjects[id]) {
+				this.observableStart(id, data);
+			}
+			this.registeredObservableObjects[id].observers.push(observer);
+			super.subscribe(observer);
+		}
+
+		unSubscribe (observer, id) {
+			if (!this.registeredObservableObjects[id]) {
+				throw (new Error('ObservableObject unSubscribe ' + id + ' does not exist'))
+			}
+
+			const observers = this.registeredObservableObjects[id].observers;
+			if (observers.indexOf(observer) !== -1) {
+				observers.splice(observers.indexOf(observer), 1);
+			}
+
+			if (!observers.length && this.registeredObservableObjects[id].managed) {
+				this.observableDestroy(id);
+			}
+
+			super.unSubscribe(observer);
+		}
+
+		notify (id, property, value, source) {
+			if (!this.registeredObservableObjects[id]) {
+				throw (new Error('ObservableObject notify ' + id + ' does not exist'))
+			}
+			const observers = this.registeredObservableObjects[id].observers;
+			observers.forEach((observer) => {
+				if (observer.observableChanged) {
+					observer.observableChanged(id, property, value, source);
+				}
+			});
+		}
+	}
+
+	// build subscription services
+
+	theDOMWatcher = new DOMWatcher();
+	theScrollWatcher = new ScrollWatcher();
+	theResizeWatcher = new ResizeWatcher();
+	theOrientationWatcher = new OrientationWatcher();
+	theWorkerWatcher = new WorkerWatcher();
+	theObservableObjectWatcher = new ObservableObjectWatcher();
+
+	/**
+	 * Converts `string` to
+	 * [kebab case](https://en.wikipedia.org/wiki/Letter_case#Special_case_styles).
 	 *
-	 * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
-	 * Released under the MIT license
+	 * @static
+	 * @memberOf _
+	 * @since 3.0.0
+	 * @category String
+	 * @param {string} [string=''] The string to convert.
+	 * @returns {string} Returns the kebab cased string.
+	 * @example
+	 *
+	 * _.kebabCase('Foo Bar');
+	 * // => 'foo-bar'
+	 *
+	 * _.kebabCase('fooBar');
+	 * // => 'foo-bar'
+	 *
+	 * _.kebabCase('__FOO_BAR__');
+	 * // => 'foo-bar'
 	 */
-
-	var js_cookie = createCommonjsModule(function (module, exports) {
-	;(function (factory) {
-		var registeredInModuleLoader;
-		if (typeof undefined === 'function' && undefined.amd) {
-			undefined(factory);
-			registeredInModuleLoader = true;
-		}
-		if ('object' === 'object') {
-			module.exports = factory();
-			registeredInModuleLoader = true;
-		}
-		if (!registeredInModuleLoader) {
-			var OldCookies = window.Cookies;
-			var api = window.Cookies = factory();
-			api.noConflict = function () {
-				window.Cookies = OldCookies;
-				return api;
-			};
-		}
-	}(function () {
-		function extend () {
-			var i = 0;
-			var result = {};
-			for (; i < arguments.length; i++) {
-				var attributes = arguments[ i ];
-				for (var key in attributes) {
-					result[key] = attributes[key];
-				}
-			}
-			return result;
-		}
-
-		function decode (s) {
-			return s.replace(/(%[0-9A-Z]{2})+/g, decodeURIComponent);
-		}
-
-		function init (converter) {
-			function api() {}
-
-			function set (key, value, attributes) {
-				if (typeof document === 'undefined') {
-					return;
-				}
-
-				attributes = extend({
-					path: '/'
-				}, api.defaults, attributes);
-
-				if (typeof attributes.expires === 'number') {
-					attributes.expires = new Date(new Date() * 1 + attributes.expires * 864e+5);
-				}
-
-				// We're using "expires" because "max-age" is not supported by IE
-				attributes.expires = attributes.expires ? attributes.expires.toUTCString() : '';
-
-				try {
-					var result = JSON.stringify(value);
-					if (/^[\{\[]/.test(result)) {
-						value = result;
-					}
-				} catch (e) {}
-
-				value = converter.write ?
-					converter.write(value, key) :
-					encodeURIComponent(String(value))
-						.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
-
-				key = encodeURIComponent(String(key))
-					.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent)
-					.replace(/[\(\)]/g, escape);
-
-				var stringifiedAttributes = '';
-				for (var attributeName in attributes) {
-					if (!attributes[attributeName]) {
-						continue;
-					}
-					stringifiedAttributes += '; ' + attributeName;
-					if (attributes[attributeName] === true) {
-						continue;
-					}
-
-					// Considers RFC 6265 section 5.2:
-					// ...
-					// 3.  If the remaining unparsed-attributes contains a %x3B (";")
-					//     character:
-					// Consume the characters of the unparsed-attributes up to,
-					// not including, the first %x3B (";") character.
-					// ...
-					stringifiedAttributes += '=' + attributes[attributeName].split(';')[0];
-				}
-
-				return (document.cookie = key + '=' + value + stringifiedAttributes);
-			}
-
-			function get (key, json) {
-				if (typeof document === 'undefined') {
-					return;
-				}
-
-				var jar = {};
-				// To prevent the for loop in the first place assign an empty array
-				// in case there are no cookies at all.
-				var cookies = document.cookie ? document.cookie.split('; ') : [];
-				var i = 0;
-
-				for (; i < cookies.length; i++) {
-					var parts = cookies[i].split('=');
-					var cookie = parts.slice(1).join('=');
-
-					if (!json && cookie.charAt(0) === '"') {
-						cookie = cookie.slice(1, -1);
-					}
-
-					try {
-						var name = decode(parts[0]);
-						cookie = (converter.read || converter)(cookie, name) ||
-							decode(cookie);
-
-						if (json) {
-							try {
-								cookie = JSON.parse(cookie);
-							} catch (e) {}
-						}
-
-						jar[name] = cookie;
-
-						if (key === name) {
-							break;
-						}
-					} catch (e) {}
-				}
-
-				return key ? jar[key] : jar;
-			}
-
-			api.set = set;
-			api.get = function (key) {
-				return get(key, false /* read as raw */);
-			};
-			api.getJSON = function (key) {
-				return get(key, true /* read as json */);
-			};
-			api.remove = function (key, attributes) {
-				set(key, '', extend(attributes, {
-					expires: -1
-				}));
-			};
-
-			api.defaults = {};
-
-			api.withConverter = init;
-
-			return api;
-		}
-
-		return init(function () {});
-	}));
+	var kebabCase = _createCompounder(function(result, word, index) {
+	  return result + (index ? '-' : '') + word.toLowerCase();
 	});
+
+	var kebabCase_1 = kebabCase;
 
 	/**
 	 * @license
@@ -4543,13 +5209,13 @@ var SargassoModule = (function (exports) {
 	 * result.type and result.strings.
 	 */
 	function templateFactory(result) {
-	    let templateCache = templateCaches.get(result.type);
+	    let templateCache = templateCaches$1.get(result.type);
 	    if (templateCache === undefined) {
 	        templateCache = {
 	            stringsArray: new WeakMap(),
 	            keyString: new Map()
 	        };
-	        templateCaches.set(result.type, templateCache);
+	        templateCaches$1.set(result.type, templateCache);
 	    }
 	    let template = templateCache.stringsArray.get(result.strings);
 	    if (template !== undefined) {
@@ -4570,7 +5236,7 @@ var SargassoModule = (function (exports) {
 	    templateCache.stringsArray.set(result.strings, template);
 	    return template;
 	}
-	const templateCaches = new Map();
+	const templateCaches$1 = new Map();
 
 	/**
 	 * @license
@@ -4641,846 +5307,6 @@ var SargassoModule = (function (exports) {
 	 * render to and update a container.
 	 */
 	const svg = (strings, ...values) => new SVGTemplateResult(strings, values, 'svg', defaultTemplateProcessor);
-
-	/**
-		Utility routines for Sargasso classes
-
-		@author Michael Rhodes (except where noted)
-		@license MIT
-		Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
-	**/
-
-	const elementMetaData = new WeakMap();
-
-	const hasClass = (element, cssClass) => {
-		const className = element.className || '';
-		const classes = className.split(/\s+/);
-		return classes.indexOf(cssClass) !== -1
-	};
-
-	// addClasses can be:
-	// a string 'someclass'
-	// a list delimited by comma or space 'class1 class3 class4'
-	// an array ['class1','class2']
-	const addClass = (element, addClasses) => {
-		const className = element.className || '';
-		const classes = className.split(/\s+/);
-
-		if (!Array.isArray(addClasses)) {
-			addClasses = addClasses.split(/[\s,]/);
-		}
-
-		addClasses.forEach((c) => {
-			c = c.trim();
-			if (classes.indexOf(c) === -1) {
-				classes.push(c);
-			}
-		});
-
-		element.className = classes.join(' ');
-	};
-
-	// removeClasses can be:
-	// a string 'someclass'
-	// a list delimited by comma or space 'class1 class3 class4'
-	// an array ['class1','class2']
-	const removeClass = (element, removeClasses) => {
-		const className = element.className || '';
-		const classes = className.split(/\s+/);
-
-		if (!Array.isArray(removeClasses)) {
-			removeClasses = removeClasses.split(/[\s,]/);
-		}
-
-		removeClasses.forEach((c) => {
-			c = c.trim();
-			if (classes.indexOf(c) !== -1) {
-				classes.splice(classes.indexOf(c), 1);
-			}
-		});
-
-		element.className = classes.join(' ');
-	};
-
-	const isVisible = (element) => {
-		return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length)
-	};
-
-	const inViewPort = (element, container = window) => {
-		const rect = element.getBoundingClientRect();
-		const visible = isVisible(element);
-		const aboveTheTop = (rect.bottom < 0);
-		let belowTheFold;
-
-		if (container.self === window) {
-			belowTheFold = (rect.top > (window.innerHeight || document.documentElement.clientHeight));
-		} else {
-			belowTheFold = (rect.top > container.clientHeight);
-		}
-
-		// console.log('inViewPort', visible, belowTheFold, aboveTheTop)
-
-		return (visible && !belowTheFold && !aboveTheTop)
-	};
-
-	/*
-		element: element to apply to
-		css: JSON object with properties in kebab-case or camelCase (or even in snake_case and seperate words)
-	*/
-
-	const css = (element, css) => {
-		for (const prop in css) {
-			if (Object.prototype.hasOwnProperty.call(css, prop)) {
-				const key = camelCase_1(prop);
-				element.style[key] = css[prop];
-			}
-		}
-	};
-
-	const setMetaData = (element, k, v) => {
-		const data = elementMetaData.get(element) || {};
-		if (v) {
-			data[k] = v;
-		} else {
-			delete data[k];
-		}
-		elementMetaData.set(element, data);
-	};
-
-	const getMetaData = (element, k) => {
-		const data = elementMetaData.get(element) || {};
-		return data[k]
-	};
-
-	const on = function (uid, container, events, selector, fn, options, once) {
-		// selector is optional
-		if (typeof selector === 'function') {
-			once = options;
-			options = fn;
-			fn = selector;
-			selector = null;
-		}
-
-		const k = 'on:' + uid + '-' + events + '-' + selector;
-
-		if (getMetaData(container, k)) { // duplicate event handler.
-			console.error('Error: Sargasso utils.on: duplicate event handler specification. %o %s', container, k);
-			return
-		}
-
-		const handler = (e) => {
-			if (once) {
-				off(uid, container, events, selector);
-			}
-
-			if (!selector) {
-				fn(e);
-			} else {
-				Array.from(container.querySelectorAll(selector)).forEach((el) => {
-					if (e.target === el || el.contains(e.target)) {
-						fn(e, el);
-					}
-				});
-			}
-		};
-
-		// store handler spec in metadata so we can gracefully remove it later
-		const data = {
-			uid: uid,
-			events: events,
-			selector: selector,
-			fn: handler,
-			options: options || false
-		};
-
-		setMetaData(container, k, data);
-
-		events.split(/[\s,]+/).forEach((evt) => {
-			container.addEventListener(evt.trim(), data.fn, data.options);
-		});
-	};
-
-	const off = function (uid, container, events, selector) {
-		const k = 'on:' + uid + '-' + events + '-' + selector;
-		const data = getMetaData(container, k);
-		if (data) {
-			events.split(/[\s,]+/).forEach((evt) => {
-				container.removeEventListener(evt.trim(), data.fn, data.options);
-			});
-			setMetaData(container, k);
-		}
-	};
-
-	// remove all (on,once) event handlers for element
-	const offAll = function (container) {
-		const data = elementMetaData.get(container) || {};
-		const handlers = [];
-
-		for (const k in data) {
-			if (Object.prototype.hasOwnProperty.call(data, k)) {
-				if (k.match(/^on:/)) {
-					handlers.push(k);
-				}
-			}
-		}
-
-		handlers.forEach((k) => {
-			off(data[k].uid, container, data[k].events, data[k].selector);
-		});
-	};
-
-	const once = function (uid, container, events, selector, fn, options) {
-		on(uid, container, events, selector, fn, options, true);
-	};
-
-	const elementTools = {
-		hasClass: hasClass,
-		addClass: addClass,
-		removeClass: removeClass,
-		isVisible: isVisible,
-		inViewPort: inViewPort,
-		setCSS: css,
-		setMetaData: setMetaData,
-		getMetaData: getMetaData,
-		on: on,
-		off: off,
-		once: once,
-		offAll: offAll
-	};
-
-	/*
-		build Proxy to observe changes to object properties
-		*/
-
-	const registeredObservables = {};
-	const getObservable = (id) => {
-		return registeredObservables[id]
-	};
-
-	const objectConstructor = ({}).constructor;
-
-	const buildProxy = (self) => {
-		return {
-			set (target, property, value) {
-				let source = self.getSource();
-				if (value !== null && value !== undefined && value.constructor === objectConstructor && value._is_observable_payload) {
-					source = value.source;
-					value = value.value;
-				}
-				Reflect.set(target, property, value);
-				self.sync(property, source);
-				return true
-			}
-		}
-	};
-
-	/*
-		@class ObservableObject
-
-		Base class for data binding. Implements Proxy and Reflect on an object so that
-		changes can be observed and manages subscribing and notifying observers.
-
-		*/
-	class ObservableObject {
-		/*
-			@param { String } id - unique id of
-			@param { Object } data - optional externally defined javascript object to observe
-			@param { Object } options - optional, used by subclasses
-			*/
-		constructor (id, data = {}, options = {}) {
-			this.id = id;
-
-			if (registeredObservables[this.id]) {
-				throw (new Error('ObservableObject ' + id + ' already exists.'))
-			}
-
-			this.bound = {}; // watchers to sync on value change
-
-			this.data = new Proxy(data, buildProxy(this));
-
-			this.options = options;
-
-			registeredObservables[this.id] = this;
-		}
-
-		/*
-			@function destroy - remove all bindings
-			*/
-		destroy () {
-			delete registeredObservables[this.id];
-			delete this.data;
-			Object.keys(this.bound).forEach((prop) => {
-				Object.keys(this.bound[prop]).forEach((k) => {
-					this.unbind(prop, k);
-				});
-			});
-		}
-
-		/*
-			@function getBoundData - return object being observed
-			*/
-		getBoundData () {
-			return this.data
-		}
-
-		/*
-			@function set - set observed object property
-			@param { String } property - observed object property to set
-			@param value - string, array, object or whatever to assign to property
-			@source { String } - source of change
-			*/
-		set (property, value, source) {
-			if (!isEqual_1(this.get(property), value)) {
-				this.data[property] = {
-					_is_observable_payload: true,
-					source: source || this.getSource(),
-					value: value
-				};
-			}
-		}
-
-		/*
-			@function get - get observed object property
-			@param { String } property - observed object property to get
-			*/
-		get (property) {
-			return this.data[property]
-		}
-
-		/*
-			@function delete - delete observed object property
-			@param { String } property - observed object property to delete
-			*/
-		delete (property) {
-			delete this.data[property];
-		}
-
-		getSource () {
-			return this.constructor.name + ':' + this.id
-		}
-
-		/*
-			@function syncAll - sync all observed object properties
-			*/
-		syncAll () {
-			Object.keys(this.data || {}).forEach((k) => {
-				this.sync(k);
-			});
-		}
-
-		/*
-			@function bind - attach a function to observe property changes
-			@param { String } id - unique id of observer function
-			@param { Function } fn - handler called when property changes
-			@param { String } property - optional name of property to observe
-
-			Handler function prototype:
-
-			If property is not supplied, callback receives property and value
-			(property, value) => {}
-
-			Otherwise just the value is supplied
-			(value) => {}
-			*/
-		bind (id, fn, property = '*') {
-			if (!this.bound[property]) {
-				this.bound[property] = {};
-			}
-			this.bound[property][id] = fn;
-			Object.keys(this.data).forEach((k) => {
-				fn(this.id, k, this.get(k));
-			});
-		}
-
-		/*
-			@function unbind - unattach observer
-			@param { String } id - unique id of observer function
-			@param { String } property - optional name of property being observed
-			*/
-		unbind (id, property = '*') {
-			if (this.bound[property][id]) {
-				delete this.bound[property][id];
-			}
-		}
-
-		/*
-			@function observers - return current observer count
-			*/
-		observers () {
-			let c = 0;
-			for (const id in this.bound) {
-				if (this.bound.hasOwnProperty(id)) {
-					c++;
-				}
-			}
-			return c
-		}
-
-		/*
-			function sync - notify observers of property value change
-			@param { String } property - property that changed
-			@param { String } source - id of originator of change
-			*/
-		sync (property, source) {
-			Object.keys(this.bound['*'] || {}).forEach((k) => {
-				this.bound['*'][k](this.id, property, this.get(property), source);
-			});
-			Object.keys(this.bound[property] || {}).forEach((k) => {
-				this.bound[property][k](this.id, property, this.get(property), source);
-			});
-		}
-	}
-
-	/**
-		Shared event observers used by Sargasso classes.
-
-		When these observers have subscribers they watch for events
-		and notify the subscriber's specific event handler
-		method when they occur.
-
-		@author Michael Rhodes (except where noted)
-		@license MIT
-		Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
-
-		Subscribers to these services must imlement handler methods
-		EG. watchDOM, watchScroll, watchResize, watchOrientation
-	**/
-
-	let theDOMWatcher;
-	let theScrollWatcher;
-	let theResizeWatcher;
-	let theOrientationWatcher;
-	let theWorkerWatcher;
-	let theObservableObjectWatcher;
-
-	class ObserverSubscriptionManager {
-		constructor (options) {
-			this.options = options;
-			this.observers = [];
-			this.pendingAnimationFrame = undefined;
-			this.frameQueue = [];
-		}
-
-		subscribe (observer) {
-			if (!this.observers.length) {
-				this.wakeup();
-			}
-			this.observers.push(observer);
-		}
-
-		unSubscribe (observer) {
-			if (this.observers.indexOf(observer) !== -1) {
-				this.observers.splice(this.observers.indexOf(observer), 1);
-			}
-
-			if (!this.observers.length) {
-				this.sleep();
-			}
-		}
-
-		sleep () {}
-
-		wakeup () {}
-
-		notifyObservers (event, params) {
-			for (let i = 0; i < this.observers.length; i++) {
-				if (this.observers[i][event]) {
-					this.observers[i][event].apply(this.observers[i], params || []);
-				}
-			}
-		}
-
-		flushQueue () {
-			if (this.pendingAnimationFrame) {
-				cancelAnimationFrame(this.pendingAnimationFrame);
-				this.pendingAnimationFrame = undefined;
-			}
-			this.frameQueue = [];
-		}
-
-		queueFrame (frame) {
-			this.frameQueue.push(frame.bind(this));
-			if (!this.pendingAnimationFrame) {
-				this.pendingAnimationFrame = requestAnimationFrame(() => {
-					this.processQueue();
-				});
-			}
-		}
-
-		processQueue () {
-			this.pendingAnimationFrame = undefined;
-			const toProcess = this.frameQueue.slice(0);
-			this.frameQueue = [];
-			for (let i = 0; i < toProcess.length; i++) {
-				toProcess[i]();
-			}
-		}
-	}
-
-	class DOMWatcher extends ObserverSubscriptionManager {
-		constructor (options) {
-			super(options);
-
-			// debounce - just need to know if a change occured, not every change
-			this.mutationHandler = debounce_1((mutations, observer) => {
-				this.observeDOM(mutations, observer);
-			}, 100, {
-				maxWait: 250
-			});
-
-			this.mutationObserver = new MutationObserver(this.mutationHandler, false);
-		}
-
-		subscribe (observer) {
-			super.subscribe(observer);
-			observer.watchDOM();
-		}
-
-		wakeup () {
-			super.wakeup();
-			this.mutationObserver.observe(document.body, {
-				childList: true,
-				subtree: true
-			});
-		}
-
-		sleep () {
-			super.sleep();
-			this.mutationObserver.disconnect();
-		}
-
-		observeDOM () {
-			this.notifyObservers('watchDOM');
-		}
-	}
-
-	class ScrollWatcher extends ObserverSubscriptionManager {
-		constructor (options = {}) {
-			super(options);
-
-			this.scrollElement = this.options.scrollElement || window;
-			this.lastscroll = 0;
-			this.scrolling = false;
-		}
-
-		// use 'scroll' event to start scroll loop unless it's already looping
-		trigger () {
-			if (!this.scrolling) {
-				this.scrollLoop();
-			}
-		}
-
-		scrollLoop () {
-			if (this.lastscroll !== this.scrollTop()) { // are we still scrolling?
-				this.scrolling = true;
-				this.lastscroll = this.scrollTop();
-				this.watchScroll(); // tell our observers
-				const frame = () => {
-					this.scrollLoop();
-				};
-				this.queueFrame(frame);
-			} else {
-				this.scrolling = false; // exit the scroll loop and wait for next 'scroll' event
-			}
-		}
-
-		setOptions (options = {}) {
-			this.sleep();
-			this.scrollElement = options.scrollElement || window;
-			this.wakeup();
-		}
-
-		subscribe (observer) {
-			super.subscribe(observer);
-			observer.watchScroll();
-		}
-
-		wakeup () {
-			super.wakeup();
-			elementTools.on('theScrollWatcher', this.scrollElement, 'scroll', () => {
-				this.trigger();
-			});
-		}
-
-		sleep () {
-			super.sleep();
-			elementTools.off('theScrollWatcher', this.scrollElement, 'scroll');
-		}
-
-		inViewPort (element) {
-			return elementTools.inViewPort(element, this.scrollElement)
-		}
-
-		watchScroll () {
-			this.notifyObservers('watchScroll');
-		}
-
-		scrollTop (newTop) {
-			if (this.scrollElement === window) {
-				if (newTop !== undefined) {
-					window.scrollTo(0, newTop);
-				} else {
-					return window.pageYOffset
-				}
-			} else {
-				if (newTop !== undefined) {
-					this.scrollElement.scrollTop = newTop;
-				} else {
-					return this.scrollElement.scrollTop
-				}
-			}
-		}
-	}
-
-	class ResizeWatcher extends ObserverSubscriptionManager {
-		constructor (options) {
-			super(options);
-
-			this.debounce = debounce_1(() => {
-				this.watchResize();
-			}, 250);
-		}
-
-		subscribe (observer) {
-			super.subscribe(observer);
-			observer.watchResize();
-		}
-
-		wakeup () {
-			super.wakeup();
-			window.addEventListener('resize', this.debounce, false);
-		}
-
-		sleep () {
-			super.sleep();
-			window.removeEventListener('resize', this.debounce);
-		}
-
-		watchResize () {
-			this.notifyObservers('watchResize');
-		}
-	}
-
-	class OrientationWatcher extends ObserverSubscriptionManager {
-		constructor (options) {
-			super(options);
-
-			if ('onorientationchange' in window) {
-				elementTools.addClass(document.body, 'have-orientation');
-			} else {
-				elementTools.addClass(document.body, 'no-orientation');
-			}
-
-			this.debounce = debounce_1(() => {
-				this.watchOrientation();
-			}, 250);
-		}
-
-		subscribe (observer) {
-			super.subscribe(observer);
-			observer.watchOrientation();
-		}
-
-		wakeup () {
-			super.wakeup();
-			if ('onorientationchange' in window) {
-				window.addEventListener('orientationchange', this.debounce, false);
-			}
-		}
-
-		sleep () {
-			super.sleep();
-			if ('onorientationchange' in window) {
-				window.removeEventListener('orientationchange', this.debounce);
-			}
-		}
-
-		watchOrientation () {
-			this.notifyObservers('watchOrientation');
-		}
-	}
-
-	// keep track of who is using web workers and
-	// cleanup dangling worker when no subscribers remain
-	class WorkerWatcher extends ObserverSubscriptionManager {
-		constructor (options) {
-			super(options);
-			this.workers = {};
-		}
-
-		registerWorker (id, codeOrURL) {
-			if (!this.workers[id]) {
-				// create a worker for the id if worker id is unknown
-
-				let blobURL = codeOrURL;
-
-				let revoke = false;
-				if (!codeOrURL.match(/^(http|\/)/i)) {
-					const blob = new Blob([codeOrURL], {
-						type: 'text/javascript'
-					});
-					blobURL = URL.createObjectURL(blob);
-					revoke = true;
-				}
-
-				this.workers[id] = {
-					worker: new Worker(blobURL),
-					observers: []
-				};
-
-				if (revoke) {
-					URL.revokeObjectURL(blobURL);
-				}
-
-				this.workers[id].worker.onmessage = (e) => {
-					this.workerMessage(id, e);
-				};
-			}
-
-			return this.workers[id].worker
-		}
-
-		subscribe (observer, id) {
-			if (!this.workers[id]) {
-				throw (new Error('worker ' + id + ' does not exist'))
-			}
-			const workerObservers = this.workers[id].observers;
-			workerObservers.push(observer);
-			super.subscribe(observer);
-		}
-
-		unSubscribe (observer, id) {
-			if (!this.workers[id]) {
-				throw (new Error('worker ' + id + ' does not exist'))
-			}
-
-			const workerObservers = this.workers[id].observers;
-			if (workerObservers.indexOf(observer) !== -1) {
-				workerObservers.splice(workerObservers.indexOf(observer), 1);
-			}
-
-			if (!workerObservers.length) {
-				this.workers[id].worker.terminate();
-				delete this.workers[id];
-			}
-
-			super.unSubscribe(observer);
-		}
-
-		workerMessage (id, e) {
-			const workerObservers = this.workers[id].observers;
-			workerObservers.forEach((observer) => {
-				if (observer.workerMessage) {
-					observer.workerMessage(id, e);
-				}
-			});
-		}
-
-		wakeup () {
-			super.wakeup();
-		}
-
-		sleep () {
-			super.sleep();
-		}
-	}
-
-	class ObservableObjectWatcher extends ObserverSubscriptionManager {
-		constructor (options) {
-			super(options);
-			this.registeredObservableObjects = {};
-		}
-
-		getObservable (id) {
-			return this.registeredObservableObjects[id] ? this.registeredObservableObjects[id].observable : undefined
-		}
-
-		observableStart (id, data) {
-			const foundObservable = getObservable(id);
-
-			// trying to define with data but already exists
-			if (foundObservable && data !== undefined) {
-				throw (new Error('ObservableObject ' + id + ' already exists, can\'t build.'))
-			}
-
-			if (!this.registeredObservableObjects[id]) { // not already managing observable
-				if (foundObservable) { // add to service
-					this.registeredObservableObjects[id] = {
-						id: id,
-						observable: foundObservable,
-						observers: [],
-						managed: false
-					};
-				} else { // make it
-					this.registeredObservableObjects[id] = {
-						id: id,
-						observable: new ObservableObject(id, data),
-						observers: [],
-						managed: true
-					};
-				}
-				this.registeredObservableObjects[id].observable.bind(this.constructor.name, this.notify.bind(this));
-			}
-
-			return this.registeredObservableObjects[id].observable
-		}
-
-		// delete an observable
-		observableDestroy (id) {
-			if (!this.registeredObservableObjects[id]) {
-				throw (new Error('ObservableObject observableDestroy ' + id + ' does not exist'))
-			}
-			this.registeredObservableObjects[id].observable.unbind(this.constructor.name);
-			this.registeredObservableObjects[id].observable.destroy();
-			delete this.registeredObservableObjects[id];
-		}
-
-		subscribe (observer, id, data) {
-			if (!this.registeredObservableObjects[id]) {
-				this.observableStart(id, data);
-			}
-			this.registeredObservableObjects[id].observers.push(observer);
-			super.subscribe(observer);
-		}
-
-		unSubscribe (observer, id) {
-			if (!this.registeredObservableObjects[id]) {
-				throw (new Error('ObservableObject unSubscribe ' + id + ' does not exist'))
-			}
-
-			const observers = this.registeredObservableObjects[id].observers;
-			if (observers.indexOf(observer) !== -1) {
-				observers.splice(observers.indexOf(observer), 1);
-			}
-
-			if (!observers.length && this.registeredObservableObjects[id].managed) {
-				this.observableDestroy(id);
-			}
-
-			super.unSubscribe(observer);
-		}
-
-		notify (id, property, value, source) {
-			if (!this.registeredObservableObjects[id]) {
-				throw (new Error('ObservableObject notify ' + id + ' does not exist'))
-			}
-			const observers = this.registeredObservableObjects[id].observers;
-			observers.forEach((observer) => {
-				if (observer.observableChanged) {
-					observer.observableChanged.apply(observer, [id, property, value, source]);
-				}
-			});
-		}
-	}
-
-	// build subscription services
-
-	theDOMWatcher = new DOMWatcher();
-	theScrollWatcher = new ScrollWatcher();
-	theResizeWatcher = new ResizeWatcher();
-	theOrientationWatcher = new OrientationWatcher();
-	theWorkerWatcher = new WorkerWatcher();
-	theObservableObjectWatcher = new ObservableObjectWatcher();
 
 	/**
 		Sargasso
@@ -5582,6 +5408,12 @@ var SargassoModule = (function (exports) {
 			this.template = undefined;
 			this.templateArgs = {};
 			this.started = false;
+
+			this.render = debounce_1(() => {
+				this._render();
+			}, 100, {
+				maxWait: 250
+			});
 		}
 
 		/*
@@ -5740,9 +5572,10 @@ var SargassoModule = (function (exports) {
 			@param { String } id - id of observable
 			@param { String } property - property that changed
 			@param { String } value - new value
-			@param { String } source - source of change
 			*/
-		observableChanged (id, property, value, source) {}
+		observableChanged (id, property, value) {
+			this.render();
+		}
 
 		/****************************************************
 		UTILITY METHODS - callable but normally not overriden
@@ -5982,7 +5815,8 @@ var SargassoModule = (function (exports) {
 			this.render();
 		}
 
-		render () {
+		// this.render is a debounced call to this
+		_render () {
 			if (this.template) {
 				render(this.template(JSON.parse(JSON.stringify(this.templateArgs || {}))), this.element);
 			}
@@ -6280,6 +6114,173 @@ var SargassoModule = (function (exports) {
 	}
 
 	registerSargassoClass('SargassoSupervisor', SargassoSupervisor);
+
+	/*!
+	 * JavaScript Cookie v2.2.1
+	 * https://github.com/js-cookie/js-cookie
+	 *
+	 * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
+	 * Released under the MIT license
+	 */
+
+	var js_cookie = createCommonjsModule(function (module, exports) {
+	;(function (factory) {
+		var registeredInModuleLoader;
+		if (typeof undefined === 'function' && undefined.amd) {
+			undefined(factory);
+			registeredInModuleLoader = true;
+		}
+		if ('object' === 'object') {
+			module.exports = factory();
+			registeredInModuleLoader = true;
+		}
+		if (!registeredInModuleLoader) {
+			var OldCookies = window.Cookies;
+			var api = window.Cookies = factory();
+			api.noConflict = function () {
+				window.Cookies = OldCookies;
+				return api;
+			};
+		}
+	}(function () {
+		function extend () {
+			var i = 0;
+			var result = {};
+			for (; i < arguments.length; i++) {
+				var attributes = arguments[ i ];
+				for (var key in attributes) {
+					result[key] = attributes[key];
+				}
+			}
+			return result;
+		}
+
+		function decode (s) {
+			return s.replace(/(%[0-9A-Z]{2})+/g, decodeURIComponent);
+		}
+
+		function init (converter) {
+			function api() {}
+
+			function set (key, value, attributes) {
+				if (typeof document === 'undefined') {
+					return;
+				}
+
+				attributes = extend({
+					path: '/'
+				}, api.defaults, attributes);
+
+				if (typeof attributes.expires === 'number') {
+					attributes.expires = new Date(new Date() * 1 + attributes.expires * 864e+5);
+				}
+
+				// We're using "expires" because "max-age" is not supported by IE
+				attributes.expires = attributes.expires ? attributes.expires.toUTCString() : '';
+
+				try {
+					var result = JSON.stringify(value);
+					if (/^[\{\[]/.test(result)) {
+						value = result;
+					}
+				} catch (e) {}
+
+				value = converter.write ?
+					converter.write(value, key) :
+					encodeURIComponent(String(value))
+						.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
+
+				key = encodeURIComponent(String(key))
+					.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent)
+					.replace(/[\(\)]/g, escape);
+
+				var stringifiedAttributes = '';
+				for (var attributeName in attributes) {
+					if (!attributes[attributeName]) {
+						continue;
+					}
+					stringifiedAttributes += '; ' + attributeName;
+					if (attributes[attributeName] === true) {
+						continue;
+					}
+
+					// Considers RFC 6265 section 5.2:
+					// ...
+					// 3.  If the remaining unparsed-attributes contains a %x3B (";")
+					//     character:
+					// Consume the characters of the unparsed-attributes up to,
+					// not including, the first %x3B (";") character.
+					// ...
+					stringifiedAttributes += '=' + attributes[attributeName].split(';')[0];
+				}
+
+				return (document.cookie = key + '=' + value + stringifiedAttributes);
+			}
+
+			function get (key, json) {
+				if (typeof document === 'undefined') {
+					return;
+				}
+
+				var jar = {};
+				// To prevent the for loop in the first place assign an empty array
+				// in case there are no cookies at all.
+				var cookies = document.cookie ? document.cookie.split('; ') : [];
+				var i = 0;
+
+				for (; i < cookies.length; i++) {
+					var parts = cookies[i].split('=');
+					var cookie = parts.slice(1).join('=');
+
+					if (!json && cookie.charAt(0) === '"') {
+						cookie = cookie.slice(1, -1);
+					}
+
+					try {
+						var name = decode(parts[0]);
+						cookie = (converter.read || converter)(cookie, name) ||
+							decode(cookie);
+
+						if (json) {
+							try {
+								cookie = JSON.parse(cookie);
+							} catch (e) {}
+						}
+
+						jar[name] = cookie;
+
+						if (key === name) {
+							break;
+						}
+					} catch (e) {}
+				}
+
+				return key ? jar[key] : jar;
+			}
+
+			api.set = set;
+			api.get = function (key) {
+				return get(key, false /* read as raw */);
+			};
+			api.getJSON = function (key) {
+				return get(key, true /* read as json */);
+			};
+			api.remove = function (key, attributes) {
+				set(key, '', extend(attributes, {
+					expires: -1
+				}));
+			};
+
+			api.defaults = {};
+
+			api.withConverter = init;
+
+			return api;
+		}
+
+		return init(function () {});
+	}));
+	});
 
 	/**
 		Breakpoints
@@ -6711,6 +6712,942 @@ var SargassoModule = (function (exports) {
 		supervisor.start(options);
 	};
 
+	/**
+	 * @license
+	 * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+	 * This code may only be used under the BSD style license found at
+	 * http://polymer.github.io/LICENSE.txt
+	 * The complete set of authors may be found at
+	 * http://polymer.github.io/AUTHORS.txt
+	 * The complete set of contributors may be found at
+	 * http://polymer.github.io/CONTRIBUTORS.txt
+	 * Code distributed by Google as part of the polymer project is also
+	 * subject to an additional IP rights grant found at
+	 * http://polymer.github.io/PATENTS.txt
+	 */
+	// Helper functions for manipulating parts
+	// TODO(kschaaf): Refactor into Part API?
+	const createAndInsertPart = (containerPart, beforePart) => {
+	    const container = containerPart.startNode.parentNode;
+	    const beforeNode = beforePart === undefined ? containerPart.endNode :
+	        beforePart.startNode;
+	    const startNode = container.insertBefore(createMarker(), beforeNode);
+	    container.insertBefore(createMarker(), beforeNode);
+	    const newPart = new NodePart(containerPart.options);
+	    newPart.insertAfterNode(startNode);
+	    return newPart;
+	};
+	const updatePart = (part, value) => {
+	    part.setValue(value);
+	    part.commit();
+	    return part;
+	};
+	const insertPartBefore = (containerPart, part, ref) => {
+	    const container = containerPart.startNode.parentNode;
+	    const beforeNode = ref ? ref.startNode : containerPart.endNode;
+	    const endNode = part.endNode.nextSibling;
+	    if (endNode !== beforeNode) {
+	        reparentNodes(container, part.startNode, endNode, beforeNode);
+	    }
+	};
+	const removePart = (part) => {
+	    removeNodes(part.startNode.parentNode, part.startNode, part.endNode.nextSibling);
+	};
+	// Helper for generating a map of array item to its index over a subset
+	// of an array (used to lazily generate `newKeyToIndexMap` and
+	// `oldKeyToIndexMap`)
+	const generateMap = (list, start, end) => {
+	    const map = new Map();
+	    for (let i = start; i <= end; i++) {
+	        map.set(list[i], i);
+	    }
+	    return map;
+	};
+	// Stores previous ordered list of parts and map of key to index
+	const partListCache = new WeakMap();
+	const keyListCache = new WeakMap();
+	/**
+	 * A directive that repeats a series of values (usually `TemplateResults`)
+	 * generated from an iterable, and updates those items efficiently when the
+	 * iterable changes based on user-provided `keys` associated with each item.
+	 *
+	 * Note that if a `keyFn` is provided, strict key-to-DOM mapping is maintained,
+	 * meaning previous DOM for a given key is moved into the new position if
+	 * needed, and DOM will never be reused with values for different keys (new DOM
+	 * will always be created for new keys). This is generally the most efficient
+	 * way to use `repeat` since it performs minimum unnecessary work for insertions
+	 * and removals.
+	 *
+	 * IMPORTANT: If providing a `keyFn`, keys *must* be unique for all items in a
+	 * given call to `repeat`. The behavior when two or more items have the same key
+	 * is undefined.
+	 *
+	 * If no `keyFn` is provided, this directive will perform similar to mapping
+	 * items to values, and DOM will be reused against potentially different items.
+	 */
+	const repeat = directive((items, keyFnOrTemplate, template) => {
+	    let keyFn;
+	    if (template === undefined) {
+	        template = keyFnOrTemplate;
+	    }
+	    else if (keyFnOrTemplate !== undefined) {
+	        keyFn = keyFnOrTemplate;
+	    }
+	    return (containerPart) => {
+	        if (!(containerPart instanceof NodePart)) {
+	            throw new Error('repeat can only be used in text bindings');
+	        }
+	        // Old part & key lists are retrieved from the last update
+	        // (associated with the part for this instance of the directive)
+	        const oldParts = partListCache.get(containerPart) || [];
+	        const oldKeys = keyListCache.get(containerPart) || [];
+	        // New part list will be built up as we go (either reused from
+	        // old parts or created for new keys in this update). This is
+	        // saved in the above cache at the end of the update.
+	        const newParts = [];
+	        // New value list is eagerly generated from items along with a
+	        // parallel array indicating its key.
+	        const newValues = [];
+	        const newKeys = [];
+	        let index = 0;
+	        for (const item of items) {
+	            newKeys[index] = keyFn ? keyFn(item, index) : index;
+	            newValues[index] = template(item, index);
+	            index++;
+	        }
+	        // Maps from key to index for current and previous update; these
+	        // are generated lazily only when needed as a performance
+	        // optimization, since they are only required for multiple
+	        // non-contiguous changes in the list, which are less common.
+	        let newKeyToIndexMap;
+	        let oldKeyToIndexMap;
+	        // Head and tail pointers to old parts and new values
+	        let oldHead = 0;
+	        let oldTail = oldParts.length - 1;
+	        let newHead = 0;
+	        let newTail = newValues.length - 1;
+	        // Overview of O(n) reconciliation algorithm (general approach
+	        // based on ideas found in ivi, vue, snabbdom, etc.):
+	        //
+	        // * We start with the list of old parts and new values (and
+	        //   arrays of their respective keys), head/tail pointers into
+	        //   each, and we build up the new list of parts by updating
+	        //   (and when needed, moving) old parts or creating new ones.
+	        //   The initial scenario might look like this (for brevity of
+	        //   the diagrams, the numbers in the array reflect keys
+	        //   associated with the old parts or new values, although keys
+	        //   and parts/values are actually stored in parallel arrays
+	        //   indexed using the same head/tail pointers):
+	        //
+	        //      oldHead v                 v oldTail
+	        //   oldKeys:  [0, 1, 2, 3, 4, 5, 6]
+	        //   newParts: [ ,  ,  ,  ,  ,  ,  ]
+	        //   newKeys:  [0, 2, 1, 4, 3, 7, 6] <- reflects the user's new
+	        //                                      item order
+	        //      newHead ^                 ^ newTail
+	        //
+	        // * Iterate old & new lists from both sides, updating,
+	        //   swapping, or removing parts at the head/tail locations
+	        //   until neither head nor tail can move.
+	        //
+	        // * Example below: keys at head pointers match, so update old
+	        //   part 0 in-place (no need to move it) and record part 0 in
+	        //   the `newParts` list. The last thing we do is advance the
+	        //   `oldHead` and `newHead` pointers (will be reflected in the
+	        //   next diagram).
+	        //
+	        //      oldHead v                 v oldTail
+	        //   oldKeys:  [0, 1, 2, 3, 4, 5, 6]
+	        //   newParts: [0,  ,  ,  ,  ,  ,  ] <- heads matched: update 0
+	        //   newKeys:  [0, 2, 1, 4, 3, 7, 6]    and advance both oldHead
+	        //                                      & newHead
+	        //      newHead ^                 ^ newTail
+	        //
+	        // * Example below: head pointers don't match, but tail
+	        //   pointers do, so update part 6 in place (no need to move
+	        //   it), and record part 6 in the `newParts` list. Last,
+	        //   advance the `oldTail` and `oldHead` pointers.
+	        //
+	        //         oldHead v              v oldTail
+	        //   oldKeys:  [0, 1, 2, 3, 4, 5, 6]
+	        //   newParts: [0,  ,  ,  ,  ,  , 6] <- tails matched: update 6
+	        //   newKeys:  [0, 2, 1, 4, 3, 7, 6]    and advance both oldTail
+	        //                                      & newTail
+	        //         newHead ^              ^ newTail
+	        //
+	        // * If neither head nor tail match; next check if one of the
+	        //   old head/tail items was removed. We first need to generate
+	        //   the reverse map of new keys to index (`newKeyToIndexMap`),
+	        //   which is done once lazily as a performance optimization,
+	        //   since we only hit this case if multiple non-contiguous
+	        //   changes were made. Note that for contiguous removal
+	        //   anywhere in the list, the head and tails would advance
+	        //   from either end and pass each other before we get to this
+	        //   case and removals would be handled in the final while loop
+	        //   without needing to generate the map.
+	        //
+	        // * Example below: The key at `oldTail` was removed (no longer
+	        //   in the `newKeyToIndexMap`), so remove that part from the
+	        //   DOM and advance just the `oldTail` pointer.
+	        //
+	        //         oldHead v           v oldTail
+	        //   oldKeys:  [0, 1, 2, 3, 4, 5, 6]
+	        //   newParts: [0,  ,  ,  ,  ,  , 6] <- 5 not in new map: remove
+	        //   newKeys:  [0, 2, 1, 4, 3, 7, 6]    5 and advance oldTail
+	        //         newHead ^           ^ newTail
+	        //
+	        // * Once head and tail cannot move, any mismatches are due to
+	        //   either new or moved items; if a new key is in the previous
+	        //   "old key to old index" map, move the old part to the new
+	        //   location, otherwise create and insert a new part. Note
+	        //   that when moving an old part we null its position in the
+	        //   oldParts array if it lies between the head and tail so we
+	        //   know to skip it when the pointers get there.
+	        //
+	        // * Example below: neither head nor tail match, and neither
+	        //   were removed; so find the `newHead` key in the
+	        //   `oldKeyToIndexMap`, and move that old part's DOM into the
+	        //   next head position (before `oldParts[oldHead]`). Last,
+	        //   null the part in the `oldPart` array since it was
+	        //   somewhere in the remaining oldParts still to be scanned
+	        //   (between the head and tail pointers) so that we know to
+	        //   skip that old part on future iterations.
+	        //
+	        //         oldHead v        v oldTail
+	        //   oldKeys:  [0, 1, -, 3, 4, 5, 6]
+	        //   newParts: [0, 2,  ,  ,  ,  , 6] <- stuck: update & move 2
+	        //   newKeys:  [0, 2, 1, 4, 3, 7, 6]    into place and advance
+	        //                                      newHead
+	        //         newHead ^           ^ newTail
+	        //
+	        // * Note that for moves/insertions like the one above, a part
+	        //   inserted at the head pointer is inserted before the
+	        //   current `oldParts[oldHead]`, and a part inserted at the
+	        //   tail pointer is inserted before `newParts[newTail+1]`. The
+	        //   seeming asymmetry lies in the fact that new parts are
+	        //   moved into place outside in, so to the right of the head
+	        //   pointer are old parts, and to the right of the tail
+	        //   pointer are new parts.
+	        //
+	        // * We always restart back from the top of the algorithm,
+	        //   allowing matching and simple updates in place to
+	        //   continue...
+	        //
+	        // * Example below: the head pointers once again match, so
+	        //   simply update part 1 and record it in the `newParts`
+	        //   array.  Last, advance both head pointers.
+	        //
+	        //         oldHead v        v oldTail
+	        //   oldKeys:  [0, 1, -, 3, 4, 5, 6]
+	        //   newParts: [0, 2, 1,  ,  ,  , 6] <- heads matched: update 1
+	        //   newKeys:  [0, 2, 1, 4, 3, 7, 6]    and advance both oldHead
+	        //                                      & newHead
+	        //            newHead ^        ^ newTail
+	        //
+	        // * As mentioned above, items that were moved as a result of
+	        //   being stuck (the final else clause in the code below) are
+	        //   marked with null, so we always advance old pointers over
+	        //   these so we're comparing the next actual old value on
+	        //   either end.
+	        //
+	        // * Example below: `oldHead` is null (already placed in
+	        //   newParts), so advance `oldHead`.
+	        //
+	        //            oldHead v     v oldTail
+	        //   oldKeys:  [0, 1, -, 3, 4, 5, 6] <- old head already used:
+	        //   newParts: [0, 2, 1,  ,  ,  , 6]    advance oldHead
+	        //   newKeys:  [0, 2, 1, 4, 3, 7, 6]
+	        //               newHead ^     ^ newTail
+	        //
+	        // * Note it's not critical to mark old parts as null when they
+	        //   are moved from head to tail or tail to head, since they
+	        //   will be outside the pointer range and never visited again.
+	        //
+	        // * Example below: Here the old tail key matches the new head
+	        //   key, so the part at the `oldTail` position and move its
+	        //   DOM to the new head position (before `oldParts[oldHead]`).
+	        //   Last, advance `oldTail` and `newHead` pointers.
+	        //
+	        //               oldHead v  v oldTail
+	        //   oldKeys:  [0, 1, -, 3, 4, 5, 6]
+	        //   newParts: [0, 2, 1, 4,  ,  , 6] <- old tail matches new
+	        //   newKeys:  [0, 2, 1, 4, 3, 7, 6]   head: update & move 4,
+	        //                                     advance oldTail & newHead
+	        //               newHead ^     ^ newTail
+	        //
+	        // * Example below: Old and new head keys match, so update the
+	        //   old head part in place, and advance the `oldHead` and
+	        //   `newHead` pointers.
+	        //
+	        //               oldHead v oldTail
+	        //   oldKeys:  [0, 1, -, 3, 4, 5, 6]
+	        //   newParts: [0, 2, 1, 4, 3,   ,6] <- heads match: update 3
+	        //   newKeys:  [0, 2, 1, 4, 3, 7, 6]    and advance oldHead &
+	        //                                      newHead
+	        //                  newHead ^  ^ newTail
+	        //
+	        // * Once the new or old pointers move past each other then all
+	        //   we have left is additions (if old list exhausted) or
+	        //   removals (if new list exhausted). Those are handled in the
+	        //   final while loops at the end.
+	        //
+	        // * Example below: `oldHead` exceeded `oldTail`, so we're done
+	        //   with the main loop.  Create the remaining part and insert
+	        //   it at the new head position, and the update is complete.
+	        //
+	        //                   (oldHead > oldTail)
+	        //   oldKeys:  [0, 1, -, 3, 4, 5, 6]
+	        //   newParts: [0, 2, 1, 4, 3, 7 ,6] <- create and insert 7
+	        //   newKeys:  [0, 2, 1, 4, 3, 7, 6]
+	        //                     newHead ^ newTail
+	        //
+	        // * Note that the order of the if/else clauses is not
+	        //   important to the algorithm, as long as the null checks
+	        //   come first (to ensure we're always working on valid old
+	        //   parts) and that the final else clause comes last (since
+	        //   that's where the expensive moves occur). The order of
+	        //   remaining clauses is is just a simple guess at which cases
+	        //   will be most common.
+	        //
+	        // * TODO(kschaaf) Note, we could calculate the longest
+	        //   increasing subsequence (LIS) of old items in new position,
+	        //   and only move those not in the LIS set. However that costs
+	        //   O(nlogn) time and adds a bit more code, and only helps
+	        //   make rare types of mutations require fewer moves. The
+	        //   above handles removes, adds, reversal, swaps, and single
+	        //   moves of contiguous items in linear time, in the minimum
+	        //   number of moves. As the number of multiple moves where LIS
+	        //   might help approaches a random shuffle, the LIS
+	        //   optimization becomes less helpful, so it seems not worth
+	        //   the code at this point. Could reconsider if a compelling
+	        //   case arises.
+	        while (oldHead <= oldTail && newHead <= newTail) {
+	            if (oldParts[oldHead] === null) {
+	                // `null` means old part at head has already been used
+	                // below; skip
+	                oldHead++;
+	            }
+	            else if (oldParts[oldTail] === null) {
+	                // `null` means old part at tail has already been used
+	                // below; skip
+	                oldTail--;
+	            }
+	            else if (oldKeys[oldHead] === newKeys[newHead]) {
+	                // Old head matches new head; update in place
+	                newParts[newHead] =
+	                    updatePart(oldParts[oldHead], newValues[newHead]);
+	                oldHead++;
+	                newHead++;
+	            }
+	            else if (oldKeys[oldTail] === newKeys[newTail]) {
+	                // Old tail matches new tail; update in place
+	                newParts[newTail] =
+	                    updatePart(oldParts[oldTail], newValues[newTail]);
+	                oldTail--;
+	                newTail--;
+	            }
+	            else if (oldKeys[oldHead] === newKeys[newTail]) {
+	                // Old head matches new tail; update and move to new tail
+	                newParts[newTail] =
+	                    updatePart(oldParts[oldHead], newValues[newTail]);
+	                insertPartBefore(containerPart, oldParts[oldHead], newParts[newTail + 1]);
+	                oldHead++;
+	                newTail--;
+	            }
+	            else if (oldKeys[oldTail] === newKeys[newHead]) {
+	                // Old tail matches new head; update and move to new head
+	                newParts[newHead] =
+	                    updatePart(oldParts[oldTail], newValues[newHead]);
+	                insertPartBefore(containerPart, oldParts[oldTail], oldParts[oldHead]);
+	                oldTail--;
+	                newHead++;
+	            }
+	            else {
+	                if (newKeyToIndexMap === undefined) {
+	                    // Lazily generate key-to-index maps, used for removals &
+	                    // moves below
+	                    newKeyToIndexMap = generateMap(newKeys, newHead, newTail);
+	                    oldKeyToIndexMap = generateMap(oldKeys, oldHead, oldTail);
+	                }
+	                if (!newKeyToIndexMap.has(oldKeys[oldHead])) {
+	                    // Old head is no longer in new list; remove
+	                    removePart(oldParts[oldHead]);
+	                    oldHead++;
+	                }
+	                else if (!newKeyToIndexMap.has(oldKeys[oldTail])) {
+	                    // Old tail is no longer in new list; remove
+	                    removePart(oldParts[oldTail]);
+	                    oldTail--;
+	                }
+	                else {
+	                    // Any mismatches at this point are due to additions or
+	                    // moves; see if we have an old part we can reuse and move
+	                    // into place
+	                    const oldIndex = oldKeyToIndexMap.get(newKeys[newHead]);
+	                    const oldPart = oldIndex !== undefined ? oldParts[oldIndex] : null;
+	                    if (oldPart === null) {
+	                        // No old part for this value; create a new one and
+	                        // insert it
+	                        const newPart = createAndInsertPart(containerPart, oldParts[oldHead]);
+	                        updatePart(newPart, newValues[newHead]);
+	                        newParts[newHead] = newPart;
+	                    }
+	                    else {
+	                        // Reuse old part
+	                        newParts[newHead] =
+	                            updatePart(oldPart, newValues[newHead]);
+	                        insertPartBefore(containerPart, oldPart, oldParts[oldHead]);
+	                        // This marks the old part as having been used, so that
+	                        // it will be skipped in the first two checks above
+	                        oldParts[oldIndex] = null;
+	                    }
+	                    newHead++;
+	                }
+	            }
+	        }
+	        // Add parts for any remaining new values
+	        while (newHead <= newTail) {
+	            // For all remaining additions, we insert before last new
+	            // tail, since old pointers are no longer valid
+	            const newPart = createAndInsertPart(containerPart, newParts[newTail + 1]);
+	            updatePart(newPart, newValues[newHead]);
+	            newParts[newHead++] = newPart;
+	        }
+	        // Remove any remaining unused old parts
+	        while (oldHead <= oldTail) {
+	            const oldPart = oldParts[oldHead++];
+	            if (oldPart !== null) {
+	                removePart(oldPart);
+	            }
+	        }
+	        // Save order of new parts for next round
+	        partListCache.set(containerPart, newParts);
+	        keyListCache.set(containerPart, newKeys);
+	    };
+	});
+
+	/**
+	 * @license
+	 * Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
+	 * This code may only be used under the BSD style license found at
+	 * http://polymer.github.io/LICENSE.txt
+	 * The complete set of authors may be found at
+	 * http://polymer.github.io/AUTHORS.txt
+	 * The complete set of contributors may be found at
+	 * http://polymer.github.io/CONTRIBUTORS.txt
+	 * Code distributed by Google as part of the polymer project is also
+	 * subject to an additional IP rights grant found at
+	 * http://polymer.github.io/PATENTS.txt
+	 */
+	const templateCaches = new WeakMap();
+	/**
+	 * Enables fast switching between multiple templates by caching the DOM nodes
+	 * and TemplateInstances produced by the templates.
+	 *
+	 * Example:
+	 *
+	 * ```
+	 * let checked = false;
+	 *
+	 * html`
+	 *   ${cache(checked ? html`input is checked` : html`input is not checked`)}
+	 * `
+	 * ```
+	 */
+	const cache = directive((value) => (part) => {
+	    if (!(part instanceof NodePart)) {
+	        throw new Error('cache can only be used in text bindings');
+	    }
+	    let templateCache = templateCaches.get(part);
+	    if (templateCache === undefined) {
+	        templateCache = new WeakMap();
+	        templateCaches.set(part, templateCache);
+	    }
+	    const previousValue = part.value;
+	    // First, can we update the current TemplateInstance, or do we need to move
+	    // the current nodes into the cache?
+	    if (previousValue instanceof TemplateInstance) {
+	        if (value instanceof TemplateResult &&
+	            previousValue.template === part.options.templateFactory(value)) {
+	            // Same Template, just trigger an update of the TemplateInstance
+	            part.setValue(value);
+	            return;
+	        }
+	        else {
+	            // Not the same Template, move the nodes from the DOM into the cache.
+	            let cachedTemplate = templateCache.get(previousValue.template);
+	            if (cachedTemplate === undefined) {
+	                cachedTemplate = {
+	                    instance: previousValue,
+	                    nodes: document.createDocumentFragment(),
+	                };
+	                templateCache.set(previousValue.template, cachedTemplate);
+	            }
+	            reparentNodes(cachedTemplate.nodes, part.startNode.nextSibling, part.endNode);
+	        }
+	    }
+	    // Next, can we reuse nodes from the cache?
+	    if (value instanceof TemplateResult) {
+	        const template = part.options.templateFactory(value);
+	        const cachedTemplate = templateCache.get(template);
+	        if (cachedTemplate !== undefined) {
+	            // Move nodes out of cache
+	            part.setValue(cachedTemplate.nodes);
+	            part.commit();
+	            // Set the Part value to the TemplateInstance so it'll update it.
+	            part.value = cachedTemplate.instance;
+	        }
+	    }
+	    part.setValue(value);
+	});
+
+	/**
+	 * @license
+	 * Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
+	 * This code may only be used under the BSD style license found at
+	 * http://polymer.github.io/LICENSE.txt
+	 * The complete set of authors may be found at
+	 * http://polymer.github.io/AUTHORS.txt
+	 * The complete set of contributors may be found at
+	 * http://polymer.github.io/CONTRIBUTORS.txt
+	 * Code distributed by Google as part of the polymer project is also
+	 * subject to an additional IP rights grant found at
+	 * http://polymer.github.io/PATENTS.txt
+	 */
+	// IE11 doesn't support classList on SVG elements, so we emulate it with a Set
+	class ClassList {
+	    constructor(element) {
+	        this.classes = new Set();
+	        this.changed = false;
+	        this.element = element;
+	        const classList = (element.getAttribute('class') || '').split(/\s+/);
+	        for (const cls of classList) {
+	            this.classes.add(cls);
+	        }
+	    }
+	    add(cls) {
+	        this.classes.add(cls);
+	        this.changed = true;
+	    }
+	    remove(cls) {
+	        this.classes.delete(cls);
+	        this.changed = true;
+	    }
+	    commit() {
+	        if (this.changed) {
+	            let classString = '';
+	            this.classes.forEach((cls) => classString += cls + ' ');
+	            this.element.setAttribute('class', classString);
+	        }
+	    }
+	}
+	/**
+	 * Stores the ClassInfo object applied to a given AttributePart.
+	 * Used to unset existing values when a new ClassInfo object is applied.
+	 */
+	const previousClassesCache = new WeakMap();
+	/**
+	 * A directive that applies CSS classes. This must be used in the `class`
+	 * attribute and must be the only part used in the attribute. It takes each
+	 * property in the `classInfo` argument and adds the property name to the
+	 * element's `class` if the property value is truthy; if the property value is
+	 * falsey, the property name is removed from the element's `class`. For example
+	 * `{foo: bar}` applies the class `foo` if the value of `bar` is truthy.
+	 * @param classInfo {ClassInfo}
+	 */
+	const classMap = directive((classInfo) => (part) => {
+	    if (!(part instanceof AttributePart) || (part instanceof PropertyPart) ||
+	        part.committer.name !== 'class' || part.committer.parts.length > 1) {
+	        throw new Error('The `classMap` directive must be used in the `class` attribute ' +
+	            'and must be the only part in the attribute.');
+	    }
+	    const { committer } = part;
+	    const { element } = committer;
+	    let previousClasses = previousClassesCache.get(part);
+	    if (previousClasses === undefined) {
+	        // Write static classes once
+	        // Use setAttribute() because className isn't a string on SVG elements
+	        element.setAttribute('class', committer.strings.join(' '));
+	        previousClassesCache.set(part, previousClasses = new Set());
+	    }
+	    const classList = (element.classList || new ClassList(element));
+	    // Remove old classes that no longer apply
+	    // We use forEach() instead of for-of so that re don't require down-level
+	    // iteration.
+	    previousClasses.forEach((name) => {
+	        if (!(name in classInfo)) {
+	            classList.remove(name);
+	            previousClasses.delete(name);
+	        }
+	    });
+	    // Add or remove classes based on their classMap value
+	    for (const name in classInfo) {
+	        const value = classInfo[name];
+	        if (value != previousClasses.has(name)) {
+	            // We explicitly want a loose truthy check of `value` because it seems
+	            // more convenient that '' and 0 are skipped.
+	            if (value) {
+	                classList.add(name);
+	                previousClasses.add(name);
+	            }
+	            else {
+	                classList.remove(name);
+	                previousClasses.delete(name);
+	            }
+	        }
+	    }
+	    if (typeof classList.commit === 'function') {
+	        classList.commit();
+	    }
+	});
+
+	/**
+	 * @license
+	 * Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
+	 * This code may only be used under the BSD style license found at
+	 * http://polymer.github.io/LICENSE.txt
+	 * The complete set of authors may be found at
+	 * http://polymer.github.io/AUTHORS.txt
+	 * The complete set of contributors may be found at
+	 * http://polymer.github.io/CONTRIBUTORS.txt
+	 * Code distributed by Google as part of the polymer project is also
+	 * subject to an additional IP rights grant found at
+	 * http://polymer.github.io/PATENTS.txt
+	 */
+	const previousValues$3 = new WeakMap();
+	/**
+	 * For AttributeParts, sets the attribute if the value is defined and removes
+	 * the attribute if the value is undefined.
+	 *
+	 * For other part types, this directive is a no-op.
+	 */
+	const ifDefined = directive((value) => (part) => {
+	    const previousValue = previousValues$3.get(part);
+	    if (value === undefined && part instanceof AttributePart) {
+	        // If the value is undefined, remove the attribute, but only if the value
+	        // was previously defined.
+	        if (previousValue !== undefined || !previousValues$3.has(part)) {
+	            const name = part.committer.name;
+	            part.committer.element.removeAttribute(name);
+	        }
+	    }
+	    else if (value !== previousValue) {
+	        part.setValue(value);
+	    }
+	    previousValues$3.set(part, value);
+	});
+
+	/**
+	 * @license
+	 * Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
+	 * This code may only be used under the BSD style license found at
+	 * http://polymer.github.io/LICENSE.txt
+	 * The complete set of authors may be found at
+	 * http://polymer.github.io/AUTHORS.txt
+	 * The complete set of contributors may be found at
+	 * http://polymer.github.io/CONTRIBUTORS.txt
+	 * Code distributed by Google as part of the polymer project is also
+	 * subject to an additional IP rights grant found at
+	 * http://polymer.github.io/PATENTS.txt
+	 */
+	const previousValues$2 = new WeakMap();
+	/**
+	 * Prevents re-render of a template function until a single value or an array of
+	 * values changes.
+	 *
+	 * Example:
+	 *
+	 * ```js
+	 * html`
+	 *   <div>
+	 *     ${guard([user.id, company.id], () => html`...`)}
+	 *   </div>
+	 * ```
+	 *
+	 * In this case, the template only renders if either `user.id` or `company.id`
+	 * changes.
+	 *
+	 * guard() is useful with immutable data patterns, by preventing expensive work
+	 * until data updates.
+	 *
+	 * Example:
+	 *
+	 * ```js
+	 * html`
+	 *   <div>
+	 *     ${guard([immutableItems], () => immutableItems.map(i => html`${i}`))}
+	 *   </div>
+	 * ```
+	 *
+	 * In this case, items are mapped over only when the array reference changes.
+	 *
+	 * @param value the value to check before re-rendering
+	 * @param f the template function
+	 */
+	const guard = directive((value, f) => (part) => {
+	    const previousValue = previousValues$2.get(part);
+	    if (Array.isArray(value)) {
+	        // Dirty-check arrays by item
+	        if (Array.isArray(previousValue) &&
+	            previousValue.length === value.length &&
+	            value.every((v, i) => v === previousValue[i])) {
+	            return;
+	        }
+	    }
+	    else if (previousValue === value &&
+	        (value !== undefined || previousValues$2.has(part))) {
+	        // Dirty-check non-arrays by identity
+	        return;
+	    }
+	    part.setValue(f());
+	    // Copy the value if it's an array so that if it's mutated we don't forget
+	    // what the previous values were.
+	    previousValues$2.set(part, Array.isArray(value) ? Array.from(value) : value);
+	});
+
+	/**
+	 * @license
+	 * Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
+	 * This code may only be used under the BSD style license found at
+	 * http://polymer.github.io/LICENSE.txt
+	 * The complete set of authors may be found at
+	 * http://polymer.github.io/AUTHORS.txt
+	 * The complete set of contributors may be found at
+	 * http://polymer.github.io/CONTRIBUTORS.txt
+	 * Code distributed by Google as part of the polymer project is also
+	 * subject to an additional IP rights grant found at
+	 * http://polymer.github.io/PATENTS.txt
+	 */
+	/**
+	 * Stores the StyleInfo object applied to a given AttributePart.
+	 * Used to unset existing values when a new StyleInfo object is applied.
+	 */
+	const previousStylePropertyCache = new WeakMap();
+	/**
+	 * A directive that applies CSS properties to an element.
+	 *
+	 * `styleMap` can only be used in the `style` attribute and must be the only
+	 * expression in the attribute. It takes the property names in the `styleInfo`
+	 * object and adds the property values as CSS properties. Property names with
+	 * dashes (`-`) are assumed to be valid CSS property names and set on the
+	 * element's style object using `setProperty()`. Names without dashes are
+	 * assumed to be camelCased JavaScript property names and set on the element's
+	 * style object using property assignment, allowing the style object to
+	 * translate JavaScript-style names to CSS property names.
+	 *
+	 * For example `styleMap({backgroundColor: 'red', 'border-top': '5px', '--size':
+	 * '0'})` sets the `background-color`, `border-top` and `--size` properties.
+	 *
+	 * @param styleInfo {StyleInfo}
+	 */
+	const styleMap = directive((styleInfo) => (part) => {
+	    if (!(part instanceof AttributePart) || (part instanceof PropertyPart) ||
+	        part.committer.name !== 'style' || part.committer.parts.length > 1) {
+	        throw new Error('The `styleMap` directive must be used in the style attribute ' +
+	            'and must be the only part in the attribute.');
+	    }
+	    const { committer } = part;
+	    const { style } = committer.element;
+	    let previousStyleProperties = previousStylePropertyCache.get(part);
+	    if (previousStyleProperties === undefined) {
+	        // Write static styles once
+	        style.cssText = committer.strings.join(' ');
+	        previousStylePropertyCache.set(part, previousStyleProperties = new Set());
+	    }
+	    // Remove old properties that no longer exist in styleInfo
+	    // We use forEach() instead of for-of so that re don't require down-level
+	    // iteration.
+	    previousStyleProperties.forEach((name) => {
+	        if (!(name in styleInfo)) {
+	            previousStyleProperties.delete(name);
+	            if (name.indexOf('-') === -1) {
+	                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+	                style[name] = null;
+	            }
+	            else {
+	                style.removeProperty(name);
+	            }
+	        }
+	    });
+	    // Add or update properties
+	    for (const name in styleInfo) {
+	        previousStyleProperties.add(name);
+	        if (name.indexOf('-') === -1) {
+	            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+	            style[name] = styleInfo[name];
+	        }
+	        else {
+	            style.setProperty(name, styleInfo[name]);
+	        }
+	    }
+	});
+
+	/**
+	 * @license
+	 * Copyright (c) 2020 The Polymer Project Authors. All rights reserved.
+	 * This code may only be used under the BSD style license found at
+	 * http://polymer.github.io/LICENSE.txt
+	 * The complete set of authors may be found at
+	 * http://polymer.github.io/AUTHORS.txt
+	 * The complete set of contributors may be found at
+	 * http://polymer.github.io/CONTRIBUTORS.txt
+	 * Code distributed by Google as part of the polymer project is also
+	 * subject to an additional IP rights grant found at
+	 * http://polymer.github.io/PATENTS.txt
+	 */
+	// For each part, remember the value that was last rendered to the part by the
+	// templateContent directive, and the DocumentFragment that was last set as a
+	// value. The DocumentFragment is used as a unique key to check if the last
+	// value rendered to the part was with templateContent. If not, we'll always
+	// re-render the value passed to templateContent.
+	const previousValues$1 = new WeakMap();
+	/**
+	 * Renders the content of a template element as HTML.
+	 *
+	 * Note, the template should be developer controlled and not user controlled.
+	 * Rendering a user-controlled template with this directive
+	 * could lead to cross-site-scripting vulnerabilities.
+	 */
+	const templateContent = directive((template) => (part) => {
+	    if (!(part instanceof NodePart)) {
+	        throw new Error('templateContent can only be used in text bindings');
+	    }
+	    const previousValue = previousValues$1.get(part);
+	    if (previousValue !== undefined && template === previousValue.template &&
+	        part.value === previousValue.fragment) {
+	        return;
+	    }
+	    const fragment = document.importNode(template.content, true);
+	    part.setValue(fragment);
+	    previousValues$1.set(part, { template, fragment });
+	});
+
+	/**
+	 * @license
+	 * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+	 * This code may only be used under the BSD style license found at
+	 * http://polymer.github.io/LICENSE.txt
+	 * The complete set of authors may be found at
+	 * http://polymer.github.io/AUTHORS.txt
+	 * The complete set of contributors may be found at
+	 * http://polymer.github.io/CONTRIBUTORS.txt
+	 * Code distributed by Google as part of the polymer project is also
+	 * subject to an additional IP rights grant found at
+	 * http://polymer.github.io/PATENTS.txt
+	 */
+	// For each part, remember the value that was last rendered to the part by the
+	// unsafeHTML directive, and the DocumentFragment that was last set as a value.
+	// The DocumentFragment is used as a unique key to check if the last value
+	// rendered to the part was with unsafeHTML. If not, we'll always re-render the
+	// value passed to unsafeHTML.
+	const previousValues = new WeakMap();
+	/**
+	 * Renders the result as HTML, rather than text.
+	 *
+	 * Note, this is unsafe to use with any user-provided input that hasn't been
+	 * sanitized or escaped, as it may lead to cross-site-scripting
+	 * vulnerabilities.
+	 */
+	const unsafeHTML = directive((value) => (part) => {
+	    if (!(part instanceof NodePart)) {
+	        throw new Error('unsafeHTML can only be used in text bindings');
+	    }
+	    const previousValue = previousValues.get(part);
+	    if (previousValue !== undefined && isPrimitive(value) &&
+	        value === previousValue.value && part.value === previousValue.fragment) {
+	        return;
+	    }
+	    const template = document.createElement('template');
+	    template.innerHTML = value; // innerHTML casts to string internally
+	    const fragment = document.importNode(template.content, true);
+	    part.setValue(fragment);
+	    previousValues.set(part, { value, fragment });
+	});
+
+	/**
+	 * @license
+	 * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+	 * This code may only be used under the BSD style license found at
+	 * http://polymer.github.io/LICENSE.txt
+	 * The complete set of authors may be found at
+	 * http://polymer.github.io/AUTHORS.txt
+	 * The complete set of contributors may be found at
+	 * http://polymer.github.io/CONTRIBUTORS.txt
+	 * Code distributed by Google as part of the polymer project is also
+	 * subject to an additional IP rights grant found at
+	 * http://polymer.github.io/PATENTS.txt
+	 */
+	const _state = new WeakMap();
+	// Effectively infinity, but a SMI.
+	const _infinity = 0x7fffffff;
+	/**
+	 * Renders one of a series of values, including Promises, to a Part.
+	 *
+	 * Values are rendered in priority order, with the first argument having the
+	 * highest priority and the last argument having the lowest priority. If a
+	 * value is a Promise, low-priority values will be rendered until it resolves.
+	 *
+	 * The priority of values can be used to create placeholder content for async
+	 * data. For example, a Promise with pending content can be the first,
+	 * highest-priority, argument, and a non_promise loading indicator template can
+	 * be used as the second, lower-priority, argument. The loading indicator will
+	 * render immediately, and the primary content will render when the Promise
+	 * resolves.
+	 *
+	 * Example:
+	 *
+	 *     const content = fetch('./content.txt').then(r => r.text());
+	 *     html`${until(content, html`<span>Loading...</span>`)}`
+	 */
+	const until = directive((...args) => (part) => {
+	    let state = _state.get(part);
+	    if (state === undefined) {
+	        state = {
+	            lastRenderedIndex: _infinity,
+	            values: [],
+	        };
+	        _state.set(part, state);
+	    }
+	    const previousValues = state.values;
+	    let previousLength = previousValues.length;
+	    state.values = args;
+	    for (let i = 0; i < args.length; i++) {
+	        // If we've rendered a higher-priority value already, stop.
+	        if (i > state.lastRenderedIndex) {
+	            break;
+	        }
+	        const value = args[i];
+	        // Render non-Promise values immediately
+	        if (isPrimitive(value) ||
+	            typeof value.then !== 'function') {
+	            part.setValue(value);
+	            state.lastRenderedIndex = i;
+	            // Since a lower-priority value will never overwrite a higher-priority
+	            // synchronous value, we can stop processing now.
+	            break;
+	        }
+	        // If this is a Promise we've already handled, skip it.
+	        if (i < previousLength && value === previousValues[i]) {
+	            continue;
+	        }
+	        // We have a Promise that we haven't seen before, so priorities may have
+	        // changed. Forget what we rendered before.
+	        state.lastRenderedIndex = _infinity;
+	        previousLength = 0;
+	        Promise.resolve(value).then((resolvedValue) => {
+	            const index = state.values.indexOf(value);
+	            // If state.values doesn't contain the value, we've re-rendered without
+	            // the value, so don't render it. Then, only render if the value is
+	            // higher-priority than what's already been rendered.
+	            if (index > -1 && index < state.lastRenderedIndex) {
+	                state.lastRenderedIndex = index;
+	                part.setValue(resolvedValue);
+	                part.commit();
+	            }
+	        });
+	    }
+	});
+
 	/*
 		Sargasso
 
@@ -6725,10 +7662,7 @@ var SargassoModule = (function (exports) {
 	const utils = {
 		registerSargassoClass: registerSargassoClass,
 		bootSargasso: bootSargasso,
-		elementTools: elementTools,
-		html: html,
-		render: render
-
+		elementTools: elementTools
 	};
 
 	const services = {
@@ -6740,8 +7674,23 @@ var SargassoModule = (function (exports) {
 		theObservableObjectWatcher: theObservableObjectWatcher
 	};
 
+	const lit = {
+		html: html,
+		render: render,
+		repeat: repeat,
+		cache: cache,
+		classMap: classMap,
+		ifDefined: ifDefined,
+		guard: guard,
+		styleMap: styleMap,
+		templateContent: templateContent,
+		unsafeHTML: unsafeHTML,
+		until: until
+	};
+
 	exports.ObservableObject = ObservableObject;
 	exports.Sargasso = Sargasso;
+	exports.lit = lit;
 	exports.services = services;
 	exports.utils = utils;
 

@@ -226,7 +226,7 @@ Your Sargasso subclasses can subscribe to event feeds in order to be notified of
 | newPage(old, new) | on a new page |
 | didBreakpoint() | new screen width breakpoint |
 | workerOnMessage (id, data = {}) | id is the worker sending the message. Any payload from the worker `postMessage` is in data.xxx as defined by the worker |
-| observableChanged(id, property, value, source) | called on data change if watching an observable object |
+| observableChanged(id, property, value) | called on data change if watching an observable object |
 | enterFullscreen() | *experimental* called if options 'watchOrientation: true' when user rotates phone or if setFullscreen is called |
 | exitFullscreen() | *experimental* called on exit fullscreen |
 
@@ -388,7 +388,7 @@ let observable = new SargassoModule.ObservableObject('shared-data', args)
 
 You can bind a function to the observable instance which is called on change:
 ```javascript
-let watch = (id, property, value, source) => {
+let watch = (id, property, value) => {
 	console.log('id:' + id + ' property:' + property + ' is now:' + value)
 }
 
@@ -408,7 +408,7 @@ class MyClass extends SargassoModule.Sargasso {
 		this.observableStart('shared-data'); // find or create an observable with id 'shared-data'
 	}
 
-	observableChanged(id, property, value, source) {
+	observableChanged(id, property, value) {
 		// do something with the change
 	}
 }
@@ -457,7 +457,7 @@ examples/example5.html
         }
 
         // observable changed, re-render the template with new values
-        observableChanged(id, property, value, source) {
+        observableChanged(id, property, value) {
           this.render()
         }
       }
