@@ -230,13 +230,6 @@ Your Sargasso subclasses can subscribe to event feeds in order to be notified of
 | enterFullscreen() | *experimental* called if options 'watchOrientation: true' when user rotates phone or if setFullscreen is called |
 | exitFullscreen() | *experimental* called on exit fullscreen |
 
-**Utility Methods:**
-| method | description |
-| ------ | ----------- |
-| getMetaData(key) | return sargasso metadata associated with element (weak map) |
-| setMetaData(key,value) | set a sargasso metadata property |
-| isVisible() | true if element is visible |
-
 **CSS Methods**
 | method | description |
 | ------ | ----------- |
@@ -255,50 +248,32 @@ Your Sargasso subclasses can subscribe to event feeds in order to be notified of
 | once(container,selector,fn) | attach delegated event handler to container scoped to a css selector that executes only once (automatically removes event handler on first call) |
 | off(container,selector) | remove delegated event handler to container scoped to css selector |
 
-Don't forget you need to let sargasso know about your class:
-```registerSargassoClass('MyClass', MyClass)```
-
+**Utility Methods:**
+| method | description |
+| ------ | ----------- |
+| getMetaData(key) | return sargasso metadata associated with element (weak map) |
+| setMetaData(key,value) | set a sargasso metadata property |
+| isVisible() | true if element is visible |
 
 ### Progressive Web App HIJAX Page Load
 
-When HIJAX is enabled, Sargasso automatically captures `<a href="..">` tags and calls the LoadPageHandler instead of allowing the browser load and replace entire pages natively. Usually a web site or app has a boilerplate html wrapper that is the same for every page and well defined content areas that change from page to page. When pages are loaded via HIJAX only the changed content is merged with the current page, replacing elements marked with `data-hijax` leaving heavy weight wrapper elements, persistent javascript, css and sargasso elements intact. You can define as many dynamic elements in the wrapper as needed. Following this scheme allows for deep linking, and search engine discovery while also speeding page load for real browsers.
+When HIJAX is enabled, Sargasso automatically captures `<a href="..">` tags and calls the LoadPageHandler instead of allowing the browser load and replace entire pages natively. Usually a web site or app has a boilerplate html wrapper that is the same for every page and well defined content areas that change from page to page. When pages are loaded via HIJAX only the changed content is merged with the current page, replacing containers marked with `data-hijax` leaving heavy weight wrapper elements, persistent javascript, css and sargasso elements intact. You can define as many dynamic elements in the wrapper as needed. Following this scheme allows for deep linking, and search engine discovery while also speeding page load for real browsers.
 
 The Sargasso supervisor takes care of cleaning up any instantiated Sargasso element controllers in the old content by calling sleep() before the content is removed then sargasso elements in the new content are instantiated and start() is called. That way Sargasso element controllers can be cleanly managed on progressive web app pages without leaving dangling event handlers and memory leaks.
 
 You can optionally make any link be ignored by hijax by setting the `<a href=".." data-no-hijax>`. Offsite links and links with targets are automatically ignored.  
 
-example/example3.html
 ```html
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Example Sargasso Element</title>
-</head>
 <body>
-  <p>This is static wrapper content which does not change from page to page because it's not in a hijaxed container.</p>
+  <p>this is static content like header and navigation</p>
 
-  <div id="navigation" data-hijax>
-    <strong><a href="example3.html">Home</a></strong> | <a href="example3-1.html">Page 1</a> | <a href="example3-2.html">Page 2</a>
-  </div>
-  <hr>
-
-  <div id="page-body" data-hijax>
-    <p>Page content for home page</p>
-    <sargasso-noisy id="content-home" data-log-it="newPage,sleep,stopWorker,destroy"></sargasso-noisy>
+  <div id="content" data-hijax>
+    <p>This is dynamic - it changes from page to page</p>
   </div>
 
-  <div id="some-other-element" data-hijax>
-    <p>This content also changes from page to page.</p>
-  </div>
+  <p>this is also static content such as a site wide footer</p>
 
-  <hr>
-
-  <p>This is also static wrapper content. Maybe a footer.</p>
-
-  <sargasso-noisy id="static-home" data-log-it="newPage,sleep,stopWorker,destroy"></sargasso-noisy>
-
-  <script src='app-bundle.iife.js'></script>
-
+  <script src='https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.min.js'></script>
   <script defer>
     window.onload = () => {
       let options = {
@@ -308,25 +283,26 @@ example/example3.html
           }
         }
       }
-      App.utils.bootSargasso(options)
+      SargassoModule.utils.bootSargasso(options)
     }
   </script>
 </body>
-</html>
 ```
+[Try It](https://stackblitz.com/edit/web-platform-5g5tqc)
 
-**Note**: Hijax pages must be served over http/https. In the example directory of this repository is a python script for a simple server. Run `python localhost.py` then connect using a web browser `http://localhost:8000/example3.html` This example has an instrumented Sargasso class which logs events to illustrate the object lifecycle as pages come and go.
+**Note:** `data-hijax` elements must have and ID and contain well formed child html elements.
 
-`data-hijax` elements must have and ID and contain well formed child html elements.
 ```html
 <div id="nope" data-hijax>I'm just text. No child elements. Won't work.</div>
 <div id="yup" data-hijax><p>I'm html. This works.</p></div>
 ```
 
 #### Programatic Page Loading
-`loadPageHandler(href)` is the utility function for programmatically loading a new page. EG. instead of `location.href= '/home'`, use `LoadPageHandler('/home')` This can be called to reload the page as well.
+
+`SargassoModule.loadPageHandler(href)` is the utility function for programmatically loading a new page. EG. instead of `location.href= '/home'`, use `LoadPageHandler('/home')` This can be called to reload the page as well.
 
 #### Content Merging Fine Control
+
 Set the `data-hijax-skip-unchanged` attribute on the hijax container and the content will remain static unless the markup is changed. This is useful if you have a Sargasso element that should remain instantiated and hold state when traversing several pages in a section.
 ```html
 <div id="test" data-hijax data-hijax-skip-unchanged>
