@@ -380,8 +380,8 @@ Observable objects implement a notification scheme for data changes. (implementa
 
 ```javascript
 let args = {
-	name: 'World!',
-	cssClass: 'red'
+  name: 'World!',
+  cssClass: 'red'
 }
 let observable = new SargassoModule.ObservableObject('shared-data', args)
 ```
@@ -389,7 +389,7 @@ let observable = new SargassoModule.ObservableObject('shared-data', args)
 You can bind a function to the observable instance which is called on change:
 ```javascript
 let watch = (id, property, value) => {
-	console.log('id:' + id + ' property:' + property + ' is now:' + value)
+  console.log('id:' + id + ' property:' + property + ' is now:' + value)
 }
 
 // you can optionally provide a property as a third parameter if you only want to be notified if 'cssClass' changes, for instance. In this case we want all changes.
@@ -403,14 +403,14 @@ observable.data.name = 'New Name' // same thing different syntax
 Sargasso Elements can subscribe to notifications from ObservableObjects that are defined externally or owned by the element.
 ```javascript
 class MyClass extends SargassoModule.Sargasso {
-	start() {
-		super.start()
-		this.observableStart('shared-data'); // find or create an observable with id 'shared-data'
-	}
+  start() {
+    super.start()
+    this.observableStart('shared-data'); // find or create an observable with id 'shared-data'
+  }
 
-	observableChanged(id, property, value) {
-		// do something with the change
-	}
+  observableChanged(id, property, value) {
+    // do something with the change
+  }
 }
 ```
 
@@ -418,55 +418,56 @@ class MyClass extends SargassoModule.Sargasso {
 Complete example of an element that renders on data update using an ObservableObject and li-html templates.
 
 examples/example5.html
+```html
 window.onload = () => {
 
-	let args = {
-		name: 'World!',
-		cssClass: 'red',
-		list: [{id:1,name:'one'},{id:2,name:'two'},{id:3,name:'three'}]
-	}
-	let observed = new SargassoModule.ObservableObject('shared-data',args)
+  let args = {
+    name: 'World!',
+    cssClass: 'red',
+    list: [{id:1,name:'one'},{id:2,name:'two'},{id:3,name:'three'}]
+  }
+  let observed = new SargassoModule.ObservableObject('shared-data',args)
 
-	// define MyClass as a subclass of Sargasso
-	// sargasso will render the template when data in
-	// observed ObservableObject is changed
-	class MyClass extends SargassoModule.Sargasso {
-		start() {
-			super.start()
+  // define MyClass as a subclass of Sargasso
+  // sargasso will render the template when data in
+  // observed ObservableObject is changed
+  class MyClass extends SargassoModule.Sargasso {
+    start() {
+      super.start()
 
-			// define a template
-			this.setTemplate((args) => SargassoModule.lit.html`
-				<p class=${args.cssClass}>Hello ${args.name} (${args.cssClass})</p>
-				<strong>List</strong>
-				<ul>
-					${SargassoModule.lit.repeat(args.list, (item) => item.id, (item, index) => SargassoModule.lit.html`
-						<li>${index}: ${item.name}</li>
-				`)}
-				</ul>
-			`)
+      // define a template
+      this.setTemplate((args) => SargassoModule.lit.html`
+        <p class=${args.cssClass}>Hello ${args.name} (${args.cssClass})</p>
+        <strong>List</strong>
+        <ul>
+          ${SargassoModule.lit.repeat(args.list, (item) => item.id, (item, index) => SargassoModule.lit.html`
+            <li>${index}: ${item.name}</li>
+        `)}
+        </ul>
+      `)
 
-			// hook up observable data
-			this.setTemplateArgs(this.observableStart('shared-data'))
-		}
-	}
+      // hook up observable data
+      this.setTemplateArgs(this.observableStart('shared-data'))
+    }
+  }
 
-	// Register MyClass to the Sargasso framework
-	SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
+  // Register MyClass to the Sargasso framework
+  SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
 
-	// Start Sargasso
-	SargassoModule.utils.bootSargasso()
+  // Start Sargasso
+  SargassoModule.utils.bootSargasso()
 
-	// repeatedly and randomly change the observed data
-	let classes = ['red','green','blue']
-	let named = ['Bob','Carol','Ted','Alice']
+  // repeatedly and randomly change the observed data
+  let classes = ['red','green','blue']
+  let named = ['Bob','Carol','Ted','Alice']
 
-	setInterval(()=>{
-		observed.data.cssClass = classes[Math.floor(Math.random() * classes.length)]
-		observed.data.name = named[Math.floor(Math.random() * named.length)]
-	},1000)
+  setInterval(()=>{
+    observed.data.cssClass = classes[Math.floor(Math.random() * classes.length)]
+    observed.data.name = named[Math.floor(Math.random() * named.length)]
+  },1000)
 }
 ```
-[Try It](https://jsfiddle.net/PelagicCreatures/gbL5y7xq/3/)
+[Try It](https://jsfiddle.net/PelagicCreatures/gbL5y7xq/11/)
 
 ### Using managed Web Workers
 You should offload compute heavy tasks to a new thread when possible.
@@ -478,7 +479,7 @@ The worker code runs when it receives an onmessage event.
 A web worker, once installed, could be used by many instances so sargasso sets e.data.uid to the id on the instance that is invoking the worker which we need to pass back in the postMessage so we know who is who.
 
 example/example4.html
-```javascript
+```html
 <!DOCTYPE html>
 <html>
 <head>
