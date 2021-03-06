@@ -14,8 +14,15 @@
   <sargasso-my-class></sargasso-my-class>
 
   <script src="../dist/sargasso.iife.js"></script>
-  <script defer>
-		let observed
+  <script defer type="module">
+    import {
+      html,render
+    } from 'https://unpkg.com/lit-html?module'
+
+    import {
+      repeat
+    } from 'https://unpkg.com/lit-html/directives/repeat.js?module'
+
     window.onload = () => {
 
       let args = {
@@ -23,7 +30,7 @@
         cssClass: 'red',
         list: [{id:1,name:'one'},{id:2,name:'two'},{id:3,name:'three'}]
       }
-      observed = new SargassoModule.ObservableObject('shared-data',args)
+      let observed = new SargassoModule.ObservableObject('shared-data',args)
 
       // define MyClass as a subclass of Sargasso
       // sargasso will render the template when data in
@@ -31,13 +38,13 @@
       class MyClass extends SargassoModule.Sargasso {
         start() {
           super.start()
-
           // define a template
-          this.setTemplate((args) => SargassoModule.lit.html`
+          this.setRenderer(render)
+          this.setTemplate((args) => html`
             <p class=${args.cssClass}>Hello ${args.name} (${args.cssClass})</p>
             <strong>List</strong>
             <ul>
-              ${SargassoModule.lit.repeat(args.list, (item) => item.id, (item, index) => SargassoModule.lit.html`
+              ${repeat(args.list, (item) => item.id, (item, index) => html`
                 <li>${index}: ${item.name}</li>
             `)}
             </ul>

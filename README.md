@@ -236,7 +236,6 @@ Your Sargasso subclasses can subscribe to event feeds in order to be notified of
 | getMetaData(key) | return sargasso metadata associated with element (weak map) |
 | setMetaData(key,value) | set a sargasso metadata property |
 | isVisible() | true if element is visible |
-| queueFrame(function) | queue a function to execute that changes the DOM |
 
 **CSS Methods**
 | method | description |
@@ -245,26 +244,6 @@ Your Sargasso subclasses can subscribe to event feeds in order to be notified of
 | addClass('classname') | add classname or array of classnames to this.element |
 | removeClass('classname')  | remove classname or array of classnames to this.element |
 | setCSS({})  | set css pairs defined in object on this.element |
-
-**Web Worker Methods**
-| method | description |
-| ------ | ----------- |
-| workerStart(id, codeOrURL) | start a web worker with id. Ignored if worker id already installed. |
-| workerPostMessage(id, data {}) | send the worker tagged with `id` a message. the message must be an object which can have any structure you want to pass to the worker |
-
-**Observable Data Methods**
-| method | description |
-| ------ | ----------- |
-| observableStart (id, data) | start watching for changes in observable data. `data` is an optional JS data object  |
-| observableStop (id) | stop watching for changes in observable data |
-| getObservable (id) | get underlying ObservableObject instance for id |
-
-**Templates & Rendering Methods**
-| method | description |
-| ------ | ----------- |
-| setTemplate (template) | set a lit-html template function for rendering |
-| setTemplateArgs (args) | set template arguments |
-| render () | render template into element |
 
 **Register Event Methods**
 | method | description |
@@ -366,6 +345,11 @@ Set `data-hijax-cache-key-selector` to a css selector of an element within the h
 
 To avoid any chaotic repaints you should only make Content or DOM changes inside animation frames - don't do any long processes in the responsive callbacks or things might bog down the browser UI. Sargasso.queueFrame maintains a list of pending page updates which are executed in order using the animation frame loop.
 
+| method | description |
+| ------ | ----------- |
+| queueFrame(function) | queue a function to execute that changes the DOM |
+
+
 ```javascript
 this.queueFrame(()=>{
   this.removeClass('css-class,some-other-css-class')
@@ -377,6 +361,12 @@ this.queueFrame(()=>{
 ### ObservableObjects
 
 Observable objects implement a notification scheme for data changes. (implementation is javascript Proxy and reflect) These objects can be shared across elements for real-time sharing and display of information.
+
+| method | description |
+| ------ | ----------- |
+| observableStart (id, data) | start watching for changes in observable data. `data` is an optional JS data object  |
+| observableStop (id) | stop watching for changes in observable data |
+| getObservable (id) | get underlying ObservableObject instance for id |
 
 ```javascript
 let args = {
@@ -414,63 +404,103 @@ class MyClass extends SargassoModule.Sargasso {
 }
 ```
 
-### Observables, Templates and Rendering
-Complete example of an element that renders on data update using an ObservableObject and li-html templates.
+### Templates and Rendering
+Complete example of an element that renders on data updates using an ObservableObject and li-html templates.
+
+| method | description |
+| ------ | ----------- |
+| setRenderer (renderer) | set a rendering function for rendering (such as lit-html render) |
+| setTemplate (template) | set a template function for rendering (such as a lit-html template function) |
+| setTemplateArgs (args) | set template arguments |
+| render () | render template into element |
 
 examples/example5.html
 ```html
-window.onload = () => {
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Example Sargasso Element w/Data Observing &amp; Template rendering</title>
+  <style>
+    .red { color: #f00; }
+    .green { color: #0f0; }
+    .blue { color: #00f; }
+  </style>
+</head>
+<body>
+  <h3>Example Sargasso Element w/Data Observing &amp; Template rendering</h3>
 
-  let args = {
-    name: 'World!',
-    cssClass: 'red',
-    list: [{id:1,name:'one'},{id:2,name:'two'},{id:3,name:'three'}]
-  }
-  let observed = new SargassoModule.ObservableObject('shared-data',args)
+  <sargasso-my-class></sargasso-my-class>
 
-  // define MyClass as a subclass of Sargasso
-  // sargasso will render the template when data in
-  // observed ObservableObject is changed
-  class MyClass extends SargassoModule.Sargasso {
-    start() {
-      super.start()
+	<script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.min.js"></script>
+  <script defer type="module">
+    import {
+      html,render
+    } from 'https://unpkg.com/lit-html?module'
 
-      // define a template
-      this.setTemplate((args) => SargassoModule.lit.html`
-        <p class=${args.cssClass}>Hello ${args.name} (${args.cssClass})</p>
-        <strong>List</strong>
-        <ul>
-          ${SargassoModule.lit.repeat(args.list, (item) => item.id, (item, index) => SargassoModule.lit.html`
-            <li>${index}: ${item.name}</li>
-        `)}
-        </ul>
-      `)
+    import {
+      repeat
+    } from 'https://unpkg.com/lit-html/directives/repeat.js?module'
 
-      // hook up observable data
-      this.setTemplateArgs(this.observableStart('shared-data'))
+    window.onload = () => {
+
+      let args = {
+        name: 'World!',
+        cssClass: 'red',
+        list: [{id:1,name:'one'},{id:2,name:'two'},{id:3,name:'three'}]
+      }
+      let observed = new SargassoModule.ObservableObject('shared-data',args)
+
+      // define MyClass as a subclass of Sargasso
+      // sargasso will render the template when data in
+      // observed ObservableObject is changed
+      class MyClass extends SargassoModule.Sargasso {
+        start() {
+          super.start()
+          // define a template
+          this.setRenderer(render)
+          this.setTemplate((args) => html`
+            <p class=${args.cssClass}>Hello ${args.name} (${args.cssClass})</p>
+            <strong>List</strong>
+            <ul>
+              ${repeat(args.list, (item) => item.id, (item, index) => html`
+                <li>${index}: ${item.name}</li>
+            `)}
+            </ul>
+          `)
+
+          // hook up observable data
+          this.setTemplateArgs(this.observableStart('shared-data'))
+        }
+      }
+
+      // Register MyClass to the Sargasso framework
+      SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
+
+      // Start Sargasso
+      SargassoModule.utils.bootSargasso()
+
+      // repeatedly and randomly change the observed data
+      let classes = ['red','green','blue']
+      let named = ['Bob','Carol','Ted','Alice']
+
+      setInterval(()=>{
+        observed.data.cssClass = classes[Math.floor(Math.random() * classes.length)]
+        observed.data.name = named[Math.floor(Math.random() * named.length)]
+      },1000)
     }
-  }
-
-  // Register MyClass to the Sargasso framework
-  SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
-
-  // Start Sargasso
-  SargassoModule.utils.bootSargasso()
-
-  // repeatedly and randomly change the observed data
-  let classes = ['red','green','blue']
-  let named = ['Bob','Carol','Ted','Alice']
-
-  setInterval(()=>{
-    observed.data.cssClass = classes[Math.floor(Math.random() * classes.length)]
-    observed.data.name = named[Math.floor(Math.random() * named.length)]
-  },1000)
-}
+  </script>
+</body>
+</html>
 ```
 [Try It](https://jsfiddle.net/PelagicCreatures/gbL5y7xq/11/)
 
 ### Using managed Web Workers
 You should offload compute heavy tasks to a new thread when possible.
+
+| method | description |
+| ------ | ----------- |
+| workerStart(id, codeOrURL) | start a web worker with id. Ignored if worker id already installed. |
+| workerPostMessage(id, data {}) | send the worker tagged with `id` a message. the message must be an object which can have any structure you want to pass to the worker |
 
 Sargasso controllers have built in managed Web Workers that can be defined in external scripts or inline code blobs simplifying the management of running workers.
 
