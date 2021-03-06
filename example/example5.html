@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Example Sargasso Element w/Data Observing &amp; Template rendering</title>
+  <style>
+    .red { color: #f00; }
+    .green { color: #0f0; }
+    .blue { color: #00f; }
+  </style>
+</head>
+<body>
+  <h3>Example Sargasso Element w/Data Observing &amp; Template rendering</h3>
+
+  <sargasso-my-class></sargasso-my-class>
+
+  <script src="../dist/sargasso.iife.js"></script>
+  <script defer>
+		let observed
+    window.onload = () => {
+
+      let args = {
+        name: 'World!',
+        cssClass: 'red',
+        list: [{id:1,name:'one'},{id:2,name:'two'},{id:3,name:'three'}]
+      }
+      observed = new SargassoModule.ObservableObject('shared-data',args)
+
+      // define MyClass as a subclass of Sargasso
+      // sargasso will render the template when data in
+      // observed ObservableObject is changed
+      class MyClass extends SargassoModule.Sargasso {
+        start() {
+          super.start()
+
+          // define a template
+          this.setTemplate((args) => SargassoModule.lit.html`
+            <p class=${args.cssClass}>Hello ${args.name} (${args.cssClass})</p>
+            <strong>List</strong>
+            <ul>
+              ${SargassoModule.lit.repeat(args.list, (item) => item.id, (item, index) => SargassoModule.lit.html`
+                <li>${index}: ${item.name}</li>
+            `)}
+            </ul>
+          `)
+
+          // hook up observable data
+          this.setTemplateArgs(this.observableStart('shared-data'))
+        }
+      }
+
+      // Register MyClass to the Sargasso framework
+      SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
+
+      // Start Sargasso
+      SargassoModule.utils.bootSargasso()
+
+      // repeatedly and randomly change the observed data
+      let classes = ['red','green','blue']
+      let named = ['Bob','Carol','Ted','Alice']
+
+      setInterval(()=>{
+        observed.data.cssClass = classes[Math.floor(Math.random() * classes.length)]
+        observed.data.name = named[Math.floor(Math.random() * named.length)]
+      },1000)
+    }
+  </script>
+</body>
+</html>

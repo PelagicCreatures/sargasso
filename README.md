@@ -10,7 +10,9 @@ Made in Barbados 🇧🇧 Copyright © 2020-2021 Michael Rhodes
 
 Sargasso Makes HTML elements aware of events such as Document (DOM) insertions and deletions, HIJAX Page load, Scrolling, Resizing, Orientation and messages Managed Web Workers and elements allowing them to efficiently implement any behavior they need to perform.
 
-One of the core features of this framework is to implement an asynchronous page loading scheme which supports deep linking and lightning fast page loads where only dynamic content areas are merged between page loads leaving css, js, web workers and wrapper elements intact. Sargasso controller instances are automatically created as needed when their element appears in the DOM and destroyed when their element is removed so everything is cleanly destroyed and all the trash is collected. Performance is further enhanced with shared event listening services which are fully debounced during large updates. Services are also provided to schedule content changes using the browser's **animation frame** event loop and managed **web workers** for simplified offloading of computation heavy tasks to a dedicated thread resulting in highly performant pages.
+One of the core features of this framework is to implement an asynchronous page loading scheme which supports deep linking and lightning fast page loads where only dynamic content areas are merged between page loads leaving css, js, web workers and wrapper elements intact. Sargasso controller instances are automatically created as needed when their element appears in the DOM and destroyed when their element is removed so everything is cleanly destroyed and all the trash is collected. Performance is further enhanced with shared event listening services which are fully debounced during updates. Services are also provided to schedule content changes using the browser's **animation frame** event loop and managed **web workers** for simplified offloading of computation heavy tasks to a dedicated thread resulting in highly performant pages.
+
+Sargasso elements can also track changes to underlying data and re-render as needed using [lit-html](https://lit-html.polymer-project.org/) templates.
 
 This is a very lightweight (27kb), pure ES6 framework (with only few dependencies) which aims to use the most advanced stable features of modern browsers to maximum effect leaving the historical cruft, kludges and code barnacles infesting older web frameworks behind. The result is lean, highly performant and clean library that simplifies the complex technologies behind modern progressive web apps and web sites.
 
@@ -125,7 +127,7 @@ example/example2.html
     </button>
   </div>
 
-  <script src='https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.js'></script>
+  <script src='https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.min.js'></script>
 
   <script defer>
     window.onload = () => {
@@ -196,15 +198,26 @@ example/example2.html
 
 ### Sargasso Base Class:
 
+**Properties**
+| property | description |
+| -------- | ----------- |
+| this.element | the element we are controlling |
+
 Your Sargasso subclasses can subscribe to event feeds in order to be notified of events.
 
-**Methods to override as needed:** *don't forget to call super.xxx() in your subclass*
 
+**Methods to override as needed:**
 | method | description |
 | ------ | ----------- |
-| constructor(element, options = {}) | subscribe to services by setting options properties. All default to false so only set the ones you need `watchDOM`, `watchScroll`, `watchResize`, `watchOrientation`, `watchViewport` eg. {watchScroll:true} |
+| constructor(element, options = {}) | subscribe to services by setting appropriate options properties. All default to false so only set the ones you need to know about `watchDOM`, `watchScroll`, `watchResize`, `watchOrientation`, `watchViewport` eg. { watchScroll: true } |
 | start() | set up any interactions and event handlers |
 | sleep() | remove any event foreign handlers defined in start() and cleanup references - event handlers created with 'this.on' and 'this.once' are automatically removed by sargasso.|
+
+*don't forget to call super.xxx() in your subclass*
+
+**Handlers for sargasso events, override as needed:**
+| method | description |
+| ------ | ----------- |
 | DOMChanged() | called when DOM changes if options 'watchDOM: true' was set in constructor |
 | didScroll() | called when scroll occurs if options 'watchScroll: true' was set in constructor |
 | didResize() | called when resize changes if options 'watchResize: true' was set in constructor |
@@ -213,30 +226,49 @@ Your Sargasso subclasses can subscribe to event feeds in order to be notified of
 | newPage(old, new) | on a new page |
 | didBreakpoint() | new screen width breakpoint |
 | workerOnMessage (id, data = {}) | id is the worker sending the message. Any payload from the worker `postMessage` is in data.xxx as defined by the worker |
-| enterFullscreen() | called if options 'watchOrientation: true' when user rotates phone or if setFullscreen is called |
-| exitFullscreen() | called on exit fullscreen |
-
-**Properties**
-
-| property | description |
-| ------ | ----------- |
-| this.element | the element we are controlling |
-
+| observableChanged(id, property, value) | called on data change if watching an observable object |
+| enterFullscreen() | *experimental* called if options 'watchOrientation: true' when user rotates phone or if setFullscreen is called |
+| exitFullscreen() | *experimental* called on exit fullscreen |
 
 **Utility Methods:**
-
 | method | description |
 | ------ | ----------- |
 | getMetaData(key) | return sargasso metadata associated with element (weak map) |
 | setMetaData(key,value) | set a sargasso metadata property |
+| isVisible() | true if element is visible |
+| queueFrame(function) | queue a function to execute that changes the DOM |
+
+**CSS Methods**
+| method | description |
+| ------ | ----------- |
 | hasClass('classname') | returns true if this.element has cssclass |
 | addClass('classname') | add classname or array of classnames to this.element |
 | removeClass('classname')  | remove classname or array of classnames to this.element |
 | setCSS({})  | set css pairs defined in object on this.element |
-| isVisible() | true if element is visible |
-| queueFrame(function) | queue a function to execute that changes the DOM |
-| workerStart(id, codeOrURL) | start a web worker with id. Ignored if worker id already installed (see https://github.com/PelagicCreatures/flyingfish for a shared worker example)|
+
+**Web Worker Methods**
+| method | description |
+| ------ | ----------- |
+| workerStart(id, codeOrURL) | start a web worker with id. Ignored if worker id already installed. |
 | workerPostMessage(id, data {}) | send the worker tagged with `id` a message. the message must be an object which can have any structure you want to pass to the worker |
+
+**Observable Data Methods**
+| method | description |
+| ------ | ----------- |
+| observableStart (id, data) | start watching for changes in observable data. `data` is an optional JS data object  |
+| observableStop (id) | stop watching for changes in observable data |
+| getObservable (id) | get underlying ObservableObject instance for id |
+
+**Templates & Rendering Methods**
+| method | description |
+| ------ | ----------- |
+| setTemplate (template) | set a lit-html template function for rendering |
+| setTemplateArgs (args) | set template arguments |
+| render () | render template into element |
+
+**Register Event Methods**
+| method | description |
+| ------ | ----------- |
 | on(container,fn) | attach undelegated event handler to container scoped to a css selector |
 | once(container,fn) | attach undelegated event handler to container scoped to a css selector that executes only once (automatically removes event handler on first call) |
 | off(container) | remove undelegated event handler to container scoped to css selector |
@@ -306,25 +338,25 @@ example/example3.html
 
 **Note**: Hijax pages must be served over http/https. In the example directory of this repository is a python script for a simple server. Run `python localhost.py` then connect using a web browser `http://localhost:8000/example3.html` This example has an instrumented Sargasso class which logs events to illustrate the object lifecycle as pages come and go.
 
-**Note**: data-hijax elements must have and ID and contain well formed child html elements.
-```
+`data-hijax` elements must have and ID and contain well formed child html elements.
+```html
 <div id="nope" data-hijax>I'm just text. No child elements. Won't work.</div>
 <div id="yup" data-hijax><p>I'm html. This works.</p></div>
 ```
 
-#### Programatic page loading
+#### Programatic Page Loading
 `loadPageHandler(href)` is the utility function for programmatically loading a new page. EG. instead of `location.href= '/home'`, use `LoadPageHandler('/home')` This can be called to reload the page as well.
 
-#### Finer content merging control
+#### Content Merging Fine Control
 Set the `data-hijax-skip-unchanged` attribute on the hijax container and the content will remain static unless the markup is changed. This is useful if you have a Sargasso element that should remain instantiated and hold state when traversing several pages in a section.
-```
+```html
 <div id="test" data-hijax data-hijax-skip-unchanged>
   <p>This content also sometimes changes from page to page, otherwise leave it alone.</p>
 </div>
 ```
 
 Set `data-hijax-cache-key-selector` to a css selector of an element within the hijax container which has defined `data-hijax-cache-key-selector` to leave the content intact across pages until the key changes.
-```
+```html
 <div id="test" data-hijax data-hijax-cache-key-selector="#sub-element">
   <p id="sub-element" data-hijax-cache-key="some-key">This content uses a cache key to signal changes, otherwise leave it alone.</p>
 </div>
@@ -342,6 +374,100 @@ this.queueFrame(()=>{
 })
 ```
 
+### ObservableObjects
+
+Observable objects implement a notification scheme for data changes. (implementation is javascript Proxy and reflect) These objects can be shared across elements for real-time sharing and display of information.
+
+```javascript
+let args = {
+	name: 'World!',
+	cssClass: 'red'
+}
+let observable = new SargassoModule.ObservableObject('shared-data', args)
+```
+
+You can bind a function to the observable instance which is called on change:
+```javascript
+let watch = (id, property, value) => {
+	console.log('id:' + id + ' property:' + property + ' is now:' + value)
+}
+
+// you can optionally provide a property as a third parameter if you only want to be notified if 'cssClass' changes, for instance. In this case we want all changes.
+observable.bind('uniqueID', watch)
+
+// now changes to the data will trigger the watch function
+observable.set('name','New Name')
+observable.data.name = 'New Name' // same thing different syntax
+```
+
+Sargasso Elements can subscribe to notifications from ObservableObjects that are defined externally or owned by the element.
+```javascript
+class MyClass extends SargassoModule.Sargasso {
+	start() {
+		super.start()
+		this.observableStart('shared-data'); // find or create an observable with id 'shared-data'
+	}
+
+	observableChanged(id, property, value) {
+		// do something with the change
+	}
+}
+```
+
+### Observables, Templates and Rendering
+Complete example of an element that renders on data update using an ObservableObject and li-html templates.
+
+examples/example5.html
+window.onload = () => {
+
+	let args = {
+		name: 'World!',
+		cssClass: 'red',
+		list: [{id:1,name:'one'},{id:2,name:'two'},{id:3,name:'three'}]
+	}
+	let observed = new SargassoModule.ObservableObject('shared-data',args)
+
+	// define MyClass as a subclass of Sargasso
+	// sargasso will render the template when data in
+	// observed ObservableObject is changed
+	class MyClass extends SargassoModule.Sargasso {
+		start() {
+			super.start()
+
+			// define a template
+			this.setTemplate((args) => SargassoModule.lit.html`
+				<p class=${args.cssClass}>Hello ${args.name} (${args.cssClass})</p>
+				<strong>List</strong>
+				<ul>
+					${SargassoModule.lit.repeat(args.list, (item) => item.id, (item, index) => SargassoModule.lit.html`
+						<li>${index}: ${item.name}</li>
+				`)}
+				</ul>
+			`)
+
+			// hook up observable data
+			this.setTemplateArgs(this.observableStart('shared-data'))
+		}
+	}
+
+	// Register MyClass to the Sargasso framework
+	SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
+
+	// Start Sargasso
+	SargassoModule.utils.bootSargasso()
+
+	// repeatedly and randomly change the observed data
+	let classes = ['red','green','blue']
+	let named = ['Bob','Carol','Ted','Alice']
+
+	setInterval(()=>{
+		observed.data.cssClass = classes[Math.floor(Math.random() * classes.length)]
+		observed.data.name = named[Math.floor(Math.random() * named.length)]
+	},1000)
+}
+```
+[Try It](https://jsfiddle.net/PelagicCreatures/gbL5y7xq/3/)
+
 ### Using managed Web Workers
 You should offload compute heavy tasks to a new thread when possible.
 
@@ -351,35 +477,72 @@ The worker code runs when it receives an onmessage event.
 
 A web worker, once installed, could be used by many instances so sargasso sets e.data.uid to the id on the instance that is invoking the worker which we need to pass back in the postMessage so we know who is who.
 
+example/example4.html
 ```javascript
-startTask () {
-  // this worker increments a counter every 3 seconds and posts a message back us
-  const task = `let counters= {}
-    onmessage = async (e) => {
-      if(!counters[e.data.uid]) { counters[e.data.uid] = e.data.count }
-      setInterval(()=>{
-        self.postMessage({ uid: e.data.uid, count: ++counters[e.data.uid] })
-      },30000)
-    }`
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Example Sargasso Element</title>
+</head>
+<body>
+  <h3>First Sargasso Element</h3>
 
-  // register the worker
-  this.workerStart('mytask', task)
+  <sargasso-my-class data-name="custom" data-count-to="10">Will count to 10</sargasso-my-class>
 
-  // start the worker working
-  this.workerPostMessage('mytask', {
-    count: 0
-  })
-}
+  <div data-sargasso-class="MyClass" data-name="div" data-count-to="20">Will count to 20</div>
 
-workerOnMessage (id, data) {
-  if(id === 'mytask') {
-    this.queueFrame(()=>{
-      this.element.innerHTML = data.count
-    })
-  }
-  super.workerOnMessage(id, data)
-}
+  <script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.min.js"></script>
+  <script defer>
+    window.onload = () => {
+
+      // define MyClass as a subclass of Sargasso
+      class MyClass extends SargassoModule.Sargasso {
+        start() {
+          super.start()
+
+          // this worker increments a counter every second and posts a message back us
+          const task = `let counters= {}
+            onmessage = async (e) => {
+              if(!counters[e.data.uid]) { counters[e.data.uid] = e.data.count }
+              setInterval(()=>{
+                self.postMessage({ uid: e.data.uid, me:e.data.me, count: ++counters[e.data.uid] })
+              },1000)
+            }`
+
+          // register the worker
+          this.workerStart('mytask', task)
+
+          // start the worker working
+          this.workerPostMessage('mytask', {
+            me: this.element.getAttribute('data-name'),
+            count: 0
+          })
+        }
+
+        workerOnMessage (id, data) {
+          if(id === 'mytask') { // only neeed to test this is running multiple workers
+            if(data.count == this.element.getAttribute('data-count-to')) {
+              this.stopWorker('mytask')
+            }
+            this.queueFrame(()=>{
+              this.element.innerHTML = data.me + ' says ' + data.count
+            })
+          }
+        }
+      }
+
+      // Register MyClass to the Sargasso framework
+      SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
+
+      // Start Sargasso
+      SargassoModule.utils.bootSargasso()
+    }
+  </script>
+</body>
+</html>
+
 ```
+[Try It](https://jsfiddle.net/PelagicCreatures/exnjtvqb/1/)
 
 ### Serving modules from your project
 ```

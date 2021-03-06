@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Example Sargasso Element</title>
+</head>
+<body>
+  <h3>First Sargasso Element</h3>
+
+  <sargasso-my-class data-name="custom" data-count-to="10">Will count to 10</sargasso-my-class>
+
+  <div data-sargasso-class="MyClass" data-name="div" data-count-to="20">Will count to 20</div>
+
+  <script src="../dist/sargasso.iife.js"></script>
+  <script defer>
+    window.onload = () => {
+
+      // define MyClass as a subclass of Sargasso
+      class MyClass extends SargassoModule.Sargasso {
+        start() {
+          super.start()
+
+          // this worker increments a counter every second and posts a message back us
+          const task = `let counters= {}
+            onmessage = async (e) => {
+              if(!counters[e.data.uid]) { counters[e.data.uid] = e.data.count }
+              setInterval(()=>{
+                self.postMessage({ uid: e.data.uid, me:e.data.me, count: ++counters[e.data.uid] })
+              },1000)
+            }`
+
+          // register the worker
+          this.workerStart('mytask', task)
+
+          // start the worker working
+          this.workerPostMessage('mytask', {
+            me: this.element.getAttribute('data-name'),
+            count: 0
+          })
+        }
+
+        workerOnMessage (id, data) {
+          if(id === 'mytask') { // only neeed to test this is running multiple workers
+            if(data.count == this.element.getAttribute('data-count-to')) {
+              this.stopWorker('mytask')
+            }
+            this.queueFrame(()=>{
+              this.element.innerHTML = data.me + ' says ' + data.count
+            })
+          }
+        }
+      }
+
+      // Register MyClass to the Sargasso framework
+      SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
+
+      // Start Sargasso
+      SargassoModule.utils.bootSargasso()
+    }
+  </script>
+</body>
+</html>
