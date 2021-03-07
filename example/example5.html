@@ -1,75 +1,108 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Example Sargasso Element w/Data Observing &amp; Template rendering</title>
-  <style>
-    .red { color: #f00; }
-    .green { color: #0f0; }
-    .blue { color: #00f; }
-  </style>
+	<title>Example Sargasso Element w/Data Observing &amp; Template rendering</title>
+	<style>
+		.red { color: #f00; }
+		.green { color: #0f0; }
+		.blue { color: #00f; }
+	</style>
 </head>
+
 <body>
-  <h3>Example Sargasso Element w/Data Observing &amp; Template rendering</h3>
+	<h3>Example Sargasso Element w/Data Observing &amp; Template rendering</h3>
 
-  <sargasso-my-class></sargasso-my-class>
+	<sargasso-my-class></sargasso-my-class>
 
-  <script src="../dist/sargasso.iife.min.js"></script>
-  <script defer type="module">
-    import {
-      html,render
-    } from 'https://unpkg.com/lit-html?module'
+	<script src="../dist/sargasso.iife.min.js"></script>
 
-    import {
-      repeat
-    } from 'https://unpkg.com/lit-html/directives/repeat.js?module'
+	<script defer type="module">
+		import {
+			html,render
+		} from 'https://unpkg.com/lit-html?module'
 
-    window.onload = () => {
+		import {
+			repeat
+		} from 'https://unpkg.com/lit-html/directives/repeat.js?module'
 
-      let args = {
-        name: 'World!',
-        cssClass: 'red',
-        list: [{id:1,name:'one'},{id:2,name:'two'},{id:3,name:'three'}]
-      }
-      let observed = new SargassoModule.ObservableObject('shared-data',args)
+		window.onload = () => {
 
-      // define MyClass as a subclass of Sargasso
-      // sargasso will render the template when data in
-      // observed ObservableObject is changed
-      class MyClass extends SargassoModule.Sargasso {
-        start() {
-          super.start()
-          // define a template
-          this.setRenderer(render)
-          this.setTemplate((args) => html`
-            <p class=${args.cssClass}>Hello ${args.name} (${args.cssClass})</p>
-            <strong>List</strong>
-            <ul>
-              ${repeat(args.list, (item) => item.id, (item, index) => html`
-                <li>${index}: ${item.name}</li>
-            `)}
-            </ul>
-          `)
+			// set up an ObservableObject with the id "shared-data"
+			let args = {
+				name: "World!",
+				cssClass: "red",
+				list: [
+					{ id: 1, name: "one" },
+					{ id: 2, name: "two" },
+					{ id: 3, name: "three" }
+				]
+			};
+			let observed = new SargassoModule.ObservableObject("shared-data", args);
 
-          // hook up observable data
-          this.setTemplateArgs(this.observableStart('shared-data'))
-        }
-      }
+			// repeatedly and randomly change the observed data
+			let classes = ["red", "green", "blue"];
+			let named = ["Bob", "Carol", "Ted", "Alice"];
 
-      // Register MyClass to the Sargasso framework
-      SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
+			setInterval(() => {
+				observed.data.cssClass =
+					classes[Math.floor(Math.random() * classes.length)];
+				observed.data.name = named[Math.floor(Math.random() * named.length)];
+			}, 1000);
 
-      // Start Sargasso
-      SargassoModule.utils.bootSargasso()
+			// define MyClass as a subclass of Sargasso
+			// sargasso will render the template whenever data in
+			// ObservableObject "shared-data" is changed
+			class MyClass extends SargassoModule.Sargasso {
+				start() {
+					super.start();
 
-      // repeatedly and randomly change the observed data
-      let classes = ['red','green','blue']
-      let named = ['Bob','Carol','Ted','Alice']
+					// hook up observable data
+					this.setTemplateArgs(this.observableStart("shared-data"));
 
-      setInterval(()=>{
-        observed.data.cssClass = classes[Math.floor(Math.random() * classes.length)]
-        observed.data.name = named[Math.floor(Math.random() * named.length)]
-      },1000)
-    }
-  </script>
+					// define a template
+					let template = args => html`
+						<p class=${args.cssClass}>Hello ${args.name} (${args.cssClass})</p>
+						<strong>List</strong>
+						<ul>
+							${repeat(
+								args.list || [],
+								item => item.id,
+								(item, index) => html`
+									<li data-index=${index}>${item.id}: ${item.name}</li>
+								`
+							)}
+						</ul>
+						<input type="text" id="new" /><input type="submit" value="add" />
+					`;
+
+					this.setRenderer(render); // set lit-html render() as the renderer
+					this.setTemplate(template); // set template function
+
+					// hook up form submitter to add item to list
+					this.on("click", '[type="submit"]', e => {
+						e.preventDefault();
+						let inp = this.element.querySelector("#new");
+						let name = inp.value;
+						inp.value = "";
+
+						let observable = this.getObservable("shared-data");
+
+						observable.data.list.push({
+							id: observable.data.list.length + 1,
+							name: name
+						});
+					});
+				}
+			}
+
+			// Register MyClass to the Sargasso framework
+			SargassoModule.utils.registerSargassoClass("MyClass", MyClass);
+
+			// Start Sargasso
+			SargassoModule.utils.bootSargasso();
+		};
+	</script>
 </body>
+
 </html>
