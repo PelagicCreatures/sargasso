@@ -127,7 +127,7 @@ example/example2.html
       </button>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.js"></script>
 
     <script defer>
       window.onload = () => {
@@ -262,7 +262,7 @@ You can optionally make any link be ignored by hijax by setting the `<a href="..
 
   <p>this is also static content such as a site wide footer</p>
 
-  <script src='https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.min.js'></script>
+  <script src='https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.js'></script>
   <script defer>
     window.onload = () => {
       let options = {
@@ -394,7 +394,7 @@ examples/example5.html
 
   <sargasso-my-class></sargasso-my-class>
 
-  <script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.js"></script>
   <script defer type="module">
     import {
       html,render
@@ -455,7 +455,7 @@ examples/example5.html
 </body>
 </html>
 ```
-[Try It](https://jsfiddle.net/PelagicCreatures/gbL5y7xq/11/)
+[Try It](https://stackblitz.com/edit/sargasso-example-5)
 
 ### Using managed Web Workers
 You should offload compute heavy tasks to a new thread when possible.
@@ -485,7 +485,7 @@ example/example4.html
 
   <div data-sargasso-class="MyClass" data-name="div" data-count-to="20">Will count to 20</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.js"></script>
   <script defer>
     window.onload = () => {
 
