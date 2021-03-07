@@ -362,7 +362,7 @@ class MyClass extends SargassoModule.Sargasso {
 
   observableChanged(id, property, value) {
     // Do something with the change like re-display the element with new values or something.
-		// DON'T make a change to the data here tho or you will have an endless loop on your hands.
+    // DON'T make a change to the data here tho or you will have an endless loop on your hands.
   }
 }
 ```
@@ -639,7 +639,9 @@ export default {
     terser({
       output: {
         comments: false
-      }
+      },
+      keep_classnames: true,
+      keep_fnames: true
     })
   ]
 }
