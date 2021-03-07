@@ -27,10 +27,6 @@ API Stable
 
 We are trying to keep this project as forward looking so as to not burden this framework with lots of obsolete junk and polyfills so while it will certainly not work on *every* ancient browser, it should work on any *reasonably* modern one. If you run into any problems, have questions, want to help or have any feedback let me know by opening a github issue.
 
-### Why?
-
-Progressive Web Apps and modern websites need a HIJAX scheme to load pages that is integrated with and can manage element behavior. The big name frameworks out there at the moment are not a very good fit for the work I am doing so I decided to roll my own to investigate the current state of browser capabilities.
-
 ### Usage Overview (Using CDN iife modules)
 
 This simple example loads the framework using the CDN and defines a simple Sargasso element controller that says "Hi World!".
@@ -74,12 +70,12 @@ example/example1.html
 </body>
 </html>
 ```
-[Try It](https://jsfiddle.net/PelagicCreatures/yafdt2h1/10/)
+[Try It](https://stackblitz.com/edit/sargasso-example-1)
 
 Sargasso element controllers are javascript Objects that are subclasses of the framework's Sargasso class. Custom behavior is defined by overriding various methods of the base class.
 
 #### Using data-sargasso-class to specify Sargasso classname
-Alternately, Sargasso watches the DOM for any elements tagged with the `data-sargasso-class` attribute which can be one classname or a list of classnames
+Alternately, Sargasso watches the DOM for any elements tagged with the `data-sargasso-class` attribute which can be one classname or a list of classnames.
 
 ```html
 <div data-sargasso-class="MyClass, MyOtherClass">This works in all browsers</div>
@@ -87,135 +83,128 @@ Alternately, Sargasso watches the DOM for any elements tagged with the `data-sar
 
 #### Custom Element tags to specify classname
 
-Many browsers support custom elements ([current compatibility](https://caniuse.com/#feat=custom-elementsv1) so the preferred (faster and cleaner) syntax for sargasso elements is to use a custom element tag. The class name is the kebab-case of your subclass name so MyClass becomes sargasso-my-class:
+Many browsers support custom elements ([current compatibility](https://caniuse.com/#feat=custom-elementsv1) The class name is the kebab-case of your subclass name so MyClass becomes sargasso-my-class:
 
 ```html
-<sargasso-my-class>This works in <em>most</em> browsers</sargasso-my-class>
+<sargasso-my-class>This works in <em>almost all reasonably modern</em> browsers</sargasso-my-class>
 ```
 
-You can also defer the instantiation using the lazy method by tagging it with `data-lazy-sargasso-class` instead of `data-sargasso-class` which will only start up the class when the element is visible in the viewport.
+You can also defer the instantiation using the lazy method by tagging it with `data-lazy-sargasso-class` instead of `data-sargasso-class` which will only start up the controller when the element becomes visible in the viewport.
 
 ### Sargasso Object Lifecycle
 
-When a Sargasso element appears in the document, the framework supervisor will instantiate an object and call the `start()` method of the object. When removed from the DOM, 'sleep()' will be called allowing you can cleanup any resources or handlers you set up in start (note that event listeners created with 'this.on' and 'this.once' are automatically cleaned up).  Beyond responding to scrolling, resize and other responsive events, you will probably want to interact with your element in some way. You should use the start hook to set up any element events you need to respond to such as clicking a button, responding to touch events or key presses, etc.
+**tl;dr** The Sargasso Object life cycle is `constructor` > `start` > do stuff and until element removed from doc > `sleep` > `destroy`
+
+When a Sargasso element appears in the document, the framework supervisor will instantiate an object and call the `start()` method of the object. When removed from the DOM, 'sleep()' will be called allowing cleanup of any resources or handlers set up in start (note that event listeners created with 'this.on' and 'this.once' are automatically cleaned up.)
 
 ### Example with event handlers
+
+In this example `MyButtonClass` illustrates this object lifecycle and handling of UI event.
 
 example/example2.html
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Example Sargasso Element</title>
-  <style>
-    .container { margin-top: 150vh; margin-bottom: 33vh; }
-    .container span { border: thin solid #333; border-radius: 1em; padding: 1em; }
-    .clicked { color: red; }
-    .float { position: fixed; bottom: 0px; right: 0px; width: 50%; float: right; }
-    .float>pre { text-align: right; }
-  </style>
-</head>
-<body>
-  <h3>Sargasso Element Example</h3>
-  <p>Element is aware of when it is scrolled into the viewport, removed from the document and implements a delegated click event which removes the element when triggered.</p>
+  <head>
+    <title>Example Sargasso Element</title>
+    <style>
+      .container { margin-top: 150vh; margin-bottom: 33vh; }
+      .clicked { color: red; }
+    </style>
+  </head>
+  <body>
+    <h3>Sargasso Element Example</h3>
 
-  <p>Scroll down to see it in action</p>
+    <p>
+      Element is aware of when it is scrolled into the viewport, removed from the document and implements a click event which removes the element when triggered.
+    </p>
 
-  <div class='container'>
-    <button data-sargasso-class="MyButtonClass">
-      Hello World! Click me!
-    </button>
-  </div>
+    <p>Scroll down to see it in action</p>
 
-  <script src='https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.min.js'></script>
+    <div class="container">
+      <button data-sargasso-class="MyButtonClass">
+        Hello World!
+      </button>
+    </div>
 
-  <script defer>
-    window.onload = () => {
-      class MyButtonClass extends SargassoModule.Sargasso {
-        constructor(element, options = {}) {
-          options.watchViewport = true // tell me when I am visible
-          super(element, options) // important!
-        }
+    <script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.min.js"></script>
 
-        start() {
-          super.start() // important!
-
-          this.on('click', (e) => { // add click event handler
-            e.preventDefault()
-            this.clicked()
-          })
-
-          this.debug('MyButtonClass starting')
-        }
-
-        sleep() {
-          this.debug('MyButtonClass sleep called')
-          super.sleep() // important!
-        }
-
-        enterViewport() {
-          this.debug('MyButtonClass entered viewport!')
-        }
-
-        // use an animation frame to mutate the DOM
-        clicked() {
-          const frame = () => { // set up a DOM mutation
-            this.debug('clicked!')
-            this.addClass('clicked')
+    <script defer>
+      window.onload = () => {
+        class MyButtonClass extends SargassoModule.Sargasso {
+          constructor(element, options = {}) {
+            options.watchViewport = true; // tell me when I am visible
+            super(element, options); // important!
           }
-          this.queueFrame(frame) // schedule it
 
-          // remove it from the document to illustrate Sargasso lifecycle
-          setTimeout(() => {
-            this.debug('removing MyButtonClass element')
-            this.element.remove()
-          }, 2000)
+          start() {
+            this.once("click", e => {
+              // add click event handler
+              e.preventDefault();
+              this.clicked();
+            });
+            super.start(); // important!
+          }
+
+          sleep() {
+            this.queueFrame(() => {
+              document.body.innerHTML = "I'm gone";
+            })
+            super.sleep();
+          }
+
+          enterViewport() {
+            this.queueFrame(() => {
+              this.element.innerHTML += " In viewport!  Click me!";
+            });
+          }
+
+          // use an animation frame to mutate the DOM
+          clicked() {
+            const frame = () => {
+              // set up a DOM mutation frame
+              this.addClass("clicked");
+              this.element.innerHTML += " Clicked!";
+            };
+            this.queueFrame(frame); // schedule it
+
+            // remove it from the document to illustrate Sargasso lifecycle
+            setTimeout(() => {
+              this.element.remove();
+            }, 1000);
+          }
         }
 
-        debug(message) {
-          document.getElementById('debug').append(message + '\n')
-        }
-      }
+        SargassoModule.utils.registerSargassoClass("MyButtonClass",MyButtonClass);
 
-      SargassoModule.utils.registerSargassoClass('MyButtonClass', MyButtonClass)
-
-      // Start Sargasso
-      SargassoModule.utils.bootSargasso()
-    }
-  </script>
-
-  <div class="float">
-    <pre id="debug">
-      Sargasso element event log
-      ------
-      ready
-    </pre>
-  </div>
-</body>
+        // Start Sargasso
+        SargassoModule.utils.bootSargasso();
+      };
+    </script>
+  </body>
 </html>
 ```
-[Try It](https://jsfiddle.net/PelagicCreatures/chfpkvs3/18/)
+[Try It](https://stackblitz.com/edit/sargasso-example-2)
 
-### Sargasso Base Class:
+### Sargasso Class:
 
-**Properties**
+All Sargasso element controllers are sub classes of Sargasso
+
+#### Properties
 | property | description |
 | -------- | ----------- |
 | this.element | the element we are controlling |
 
 Your Sargasso subclasses can subscribe to event feeds in order to be notified of events.
 
-
-**Methods to override as needed:**
+#### Overridable Methods
 | method | description |
 | ------ | ----------- |
-| constructor(element, options = {}) | subscribe to services by setting appropriate options properties. All default to false so only set the ones you need to know about `watchDOM`, `watchScroll`, `watchResize`, `watchOrientation`, `watchViewport` eg. { watchScroll: true } |
-| start() | set up any interactions and event handlers |
-| sleep() | remove any event foreign handlers defined in start() and cleanup references - event handlers created with 'this.on' and 'this.once' are automatically removed by sargasso.|
+| constructor(element, options = {}) | subscribe to services by setting appropriate options properties before calling `super(element,options)`. All default to false so only set the ones you need to know about `watchDOM`, `watchScroll`, `watchResize`, `watchOrientation`, `watchViewport` eg. `options.watchScroll = true` |
+| start() | set up any interactions and event handlers for the element content such as click handlers, touch events, etc. Generally should call super.start() at head of function |
+| sleep() | remove any event **foreign** event handlers defined in start() and cleanup references - event handlers created with 'this.on' and 'this.once' are automatically removed by sargasso. Generally should call super.sleep() at tail of function|
 
-*don't forget to call super.xxx() in your subclass*
-
-**Handlers for sargasso events, override as needed:**
+#### Handlers for sargasso managed events, override these as needed to perform any needed behavior:
 | method | description |
 | ------ | ----------- |
 | DOMChanged() | called when DOM changes if options 'watchDOM: true' was set in constructor |
@@ -225,39 +214,39 @@ Your Sargasso subclasses can subscribe to event feeds in order to be notified of
 | exitViewport() | called when element is exiting viewport if options 'watchViewport: true' was set in constructor |
 | newPage(old, new) | on a new page |
 | didBreakpoint() | new screen width breakpoint |
-| workerOnMessage (id, data = {}) | id is the worker sending the message. Any payload from the worker `postMessage` is in data.xxx as defined by the worker |
-| observableChanged(id, property, value) | called on data change if watching an observable object |
-| enterFullscreen() | *experimental* called if options 'watchOrientation: true' when user rotates phone or if setFullscreen is called |
-| exitFullscreen() | *experimental* called on exit fullscreen |
+| workerOnMessage (id, data = {}) | `id` is the id of the worker sending the message (can have as many as you want). Any payload from the worker's `postMessage` call is in data.xxx as defined by the worker. |
+| observableChanged(id, property, value) | if watching an observable object this is called on observable data change. `id` is the id of the observable (can have as many as you want) |
+| enterFullscreen() | *experimental API in flux* called if options 'watchOrientation: true' when user rotates phone or if setFullscreen is called |
+| exitFullscreen() | *experimental API in flux* called on exit fullscreen |
 
-**CSS Methods**
+#### CSS Methods
 | method | description |
 | ------ | ----------- |
-| hasClass('classname') | returns true if this.element has cssclass |
-| addClass('classname') | add classname or array of classnames to this.element |
-| removeClass('classname')  | remove classname or array of classnames to this.element |
-| setCSS({})  | set css pairs defined in object on this.element |
+| hasClass('classname') | returns true if this.element has cssclass. |
+| addClass('classname') | add classname or array of classnames to this.element eg: 'class1,class2' |
+| removeClass('classname')  | remove classname or array of classnames from this.element eg: 'class1,class2' |
+| setCSS({})  | set css pairs on this.element {'padding':'1em','margin':'2em'} |
 
-**Register Event Methods**
+#### Register Event Methods
 | method | description |
 | ------ | ----------- |
-| on(container,fn) | attach undelegated event handler to container scoped to a css selector |
-| once(container,fn) | attach undelegated event handler to container scoped to a css selector that executes only once (automatically removes event handler on first call) |
-| off(container) | remove undelegated event handler to container scoped to css selector |
-| on(container,selector,fn) | attach delegated event handler to container scoped to a css selector |
-| once(container,selector,fn) | attach delegated event handler to container scoped to a css selector that executes only once (automatically removes event handler on first call) |
-| off(container,selector) | remove delegated event handler to container scoped to css selector |
+| on(container,fn) | attach an undelegated event handler to element |
+| once(container,fn) | attach undelegated event handler to this.element that executes only once (automatically removes the event handler on first call) |
+| off(container) | remove undelegated event handler from this.element |
+| on(container,selector,fn) | attach delegated event handler scoped to a css selector for an element within this.element |
+| once(container,selector,fn) | attach delegated event handler scoped to a css selector for an element within this.element that executes only once (automatically removes event handler on first call) |
+| off(container,selector) | remove delegated event handler scoped to css selector for an element within this.element |
 
-**Utility Methods:**
+#### Utility Methods:
 | method | description |
 | ------ | ----------- |
-| getMetaData(key) | return sargasso metadata associated with element (weak map) |
-| setMetaData(key,value) | set a sargasso metadata property |
-| isVisible() | true if element is visible |
+| getMetaData(key) | return this.element's metadata value for key (implemented as a weak map.) Use this for any key value pairs you like. All data is destroyed when Sargasso object is destroyed. |
+| setMetaData(key,value) | set this.element's metadata value for key |
+| isVisible() | true if this.element is visible |
 
-### Progressive Web App HIJAX Page Load
+### Progressive Web Apps
 
-When HIJAX is enabled, Sargasso automatically captures `<a href="..">` tags and calls the LoadPageHandler instead of allowing the browser load and replace entire pages natively. Usually a web site or app has a boilerplate html wrapper that is the same for every page and well defined content areas that change from page to page. When pages are loaded via HIJAX only the changed content is merged with the current page, replacing containers marked with `data-hijax` leaving heavy weight wrapper elements, persistent javascript, css and sargasso elements intact. You can define as many dynamic elements in the wrapper as needed. Following this scheme allows for deep linking, and search engine discovery while also speeding page load for real browsers.
+When HIJAX is enabled, Sargasso automatically captures `<a href="..">` tags and calls the LoadPageHandler instead of allowing the browser load and replace entire pages natively. Usually a web site or app has a boilerplate html wrapper that is the same for every page with well defined content areas that change from page to page. When pages are loaded via HIJAX only the changed content is merged with the current page, replacing content in containers marked with `data-hijax` leaving heavy weight wrapper elements, persistent javascript, css and sargasso elements undisturbed. You can define as many dynamic elements in the wrapper as needed. Following this scheme allows for deep linking and search engine discovery while also speeding page load for an "app" like experience for real browsers.
 
 The Sargasso supervisor takes care of cleaning up any instantiated Sargasso element controllers in the old content by calling sleep() before the content is removed then sargasso elements in the new content are instantiated and start() is called. That way Sargasso element controllers can be cleanly managed on progressive web app pages without leaving dangling event handlers and memory leaks.
 
@@ -288,9 +277,9 @@ You can optionally make any link be ignored by hijax by setting the `<a href="..
   </script>
 </body>
 ```
-[Try It](https://stackblitz.com/edit/web-platform-5g5tqc)
+[Try It](https://stackblitz.com/edit/sargasso-hijax)
 
-**Note:** `data-hijax` elements must have and ID and contain well formed child html elements.
+**Note:** `data-hijax` elements must have and ID attribute defined and must contain well formed child html elements.
 
 ```html
 <div id="nope" data-hijax>I'm just text. No child elements. Won't work.</div>
@@ -299,18 +288,18 @@ You can optionally make any link be ignored by hijax by setting the `<a href="..
 
 #### Programatic Page Loading
 
-`SargassoModule.loadPageHandler(href)` is the utility function for programmatically loading a new page. EG. instead of `location.href= '/home'`, use `LoadPageHandler('/home')` This can be called to reload the page as well.
+`SargassoModule.loadPageHandler(href)` is the utility function for programmatically loading a new page. EG. instead of using `location.href= '/home'`, use `loadPageHandler('/home')` This can be called to reload the page as well.
 
 #### Content Merging Fine Control
 
-Set the `data-hijax-skip-unchanged` attribute on the hijax container and the content will remain static unless the markup is changed. This is useful if you have a Sargasso element that should remain instantiated and hold state when traversing several pages in a section.
+Set the `data-hijax-skip-unchanged` attribute on a hijax container and the content will remain static unless the markup is changed. This is useful if you have a Sargasso element that should remain instantiated and hold state when traversing several pages in a section but change when you move to a new section of the site.
 ```html
 <div id="test" data-hijax data-hijax-skip-unchanged>
   <p>This content also sometimes changes from page to page, otherwise leave it alone.</p>
 </div>
 ```
 
-Set `data-hijax-cache-key-selector` to a css selector of an element within the hijax container which has defined `data-hijax-cache-key-selector` to leave the content intact across pages until the key changes.
+Set `data-hijax-cache-key-selector` to a css selector of an element within a hijax container which has defined `data-hijax-cache-key-selector` to leave the content intact across pages until the key value changes.
 ```html
 <div id="test" data-hijax data-hijax-cache-key-selector="#sub-element">
   <p id="sub-element" data-hijax-cache-key="some-key">This content uses a cache key to signal changes, otherwise leave it alone.</p>
@@ -319,54 +308,51 @@ Set `data-hijax-cache-key-selector` to a css selector of an element within the h
 
 ### Using Animation Frames
 
-To avoid any chaotic repaints you should only make Content or DOM changes inside animation frames - don't do any long processes in the responsive callbacks or things might bog down the browser UI. Sargasso.queueFrame maintains a list of pending page updates which are executed in order using the animation frame loop.
+To avoid chaotic repaints, make Content or DOM changes inside animation frames - don't do any long processes in the responsive callbacks or things might bog down the browser UI. Sargasso.queueFrame maintains a list of pending page updates which are executed in order using the request animation frame loop.
 
 | method | description |
 | ------ | ----------- |
-| queueFrame(function) | queue a function to execute that changes the DOM |
+| queueFrame(function) | queue a function to execute that changes the DOM. To keep pages performant, the function should not be heavy weight or computationally intensive |
 
-
+Example
 ```javascript
-this.queueFrame(()=>{
+const frame = () => {
   this.removeClass('css-class,some-other-css-class')
   this.addClass('css-class,some-other-css-class')
   this.element.innerHTML = 'changed!'
-})
+}
+this.queueFrame(frame)
 ```
 
 ### ObservableObjects
 
-Observable objects implement a notification scheme for data changes. (implementation is javascript Proxy and reflect) These objects can be shared across elements for real-time sharing and display of information.
+Observable objects implement a notification scheme for tracking data changes. (the implementation is using javascript Proxy and Reflect) These objects can be shared across elements for real-time display of information.
 
 | method | description |
 | ------ | ----------- |
-| observableStart (id, data) | start watching for changes in observable data. `data` is an optional JS data object  |
+| observableStart (id, data) | start watching for changes in observable object. `id` is an application unique identifier for the shared data. `data` is an optional JS data object to initialize the values |
 | observableStop (id) | stop watching for changes in observable data |
-| getObservable (id) | get underlying ObservableObject instance for id |
+| getObservable (id) | get underlying ObservableObject instance for `id` |
 
 ```javascript
-let args = {
-  name: 'World!',
-  cssClass: 'red'
-}
+let args = { name: 'World!', cssClass: 'red' }
 let observable = new SargassoModule.ObservableObject('shared-data', args)
 ```
 
-You can bind a function to the observable instance which is called on change:
+Then bind a function to the observable instance which is called when the data changes:
 ```javascript
 let watch = (id, property, value) => {
   console.log('id:' + id + ' property:' + property + ' is now:' + value)
 }
 
-// you can optionally provide a property as a third parameter if you only want to be notified if 'cssClass' changes, for instance. In this case we want all changes.
 observable.bind('uniqueID', watch)
 
-// now changes to the data will trigger the watch function
-observable.set('name','New Name')
-observable.data.name = 'New Name' // same thing different syntax
+// any changes to the data will trigger the watch function
+observable.data.name = 'New Name'
+observable.set('name','New Name') // same thing different syntax
 ```
 
-Sargasso Elements can subscribe to notifications from ObservableObjects that are defined externally or owned by the element.
+Sargasso Elements can subscribe to ObservableObjects that are owned by the element or were defined externally.
 ```javascript
 class MyClass extends SargassoModule.Sargasso {
   start() {
@@ -375,13 +361,14 @@ class MyClass extends SargassoModule.Sargasso {
   }
 
   observableChanged(id, property, value) {
-    // do something with the change
+    // Do something with the change like re-display the element with new values or something.
+		// DON'T make a change to the data here tho or you will have an endless loop on your hands.
   }
 }
 ```
 
 ### Templates and Rendering
-Complete example of an element that renders on data updates using an ObservableObject and li-html templates.
+Complete example of an element that renders on data updates using an ObservableObject and `li-html` templates.
 
 | method | description |
 | ------ | ----------- |
@@ -407,7 +394,7 @@ examples/example5.html
 
   <sargasso-my-class></sargasso-my-class>
 
-	<script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.min.js"></script>
   <script defer type="module">
     import {
       html,render
