@@ -3694,8 +3694,8 @@ var SargassoModule = (function (exports) {
 			// debounce - just need to know if a change occured, not every change
 			this.mutationHandler = debounce_1((mutations, observer) => {
 				this.observeDOM(mutations, observer);
-			}, 100, {
-				maxWait: 250
+			}, 25, {
+				maxWait: 100
 			});
 
 			this.mutationObserver = new MutationObserver(this.mutationHandler, false);
