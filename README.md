@@ -16,7 +16,7 @@ Made in Barbados 🇧🇧 Copyright © 2020-2021 Michael Rhodes
 * Fast, Debounced UI Events ('resize','scroll', etc.)
 * PWA/SPA friendly event handlers for elements ('click', 'touch', etc.)
 * Simplified CSS class & CSS style manipulation for elements
-* Templating & Rendering element content which can automatically re-render on data changed
+* Templating & Rendering of element content which automatically re-renders on data change
 
 ### Sargasso uses the latest javascript browser capabilities:
 * Custom Elements
@@ -26,7 +26,7 @@ Made in Barbados 🇧🇧 Copyright © 2020-2021 Michael Rhodes
 * Proxy / Reflect for Observable data
 * Template literals and rendering tools such as [lit-html](https://lit-html.polymer-project.org/)
 
-The result is lean (<50k), highly performant and clean library that simplifies the complex technologies behind modern progressive web apps and web sites.
+The result is lean (<50k), highly performant and clean library that simplifies the implementation of the complex technologies behind modern progressive web apps and web sites.
 
 The Sargasso ecosystem includes modules for:
 
