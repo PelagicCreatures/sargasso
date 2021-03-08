@@ -39,7 +39,7 @@
         }
 
         workerOnMessage (id, data) {
-          if(id === 'mytask') { // only neeed to test this is running multiple workers
+          if(id === 'mytask') { // really only neeed to test this element is running multiple workers
             if(data.count == this.element.getAttribute('data-count-to')) {
               this.stopWorker('mytask')
             }

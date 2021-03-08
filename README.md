@@ -551,7 +551,7 @@ example/example4.html
 </html>
 
 ```
-[Try It](https://jsfiddle.net/PelagicCreatures/exnjtvqb/1/)
+[Try It](https://stackblitz.com/edit/sargasso-example-4)
 
 ### Serving modules from your project
 ```
