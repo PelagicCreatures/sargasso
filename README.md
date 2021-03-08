@@ -29,6 +29,8 @@ Made in Barbados 🇧🇧 Copyright © 2020-2021 Michael Rhodes
 The result is lean (<50k), highly performant and clean library that simplifies the complex technologies behind modern progressive web apps and web sites.
 
 The Sargasso ecosystem includes modules for:
+
+| NPM | Capabilities |
 | --- | --- |
 | [@pelagiccreatures/flyingfish](https://www.npmjs.com/package/@pelagiccreatures/flyingfish) | Lazy loaded images and element backgrounds using web workers |
 | [@pelagiccreatures/tropicbird](https://www.npmjs.com/package/@pelagiccreatures/tropicbird) | PWA friendly Material Design components |
