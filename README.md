@@ -1,6 +1,6 @@
-# @pelagiccreatures/sargasso
+# [@pelagiccreatures/sargasso](https://www.npmjs.com/package/@pelagiccreatures/sargasso)
 
-### Simple, Fast, Supervised Javascript Controller framework for Web Sites and Progressive Web Apps.
+### Simple, Fast, Supervised Javascript Element Controller framework for Web Sites and Progressive Web Apps.
 
 ```
 @author Michael Rhodes (except where noted)
@@ -8,24 +8,36 @@
 Made in Barbados 🇧🇧 Copyright © 2020-2021 Michael Rhodes
 ```
 
-Sargasso Makes HTML elements aware of events such as Document (DOM) insertions and deletions, HIJAX Page load, Scrolling, Resizing, Orientation and messages Managed Web Workers and elements allowing them to efficiently implement any behavior they need to perform.
+### Sargasso implements modern tools for:
+* PWA (Progressive Web App)
+* SPA (single-page application)
+* Web pages
+* Element controller management for creation and clean destruction of custom elements
+* Fast, Debounced UI Events ('resize','scroll', etc.)
+* PWA/SPA friendly event handlers for elements ('click', 'touch', etc.)
+* Simplified CSS class & CSS style manipulation for elements
+* Templating & Rendering element content which can automatically re-render on data changed
 
-One of the core features of this framework is to implement an asynchronous page loading scheme which supports deep linking and lightning fast page loads where only dynamic content areas are merged between page loads leaving css, js, web workers and wrapper elements intact. Sargasso controller instances are automatically created as needed when their element appears in the DOM and destroyed when their element is removed so everything is cleanly destroyed and all the trash is collected. Performance is further enhanced with shared event listening services which are fully debounced during updates. Services are also provided to schedule content changes using the browser's **animation frame** event loop and managed **web workers** for simplified offloading of computation heavy tasks to a dedicated thread resulting in highly performant pages.
+### Sargasso uses the latest javascript browser capabilities:
+* Custom Elements
+* Web Workers
+* Weak Map metadata
+* Animation Frames for clean page updates
+* Proxy / Reflect for Observable data
+* Template literals and rendering tools such as [lit-html](https://lit-html.polymer-project.org/)
 
-Sargasso elements can also track changes to underlying data and re-render as needed using [lit-html](https://lit-html.polymer-project.org/) templates.
+The result is lean (<50k), highly performant and clean library that simplifies the complex technologies behind modern progressive web apps and web sites.
 
-This is a very lightweight (27kb), pure ES6 framework (with only few dependencies) which aims to use the most advanced stable features of modern browsers to maximum effect leaving the historical cruft, kludges and code barnacles infesting older web frameworks behind. The result is lean, highly performant and clean library that simplifies the complex technologies behind modern progressive web apps and web sites.
-
-Other Sargasso modules that build on this framework:
-* [@pelagiccreatures/flyingfish: Lazy Loading Images](https://github.com/PelagicCreatures/flyingfish)
-* [@pelagiccreatures/tropicbird: Material Design Element Controllers](https://github.com/PelagicCreatures/tropicbird)
-* [@pelagiccreatures/molamola: Forms & Form Validation](https://github.com/PelagicCreatures/molamola)
+The Sargasso ecosystem includes modules for:
+| [@pelagiccreatures/flyingfish](https://www.npmjs.com/package/@pelagiccreatures/flyingfish) | Lazy loaded images and element backgrounds using web workers |
+| [@pelagiccreatures/tropicbird](https://www.npmjs.com/package/@pelagiccreatures/tropicbird) | PWA friendly Material Design components |
+| [@pelagiccreatures/molamola](https://www.npmjs.com/package/@pelagiccreatures/molamola) | PWA friendly form validation & API payload management |
 
 ### Status
 
 API Stable
 
-We are trying to keep this project as forward looking so as to not burden this framework with lots of obsolete junk and polyfills so while it will certainly not work on *every* ancient browser, it should work on any *reasonably* modern one. If you run into any problems, have questions, want to help or have any feedback let me know by opening a github issue.
+We are trying to keep this project as forward looking so as to not burden this framework with lots of obsolete junk and polyfills so while it will probably not work on *every* ancient browser, it should work on any *reasonably* modern one. If you run into any problems, have questions, want to help or have any feedback let us know by opening a github issue.
 
 ### Usage Overview (Using CDN iife modules)
 
