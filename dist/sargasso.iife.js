@@ -3624,10 +3624,11 @@ var SargassoModule = (function (exports) {
 			this.observers = [];
 			this.pendingAnimationFrame = undefined;
 			this.frameQueue = [];
+			this.sleeping = true;
 		}
 
 		subscribe (observer) {
-			if (!this.observers.length) {
+			if (!this.observers.length && this.sleeping) {
 				this.wakeup();
 			}
 			this.observers.push(observer);
@@ -3643,9 +3644,13 @@ var SargassoModule = (function (exports) {
 			}
 		}
 
-		sleep () {}
+		sleep () {
+			this.sleeping = true;
+		}
 
-		wakeup () {}
+		wakeup () {
+			this.sleeping = false;
+		}
 
 		notifyObservers (event, params) {
 			for (let i = 0; i < this.observers.length; i++) {
