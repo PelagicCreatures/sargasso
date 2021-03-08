@@ -945,8 +945,6 @@ var SargassoModule = (function (exports) {
 			belowTheFold = (rect.top > container.clientHeight);
 		}
 
-		// console.log('inViewPort', visible, belowTheFold, aboveTheTop)
-
 		return (visible && !belowTheFold && !aboveTheTop)
 	};
 
@@ -959,7 +957,7 @@ var SargassoModule = (function (exports) {
 		for (const prop in css) {
 			if (Object.prototype.hasOwnProperty.call(css, prop)) {
 				const key = camelCase_1(prop);
-				element.style[key] = css[prop];
+				element.style[key] = css[prop] || null;
 			}
 		}
 	};
@@ -976,7 +974,11 @@ var SargassoModule = (function (exports) {
 
 	const getMetaData = (element, k) => {
 		const data = elementMetaData.get(element) || {};
-		return data[k]
+		if (k) {
+			return data[k]
+		} else {
+			return data
+		}
 	};
 
 	const on = function (uid, container, events, selector, fn, options, once) {
@@ -985,7 +987,7 @@ var SargassoModule = (function (exports) {
 			once = options;
 			options = fn;
 			fn = selector;
-			selector = null;
+			selector = undefined;
 		}
 
 		const k = 'on:' + uid + '-' + events + '-' + selector;
@@ -1015,7 +1017,7 @@ var SargassoModule = (function (exports) {
 		const data = {
 			uid: uid,
 			events: events,
-			selector: selector,
+			selector: selector || undefined,
 			fn: handler,
 			options: options || false
 		};
@@ -1057,6 +1059,11 @@ var SargassoModule = (function (exports) {
 	};
 
 	const once = function (uid, container, events, selector, fn, options) {
+		if (typeof selector === 'function') {
+			options = fn;
+			fn = selector;
+			selector = undefined;
+		}
 		on(uid, container, events, selector, fn, options, true);
 	};
 

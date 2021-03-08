@@ -5,7 +5,6 @@
 		<link rel="stylesheet" href="../node_modules/mocha/mocha.css">
 		<div id="mocha"></div>
 		<script src="../node_modules/setimmediate/setimmediate.js"></script>
-
 		<script src="../node_modules/mocha/mocha.js"></script>
 		<script src="../node_modules/chai/chai.js"></script>
 		<script src="../node_modules/sinon/pkg/sinon.js"></script>
@@ -15,7 +14,7 @@
 		  var expect = chai.expect;
 		</script>
 		<style>
-			#spacer.below-the-fold { height:100vh; }
+			#spacer { margin-top:100vh; }
 			.hidden-display { display: none; }
 		</style>
 	</head>
@@ -25,16 +24,8 @@
 				HiJaxed content here. index.html
 			</div>
 		</div>
-		<div style="text-align:center;">
-			<div id="test-element1" class="hidden-display" style="min-height:33vh;width:33vw;"></div>
-			<div id="spacer"></div>
-			<div id="test-element" style="border:thin dashed silver;min-height:33vh;width:33vw;">
-				<div class="nested-element">
-					<div class="deep-nested-element"></div>
-				</div>
-				<div class="nested-element"></div>
-			</div>
-		</div>
+		<div id="test-container"><div id="spacer"></div></div>
+
 		<script src="../dist/sargasso.iife.js"></script>
 		<script src="./spec.js"></script>
 		<script defer>

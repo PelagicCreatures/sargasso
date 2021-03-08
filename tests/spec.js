@@ -1,11 +1,38 @@
 const elementTools = SargassoModule.utils.elementTools
-const testElement = document.getElementById('test-element')
-const testElement1 = document.getElementById('test-element1')
+const testElement = document.createElement('div')
+testElement.setAttribute('id', 'test-element')
+const testElement1 = document.createElement('div')
+const nestedElement = document.createElement('div')
+const nestedElement2 = document.createElement('div')
+const deepNestedElement = document.createElement('div')
+nestedElement.appendChild(deepNestedElement)
+
+const container = document.getElementById('test-container')
+container.appendChild(testElement)
+testElement.appendChild(nestedElement)
+testElement.appendChild(nestedElement2)
+elementTools.addClass(nestedElement, 'nested-element')
+elementTools.addClass(nestedElement2, 'nested-element')
+
+function makeNode (html) {
+	const e = document.createElement('div')
+	e.innerHTML = html
+	return e.firstChild
+}
+/*
+	container
+		test element <- undelegated event
+			nested element <- delegated event
+				deep nested element
+			nested element <- delegated event
+*/
+
 describe('Sargasso', function () {
 	it('utils.hasClass', function (done) {
 		expect(elementTools.hasClass(testElement, 'test-class')).to.be.false
 		setImmediate(done)
 	})
+
 	it('utils.addClass', function (done) {
 		elementTools.addClass(testElement, 'test-class')
 		elementTools.addClass(testElement, ['test-class2', 'test-class3'])
@@ -14,6 +41,7 @@ describe('Sargasso', function () {
 		expect(elementTools.hasClass(testElement, 'test-class3')).to.be.true
 		setImmediate(done)
 	})
+
 	it('utils.removeClass', function (done) {
 		elementTools.removeClass(testElement, 'test-class')
 		expect(elementTools.hasClass(testElement, 'test-class')).to.be.false
@@ -23,22 +51,9 @@ describe('Sargasso', function () {
 		expect(elementTools.hasClass(testElement, 'test-class3')).to.be.false
 		setImmediate(done)
 	})
-	it('utils.isVisible', function (done) {
-		expect(elementTools.isVisible(testElement)).to.be.true
-		elementTools.addClass(testElement, 'hidden-display')
-		expect(elementTools.isVisible(testElement)).to.be.false
-		elementTools.removeClass(testElement, 'hidden-display')
-		setImmediate(done)
-	})
-	it('utils.inViewPort', function (done) {
-		expect(elementTools.inViewPort(testElement)).to.be.true
-		elementTools.addClass(document.querySelector('#spacer'), 'below-the-fold')
-		expect(elementTools.inViewPort(testElement)).to.be.false
-		elementTools.removeClass(document.querySelector('#spacer'), 'below-the-fold')
-		setImmediate(done)
-	})
+
 	it('utils.css', function (done) {
-		const css = {
+		let css = {
 			backgroundColor: 'rgb(238, 238, 238)',
 			color: 'black',
 			'border-color': 'pink'
@@ -47,8 +62,21 @@ describe('Sargasso', function () {
 		expect(testElement.style.backgroundColor, 'background-color').to.equal('rgb(238, 238, 238)')
 		expect(testElement.style.color, 'color').to.equal('black')
 		expect(testElement.style.borderColor, 'border-color').to.equal('pink')
+
+		css = {
+			backgroundColor: '',
+			color: '',
+			'border-color': ''
+		}
+		elementTools.setCSS(testElement, css)
+
+		expect(testElement.style.backgroundColor).to.equal('')
+		expect(testElement.style.color).to.equal('')
+		expect(testElement.style.borderColor).to.equal('')
+
 		setImmediate(done)
 	})
+
 	it('utils.setMetaData utils.getMetaData', function (done) {
 		elementTools.setMetaData(testElement, 'key', 'test')
 		expect(elementTools.getMetaData(testElement, 'key')).to.equal('test')
@@ -57,41 +85,113 @@ describe('Sargasso', function () {
 		setImmediate(done)
 	})
 
-	it('util.on util.off util.once', function (done) {
+	it('utils.isVisible', function (done) {
+		expect(elementTools.isVisible(testElement)).to.be.true
+		elementTools.addClass(testElement, 'hidden-display')
+		expect(elementTools.isVisible(testElement)).to.be.false
+		elementTools.removeClass(testElement, 'hidden-display')
+		setImmediate(done)
+	})
+
+	it('utils.inViewPort', function (done) {
+		expect(elementTools.inViewPort(testElement)).to.be.false
+		window.scrollTo(0, window.innerHeight)
+		expect(elementTools.inViewPort(testElement)).to.be.true
+		window.scrollTo(0, 0)
+		setImmediate(done)
+	})
+
+	it('utils.on undelegated', function (done) {
 		const fn = sinon.spy()
 
-		// test un delegated events
-		elementTools.on('myid', testElement, 'click', null, fn)
+		// on
+		// test undelegated events - should see a click on the element or any of its child elements
+		elementTools.on('myid', testElement, 'click', fn)
 		testElement.click()
 		expect(fn.called).to.be.true
 
 		fn.resetHistory()
-		elementTools.off('myid', testElement, 'click', null)
+		nestedElement.click()
+		expect(fn.callCount).to.equal(1)
+
+		fn.resetHistory()
+		nestedElement2.click()
+		expect(fn.callCount).to.equal(1)
+
+		fn.resetHistory()
+		deepNestedElement.click()
+		expect(fn.callCount).to.equal(1)
+		setImmediate(done)
+	})
+
+	it('utils.off', function (done) {
+		const fn = sinon.spy()
+
+		// off
+		fn.resetHistory()
+		elementTools.off('myid', testElement, 'click')
 		testElement.click()
 		expect(fn.called).to.be.false
+		setImmediate(done)
+	})
 
-		// test once events
+	it('utils.once', function (done) {
+		const fn = sinon.spy()
+
+		// test once events are removed after trigger
 		fn.resetHistory()
-		elementTools.once('myid', testElement, 'click', null, fn)
+		elementTools.once('myid', testElement, 'click', fn)
 		testElement.click()
 		expect(fn.called).to.be.true
+
 		fn.resetHistory()
 		testElement.click()
 		expect(fn.called).to.be.false
+		setImmediate(done)
+	})
+
+	it('utils.on delegated', function (done) {
+		const fn = sinon.spy()
 
 		// test delegated events
-		fn.resetHistory()
 		elementTools.on('myid', testElement, 'click', '.nested-element', fn)
-		testElement.click() // click on container (ignored)
-		document.querySelectorAll('.nested-element')[0].click()
-		document.querySelectorAll('.nested-element')[1].click()
-		document.querySelectorAll('.deep-nested-element')[0].click()
-		expect(fn.callCount).to.equal(3)
+
+		fn.resetHistory()
+		testElement.click()
+		expect(fn.callCount).to.equal(0)
+
+		fn.resetHistory()
+		nestedElement.click()
+		expect(fn.callCount).to.equal(1)
+
+		fn.resetHistory()
+		deepNestedElement.click()
+		expect(fn.callCount).to.equal(1)
+
+		fn.resetHistory()
+		nestedElement2.click()
+		expect(fn.callCount).to.equal(1)
 
 		fn.resetHistory()
 		elementTools.off('myid', testElement, 'click', '.nested-element')
-		document.querySelectorAll('.nested-element')[0].click()
-		document.querySelectorAll('.nested-element')[1].click()
+		nestedElement.click()
+		nestedElement2.click()
+		expect(fn.callCount).to.equal(0)
+		setImmediate(done)
+	})
+
+	it('utils.offAll', function (done) {
+		const fn = sinon.spy()
+
+		// offAll - remove all sargasso handlers from element
+		elementTools.on('myid', testElement, 'click', fn)
+		elementTools.on('myid2', testElement, 'click', '.nested-element', fn)
+		elementTools.once('myid3', testElement, 'click', fn)
+		elementTools.offAll(testElement)
+		fn.resetHistory()
+		testElement.click()
+		nestedElement.click()
+		nestedElement2.click()
 		expect(fn.callCount).to.equal(0)
 		setImmediate(done)
 	})
@@ -108,19 +208,17 @@ describe('Sargasso', function () {
 		let start = false
 		let sleep = false
 		let destroy = false
-		const didScroll = 0
 
 		class InstrumentedSubclass extends SargassoModule.Sargasso {
 			constructor (element, options) {
-				super(element, {
-					watchScroll: true
-				})
+				super(element, options)
 				instantiated = true
 			}
 
 			start () {
 				super.start()
 				start = true
+				this.element.remove()
 			}
 
 			sleep () {
@@ -131,103 +229,49 @@ describe('Sargasso', function () {
 			destroy () {
 				destroy = true
 				super.destroy()
+				expect(instantiated).to.be.true
+				expect(start).to.be.true
+				expect(sleep).to.be.true
+				expect(destroy).to.be.true
+				done()
 			}
 		}
 
 		SargassoModule.utils.registerSargassoClass('InstrumentedSubclass', InstrumentedSubclass)
-		testElement.innerHTML = '<sargasso-instrumented-subclass id="my-element"></sargasso-instrumented-subclass>'
-		const myElement = document.querySelector('#my-element')
-		const myClassInstance = elementTools.getMetaData(myElement, 'InstrumentedSubclass')
-		expect(instantiated).to.be.true
-		expect(start).to.be.true
 
-		testElement.innerHTML = '' // kill it
-		expect(sleep).to.be.true
-		expect(destroy).to.be.true
-		setImmediate(done)
+		container.appendChild(makeNode('<sargasso-instrumented-subclass></sargasso-instrumented-subclass>'))
 	})
 
 	/*
-		exercises:
-			ObserverSubscriptionManager subscribe, unsubscribe
-			ScrollWatcher scroll trigger and watch loop
-		 	Sargasso.watchScroll, Sargasso.didScroll callback handling
-	*/
-	it('Sargasso watchScroll callback', function (done) {
-		let didScroll = 0
+			excercises
+				Supervisor instantiate by data-sargasso-class w/multiple classes
+		*/
+	it('Sargasso Supervisor Instantiate 2 Sargasso classes by data-sargasso-class', function (done) {
+		let count = 0
 
-		class InstrumentedScrollClass extends SargassoModule.Sargasso {
-			constructor (element, options) {
-				super(element, {
-					watchScroll: true
-				})
-			}
-
-			start () {
-				super.start()
-			}
-
-			sleep () {
-				super.sleep()
-			}
-
-			didScroll () {
-				++didScroll
-				if (didScroll > 1) {
-					expect(didScroll).to.equal(2)
-					expect(SargassoModule.services.theScrollWatcher.scrollTop()).to.equal(10)
-					testElement.innerHTML = '' // kill it
-					expect(SargassoModule.services.theScrollWatcher.observers.length).to.equal(1)
-					window.scrollTo(0, 0)
-					done()
-				}
-			}
-		}
-
-		SargassoModule.utils.registerSargassoClass('InstrumentedScrollClass', InstrumentedScrollClass)
-		testElement.innerHTML = '<sargasso-instrumented-scroll-class id="my-element"></sargasso-instrumented-scroll-class>'
-		const myElement = document.querySelector('#my-element')
-		const myClassInstance = elementTools.getMetaData(myElement, 'InstrumentedScrollClass')
-		expect(SargassoModule.services.theScrollWatcher.observers.length).to.equal(2)
-		expect(didScroll).to.equal(1)
-		window.scrollTo(0, 10)
-	})
-
-	/*
-		excercises
-			HijaxLoader
-	*/
-	it('Sargasso HijaxLoader', function (done) {
-		class InstrumentedHijaxClass extends SargassoModule.Sargasso {
-			newPage (oldPage, newPage) {
-				if (newPage === '/tests/page1.html') {
-					document.getElementById('back-link').click()
-					testElement.innerHTML = '' // kill it
-					done()
-				}
-			}
-		}
-		SargassoModule.utils.registerSargassoClass('InstrumentedHijaxClass', InstrumentedHijaxClass)
-		testElement.innerHTML = '<sargasso-instrumented-hijax-class id="my-element"></sargasso-instrumented-hijax-class>'
-		const myElement = document.querySelector('#my-element')
-		const myClassInstance = elementTools.getMetaData(myElement, 'InstrumentedHijaxClass')
-		SargassoModule.loadPageHandler('./page1.html')
-	})
-
-	/*
-		excercises
-			Supervisor
-	*/
-	it('Sargasso Supervisor Instantiate by data-sargasso-class', function (done) {
 		class InstrumentedSupervisorTest extends SargassoModule.Sargasso {
 			start () {
 				super.start()
-				testElement.innerHTML = '' // kill it
-				setImmediate(done)
+				if (++count === 2) {
+					this.element.remove()
+					done()
+				}
 			}
 		}
+
+		class InstrumentedSupervisorTest1 extends SargassoModule.Sargasso {
+			start () {
+				super.start()
+				if (++count === 2) {
+					this.element.remove()
+					done()
+				}
+			}
+		}
+
 		SargassoModule.utils.registerSargassoClass('InstrumentedSupervisorTest', InstrumentedSupervisorTest)
-		testElement.innerHTML = '<div id="my-element" data-sargasso-class="InstrumentedSupervisorTest"></div>'
+		SargassoModule.utils.registerSargassoClass('InstrumentedSupervisorTest1', InstrumentedSupervisorTest1)
+		container.appendChild(makeNode('<div data-sargasso-class="InstrumentedSupervisorTest,InstrumentedSupervisorTest1"></div>'))
 	})
 
 	/*
@@ -238,32 +282,117 @@ describe('Sargasso', function () {
 		class InstrumentedLazyTest extends SargassoModule.Sargasso {
 			start () {
 				super.start()
-				testElement.innerHTML = '' // kill it
 				window.scrollTo(0, 0)
+				this.element.remove()
 				done()
 			}
 		}
-		elementTools.addClass(document.querySelector('#spacer'), 'below-the-fold')
 		SargassoModule.utils.registerSargassoClass('InstrumentedLazyTest', InstrumentedLazyTest)
-		testElement.innerHTML = '<div id="my-element" data-lazy-sargasso-class="InstrumentedLazyTest"></div>'
+		container.appendChild(makeNode('<div data-lazy-sargasso-class="InstrumentedLazyTest"></div>'))
 		window.scrollTo(0, window.innerHeight)
 	})
 
 	/*
-		excercises
-			LazyInstantiate - container not visible, instantiate on reveal
+		exercises:
+			ObserverSubscriptionManager subscribe, unsubscribe
+			ScrollWatcher scroll trigger and watch loop
+		 	Sargasso.watchScroll, Sargasso.didScroll callback handling
 	*/
-	it('Sargasso LazyInstantiate by data-lazy-sargasso-class in hidden container', function (done) {
-		class InstrumentedLazyRevealTest extends SargassoModule.Sargasso {
-			start () {
-				super.start()
-				testElement1.innerHTML = '' // kill it
-				elementTools.addClass(testElement1, 'hidden-display')
-				done()
+	it('Sargasso watchScroll', function (done) {
+		class InstrumentedScrollClass extends SargassoModule.Sargasso {
+			constructor (element, options) {
+				super(element, {
+					watchScroll: true
+				})
+				this.triggered = false
+			}
+
+			didScroll () {
+				window.scrollTo(0, 0)
+				if (!this.triggered) {
+					this.triggered = true
+					done()
+				}
 			}
 		}
-		SargassoModule.utils.registerSargassoClass('InstrumentedLazyRevealTest', InstrumentedLazyRevealTest)
-		testElement1.innerHTML = '<div id="my-element" data-lazy-sargasso-class="InstrumentedLazyRevealTest"></div>'
-		elementTools.removeClass(testElement1, 'hidden-display')
+		SargassoModule.utils.registerSargassoClass('InstrumentedScrollClass', InstrumentedScrollClass)
+		container.appendChild(makeNode('<sargasso-instrumented-scroll-class></sargasso-instrumented-scroll-class>'))
+		window.scrollTo(0, 10)
+	})
+
+	it('Sargasso watchDOM', function (done) {
+		class InstrumentedDOMClass extends SargassoModule.Sargasso {
+			constructor (element, options) {
+				super(element, {
+					watchDOM: true
+				})
+				this.triggered = false
+			}
+
+			start () {
+				super.start()
+				container.appendChild(makeNode('<p></p>'))
+			}
+
+			DOMChanged () {
+				if (!this.triggered) {
+					this.triggered = true
+					done()
+				}
+			}
+		}
+
+		SargassoModule.utils.registerSargassoClass('InstrumentedDOMClass', InstrumentedDOMClass)
+		container.appendChild(makeNode('<sargasso-instrumented-dom-class></sargasso-instrumented-dom-class>'))
+	})
+
+	it('Sargasso watchResize', function (done) {
+		class InstrumentedResizeClass extends SargassoModule.Sargasso {
+			constructor (element, options) {
+				super(element, {
+					watchResize: true
+				})
+				this.triggered = false
+			}
+
+			start () {
+				super.start()
+				window.dispatchEvent(new Event('resize'))
+			}
+
+			didResize () {
+				if (!this.triggered) {
+					this.triggered = true
+					done()
+				}
+			}
+		}
+
+		SargassoModule.utils.registerSargassoClass('InstrumentedResizeClass', InstrumentedResizeClass)
+		container.appendChild(makeNode('<sargasso-instrumented-resize-class></sargasso-instrumented-resize-class>'))
+	})
+
+	/*
+		excercises
+			HijaxLoader
+	*/
+	it('Sargasso HijaxLoader', function (done) {
+		class InstrumentedHijaxClass extends SargassoModule.Sargasso {
+			start () {
+				super.start()
+				SargassoModule.loadPageHandler('./page1.html')
+			}
+
+			newPage (oldPage, newPage) {
+				if (newPage === '/tests/page1.html') {
+					document.getElementById('back-link').click()
+					this.element.remove()
+					done()
+				}
+			}
+		}
+		SargassoModule.utils.registerSargassoClass('InstrumentedHijaxClass', InstrumentedHijaxClass)
+		console.log(container)
+		container.appendChild(makeNode('<sargasso-instrumented-hijax-class id="my-hijax-element"></sargasso-instrumented-hijax-class>'))
 	})
 })
