@@ -18,7 +18,6 @@
 		"custom-elements",
 		"progressive-enhancement"
 	],
-	"main": "index.js",
 	"scripts": {
 		"test": "npx mocha-chrome http://localhost:8000/tests/index.html --ignore-exceptions",
 		"build": "npx rollup --no-treeshake -c rollup.config.js",
