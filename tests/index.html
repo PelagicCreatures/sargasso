@@ -1,36 +1,50 @@
 <!doctype>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<link rel="stylesheet" href="../node_modules/mocha/mocha.css">
-		<div id="mocha"></div>
-		<script src="../node_modules/setimmediate/setimmediate.js"></script>
-		<script src="../node_modules/mocha/mocha.js"></script>
-		<script src="../node_modules/chai/chai.js"></script>
-		<script src="../node_modules/sinon/pkg/sinon.js"></script>
-		<script>
-		  mocha.ui('bdd');
-		  mocha.reporter('html');
-		  var expect = chai.expect;
-		</script>
-		<style>
-			#spacer { margin-top:100vh; }
-			.hidden-display { display: none; }
-		</style>
-	</head>
-	<body style="height:200vh;">
-		<div id="hijaxed" data-hijax>
-			<div>
-				HiJaxed content here. index.html
-			</div>
-		</div>
-		<div id="test-container"><div id="spacer"></div></div>
 
-		<script src="../dist/sargasso.iife.js"></script>
-		<script src="./spec.js"></script>
-		<script defer>
-			SargassoModule.utils.bootSargasso({hijax:{},breakpoints:{}})
-			mocha.run();
-		</script>
-	</body>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="../node_modules/mocha/mocha.css">
+	<div id="mocha"></div>
+	<script src="../node_modules/setimmediate/setimmediate.js"></script>
+	<script src="../node_modules/mocha/mocha.js"></script>
+	<script src="../node_modules/chai/chai.js"></script>
+	<script src="../node_modules/sinon/pkg/sinon.js"></script>
+	<script>
+		mocha.setup({ui:'bdd'});
+		mocha.checkLeaks();
+		mocha.reporter('html');
+		var expect = chai.expect;
+	</script>
+	<style>
+		#spacer {
+			margin-top: 100vh;
+		}
+
+		.hidden-display {
+			display: none;
+		}
+	</style>
+</head>
+
+<body style="height:200vh;">
+	<div id="hijaxed" data-hijax>
+		<div>
+			HiJaxed content here. index.html
+		</div>
+	</div>
+	<div id="test-container">
+		<div id="spacer"></div>
+	</div>
+
+	<script src="../dist/sargasso.iife.js"></script>
+	<script src="./spec.js"></script>
+	<script defer>
+		SargassoModule.utils.bootSargasso({
+			hijax: {},
+			breakpoints: {}
+		})
+		mocha.run();
+	</script>
+</body>
+
 </html>
