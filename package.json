@@ -44,7 +44,7 @@
 		"sinon": "^9.2.4"
 	},
 	"dependencies": {
-		"js-cookie": "^2.2.1",
+		"es-cookie": "^1.3.2",
 		"lodash": "^4.17.21"
 	},
 	"directories": {
