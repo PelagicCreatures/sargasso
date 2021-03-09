@@ -1,6 +1,6 @@
 # [@pelagiccreatures/sargasso](https://www.npmjs.com/package/@pelagiccreatures/sargasso)
 
-### Simple, Fast, Supervised Javascript Element Controller framework for Web Sites and Progressive Web Apps.
+### Simple, Fast, Supervised Javascript Element Controllers framework for Web Sites and Progressive Web Apps.
 
 ```
 @author Michael Rhodes (except where noted)
@@ -9,14 +9,17 @@ Made in Barbados 🇧🇧 Copyright © 2020-2021 Michael Rhodes
 ```
 
 ### Sargasso implements modern tools for:
-* PWA (Progressive Web App)
-* SPA (single-page application)
+* PWA (Progressive Web Apps)
+* SPA (single-page applications)
 * Web pages
-* Element controller management for creation and clean destruction of custom elements
+
+### Key features
+* Element controller management for creation and clean destruction of custom elements as content changes
 * Fast, Debounced UI Events ('resize','scroll', etc.)
 * PWA/SPA friendly event handlers for elements ('click', 'touch', etc.)
-* Simplified CSS class & CSS style manipulation for elements
-* Templating & Rendering of element content which automatically re-renders on data change
+* Simplified CSS class & CSS style manipulation
+* Web worker management and event subscriptions
+* Templating & Rendering of element content which automatically re-renders when data changes
 
 ### Sargasso uses the latest javascript browser capabilities:
 * Custom Elements
