@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Example Sargasso Element</title>
+</head>
+<body>
+  <h3>First Sargasso Element</h3>
+
+  <sargasso-my-shadow-class>Using a custom element</sargasso-my-shadow-class>
+
+  <script src='/dist/sargasso.iife.js'></script>
+  <script defer>
+    window.onload = () => {
+
+      // define MyClass as a subclass of Sargasso
+      class MyShadowClass extends SargassoModule.Sargasso {
+        constructor(element, options = {}) {
+					options.shadowDOM = 'open'
+        	super(element,options)
+      	}
+
+				start() {
+					this.setCSS({'border':'thin dashed red'})
+					console.log(this.hostElement)
+					console.log(this.element)
+					this.on('click',(e) => {
+						console.log('inner click',e.target)
+					})
+				}
+			}
+
+      // Register MyClass to the Sargasso framework
+      SargassoModule.utils.registerSargassoClass('MyShadowClass', MyShadowClass)
+
+      // Start Sargasso
+      SargassoModule.utils.bootSargasso()
+    }
+  </script>
+</body>
+</html>
