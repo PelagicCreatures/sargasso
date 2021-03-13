@@ -28,6 +28,7 @@ Made in Barbados 🇧🇧 Copyright © 2020-2021 Michael Rhodes
 * Animation Frames for clean page updates
 * Proxy / Reflect for Observable data
 * Template literals and rendering tools such as [lit-html](https://lit-html.polymer-project.org/)
+* Shadow DOM
 
 The result is lean (<50k), highly performant and clean library that simplifies the implementation of the complex technologies behind modern progressive web apps and web sites.
 
@@ -225,7 +226,7 @@ Your Sargasso subclasses can subscribe to event feeds in order to be notified of
 #### Handlers for sargasso managed events, override these as needed to perform any needed behavior:
 | method | description |
 | ------ | ----------- |
-| DOMChanged() | called when DOM changes if options 'watchDOM: true' was set in constructor |
+| DOMChanged(root) | called when DOM changes if options 'watchDOM: true' was set in constructor. `root` is root element where change occurred such as body or root element of a shadow dom |
 | didScroll() | called when scroll occurs if options 'watchScroll: true' was set in constructor |
 | didResize() | called when resize changes if options 'watchResize: true' was set in constructor |
 | enterViewport() | called  when element is entering viewport if options 'watchViewport: true' was set in constructor |
@@ -555,6 +556,11 @@ example/example4.html
 
 ```
 [Try It](https://stackblitz.com/edit/sargasso-example-4)
+
+### Using Shadow Dom
+
+Pass `options.shadowDOM = true` when calling super in your Sargasso subclass constructor and Sargasso will create a shadow dom for the scoping styles and child elements to the element.
+
 
 ### Serving modules from your project
 ```
