@@ -6,9 +6,6 @@
 	<link href='https://cdn.jsdelivr.net/npm/@pelagiccreatures/tropicbird/dist/bundle.css' rel='stylesheet'>
 	<style>
 		sargasso-my-shadow-class {
-			display: block;
-			border: thin dashed red;
-			padding: 10px;
 			--inner-element-background-color: yellow
 		}
 	</style>
@@ -21,7 +18,7 @@
 	</sargasso-my-shadow-class>
 
 	<script src='/dist/sargasso.iife.js'></script>
-	<script src="/dist/tropicbird.iife.js"></script>
+	<script src="/dist/foreign/tropicbird.iife.js"></script>
 	<script defer type="module">
 		import {
 		html,render
@@ -42,17 +39,20 @@
 						<link href='https://cdn.jsdelivr.net/npm/@pelagiccreatures/tropicbird/dist/bundle.css' rel='stylesheet'>
 
 						<style>
+							:host { display: block; contain: content; padding: 1.2em; }
 							p { background-color: var(--inner-element-background-color,silver)}
 						</style>
-						<div class="mdc-switch">
-							<div class="mdc-switch__track"></div>
-							<div class="mdc-switch__thumb-underlay">
-								<div class="mdc-switch__thumb">
-									<input class="mdc-switch__native-control" type="checkbox" name=${args.name} id=${args.id} data-validate=${args.validate}>
+						<section>
+							<div class="mdc-switch">
+								<div class="mdc-switch__track"></div>
+								<div class="mdc-switch__thumb-underlay">
+									<div class="mdc-switch__thumb">
+										<input class="mdc-switch__native-control" type="checkbox" name=${args.name} id=${args.id} data-validate=${args.validate}>
+									</div>
 								</div>
 							</div>
-						</div>
-						<label for="${args.id}">${args.label}</label>
+							<label for="${args.id}">${args.label}</label>
+						</section>
 					`
 					this.setTemplateArgs({
 						label: this.hostElement.getAttribute('label'),

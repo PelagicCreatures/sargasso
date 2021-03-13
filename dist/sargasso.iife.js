@@ -4320,7 +4320,7 @@ var SargassoModule = (function (exports) {
 			@function DOMChanged - something changed on the page
 			called if options.watchDOM set, override as needed.
 			*/
-		DOMChanged (dom) {}
+		DOMChanged (root) {}
 
 		/*
 			@function didScroll - scroll occured
@@ -4850,14 +4850,14 @@ var SargassoModule = (function (exports) {
 			this.lazyHandler();
 		}
 
-		DOMChanged () {
-			super.DOMChanged();
-			this.lazyHandler();
+		DOMChanged (root) {
+			super.DOMChanged(root);
+			this.lazyHandler(root);
 		}
 
 		// watch viewport and instantiate lazy-instantiate-responsive things when visible
-		lazyHandler () {
-			const els = document.querySelectorAll('[data-lazy-sargasso-class]');
+		lazyHandler (root = document) {
+			const els = root.querySelectorAll('[data-lazy-sargasso-class]');
 			for (let i = 0; i < els.length; i++) {
 				const element = els[i];
 				if (theScrollWatcher.inViewPort(element)) {
@@ -4923,7 +4923,7 @@ var SargassoModule = (function (exports) {
 			this.doIt(root);
 		}
 
-		doIt (root) {
+		doIt (root = document) {
 			const elements = root.querySelectorAll('[data-sargasso-class]');
 			for (const element of elements) {
 				this.instantiate(element);
@@ -5265,9 +5265,9 @@ var SargassoModule = (function (exports) {
 			}, false);
 		}
 
-		DOMChanged () {
-			super.DOMChanged();
-			this.hijaxLinks();
+		DOMChanged (root) {
+			super.DOMChanged(root);
+			this.hijaxLinks(root);
 		}
 
 		watchPopState (e) {
