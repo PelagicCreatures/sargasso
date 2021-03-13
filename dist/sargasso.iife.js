@@ -3688,12 +3688,12 @@ var SargassoModule = (function (exports) {
 	}
 
 	class DOMWatcher extends ObserverSubscriptionManager {
-		constructor (options) {
+		constructor (options = {}) {
 			super(options);
 
 			// debounce - just need to know if a change occured, not every change
 			this.mutationHandler = debounce_1((mutations, observer) => {
-				this.observeDOM(mutations, observer);
+				this.observeDOM(this.options.shadowDOM || document.body);
 			}, 25, {
 				maxWait: 100
 			});
@@ -3703,12 +3703,12 @@ var SargassoModule = (function (exports) {
 
 		subscribe (observer) {
 			super.subscribe(observer);
-			observer.watchDOM();
+			observer.watchDOM(this.options.shadowDOM || document.body);
 		}
 
 		wakeup () {
 			super.wakeup();
-			this.mutationObserver.observe(document.body, {
+			this.mutationObserver.observe(this.options.shadowDOM || document.body, {
 				childList: true,
 				subtree: true
 			});
@@ -3719,8 +3719,8 @@ var SargassoModule = (function (exports) {
 			this.mutationObserver.disconnect();
 		}
 
-		observeDOM () {
-			this.notifyObservers('watchDOM');
+		observeDOM (root) {
+			this.notifyObservers('watchDOM', [root || this.options.shadowDOM || document.body]);
 		}
 	}
 
@@ -4183,13 +4183,21 @@ var SargassoModule = (function (exports) {
 			this.element = element;
 			if (options.shadowDOM) {
 				this.shadowDOM = element.attachShadow({
-					mode: options.shadowDOM
+					mode: 'open'
 				});
 				this.shadowRoot = document.createElement('div');
 				this.shadowDOM.append(this.shadowRoot);
 				this.hostElement = this.element;
-				this.shadowRoot.innerHTML = this.hostElement.innerHTML;
 				this.element = this.shadowRoot;
+				this.hostTemplates = {}; // <template id="xxx"></template>
+				const templates = this.hostElement.querySelectorAll('template');
+				if (templates.length) {
+					templates.forEach((t) => {
+						if (t.getAttribute('id')) {
+							this.hostTemplates[t.getAttribute('id')] = t.content.cloneNode(true);
+						}
+					});
+				}
 			}
 			this.options = options;
 			this.pendingAnimationFrame = undefined;
@@ -4222,6 +4230,16 @@ var SargassoModule = (function (exports) {
 			this.setMetaData(this.constructor.name, this);
 
 			liveElements.push(this);
+
+			// if using shadow DOM, build a DOMWatcher to observe changes
+			if (this.shadowDOM) {
+				if (!this.shadowDOMWatcher) {
+					this.shadowDOMWatcher = new DOMWatcher({
+						shadowDOM: this.shadowRoot
+					});
+				}
+				this.shadowDOMWatcher.subscribe(this);
+			}
 
 			// subscribe to desired event services
 
@@ -4267,6 +4285,10 @@ var SargassoModule = (function (exports) {
 			Note: always call super.sleep() at the end of your subclass sleep method
 			*/
 		sleep () {
+			if (this.shadowDOM) {
+				this.shadowDOMWatcher.unSubscribe(this);
+			}
+
 			if (this.options.watchDOM) {
 				theDOMWatcher.unSubscribe(this);
 			}
@@ -4298,7 +4320,7 @@ var SargassoModule = (function (exports) {
 			@function DOMChanged - something changed on the page
 			called if options.watchDOM set, override as needed.
 			*/
-		DOMChanged () {}
+		DOMChanged (dom) {}
 
 		/*
 			@function didScroll - scroll occured
@@ -4705,8 +4727,15 @@ var SargassoModule = (function (exports) {
 		/*
 			@function watchDOM - hook called if options.watchDOM set and DOM changed
 			*/
-		watchDOM () {
-			this.DOMChanged();
+		watchDOM (root) {
+			if (root === this.shadowRoot) {
+				// something happend this element's my shadow DOM, tell in the DOM about it
+				// so dom observers can take actions such as instantiating new sargasso
+				// controllers, etc.
+				theDOMWatcher.observeDOM(this.shadowRoot);
+			} else {
+				this.DOMChanged(root);
+			}
 		}
 
 		/*
@@ -4890,12 +4919,12 @@ var SargassoModule = (function (exports) {
 			this.doIt();
 		}
 
-		DOMChanged () {
-			this.doIt();
+		DOMChanged (root) {
+			this.doIt(root);
 		}
 
-		doIt () {
-			const elements = document.querySelectorAll('[data-sargasso-class]');
+		doIt (root) {
+			const elements = root.querySelectorAll('[data-sargasso-class]');
 			for (const element of elements) {
 				this.instantiate(element);
 			}

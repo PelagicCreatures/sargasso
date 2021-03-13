@@ -1,40 +1,97 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Example Sargasso Element</title>
+	<title>Example Sargasso Element</title>
+	<link href='https://cdn.jsdelivr.net/npm/@pelagiccreatures/tropicbird/dist/bundle.css' rel='stylesheet'>
+	<style>
+		sargasso-my-shadow-class {
+			display: block;
+			border: thin dashed red;
+			padding: 10px;
+			--inner-element-background-color: yellow
+		}
+	</style>
 </head>
+
 <body>
-  <h3>First Sargasso Element</h3>
+	<h3>First Sargasso Element</h3>
 
-  <sargasso-my-shadow-class>Using a custom element</sargasso-my-shadow-class>
+	<sargasso-my-shadow-class label="Click Me!" id='test' name="test-name" validate='{"notEmpty":true}'>
+	</sargasso-my-shadow-class>
 
-  <script src='/dist/sargasso.iife.js'></script>
-  <script defer>
-    window.onload = () => {
+	<script src='/dist/sargasso.iife.js'></script>
+	<script src="/dist/tropicbird.iife.js"></script>
+	<script defer type="module">
+		import {
+		html,render
+	} from 'https://unpkg.com/lit-html?module'
 
-      // define MyClass as a subclass of Sargasso
-      class MyShadowClass extends SargassoModule.Sargasso {
-        constructor(element, options = {}) {
+		window.onload = () => {
+			// define MyClass as a subclass of Sargasso
+			class MyShadowClass extends SargassoModule.Sargasso {
+				constructor(element, options = {}) {
 					options.shadowDOM = 'open'
-        	super(element,options)
-      	}
+					super(element, options)
+
+					if(this.hostTemplates.one) {
+
+					}
+
+					let template = args => html`
+						<link href='https://cdn.jsdelivr.net/npm/@pelagiccreatures/tropicbird/dist/bundle.css' rel='stylesheet'>
+
+						<style>
+							p { background-color: var(--inner-element-background-color,silver)}
+						</style>
+						<div class="mdc-switch">
+							<div class="mdc-switch__track"></div>
+							<div class="mdc-switch__thumb-underlay">
+								<div class="mdc-switch__thumb">
+									<input class="mdc-switch__native-control" type="checkbox" name=${args.name} id=${args.id} data-validate=${args.validate}>
+								</div>
+							</div>
+						</div>
+						<label for="${args.id}">${args.label}</label>
+					`
+					this.setTemplateArgs({
+						label: this.hostElement.getAttribute('label'),
+						name: this.hostElement.getAttribute('name'),
+						id: this.hostElement.getAttribute('id'),
+						validate: this.hostElement.getAttribute('validate')
+					})
+					this.setRenderer(render); // set lit-html render() as the renderer
+					this.setTemplate(template); // set template function
+				}
 
 				start() {
-					this.setCSS({'border':'thin dashed red'})
-					console.log(this.hostElement)
-					console.log(this.element)
-					this.on('click',(e) => {
-						console.log('inner click',e.target)
-					})
+					super.start()
 				}
 			}
 
-      // Register MyClass to the Sargasso framework
-      SargassoModule.utils.registerSargassoClass('MyShadowClass', MyShadowClass)
+			// Register MyClass to the Sargasso framework
+			SargassoModule.utils.registerSargassoClass('MyShadowClass', MyShadowClass)
 
-      // Start Sargasso
-      SargassoModule.utils.bootSargasso()
-    }
-  </script>
+			class MyClass extends SargassoModule.Sargasso {
+				start() {
+					// use an animation frame to set the element content
+					this.queueFrame(() => {
+						this.element.innerHTML = 'Hello World! (' + this.element.getAttribute('id') + ')'
+					})
+					super.start()
+				}
+			}
+
+			// Register MyClass to the Sargasso framework
+			SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
+
+			// Start Sargasso
+			SargassoModule.utils.bootSargasso()
+
+			let tropicBird = new TropicBirdModule.TropicBird(document.body, {})
+			tropicBird.start()
+		}
+	</script>
 </body>
+
 </html>
