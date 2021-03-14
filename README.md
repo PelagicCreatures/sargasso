@@ -343,6 +343,25 @@ const frame = () => {
 this.queueFrame(frame)
 ```
 
+### Web Components
+
+[Using Shadow Dom](https://developers.google.com/web/fundamentals/web-components/shadowdom)
+
+Sargasso controllers are web components. If you want to further encapsulate the element from the rest of the page, pass `options.shadowDOM = true` when calling `super(element,options)` in your Sargasso subclass constructor and Sargasso will create a shadow DOM for scoping styles and child elements to the element. Sargasso elements within the shadow DOM are under supervision (new elements are instantiated and destroyed as needed).
+
+```
+class MyClass extends SargassoModule.Sargasso {
+	constructor(element, options = {}) {
+		options.shadowDOM = true
+		super(element, options)
+	}
+
+	start() {
+		super.start()
+	}
+}
+```
+
 ### ObservableObjects
 
 Observable objects implement a notification scheme for tracking data changes. (the implementation is using javascript Proxy and Reflect) These objects can be shared across elements for real-time display of information.
@@ -556,10 +575,6 @@ example/example4.html
 
 ```
 [Try It](https://stackblitz.com/edit/sargasso-example-4)
-
-### Using Shadow Dom
-
-Pass `options.shadowDOM = true` when calling super in your Sargasso subclass constructor and Sargasso will create a shadow dom for the scoping styles and child elements to the element.
 
 
 ### Serving modules from your project
