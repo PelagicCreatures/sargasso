@@ -10,7 +10,7 @@ import {
 import {
 	Noisy
 }
-	from '../lib/Noisy.js'
+	from './Noisy.js'
 
 export {
 	Sargasso, utils, loadPageHandler

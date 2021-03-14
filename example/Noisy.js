@@ -60,11 +60,11 @@ class Noisy extends Sargasso {
 		super.destroy()
 	}
 
-	DOMChanged () {
+	DOMChanged (root) {
 		if (this.instrument.DOMChanged) {
-			this.logIt('DOMChanged')
+			this.logIt('DOMChanged', root)
 		}
-		super.DOMChanged()
+		super.DOMChanged(root)
 	}
 
 	didScroll () {

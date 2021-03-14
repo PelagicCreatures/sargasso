@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Example Sargasso Element</title>
+	<style>
+		sargasso-my-shadow-class {
+			--inner-element-background-color: silver
+		}
+	</style>
+</head>
+
+<body>
+	<h3>First Sargasso Element</h3>
+
+	<sargasso-my-shadow-class id="test" name="World"></sargasso-my-shadow-class>
+
+	<script src='/dist/sargasso.iife.js'></script>
+		<script defer type="module">
+			import {
+			html,render
+		} from 'https://unpkg.com/lit-html?module'
+
+		window.onload = () => {
+			class MyShadowClass extends SargassoModule.Sargasso {
+				constructor(element, options = {}) {
+					options.shadowDOM = true
+					super(element, options)
+				}
+
+				start() {
+					let template = args => html`
+						<style>
+							:host { display: block; contain: content;}
+							p { padding: 1em; background-color: var(--inner-element-background-color,silver); }
+						</style>
+						<p>Hello, ${args.name}!</p>
+						<sargasso-my-class data-name="${args.name}"></sargasso-my-class>
+					`
+					this.setTemplateArgs({
+						name: this.hostElement.getAttribute('name')
+					})
+					this.setRenderer(render); // set lit-html render() as the renderer
+					this.setTemplate(template); // set template function
+				}
+			}
+
+			// Register MyClass to the Sargasso framework
+			SargassoModule.utils.registerSargassoClass('MyShadowClass', MyShadowClass)
+
+			class MyClass extends SargassoModule.Sargasso {
+				start() {
+					this.queueFrame(() => {
+						this.element.innerHTML = 'Embedded class also says Hello, ' + this.element.getAttribute('data-name')
+					})
+					super.start()
+				}
+			}
+
+			// Register MyClass to the Sargasso framework
+			SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
+
+			// Start Sargasso
+			SargassoModule.utils.bootSargasso()
+		}
+	</script>
+</body>
+
+</html>
