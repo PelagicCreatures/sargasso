@@ -4124,7 +4124,7 @@ var SargassoModule = (function (exports) {
 		registeredClasses[className] = object;
 		if (supportsCustomElements) {
 			/*
-				for custom html element scheme <sargasso-class-name></sargasso-class-name>
+				for custom html element scheme <sargasso-class-name sargasso-other-class-name></sargasso-class-name>
 				we define a factory to build a class that is a subclass of HTMLElement.
 				The browser will instantiate this class when the element appears in the DOM
 				allowing us to instantiate the required sargasso controller
