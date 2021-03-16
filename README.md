@@ -110,7 +110,7 @@ All major current browsers support custom elements ([current compatibility](http
 <sargasso-my-class>This works in <em>almost all reasonably modern</em> browsers</sargasso-my-class>
 ```
 
-Multiple classes can be supplied as unary attributes on the custom element tag.
+Multiple sargasso classes can be supplied as unary attributes on the custom element tag.
 
 ```html
 <sargasso-my-class sargasso-my-other-class>This works in <em>almost all reasonably modern</em> browsers</sargasso-my-class>
