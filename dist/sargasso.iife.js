@@ -4121,7 +4121,12 @@ var SargassoModule = (function (exports) {
 
 		*/
 	const registerSargassoClass = (className, object) => {
+		if (registeredClasses[className]) {
+			throw (new Error('Sargasso class ' + className + ' is already registered.'))
+		}
+
 		registeredClasses[className] = object;
+
 		if (supportsCustomElements) {
 			/*
 				for custom html element scheme <sargasso-class-name sargasso-other-class-name></sargasso-class-name>
