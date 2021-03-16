@@ -4140,21 +4140,40 @@ var SargassoModule = (function (exports) {
 				constructor(element, options = {}) {
 					super()
 					this.helperClass= '${className}'
-					this.helper = null
+					this.helpers = []
 				}
 
 				connectedCallback () {
-					this.helper = new registeredClasses[this.helperClass](this,{isCustomElement:true})
-					this.helper.start()
+					this.helpers.push(new registeredClasses[this.helperClass](this,{isCustomElement:true}))
+					if (this.hasAttributes()) {
+						for(let i = 0; i < this.attributes.length; i++) {
+							if(this.attributes[i].name.match(/^sargasso-/)) {
+								let classname = this.attributes[i].name.replace(/^sargasso-/,'').split('-').map(word=> word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join('')
+								if(!registeredClasses[classname]) {
+									console.log('instantiate by attribute ' + this.attributes[i].name + ' > ' + classname + ' is not a sargasso class')
+									continue
+								}
+								this.helpers.push(new registeredClasses[classname](this,{isCustomElement:true}))
+							}
+						}
+					}
+
+					this.helpers.forEach((helper) => {
+						helper.start()
+					})
 				}
 
 				disconnectedCallback () {
-					this.helper.destroy()
-					this.helper = null // nuke the reference for trash collection
+					this.helpers.forEach((helper) => {
+						helper.sleep()
+						helper.destroy()
+				 	})
+					this.helpers = [] // nuke the reference for trash collection
 				}
 			}`;
 
-			customElements.define('sargasso-' + kebabCase_1(className), new Function('registeredClasses', customElementClassFactory)(registeredClasses));
+			const fn = new Function('registeredClasses', customElementClassFactory)(registeredClasses);
+			customElements.define('sargasso-' + kebabCase_1(className), fn);
 		}
 	};
 
