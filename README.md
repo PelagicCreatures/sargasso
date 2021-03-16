@@ -97,7 +97,7 @@ Sargasso element controllers are javascript Objects that are subclasses of the f
 Alternately, Sargasso watches the DOM for any elements tagged with the `data-sargasso-class` attribute which can be one classname or a list of classnames.
 
 ```html
-<div data-sargasso-class="MyClass, MyOtherClass">This works in all browsers</div>
+<body data-sargasso-class="MyClass, MyOtherClass">This works in all browsers</body>
 ```
 
 You can also defer the instantiation using the lazy method by tagging it with `data-lazy-sargasso-class` instead of `data-sargasso-class` which will only start up the controller when the element becomes visible in the viewport.
@@ -107,13 +107,13 @@ You can also defer the instantiation using the lazy method by tagging it with `d
 All major current browsers support custom elements ([current compatibility](https://caniuse.com/#feat=custom-elementsv1) The class name is the kebab-case of your subclass name so MyClass becomes sargasso-my-class:
 
 ```html
-<sargasso-my-class>This works in <em>almost all reasonably modern</em> browsers</sargasso-my-class>
+<sargasso-my-class>This works in <em>all reasonably modern</em> browsers</sargasso-my-class>
 ```
 
 Multiple sargasso classes can be supplied as unary attributes on the custom element tag.
 
 ```html
-<sargasso-my-class sargasso-my-other-class>This works in <em>almost all reasonably modern</em> browsers</sargasso-my-class>
+<sargasso-my-class sargasso-my-other-class>This works in <em>all reasonably modern</em> browsers</sargasso-my-class>
 ```
 
 ### Sargasso Object Lifecycle
