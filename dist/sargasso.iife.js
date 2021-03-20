@@ -957,7 +957,7 @@ var SargassoModule = (function (exports) {
 		for (const prop in css) {
 			if (Object.prototype.hasOwnProperty.call(css, prop)) {
 				const key = camelCase_1(prop);
-				element.style[key] = css[prop] || null;
+				element.style[key] = css[prop] !== null ? css[prop] : null;
 			}
 		}
 	};
@@ -4947,7 +4947,11 @@ var SargassoModule = (function (exports) {
 			this.doIt(root);
 		}
 
-		doIt (root = document) {
+		doIt (root = document.body) {
+			if (root.getAttribute('data-sargasso-class')) {
+				this.instantiate(root);
+			}
+
 			const elements = root.querySelectorAll('[data-sargasso-class]');
 			for (const element of elements) {
 				this.instantiate(element);

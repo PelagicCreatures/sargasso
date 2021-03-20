@@ -392,7 +392,6 @@ describe('Sargasso', function () {
 			}
 		}
 		SargassoModule.utils.registerSargassoClass('InstrumentedHijaxClass', InstrumentedHijaxClass)
-		console.log(container)
 		container.appendChild(makeNode('<sargasso-instrumented-hijax-class id="my-hijax-element"></sargasso-instrumented-hijax-class>'))
 	})
 })
