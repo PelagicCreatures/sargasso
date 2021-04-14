@@ -35,8 +35,8 @@ var SargassoModule = (function (exports) {
 		return fn(module, module.exports), module.exports;
 	}
 
-	function commonjsRequire (target) {
-		throw new Error('Could not dynamically require "' + target + '". Please configure the dynamicRequireTargets option of @rollup/plugin-commonjs appropriately for this require call to behave properly.');
+	function commonjsRequire (path) {
+		throw new Error('Could not dynamically require "' + path + '". Please configure the dynamicRequireTargets or/and ignoreDynamicRequires option of @rollup/plugin-commonjs appropriately for this require call to work.');
 	}
 
 	/** Detect free variable `global` from Node.js. */
@@ -3429,8 +3429,6 @@ var SargassoModule = (function (exports) {
 		return registeredObservables[id]
 	};
 
-	const objectConstructor = ({}).constructor;
-
 	const buildProxy = (self) => {
 		return {
 			get (target, property) {
@@ -3485,8 +3483,8 @@ var SargassoModule = (function (exports) {
 			delete registeredObservables[this.id];
 			delete this.data;
 			Object.keys(this.bound).forEach((prop) => {
-				Object.keys(this.bound[prop]).forEach((k) => {
-					this.unbind(prop, k);
+				Object.keys(this.bound[prop]).forEach((id) => {
+					this.unbind(id, prop);
 				});
 			});
 		}
@@ -3564,22 +3562,9 @@ var SargassoModule = (function (exports) {
 			@param { String } property - optional name of property being observed
 			*/
 		unbind (id, property = '*') {
-			if (this.bound[property][id]) {
+			if (this.bound[property] && this.bound[property][id]) {
 				delete this.bound[property][id];
 			}
-		}
-
-		/*
-			@function observers - return current observer count
-			*/
-		observers () {
-			let c = 0;
-			for (const id in this.bound) {
-				if (this.bound.hasOwnProperty(id)) {
-					c++;
-				}
-			}
-			return c
 		}
 
 		/*

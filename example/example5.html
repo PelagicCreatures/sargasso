@@ -85,14 +85,10 @@
 			// Start Sargasso
 			SargassoModule.utils.bootSargasso();
 
-
-			// repeatedly and randomly change the observed data
 			let classes = ["red", "green", "blue"];
-			let named = ["Bob", "Carol", "Ted", "Alice"];
-
 			setInterval(() => {
 				observed.data.cssClass = classes[Math.floor(Math.random() * classes.length)];
-				observed.data.name = named[Math.floor(Math.random() * named.length)];
+				observed.data.name = observed.data.list[Math.floor(Math.random() * observed.data.list.length)].name;
 			}, 1000);
 		};
 	</script>

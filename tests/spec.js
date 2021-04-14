@@ -372,6 +372,69 @@ describe('Sargasso', function () {
 		container.appendChild(makeNode('<sargasso-instrumented-resize-class></sargasso-instrumented-resize-class>'))
 	})
 
+	it('Sargasso ObservableObject primitive', function (done) {
+		const args = {
+			hello: 'World!'
+		}
+		const observed = new SargassoModule.ObservableObject('shared-data', args)
+
+		let count = 0
+		observed.bind('test-bind-1', (id, prop, val) => {
+			++count
+		})
+
+		observed.bind('test-bind-2', (id, prop, val) => {
+			++count
+		})
+
+		observed.bind('test-bind-3', (id, prop, val) => {
+			++count
+		}, 'hello')
+
+		expect(Object.keys(observed.bound['*']).length).to.equal(2)
+		expect(Object.keys(observed.bound.hello).length).to.equal(1)
+
+		expect(count).to.equal(3)
+
+		observed.data.hello += '!'
+
+		expect(count).to.equal(6)
+
+		observed.unbind('test-bind-1')
+		observed.unbind('test-bind-2')
+		observed.unbind('test-bind-3', 'hello')
+
+		observed.data.hello += '!'
+
+		expect(Object.keys(observed.bound['*']).length).to.equal(0)
+		expect(count).to.equal(6)
+
+		done()
+	})
+
+	it('Sargasso observable', function (done) {
+		let count = 0
+		class InstrumentedDOMClass extends SargassoModule.Sargasso {
+			observableChanged (id, property, value) {
+				++count
+			}
+		}
+
+		const o = new InstrumentedDOMClass(document.createElement('div'))
+
+		const observed = o.observableStart('observeable-id')
+
+		observed.data.test = 1
+
+		expect(count).to.equal(1)
+
+		o.destroy()
+
+		expect(SargassoModule.services.theObservableObjectWatcher.observers.length).to.equal(0)
+
+		done()
+	})
+
 	/*
 		excercises
 			HijaxLoader

@@ -26,7 +26,7 @@
 	"author": "Michael Rhodes",
 	"license": "MIT",
 	"devDependencies": {
-		"@rollup/plugin-commonjs": "^17.1.0",
+		"@rollup/plugin-commonjs": "^18.0.0",
 		"@rollup/plugin-json": "^4.1.0",
 		"@rollup/plugin-node-resolve": "^11.2.0",
 		"chai": "^4.3.3",
@@ -42,7 +42,7 @@
 		"rollup": "^2.41.0",
 		"rollup-plugin-terser": "^7.0.2",
 		"setimmediate": "^1.0.5",
-		"sinon": "^9.2.4"
+		"sinon": "^10.0.0"
 	},
 	"dependencies": {
 		"es-cookie": "^1.3.2",
