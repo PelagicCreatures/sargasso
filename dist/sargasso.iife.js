@@ -871,43 +871,51 @@ var SargassoModule = (function (exports) {
 
 	const validators = {};
 
-	const setValidation = (name, fn) => {
+	const setValidator = (name, fn) => {
 		validators[name] = fn;
 	};
 
-	setValidation('isDefined', (arg) => {
+	setValidator('isDefined', (arg) => {
 		return arg !== undefined
 	});
 
-	setValidation('isElement', (arg) => {
+	setValidator('isUnDefined', (arg) => {
+		return arg === undefined
+	});
+
+	setValidator('isNull', (arg) => {
+		return arg === null
+	});
+
+	setValidator('isElement', (arg) => {
 		return arg && (arg instanceof Element || arg instanceof Window)
 	});
 
-	setValidation('isEventTarget', (arg) => {
+	setValidator('isEventTarget', (arg) => {
 		return arg && arg instanceof EventTarget
 	});
 
-	setValidation('isString', (arg) => {
+	setValidator('isString', (arg) => {
 		return arg && (typeof arg === 'string' || arg instanceof String)
 	});
 
-	setValidation('isArray', (arg) => {
+	setValidator('isArray', (arg) => {
 		return arg && arg instanceof Array
 	});
 
-	setValidation('notEmpty', (arg) => {
+	setValidator('notEmpty', (arg) => {
 		return arg instanceof Array ? arg.length !== 0 : arg !== ''
 	});
 
-	setValidation('isEmpty', (arg) => {
-		return arg === undefined || (arg instanceof Array ? arg.length === 0 : arg === '')
+	setValidator('isEmpty', (arg) => {
+		return arg === undefined || !arg || (arg instanceof Array ? arg.length === 0 : arg === '')
 	});
 
-	setValidation('isObject', (arg) => {
+	setValidator('isObject', (arg) => {
 		return arg && arg instanceof Object
 	});
 
-	setValidation('isFunction', (arg) => {
+	setValidator('isFunction', (arg) => {
 		return arg && typeof arg === 'function'
 	});
 
@@ -917,20 +925,20 @@ var SargassoModule = (function (exports) {
 	// ['test1','test2',['either','or']]
 	const validate = (param, arg, tests) => {
 		// console.log(param, arg)
-		const result = tests.map((test) => {
+		const allOf = tests.map((test) => {
 			if (test instanceof Array) {
-				const anyOf = test.map((or) => {
-					return validators[or](arg)
+				const anyOf = test.map((orTest) => {
+					return validators[orTest] && validators[orTest](arg)
 				});
 				return anyOf.indexOf(true) !== -1
 			}
 			else {
-				return validators[test](arg)
+				return validators[test] && validators[test](arg)
 			}
 		});
 
-		if (result.indexOf(false) !== -1) {
-			throw (new Error('call to ' + param + ' invalid value'))
+		if (allOf.indexOf(false) !== -1) {
+			throw (new Error('call to ' + param + ' invalid value: ' + arg + ' ' + tests, +' ' + allOf))
 		}
 	};
 
@@ -1046,7 +1054,9 @@ var SargassoModule = (function (exports) {
 	const setMetaData = (element, k, v) => {
 		validate('setMetaData element', element, ['isDefined', 'isElement']);
 		validate('setMetaData k', k, ['isDefined', 'isString']);
-
+		validate('setMetaData v', v, [
+			['isUnDefined', 'isNull', 'isString', 'isObject']
+		]);
 		const data = elementMetaData.get(element) || {};
 		if (v) {
 			data[k] = v;
@@ -4293,36 +4303,30 @@ var SargassoModule = (function (exports) {
 		@class Sargasso -  the superclass for all element controllers
 		*/
 	class Sargasso {
-		constructor (element, options = {}) {
+		constructor(element, options = {}) {
+			validate('Sargasso constructor element', element, ['isDefined', 'isElement']);
+			validate('Sargasso constructor options', options, ['isDefined', ['isObject']]);
+
 			this.uid = ++unique;
 			this.element = element;
 			if (options.shadowDOM) {
-				this.shadowDOM = element.attachShadow({
+				this._shadowDOM = element.attachShadow({
 					mode: 'open'
 				});
-				this.shadowRoot = document.createElement('div');
-				this.shadowDOM.append(this.shadowRoot);
-				this.hostElement = this.element;
-				this.element = this.shadowRoot;
-				this.hostTemplates = {}; // <template id="xxx"></template>
-				const templates = this.hostElement.querySelectorAll('template');
-				if (templates.length) {
-					templates.forEach((t) => {
-						if (t.getAttribute('id')) {
-							this.hostTemplates[t.getAttribute('id')] = t.content.cloneNode(true);
-						}
-					});
-				}
+				this._shadowRoot = document.createElement('div');
+				this._shadowDOM.append(this._shadowRoot);
+				this._hostElement = this.element;
+				this.element = this._shadowRoot;
 			}
 			this.options = options;
-			this.pendingAnimationFrame = undefined;
-			this.frameQueue = [];
-			this.isInViewport = false;
-			this.workers = {};
-			this.observables = {};
-			this.template = undefined;
-			this.templateArgs = {};
-			this.started = false;
+			this._pendingAnimationFrame = undefined;
+			this._frameQueue = [];
+			this._isInViewport = false;
+			this._workers = {};
+			this._observables = {};
+			this._template = undefined;
+			this._templateArgs = {};
+			this._started = false;
 
 			this.render = debounce_1(() => {
 				this._render();
@@ -4338,7 +4342,7 @@ var SargassoModule = (function (exports) {
 
 			Note: always call super.start() in at the top of your subclass start method
 			*/
-		start () {
+		start() {
 			const registeredResponsiveControllers = this.getMetaData('registeredResponsiveControllers') || [];
 			registeredResponsiveControllers.push(this);
 			this.setMetaData('registeredResponsiveControllers', registeredResponsiveControllers);
@@ -4347,13 +4351,13 @@ var SargassoModule = (function (exports) {
 			liveElements.push(this);
 
 			// if using shadow DOM, build a DOMWatcher to observe changes
-			if (this.shadowDOM) {
-				if (!this.shadowDOMWatcher) {
-					this.shadowDOMWatcher = new DOMWatcher({
-						shadowDOM: this.shadowRoot
+			if (this._shadowDOM) {
+				if (!this._shadowDOMWatcher) {
+					this._shadowDOMWatcher = new DOMWatcher({
+						shadowDOM: this._shadowRoot
 					});
 				}
-				this.shadowDOMWatcher.subscribe(this);
+				this._shadowDOMWatcher.subscribe(this);
 			}
 
 			// subscribe to desired event services
@@ -4382,14 +4386,15 @@ var SargassoModule = (function (exports) {
 			this.elementListener = (e) => {
 				if (e.detail && e.detail.sargassoEvent && eventNames.indexOf(e.detail.sargassoEvent) !== -1) {
 					this[e.detail.sargassoEvent].apply(this, e.detail.sargassoEventOptions || []);
-				} else {
+				}
+				else {
 					this.elementEvent(e);
 				}
 			};
 
 			this.element.addEventListener('sargasso', this.elementListener);
 
-			this.started = true;
+			this._started = true;
 		}
 
 		/*
@@ -4399,9 +4404,9 @@ var SargassoModule = (function (exports) {
 
 			Note: always call super.sleep() at the end of your subclass sleep method
 			*/
-		sleep () {
-			if (this.shadowDOM) {
-				this.shadowDOMWatcher.unSubscribe(this);
+		sleep() {
+			if (this._shadowDOM) {
+				this._shadowDOMWatcher.unSubscribe(this);
 			}
 
 			if (this.options.watchDOM) {
@@ -4424,7 +4429,7 @@ var SargassoModule = (function (exports) {
 
 			elementTools.offAll(this.element); // remove all dangling event listeners created with on/once
 
-			this.started = false;
+			this._started = false;
 		}
 
 		/**************************************************************
@@ -4435,66 +4440,66 @@ var SargassoModule = (function (exports) {
 			@function DOMChanged - something changed on the page
 			called if options.watchDOM set, override as needed.
 			*/
-		DOMChanged (root) {}
+		DOMChanged(root) {}
 
 		/*
 			@function didScroll - scroll occured
 			called if options.watchScroll set, override as needed.
 			*/
-		didScroll () {}
+		didScroll() {}
 
 		/*
 			@function didResize - resize occured
 			called if options.watchResize set, override as needed.
 			*/
-		didResize () {}
+		didResize() {}
 
 		/*
 			@function didBreakpoint - new breakpoint, override as needed.
 			*/
-		didBreakpoint () {}
+		didBreakpoint() {}
 
 		/*
 			@function enterViewport - element entered the viewport
 			called if options.watchViewport set, override as needed.
 			*/
-		enterViewport () {}
+		enterViewport() {}
 
 		/*
 			@function exitViewport - element exited the viewport
 			called if options.watchViewport set, override as needed.
 			*/
-		exitViewport () {}
+		exitViewport() {}
 
 		/*
 			@function enterFullscreen - element entered fullscreen, override as needed.
 			*/
-		enterFullscreen () {}
+		enterFullscreen() {}
 
 		/*
 			@function exitFullscreen - element exited fullscreen, override as needed.
 			*/
-		exitFullscreen () {}
+		exitFullscreen() {}
 
 		/*
 			@function newPage - page changed
 			@param { String } oldPath - outgoing page
 			@param { String } newPath - incoming page
 			*/
-		newPage (oldPath, newPath) {}
+		newPage(oldPath, newPath) {}
 
 		/*
 			@function elementEvent - element received a 'sargasso' custom event from somewhere
 			@param { Object } e - event
 			*/
-		elementEvent (e) {}
+		elementEvent(e) {}
 
 		/*
 			@function workerOnMessage - listen for worker postMessage event
-			@param { String } id - id of worker started with this.workerStart()
+			@param { String } id - id of worker started with this._workerstart()
 			@param { Object } data - data received from worker
 			*/
-		workerOnMessage (id, data) {}
+		workerOnMessage(id, data) {}
 
 		/*
 			@function observableChange - listen for changes to observable object
@@ -4502,7 +4507,7 @@ var SargassoModule = (function (exports) {
 			@param { String } property - property that changed
 			@param { String } value - new value
 			*/
-		observableChanged (id, property, value) {
+		observableChanged(id, property, value) {
 			this.render();
 		}
 
@@ -4515,7 +4520,7 @@ var SargassoModule = (function (exports) {
 			@param { String } - key name for value
 			@param { Object } - value or JSON object, null will remove from key from metadate
 			*/
-		setMetaData (k, v) {
+		setMetaData(k, v) {
 			elementTools.setMetaData(this.element, k, v);
 		}
 
@@ -4524,7 +4529,7 @@ var SargassoModule = (function (exports) {
 			@param { String } key - name of value to return
 			@return { Object } if key is found otherwise undefined
 			*/
-		getMetaData (k) {
+		getMetaData(k) {
 			return elementTools.getMetaData(this.element, k)
 		}
 
@@ -4535,7 +4540,7 @@ var SargassoModule = (function (exports) {
 			@param { Function } fn - event handler function
 			@param { Object } [options] - for addEventListener
 			*/
-		on (evt, selector, fn, options) {
+		on(evt, selector, fn, options) {
 			elementTools.on(this.constructor.name + '-' + this.uid, this.element, evt, selector, fn, options);
 		}
 
@@ -4544,7 +4549,7 @@ var SargassoModule = (function (exports) {
 			@param { String} evt - HTML element event name
 			@param { String } [selector] - element query selector
 			*/
-		off (evt, selector) {
+		off(evt, selector) {
 			elementTools.off(this.constructor.name + '-' + this.uid, this.element, evt, selector);
 		}
 
@@ -4555,7 +4560,7 @@ var SargassoModule = (function (exports) {
 			@param { Function } fn - event handler function
 			@param { Object } [options] - for addEventListener
 			*/
-		once (evt, selector, fn, options) {
+		once(evt, selector, fn, options) {
 			elementTools.once(this.constructor.name + '-' + this.uid, this.element, evt, selector, fn, options);
 		}
 
@@ -4564,7 +4569,7 @@ var SargassoModule = (function (exports) {
 			@param { String } event - name of sargasso event
 			@param { Object } params - array of params to attach to event
 			*/
-		notifyAll (event, params) {
+		notifyAll(event, params) {
 			if (eventNames.indexOf(event) === -1) {
 				throw (new Error('invalid event name ' + event))
 			}
@@ -4581,7 +4586,7 @@ var SargassoModule = (function (exports) {
 			@param { String } event - name of sargasso event
 			@param { Object } params - array of params to attach to event
 			*/
-		notifyElement (element, event, params) {
+		notifyElement(element, event, params) {
 			if (eventNames.indexOf(event) === -1) {
 				throw (new Error('invalid event name ' + event))
 			}
@@ -4611,11 +4616,11 @@ var SargassoModule = (function (exports) {
 
 			The frame will then be executed in the next requested animation frame
 			*/
-		queueFrame (frame) {
-			this.frameQueue.push(frame.bind(this));
-			if (!this.pendingAnimationFrame) {
-				this.pendingAnimationFrame = requestAnimationFrame(() => {
-					this.processQueue();
+		queueFrame(frame) {
+			this._frameQueue.push(frame.bind(this));
+			if (!this._pendingAnimationFrame) {
+				this._pendingAnimationFrame = requestAnimationFrame(() => {
+					this._processQueue();
 				});
 			}
 		}
@@ -4627,10 +4632,11 @@ var SargassoModule = (function (exports) {
 			it would be nice to acually use the experimental requestFullScreen thing but
 			you can't do that on rotate at the moment, only on click.
 			*/
-		wantFullscreen (want) {
+		wantFullscreen(want) {
 			if (want) {
 				this.enterFullscreen();
-			} else {
+			}
+			else {
 				this.exitFullscreen();
 			}
 		}
@@ -4639,23 +4645,23 @@ var SargassoModule = (function (exports) {
 		ELEMENT UTILITIES - convienience methods for manipilating HTML elements
 		***********************************************************************/
 
-		hasClass (cssClass) {
+		hasClass(cssClass) {
 			return elementTools.hasClass(this.element, cssClass)
 		}
 
-		addClass (cssClasses) {
+		addClass(cssClasses) {
 			elementTools.addClass(this.element, cssClasses);
 		}
 
-		removeClass (cssClasses) {
+		removeClass(cssClasses) {
 			elementTools.removeClass(this.element, cssClasses);
 		}
 
-		setCSS (cssObject) {
+		setCSS(cssObject) {
 			elementTools.setCSS(this.element, cssObject);
 		}
 
-		isVisible () {
+		isVisible() {
 			return elementTools.isVisible(this.element)
 		}
 
@@ -4681,15 +4687,15 @@ var SargassoModule = (function (exports) {
 				})
 			}`
 
-			this.workerStart('pointless-stuff', mycode)
+			this._workerstart('pointless-stuff', mycode)
 
 			this.workerPostMessage('pointless-stuff', {answer:42})
 
 			*/
-		workerStart (id, codeOrURL) {
-			this.workers[id] = theWorkerWatcher.registerWorker(id, codeOrURL);
+		workerStart(id, codeOrURL) {
+			this._workers[id] = theWorkerWatcher.registerWorker(id, codeOrURL);
 			theWorkerWatcher.subscribe(this, id);
-			return this.workers[id]
+			return this._workers[id]
 		}
 
 		/*
@@ -4697,12 +4703,12 @@ var SargassoModule = (function (exports) {
 			@param { String } id - id of worker
 			@param { Object } message - data to send to worker
 			*/
-		workerPostMessage (id, message) {
+		workerPostMessage(id, message) {
 			if (!message.uid) {
 				message.uid = this.uid;
 			}
-			if (this.workers[id]) {
-				this.workers[id].postMessage(message);
+			if (this._workers[id]) {
+				this._workers[id].postMessage(message);
 			}
 		}
 
@@ -4712,50 +4718,50 @@ var SargassoModule = (function (exports) {
 		obj optional external object
 		*************************************************/
 
-		getObservable (id) {
-			return this.observables[id]
+		getObservable(id) {
+			return this._observables[id]
 		}
 
-		observableStart (id, data) {
+		observableStart(id, data) {
 			theObservableObjectWatcher.subscribe(this, id, data);
-			this.observables[id] = theObservableObjectWatcher.getObservable(id);
-			return this.observables[id]
+			this._observables[id] = theObservableObjectWatcher.getObservable(id);
+			return this._observables[id]
 		}
 
-		observableStop (id) {
-			if (this.observables[id]) {
+		observableStop(id) {
+			if (this._observables[id]) {
 				theObservableObjectWatcher.unSubscribe(this, id);
-				delete this.observables[id];
+				delete this._observables[id];
 			}
 		}
 
-		observableStopAll () {
-			for (const id in this.observables) {
+		observableStopAll() {
+			for (const id in this._observables) {
 				this.observableStop(id);
 			}
 		}
 
-		setTemplate (template) {
-			this.template = template;
+		setTemplate(template) {
+			this._template = template;
 		}
 
-		setRenderer (renderer) {
+		setRenderer(renderer) {
 			this.renderer = renderer;
 		}
 
-		setTemplateArgs (args = {}) {
-			this.templateArgs = args.constructor && args.constructor.name === 'ObservableObject' ? args.data : args;
+		setTemplateArgs(args = {}) {
+			this._templateArgs = args.constructor && args.constructor.name === 'ObservableObject' ? args.data : args;
 			this.render();
 		}
 
-		getTemplateArgs () {
-			return JSON.parse(JSON.stringify(this.templateArgs || {}))
+		getTemplateArgs() {
+			return JSON.parse(JSON.stringify(this._templateArgs || {}))
 		}
 
 		// this.render is a debounced call to this
-		_render () {
-			if (this.template && this.renderer) {
-				this.renderer(this.template(this.getTemplateArgs()), this.element);
+		_render() {
+			if (this._template && this.renderer) {
+				this.renderer(this._template(this.getTemplateArgs()), this.element);
 			}
 		}
 
@@ -4764,57 +4770,57 @@ var SargassoModule = (function (exports) {
 		*************************************************/
 
 		/*
-			@function flushQueue - disgard all pending frames
+			@function _flushQueue - disgard all pending frames
 			*/
-		flushQueue () {
-			if (this.pendingAnimationFrame) {
-				cancelAnimationFrame(this.pendingAnimationFrame);
-				this.pendingAnimationFrame = undefined;
+		_flushQueue() {
+			if (this._pendingAnimationFrame) {
+				cancelAnimationFrame(this._pendingAnimationFrame);
+				this._pendingAnimationFrame = undefined;
 			}
-			this.frameQueue = [];
+			this._frameQueue = [];
 		}
 
 		/*
-			@function flushQueue - execute pending frames
+			@function _flushQueue - execute pending frames
 			*/
-		processQueue () {
-			this.pendingAnimationFrame = undefined;
-			const toProcess = this.frameQueue.slice(0);
-			this.frameQueue = [];
+		_processQueue() {
+			this._pendingAnimationFrame = undefined;
+			const toProcess = this._frameQueue.slice(0);
+			this._frameQueue = [];
 			for (let i = 0; i < toProcess.length; i++) {
 				toProcess[i]();
 			}
 		}
 
 		/*
-			@function stopWorker - stop a worker
+			@function _stopWorker - stop a worker
 			*/
-		stopWorker (id) {
-			if (this.workers[id]) {
+		_stopWorker(id) {
+			if (this._workers[id]) {
 				theWorkerWatcher.unSubscribe(this, id);
-				delete this.workers[id];
+				delete this._workers[id];
 			}
 		}
 
 		/*
-			@function stopAllWorkers - cleanup all workers registered by me
+			@function _stopAllWorkers - cleanup all workers registered by me
 			*/
-		stopAllWorkers () {
-			for (const worker in this.workers) {
-				this.stopWorker(worker);
+		_stopAllWorkers() {
+			for (const worker in this._workers) {
+				this._stopWorker(worker);
 			}
 		}
 
 		/*
 			@function destroy - called when this.element is removed from the DOM
 			*/
-		destroy () {
-			this.stopAllWorkers();
+		destroy() {
+			this._stopAllWorkers();
 			this.observableStopAll();
 
-			this.flushQueue();
+			this._flushQueue();
 
-			if (this.started) {
+			if (this._started) {
 				this.sleep();
 			}
 
@@ -4842,13 +4848,14 @@ var SargassoModule = (function (exports) {
 		/*
 			@function watchDOM - hook called if options.watchDOM set and DOM changed
 			*/
-		watchDOM (root) {
-			if (root === this.shadowRoot) {
+		watchDOM(root) {
+			if (root === this._shadowRoot) {
 				// something happend this element's my shadow DOM, tell in the DOM about it
 				// so dom observers can take actions such as instantiating new sargasso
 				// controllers, etc.
-				theDOMWatcher.observeDOM(this.shadowRoot);
-			} else {
+				theDOMWatcher.observeDOM(this._shadowRoot);
+			}
+			else {
 				this.DOMChanged(root);
 			}
 		}
@@ -4856,7 +4863,7 @@ var SargassoModule = (function (exports) {
 		/*
 			@function watchScroll - hook called if options.watchScroll set and Scroll Wrapper scrolled
 			*/
-		watchScroll () {
+		watchScroll() {
 			if (this.options.watchViewport) {
 				this.inViewport();
 			}
@@ -4867,7 +4874,7 @@ var SargassoModule = (function (exports) {
 		/*
 			@function watchResize - hook called if options.watchResize set and window changed size
 			*/
-		watchResize () {
+		watchResize() {
 			if (this.options.watchViewport) {
 				this.inViewport();
 			}
@@ -4878,10 +4885,11 @@ var SargassoModule = (function (exports) {
 		/*
 			@function watchOrientation - hook called if options.watchOrientation set and orientation changes
 			*/
-		watchOrientation () {
+		watchOrientation() {
 			if (window.orientation && (window.orientation === 90 || window.orientation === -90)) {
 				this.wantFullscreen(true);
-			} else {
+			}
+			else {
 				this.wantFullscreen(false);
 			}
 		}
@@ -4889,16 +4897,17 @@ var SargassoModule = (function (exports) {
 		/*
 			@function inViewport - hook called if options.watchViewPort set and this.element enters viewport
 			*/
-		inViewport () {
+		inViewport() {
 			if (theScrollWatcher.inViewPort(this.element)) {
-				if (!this.isInViewport) {
+				if (!this._isInViewport) {
 					this.enterViewport();
-					this.isInViewport = true;
+					this._isInViewport = true;
 				}
-			} else {
-				if (this.isInViewport) {
+			}
+			else {
+				if (this._isInViewport) {
 					this.exitViewport();
-					this.isInViewport = false;
+					this._isInViewport = false;
 				}
 			}
 		};
@@ -4906,7 +4915,7 @@ var SargassoModule = (function (exports) {
 		/*
 			@function workerMessage - hook called when worker posts a message
 			*/
-		workerMessage (id, e) {
+		workerMessage(id, e) {
 			if (e.data.uid === this.uid) {
 				this.workerOnMessage(id, e.data);
 			}
@@ -4914,7 +4923,7 @@ var SargassoModule = (function (exports) {
 
 		// experimental
 
-		nativeRequestFullScreen () {
+		nativeRequestFullScreen() {
 			if (document.fullscreenElement) {
 				if (document.fullscreenElement === this.element) {
 					return
@@ -4925,7 +4934,7 @@ var SargassoModule = (function (exports) {
 			this.element.requestFullscreen();
 		}
 
-		nativeExitFullScreen () {
+		nativeExitFullScreen() {
 			if (document.fullscreenElement && document.fullscreenElement === this.element) {
 				document.exitFullscreen();
 			}
@@ -5601,7 +5610,7 @@ var SargassoModule = (function (exports) {
 		bootSargasso: bootSargasso,
 		elementTools: elementTools,
 		validate: validate,
-		setValidation: setValidation
+		setValidator: setValidator
 	};
 
 	const services = {

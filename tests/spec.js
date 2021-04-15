@@ -14,7 +14,7 @@ testElement.appendChild(nestedElement2)
 elementTools.addClass(nestedElement, 'nested-element')
 elementTools.addClass(nestedElement2, 'nested-element')
 
-function makeNode (html) {
+function makeNode(html) {
 	const e = document.createElement('div')
 	e.innerHTML = html
 	return e.firstChild
@@ -210,23 +210,25 @@ describe('Sargasso', function () {
 		let destroy = false
 
 		class InstrumentedSubclass extends SargassoModule.Sargasso {
-			constructor (element, options) {
+			constructor(element, options) {
 				super(element, options)
 				instantiated = true
 			}
 
-			start () {
+			start() {
 				super.start()
 				start = true
-				this.element.remove()
+				setTimeout(() => {
+					this.element.remove()
+				}, 0)
 			}
 
-			sleep () {
+			sleep() {
 				sleep = true
 				super.sleep()
 			}
 
-			destroy () {
+			destroy() {
 				destroy = true
 				super.destroy()
 				expect(instantiated).to.be.true
@@ -250,7 +252,7 @@ describe('Sargasso', function () {
 		let count = 0
 
 		class InstrumentedSupervisorTest extends SargassoModule.Sargasso {
-			start () {
+			start() {
 				super.start()
 				if (++count === 2) {
 					this.element.remove()
@@ -260,7 +262,7 @@ describe('Sargasso', function () {
 		}
 
 		class InstrumentedSupervisorTest1 extends SargassoModule.Sargasso {
-			start () {
+			start() {
 				super.start()
 				if (++count === 2) {
 					this.element.remove()
@@ -280,7 +282,7 @@ describe('Sargasso', function () {
 	*/
 	it('Sargasso LazyInstantiate by data-lazy-sargasso-class', function (done) {
 		class InstrumentedLazyTest extends SargassoModule.Sargasso {
-			start () {
+			start() {
 				super.start()
 				window.scrollTo(0, 0)
 				this.element.remove()
@@ -300,14 +302,14 @@ describe('Sargasso', function () {
 	*/
 	it('Sargasso watchScroll', function (done) {
 		class InstrumentedScrollClass extends SargassoModule.Sargasso {
-			constructor (element, options) {
+			constructor(element, options) {
 				super(element, {
 					watchScroll: true
 				})
 				this.triggered = false
 			}
 
-			didScroll () {
+			didScroll() {
 				window.scrollTo(0, 0)
 				if (!this.triggered) {
 					this.triggered = true
@@ -322,19 +324,19 @@ describe('Sargasso', function () {
 
 	it('Sargasso watchDOM', function (done) {
 		class InstrumentedDOMClass extends SargassoModule.Sargasso {
-			constructor (element, options) {
+			constructor(element, options) {
 				super(element, {
 					watchDOM: true
 				})
 				this.triggered = false
 			}
 
-			start () {
+			start() {
 				super.start()
 				container.appendChild(makeNode('<p></p>'))
 			}
 
-			DOMChanged () {
+			DOMChanged() {
 				if (!this.triggered) {
 					this.triggered = true
 					done()
@@ -348,19 +350,19 @@ describe('Sargasso', function () {
 
 	it('Sargasso watchResize', function (done) {
 		class InstrumentedResizeClass extends SargassoModule.Sargasso {
-			constructor (element, options) {
+			constructor(element, options) {
 				super(element, {
 					watchResize: true
 				})
 				this.triggered = false
 			}
 
-			start () {
+			start() {
 				super.start()
 				window.dispatchEvent(new Event('resize'))
 			}
 
-			didResize () {
+			didResize() {
 				if (!this.triggered) {
 					this.triggered = true
 					done()
@@ -415,7 +417,7 @@ describe('Sargasso', function () {
 	it('Sargasso observable', function (done) {
 		let count = 0
 		class InstrumentedDOMClass extends SargassoModule.Sargasso {
-			observableChanged (id, property, value) {
+			observableChanged(id, property, value) {
 				++count
 			}
 		}
@@ -441,12 +443,12 @@ describe('Sargasso', function () {
 	*/
 	it('Sargasso HijaxLoader', function (done) {
 		class InstrumentedHijaxClass extends SargassoModule.Sargasso {
-			start () {
+			start() {
 				super.start()
 				SargassoModule.loadPageHandler('./page1.html')
 			}
 
-			newPage (oldPage, newPage) {
+			newPage(oldPage, newPage) {
 				if (newPage === '/tests/page1.html') {
 					document.getElementById('back-link').click()
 					this.element.remove()

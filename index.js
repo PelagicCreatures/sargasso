@@ -15,7 +15,7 @@ import {
 from './lib/Sargasso.js'
 
 import {
-	validate, setValidation
+	validate, setValidator
 }
 from './lib/checkArgs'
 
@@ -44,7 +44,7 @@ const utils = {
 	bootSargasso: bootSargasso,
 	elementTools: elementTools,
 	validate: validate,
-	setValidation: setValidation
+	setValidator: setValidator
 }
 
 const services = {
