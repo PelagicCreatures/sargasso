@@ -869,6 +869,71 @@ var SargassoModule = (function (exports) {
 
 	var camelCase_1 = camelCase;
 
+	const validators = {};
+
+	const setValidation = (name, fn) => {
+		validators[name] = fn;
+	};
+
+	setValidation('isDefined', (arg) => {
+		return arg !== undefined
+	});
+
+	setValidation('isElement', (arg) => {
+		return arg && (arg instanceof Element || arg instanceof Window)
+	});
+
+	setValidation('isEventTarget', (arg) => {
+		return arg && arg instanceof EventTarget
+	});
+
+	setValidation('isString', (arg) => {
+		return arg && (typeof arg === 'string' || arg instanceof String)
+	});
+
+	setValidation('isArray', (arg) => {
+		return arg && arg instanceof Array
+	});
+
+	setValidation('notEmpty', (arg) => {
+		return arg instanceof Array ? arg.length !== 0 : arg !== ''
+	});
+
+	setValidation('isEmpty', (arg) => {
+		return arg === undefined || (arg instanceof Array ? arg.length === 0 : arg === '')
+	});
+
+	setValidation('isObject', (arg) => {
+		return arg && arg instanceof Object
+	});
+
+	setValidation('isFunction', (arg) => {
+		return arg && typeof arg === 'function'
+	});
+
+
+	// tests is an array which must be all true
+	// if top level element is an array then sub array is evaluated as an 'or'
+	// ['test1','test2',['either','or']]
+	const validate = (param, arg, tests) => {
+		// console.log(param, arg)
+		const result = tests.map((test) => {
+			if (test instanceof Array) {
+				const anyOf = test.map((or) => {
+					return validators[or](arg)
+				});
+				return anyOf.indexOf(true) !== -1
+			}
+			else {
+				return validators[test](arg)
+			}
+		});
+
+		if (result.indexOf(false) !== -1) {
+			throw (new Error('call to ' + param + ' invalid value'))
+		}
+	};
+
 	/**
 		Utility routines for Sargasso classes
 
@@ -880,6 +945,8 @@ var SargassoModule = (function (exports) {
 	const elementMetaData = new WeakMap();
 
 	const hasClass = (element, cssClass) => {
+		validate('hasClass element', element, ['isDefined', 'isElement']);
+		validate('hasClass cssClass', cssClass, ['isDefined', 'notEmpty', 'isString']);
 		const className = element.className || '';
 		const classes = className.split(/\s+/);
 		return classes.indexOf(cssClass) !== -1
@@ -890,6 +957,9 @@ var SargassoModule = (function (exports) {
 	// a list delimited by comma or space 'class1 class3 class4'
 	// an array ['class1','class2']
 	const addClass = (element, addClasses) => {
+		validate('addClass element', element, ['isDefined', 'isElement']);
+		validate('addClass addClasses', addClasses, ['isDefined', 'notEmpty', ['isString', 'isArray']]);
+
 		const className = element.className || '';
 		const classes = className.split(/\s+/);
 
@@ -912,6 +982,9 @@ var SargassoModule = (function (exports) {
 	// a list delimited by comma or space 'class1 class3 class4'
 	// an array ['class1','class2']
 	const removeClass = (element, removeClasses) => {
+		validate('removeClass element', element, ['isDefined', 'isElement']);
+		validate('removeClass removeClasses', removeClasses, ['isDefined', 'notEmpty', ['isString', 'isArray']]);
+
 		const className = element.className || '';
 		const classes = className.split(/\s+/);
 
@@ -930,10 +1003,14 @@ var SargassoModule = (function (exports) {
 	};
 
 	const isVisible = (element) => {
+		validate('isVisible element', element, ['isDefined', 'isElement']);
+
 		return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length)
 	};
 
 	const inViewPort = (element, container = window) => {
+		validate('inViewPort element', element, ['isDefined', 'isElement']);
+
 		const rect = element.getBoundingClientRect();
 		const visible = isVisible(element);
 		const aboveTheTop = (rect.bottom < 0);
@@ -941,7 +1018,8 @@ var SargassoModule = (function (exports) {
 
 		if (container.self === window) {
 			belowTheFold = (rect.top > (window.innerHeight || document.documentElement.clientHeight));
-		} else {
+		}
+		else {
 			belowTheFold = (rect.top > container.clientHeight);
 		}
 
@@ -954,6 +1032,9 @@ var SargassoModule = (function (exports) {
 	*/
 
 	const css = (element, css) => {
+		validate('css element', element, ['isDefined', 'isElement']);
+		validate('css css', css, ['isDefined', ['isObject']]);
+
 		for (const prop in css) {
 			if (Object.prototype.hasOwnProperty.call(css, prop)) {
 				const key = camelCase_1(prop);
@@ -963,20 +1044,28 @@ var SargassoModule = (function (exports) {
 	};
 
 	const setMetaData = (element, k, v) => {
+		validate('setMetaData element', element, ['isDefined', 'isElement']);
+		validate('setMetaData k', k, ['isDefined', 'isString']);
+
 		const data = elementMetaData.get(element) || {};
 		if (v) {
 			data[k] = v;
-		} else {
+		}
+		else {
 			delete data[k];
 		}
 		elementMetaData.set(element, data);
 	};
 
 	const getMetaData = (element, k) => {
+		validate('getMetaData element', element, ['isDefined', 'isElement']);
+		validate('getMetaData k', k, ['isDefined', 'isString']);
+
 		const data = elementMetaData.get(element) || {};
 		if (k) {
 			return data[k]
-		} else {
+		}
+		else {
 			return data
 		}
 	};
@@ -989,6 +1078,13 @@ var SargassoModule = (function (exports) {
 			fn = selector;
 			selector = undefined;
 		}
+		validate('on uid', uid, ['isDefined', 'notEmpty']);
+		validate('on container', container, ['isDefined', 'isEventTarget']);
+		validate('on events', events, ['isDefined', 'isString']);
+		validate('on fn', fn, ['isDefined', 'isFunction']);
+		validate('on selector', selector, [
+			['isEmpty', 'isString']
+		]);
 
 		const k = 'on:' + uid + '-' + events + '-' + selector;
 
@@ -1004,7 +1100,8 @@ var SargassoModule = (function (exports) {
 
 			if (!selector) {
 				fn(e);
-			} else {
+			}
+			else {
 				Array.from(container.querySelectorAll(selector)).forEach((el) => {
 					if (e.target === el || el.contains(e.target)) {
 						fn(e, el);
@@ -1030,6 +1127,13 @@ var SargassoModule = (function (exports) {
 	};
 
 	const off = function (uid, container, events, selector) {
+		validate('off uid', uid, ['isDefined', 'notEmpty']);
+		validate('off container', container, ['isDefined', 'isEventTarget']);
+		validate('off events', events, ['isDefined', 'isString']);
+		validate('off selector', selector, [
+			['isEmpty', 'isString']
+		]);
+
 		const k = 'on:' + uid + '-' + events + '-' + selector;
 		const data = getMetaData(container, k);
 		if (data) {
@@ -1042,6 +1146,8 @@ var SargassoModule = (function (exports) {
 
 	// remove all (on,once) event handlers for element
 	const offAll = function (container) {
+		validate('offAll container', container, ['isDefined', 'isEventTarget']);
+
 		const data = elementMetaData.get(container) || {};
 		const handlers = [];
 
@@ -5493,7 +5599,9 @@ var SargassoModule = (function (exports) {
 	const utils = {
 		registerSargassoClass: registerSargassoClass,
 		bootSargasso: bootSargasso,
-		elementTools: elementTools
+		elementTools: elementTools,
+		validate: validate,
+		setValidation: setValidation
 	};
 
 	const services = {

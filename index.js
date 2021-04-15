@@ -12,32 +12,39 @@
 import {
 	registerSargassoClass, Sargasso
 }
-	from './lib/Sargasso.js'
+from './lib/Sargasso.js'
+
+import {
+	validate, setValidation
+}
+from './lib/checkArgs'
 
 import {
 	elementTools
 }
-	from './lib/utils.js'
+from './lib/utils.js'
 
 import {
 	loadPageHandler, bootSargasso
 }
-	from './lib/boot.js'
+from './lib/boot.js'
 
 import {
 	theObservableObjectWatcher, theDOMWatcher, theScrollWatcher, theResizeWatcher, theOrientationWatcher, theWorkerWatcher
 }
-	from './lib/Services.js'
+from './lib/Services.js'
 
 import {
 	ObservableObject
 }
-	from './lib/ObservableObject'
+from './lib/ObservableObject'
 
 const utils = {
 	registerSargassoClass: registerSargassoClass,
 	bootSargasso: bootSargasso,
-	elementTools: elementTools
+	elementTools: elementTools,
+	validate: validate,
+	setValidation: setValidation
 }
 
 const services = {
