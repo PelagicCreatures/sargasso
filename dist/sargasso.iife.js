@@ -30,33 +30,32 @@ var SargassoModule = (function (exports) {
 		return a;
 	}
 
-	function createCommonjsModule(fn) {
-	  var module = { exports: {} };
-		return fn(module, module.exports), module.exports;
-	}
-
 	function commonjsRequire (path) {
 		throw new Error('Could not dynamically require "' + path + '". Please configure the dynamicRequireTargets or/and ignoreDynamicRequires option of @rollup/plugin-commonjs appropriately for this require call to work.');
 	}
 
 	/** Detect free variable `global` from Node.js. */
 
-	var freeGlobal = typeof commonjsGlobal == 'object' && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
+	var freeGlobal$1 = typeof commonjsGlobal == 'object' && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
 
-	var _freeGlobal = freeGlobal;
+	var _freeGlobal = freeGlobal$1;
+
+	var freeGlobal = _freeGlobal;
 
 	/** Detect free variable `self`. */
 	var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
 
 	/** Used as a reference to the global object. */
-	var root = _freeGlobal || freeSelf || Function('return this')();
+	var root$9 = freeGlobal || freeSelf || Function('return this')();
 
-	var _root = root;
+	var _root = root$9;
+
+	var root$8 = _root;
 
 	/** Built-in value references. */
-	var Symbol = _root.Symbol;
+	var Symbol$4 = root$8.Symbol;
 
-	var _Symbol = Symbol;
+	var _Symbol = Symbol$4;
 
 	/**
 	 * A specialized version of `_.map` for arrays without support for iteratee
@@ -67,7 +66,8 @@ var SargassoModule = (function (exports) {
 	 * @param {Function} iteratee The function invoked per iteration.
 	 * @returns {Array} Returns the new mapped array.
 	 */
-	function arrayMap(array, iteratee) {
+
+	function arrayMap$1(array, iteratee) {
 	  var index = -1,
 	      length = array == null ? 0 : array.length,
 	      result = Array(length);
@@ -78,7 +78,7 @@ var SargassoModule = (function (exports) {
 	  return result;
 	}
 
-	var _arrayMap = arrayMap;
+	var _arrayMap = arrayMap$1;
 
 	/**
 	 * Checks if `value` is classified as an `Array` object.
@@ -103,9 +103,12 @@ var SargassoModule = (function (exports) {
 	 * _.isArray(_.noop);
 	 * // => false
 	 */
-	var isArray = Array.isArray;
 
-	var isArray_1 = isArray;
+	var isArray$4 = Array.isArray;
+
+	var isArray_1 = isArray$4;
+
+	var Symbol$3 = _Symbol;
 
 	/** Used for built-in method references. */
 	var objectProto$b = Object.prototype;
@@ -121,7 +124,7 @@ var SargassoModule = (function (exports) {
 	var nativeObjectToString$1 = objectProto$b.toString;
 
 	/** Built-in value references. */
-	var symToStringTag$1 = _Symbol ? _Symbol.toStringTag : undefined;
+	var symToStringTag$1 = Symbol$3 ? Symbol$3.toStringTag : undefined;
 
 	/**
 	 * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
@@ -130,7 +133,7 @@ var SargassoModule = (function (exports) {
 	 * @param {*} value The value to query.
 	 * @returns {string} Returns the raw `toStringTag`.
 	 */
-	function getRawTag(value) {
+	function getRawTag$1(value) {
 	  var isOwn = hasOwnProperty$8.call(value, symToStringTag$1),
 	      tag = value[symToStringTag$1];
 
@@ -150,9 +153,10 @@ var SargassoModule = (function (exports) {
 	  return result;
 	}
 
-	var _getRawTag = getRawTag;
+	var _getRawTag = getRawTag$1;
 
 	/** Used for built-in method references. */
+
 	var objectProto$a = Object.prototype;
 
 	/**
@@ -169,18 +173,22 @@ var SargassoModule = (function (exports) {
 	 * @param {*} value The value to convert.
 	 * @returns {string} Returns the converted string.
 	 */
-	function objectToString(value) {
+	function objectToString$1(value) {
 	  return nativeObjectToString.call(value);
 	}
 
-	var _objectToString = objectToString;
+	var _objectToString = objectToString$1;
+
+	var Symbol$2 = _Symbol,
+	    getRawTag = _getRawTag,
+	    objectToString = _objectToString;
 
 	/** `Object#toString` result references. */
 	var nullTag = '[object Null]',
 	    undefinedTag = '[object Undefined]';
 
 	/** Built-in value references. */
-	var symToStringTag = _Symbol ? _Symbol.toStringTag : undefined;
+	var symToStringTag = Symbol$2 ? Symbol$2.toStringTag : undefined;
 
 	/**
 	 * The base implementation of `getTag` without fallbacks for buggy environments.
@@ -189,16 +197,16 @@ var SargassoModule = (function (exports) {
 	 * @param {*} value The value to query.
 	 * @returns {string} Returns the `toStringTag`.
 	 */
-	function baseGetTag(value) {
+	function baseGetTag$5(value) {
 	  if (value == null) {
 	    return value === undefined ? undefinedTag : nullTag;
 	  }
 	  return (symToStringTag && symToStringTag in Object(value))
-	    ? _getRawTag(value)
-	    : _objectToString(value);
+	    ? getRawTag(value)
+	    : objectToString(value);
 	}
 
-	var _baseGetTag = baseGetTag;
+	var _baseGetTag = baseGetTag$5;
 
 	/**
 	 * Checks if `value` is object-like. A value is object-like if it's not `null`
@@ -224,11 +232,15 @@ var SargassoModule = (function (exports) {
 	 * _.isObjectLike(null);
 	 * // => false
 	 */
-	function isObjectLike(value) {
+
+	function isObjectLike$5(value) {
 	  return value != null && typeof value == 'object';
 	}
 
-	var isObjectLike_1 = isObjectLike;
+	var isObjectLike_1 = isObjectLike$5;
+
+	var baseGetTag$4 = _baseGetTag,
+	    isObjectLike$4 = isObjectLike_1;
 
 	/** `Object#toString` result references. */
 	var symbolTag$1 = '[object Symbol]';
@@ -250,18 +262,23 @@ var SargassoModule = (function (exports) {
 	 * _.isSymbol('abc');
 	 * // => false
 	 */
-	function isSymbol(value) {
+	function isSymbol$2(value) {
 	  return typeof value == 'symbol' ||
-	    (isObjectLike_1(value) && _baseGetTag(value) == symbolTag$1);
+	    (isObjectLike$4(value) && baseGetTag$4(value) == symbolTag$1);
 	}
 
-	var isSymbol_1 = isSymbol;
+	var isSymbol_1 = isSymbol$2;
+
+	var Symbol$1 = _Symbol,
+	    arrayMap = _arrayMap,
+	    isArray$3 = isArray_1,
+	    isSymbol$1 = isSymbol_1;
 
 	/** Used as references for various `Number` constants. */
 	var INFINITY = 1 / 0;
 
 	/** Used to convert symbols to primitives and strings. */
-	var symbolProto$1 = _Symbol ? _Symbol.prototype : undefined,
+	var symbolProto$1 = Symbol$1 ? Symbol$1.prototype : undefined,
 	    symbolToString = symbolProto$1 ? symbolProto$1.toString : undefined;
 
 	/**
@@ -272,23 +289,25 @@ var SargassoModule = (function (exports) {
 	 * @param {*} value The value to process.
 	 * @returns {string} Returns the string.
 	 */
-	function baseToString(value) {
+	function baseToString$1(value) {
 	  // Exit early for strings to avoid a performance hit in some environments.
 	  if (typeof value == 'string') {
 	    return value;
 	  }
-	  if (isArray_1(value)) {
+	  if (isArray$3(value)) {
 	    // Recursively convert values (susceptible to call stack limits).
-	    return _arrayMap(value, baseToString) + '';
+	    return arrayMap(value, baseToString$1) + '';
 	  }
-	  if (isSymbol_1(value)) {
+	  if (isSymbol$1(value)) {
 	    return symbolToString ? symbolToString.call(value) : '';
 	  }
 	  var result = (value + '');
 	  return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
 	}
 
-	var _baseToString = baseToString;
+	var _baseToString = baseToString$1;
+
+	var baseToString = _baseToString;
 
 	/**
 	 * Converts `value` to a string. An empty string is returned for `null`
@@ -311,11 +330,11 @@ var SargassoModule = (function (exports) {
 	 * _.toString([1, 2, 3]);
 	 * // => '1,2,3'
 	 */
-	function toString(value) {
-	  return value == null ? '' : _baseToString(value);
+	function toString$4(value) {
+	  return value == null ? '' : baseToString(value);
 	}
 
-	var toString_1 = toString;
+	var toString_1 = toString$4;
 
 	/**
 	 * The base implementation of `_.slice` without an iteratee call guard.
@@ -326,7 +345,8 @@ var SargassoModule = (function (exports) {
 	 * @param {number} [end=array.length] The end position.
 	 * @returns {Array} Returns the slice of `array`.
 	 */
-	function baseSlice(array, start, end) {
+
+	function baseSlice$1(array, start, end) {
 	  var index = -1,
 	      length = array.length;
 
@@ -347,7 +367,9 @@ var SargassoModule = (function (exports) {
 	  return result;
 	}
 
-	var _baseSlice = baseSlice;
+	var _baseSlice = baseSlice$1;
+
+	var baseSlice = _baseSlice;
 
 	/**
 	 * Casts `array` to a slice if it's needed.
@@ -358,15 +380,16 @@ var SargassoModule = (function (exports) {
 	 * @param {number} [end=array.length] The end position.
 	 * @returns {Array} Returns the cast slice.
 	 */
-	function castSlice(array, start, end) {
+	function castSlice$1(array, start, end) {
 	  var length = array.length;
 	  end = end === undefined ? length : end;
-	  return (!start && end >= length) ? array : _baseSlice(array, start, end);
+	  return (!start && end >= length) ? array : baseSlice(array, start, end);
 	}
 
-	var _castSlice = castSlice;
+	var _castSlice = castSlice$1;
 
 	/** Used to compose unicode character classes. */
+
 	var rsAstralRange$2 = '\\ud800-\\udfff',
 	    rsComboMarksRange$3 = '\\u0300-\\u036f',
 	    reComboHalfMarksRange$3 = '\\ufe20-\\ufe2f',
@@ -387,11 +410,11 @@ var SargassoModule = (function (exports) {
 	 * @param {string} string The string to inspect.
 	 * @returns {boolean} Returns `true` if a symbol is found, else `false`.
 	 */
-	function hasUnicode(string) {
+	function hasUnicode$2(string) {
 	  return reHasUnicode.test(string);
 	}
 
-	var _hasUnicode = hasUnicode;
+	var _hasUnicode = hasUnicode$2;
 
 	/**
 	 * Converts an ASCII `string` to an array.
@@ -400,13 +423,15 @@ var SargassoModule = (function (exports) {
 	 * @param {string} string The string to convert.
 	 * @returns {Array} Returns the converted array.
 	 */
-	function asciiToArray(string) {
+
+	function asciiToArray$1(string) {
 	  return string.split('');
 	}
 
-	var _asciiToArray = asciiToArray;
+	var _asciiToArray = asciiToArray$1;
 
 	/** Used to compose unicode character classes. */
+
 	var rsAstralRange$1 = '\\ud800-\\udfff',
 	    rsComboMarksRange$2 = '\\u0300-\\u036f',
 	    reComboHalfMarksRange$2 = '\\ufe20-\\ufe2f',
@@ -441,11 +466,15 @@ var SargassoModule = (function (exports) {
 	 * @param {string} string The string to convert.
 	 * @returns {Array} Returns the converted array.
 	 */
-	function unicodeToArray(string) {
+	function unicodeToArray$1(string) {
 	  return string.match(reUnicode) || [];
 	}
 
-	var _unicodeToArray = unicodeToArray;
+	var _unicodeToArray = unicodeToArray$1;
+
+	var asciiToArray = _asciiToArray,
+	    hasUnicode$1 = _hasUnicode,
+	    unicodeToArray = _unicodeToArray;
 
 	/**
 	 * Converts `string` to an array.
@@ -454,13 +483,18 @@ var SargassoModule = (function (exports) {
 	 * @param {string} string The string to convert.
 	 * @returns {Array} Returns the converted array.
 	 */
-	function stringToArray(string) {
-	  return _hasUnicode(string)
-	    ? _unicodeToArray(string)
-	    : _asciiToArray(string);
+	function stringToArray$1(string) {
+	  return hasUnicode$1(string)
+	    ? unicodeToArray(string)
+	    : asciiToArray(string);
 	}
 
-	var _stringToArray = stringToArray;
+	var _stringToArray = stringToArray$1;
+
+	var castSlice = _castSlice,
+	    hasUnicode = _hasUnicode,
+	    stringToArray = _stringToArray,
+	    toString$3 = toString_1;
 
 	/**
 	 * Creates a function like `_.lowerFirst`.
@@ -469,12 +503,12 @@ var SargassoModule = (function (exports) {
 	 * @param {string} methodName The name of the `String` case method to use.
 	 * @returns {Function} Returns the new case function.
 	 */
-	function createCaseFirst(methodName) {
+	function createCaseFirst$1(methodName) {
 	  return function(string) {
-	    string = toString_1(string);
+	    string = toString$3(string);
 
-	    var strSymbols = _hasUnicode(string)
-	      ? _stringToArray(string)
+	    var strSymbols = hasUnicode(string)
+	      ? stringToArray(string)
 	      : undefined;
 
 	    var chr = strSymbols
@@ -482,14 +516,16 @@ var SargassoModule = (function (exports) {
 	      : string.charAt(0);
 
 	    var trailing = strSymbols
-	      ? _castSlice(strSymbols, 1).join('')
+	      ? castSlice(strSymbols, 1).join('')
 	      : string.slice(1);
 
 	    return chr[methodName]() + trailing;
 	  };
 	}
 
-	var _createCaseFirst = createCaseFirst;
+	var _createCaseFirst = createCaseFirst$1;
+
+	var createCaseFirst = _createCaseFirst;
 
 	/**
 	 * Converts the first character of `string` to upper case.
@@ -508,9 +544,12 @@ var SargassoModule = (function (exports) {
 	 * _.upperFirst('FRED');
 	 * // => 'FRED'
 	 */
-	var upperFirst = _createCaseFirst('toUpperCase');
+	var upperFirst$1 = createCaseFirst('toUpperCase');
 
-	var upperFirst_1 = upperFirst;
+	var upperFirst_1 = upperFirst$1;
+
+	var toString$2 = toString_1,
+	    upperFirst = upperFirst_1;
 
 	/**
 	 * Converts the first character of `string` to upper case and the remaining
@@ -527,11 +566,11 @@ var SargassoModule = (function (exports) {
 	 * _.capitalize('FRED');
 	 * // => 'Fred'
 	 */
-	function capitalize(string) {
-	  return upperFirst_1(toString_1(string).toLowerCase());
+	function capitalize$1(string) {
+	  return upperFirst(toString$2(string).toLowerCase());
 	}
 
-	var capitalize_1 = capitalize;
+	var capitalize_1 = capitalize$1;
 
 	/**
 	 * A specialized version of `_.reduce` for arrays without support for
@@ -545,7 +584,8 @@ var SargassoModule = (function (exports) {
 	 *  the initial value.
 	 * @returns {*} Returns the accumulated value.
 	 */
-	function arrayReduce(array, iteratee, accumulator, initAccum) {
+
+	function arrayReduce$1(array, iteratee, accumulator, initAccum) {
 	  var index = -1,
 	      length = array == null ? 0 : array.length;
 
@@ -558,7 +598,7 @@ var SargassoModule = (function (exports) {
 	  return accumulator;
 	}
 
-	var _arrayReduce = arrayReduce;
+	var _arrayReduce = arrayReduce$1;
 
 	/**
 	 * The base implementation of `_.propertyOf` without support for deep paths.
@@ -567,13 +607,16 @@ var SargassoModule = (function (exports) {
 	 * @param {Object} object The object to query.
 	 * @returns {Function} Returns the new accessor function.
 	 */
-	function basePropertyOf(object) {
+
+	function basePropertyOf$1(object) {
 	  return function(key) {
 	    return object == null ? undefined : object[key];
 	  };
 	}
 
-	var _basePropertyOf = basePropertyOf;
+	var _basePropertyOf = basePropertyOf$1;
+
+	var basePropertyOf = _basePropertyOf;
 
 	/** Used to map Latin Unicode letters to basic Latin letters. */
 	var deburredLetters = {
@@ -641,9 +684,12 @@ var SargassoModule = (function (exports) {
 	 * @param {string} letter The matched letter to deburr.
 	 * @returns {string} Returns the deburred letter.
 	 */
-	var deburrLetter = _basePropertyOf(deburredLetters);
+	var deburrLetter$1 = basePropertyOf(deburredLetters);
 
-	var _deburrLetter = deburrLetter;
+	var _deburrLetter = deburrLetter$1;
+
+	var deburrLetter = _deburrLetter,
+	    toString$1 = toString_1;
 
 	/** Used to match Latin Unicode letters (excluding mathematical operators). */
 	var reLatin = /[\xc0-\xd6\xd8-\xf6\xf8-\xff\u0100-\u017f]/g;
@@ -681,14 +727,15 @@ var SargassoModule = (function (exports) {
 	 * _.deburr('déjà vu');
 	 * // => 'deja vu'
 	 */
-	function deburr(string) {
-	  string = toString_1(string);
-	  return string && string.replace(reLatin, _deburrLetter).replace(reComboMark, '');
+	function deburr$1(string) {
+	  string = toString$1(string);
+	  return string && string.replace(reLatin, deburrLetter).replace(reComboMark, '');
 	}
 
-	var deburr_1 = deburr;
+	var deburr_1 = deburr$1;
 
 	/** Used to match words composed of alphanumeric characters. */
+
 	var reAsciiWord = /[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/g;
 
 	/**
@@ -698,13 +745,14 @@ var SargassoModule = (function (exports) {
 	 * @param {string} The string to inspect.
 	 * @returns {Array} Returns the words of `string`.
 	 */
-	function asciiWords(string) {
+	function asciiWords$1(string) {
 	  return string.match(reAsciiWord) || [];
 	}
 
-	var _asciiWords = asciiWords;
+	var _asciiWords = asciiWords$1;
 
 	/** Used to detect strings that need a more robust regexp to match words. */
+
 	var reHasUnicodeWord = /[a-z][A-Z]|[A-Z]{2}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]/;
 
 	/**
@@ -714,13 +762,14 @@ var SargassoModule = (function (exports) {
 	 * @param {string} string The string to inspect.
 	 * @returns {boolean} Returns `true` if a word is found, else `false`.
 	 */
-	function hasUnicodeWord(string) {
+	function hasUnicodeWord$1(string) {
 	  return reHasUnicodeWord.test(string);
 	}
 
-	var _hasUnicodeWord = hasUnicodeWord;
+	var _hasUnicodeWord = hasUnicodeWord$1;
 
 	/** Used to compose unicode character classes. */
+
 	var rsAstralRange = '\\ud800-\\udfff',
 	    rsComboMarksRange = '\\u0300-\\u036f',
 	    reComboHalfMarksRange = '\\ufe20-\\ufe2f',
@@ -784,11 +833,16 @@ var SargassoModule = (function (exports) {
 	 * @param {string} The string to inspect.
 	 * @returns {Array} Returns the words of `string`.
 	 */
-	function unicodeWords(string) {
+	function unicodeWords$1(string) {
 	  return string.match(reUnicodeWord) || [];
 	}
 
-	var _unicodeWords = unicodeWords;
+	var _unicodeWords = unicodeWords$1;
+
+	var asciiWords = _asciiWords,
+	    hasUnicodeWord = _hasUnicodeWord,
+	    toString = toString_1,
+	    unicodeWords = _unicodeWords;
 
 	/**
 	 * Splits `string` into an array of its words.
@@ -809,17 +863,21 @@ var SargassoModule = (function (exports) {
 	 * _.words('fred, barney, & pebbles', /[^, ]+/g);
 	 * // => ['fred', 'barney', '&', 'pebbles']
 	 */
-	function words(string, pattern, guard) {
-	  string = toString_1(string);
+	function words$1(string, pattern, guard) {
+	  string = toString(string);
 	  pattern = guard ? undefined : pattern;
 
 	  if (pattern === undefined) {
-	    return _hasUnicodeWord(string) ? _unicodeWords(string) : _asciiWords(string);
+	    return hasUnicodeWord(string) ? unicodeWords(string) : asciiWords(string);
 	  }
 	  return string.match(pattern) || [];
 	}
 
-	var words_1 = words;
+	var words_1 = words$1;
+
+	var arrayReduce = _arrayReduce,
+	    deburr = deburr_1,
+	    words = words_1;
 
 	/** Used to compose unicode capture groups. */
 	var rsApos = "['\u2019]";
@@ -834,13 +892,16 @@ var SargassoModule = (function (exports) {
 	 * @param {Function} callback The function to combine each word.
 	 * @returns {Function} Returns the new compounder function.
 	 */
-	function createCompounder(callback) {
+	function createCompounder$2(callback) {
 	  return function(string) {
-	    return _arrayReduce(words_1(deburr_1(string).replace(reApos, '')), callback, '');
+	    return arrayReduce(words(deburr(string).replace(reApos, '')), callback, '');
 	  };
 	}
 
-	var _createCompounder = createCompounder;
+	var _createCompounder = createCompounder$2;
+
+	var capitalize = capitalize_1,
+	    createCompounder$1 = _createCompounder;
 
 	/**
 	 * Converts `string` to [camel case](https://en.wikipedia.org/wiki/CamelCase).
@@ -862,9 +923,9 @@ var SargassoModule = (function (exports) {
 	 * _.camelCase('__FOO_BAR__');
 	 * // => 'fooBar'
 	 */
-	var camelCase = _createCompounder(function(result, word, index) {
+	var camelCase = createCompounder$1(function(result, word, index) {
 	  word = word.toLowerCase();
-	  return result + (index ? capitalize_1(word) : word);
+	  return result + (index ? capitalize(word) : word);
 	});
 
 	var camelCase_1 = camelCase;
@@ -1223,12 +1284,15 @@ var SargassoModule = (function (exports) {
 	 * _.isObject(null);
 	 * // => false
 	 */
-	function isObject(value) {
+
+	function isObject$4(value) {
 	  var type = typeof value;
 	  return value != null && (type == 'object' || type == 'function');
 	}
 
-	var isObject_1 = isObject;
+	var isObject_1 = isObject$4;
+
+	var root$7 = _root;
 
 	/**
 	 * Gets the timestamp of the number of milliseconds that have elapsed since
@@ -1246,13 +1310,14 @@ var SargassoModule = (function (exports) {
 	 * }, _.now());
 	 * // => Logs the number of milliseconds it took for the deferred invocation.
 	 */
-	var now = function() {
-	  return _root.Date.now();
+	var now$1 = function() {
+	  return root$7.Date.now();
 	};
 
-	var now_1 = now;
+	var now_1 = now$1;
 
 	/** Used to match a single whitespace character. */
+
 	var reWhitespace = /\s/;
 
 	/**
@@ -1263,14 +1328,16 @@ var SargassoModule = (function (exports) {
 	 * @param {string} string The string to inspect.
 	 * @returns {number} Returns the index of the last non-whitespace character.
 	 */
-	function trimmedEndIndex(string) {
+	function trimmedEndIndex$1(string) {
 	  var index = string.length;
 
 	  while (index-- && reWhitespace.test(string.charAt(index))) {}
 	  return index;
 	}
 
-	var _trimmedEndIndex = trimmedEndIndex;
+	var _trimmedEndIndex = trimmedEndIndex$1;
+
+	var trimmedEndIndex = _trimmedEndIndex;
 
 	/** Used to match leading whitespace. */
 	var reTrimStart = /^\s+/;
@@ -1282,13 +1349,17 @@ var SargassoModule = (function (exports) {
 	 * @param {string} string The string to trim.
 	 * @returns {string} Returns the trimmed string.
 	 */
-	function baseTrim(string) {
+	function baseTrim$1(string) {
 	  return string
-	    ? string.slice(0, _trimmedEndIndex(string) + 1).replace(reTrimStart, '')
+	    ? string.slice(0, trimmedEndIndex(string) + 1).replace(reTrimStart, '')
 	    : string;
 	}
 
-	var _baseTrim = baseTrim;
+	var _baseTrim = baseTrim$1;
+
+	var baseTrim = _baseTrim,
+	    isObject$3 = isObject_1,
+	    isSymbol = isSymbol_1;
 
 	/** Used as references for various `Number` constants. */
 	var NAN = 0 / 0;
@@ -1328,28 +1399,32 @@ var SargassoModule = (function (exports) {
 	 * _.toNumber('3.2');
 	 * // => 3.2
 	 */
-	function toNumber(value) {
+	function toNumber$1(value) {
 	  if (typeof value == 'number') {
 	    return value;
 	  }
-	  if (isSymbol_1(value)) {
+	  if (isSymbol(value)) {
 	    return NAN;
 	  }
-	  if (isObject_1(value)) {
+	  if (isObject$3(value)) {
 	    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
-	    value = isObject_1(other) ? (other + '') : other;
+	    value = isObject$3(other) ? (other + '') : other;
 	  }
 	  if (typeof value != 'string') {
 	    return value === 0 ? value : +value;
 	  }
-	  value = _baseTrim(value);
+	  value = baseTrim(value);
 	  var isBinary = reIsBinary.test(value);
 	  return (isBinary || reIsOctal.test(value))
 	    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
 	    : (reIsBadHex.test(value) ? NAN : +value);
 	}
 
-	var toNumber_1 = toNumber;
+	var toNumber_1 = toNumber$1;
+
+	var isObject$2 = isObject_1,
+	    now = now_1,
+	    toNumber = toNumber_1;
 
 	/** Error message constants. */
 	var FUNC_ERROR_TEXT = 'Expected a function';
@@ -1427,11 +1502,11 @@ var SargassoModule = (function (exports) {
 	  if (typeof func != 'function') {
 	    throw new TypeError(FUNC_ERROR_TEXT);
 	  }
-	  wait = toNumber_1(wait) || 0;
-	  if (isObject_1(options)) {
+	  wait = toNumber(wait) || 0;
+	  if (isObject$2(options)) {
 	    leading = !!options.leading;
 	    maxing = 'maxWait' in options;
-	    maxWait = maxing ? nativeMax(toNumber_1(options.maxWait) || 0, wait) : maxWait;
+	    maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
 	    trailing = 'trailing' in options ? !!options.trailing : trailing;
 	  }
 
@@ -1476,7 +1551,7 @@ var SargassoModule = (function (exports) {
 	  }
 
 	  function timerExpired() {
-	    var time = now_1();
+	    var time = now();
 	    if (shouldInvoke(time)) {
 	      return trailingEdge(time);
 	    }
@@ -1505,11 +1580,11 @@ var SargassoModule = (function (exports) {
 	  }
 
 	  function flush() {
-	    return timerId === undefined ? result : trailingEdge(now_1());
+	    return timerId === undefined ? result : trailingEdge(now());
 	  }
 
 	  function debounced() {
-	    var time = now_1(),
+	    var time = now(),
 	        isInvoking = shouldInvoke(time);
 
 	    lastArgs = arguments;
@@ -1546,12 +1621,13 @@ var SargassoModule = (function (exports) {
 	 * @name clear
 	 * @memberOf ListCache
 	 */
-	function listCacheClear() {
+
+	function listCacheClear$1() {
 	  this.__data__ = [];
 	  this.size = 0;
 	}
 
-	var _listCacheClear = listCacheClear;
+	var _listCacheClear = listCacheClear$1;
 
 	/**
 	 * Performs a
@@ -1585,11 +1661,14 @@ var SargassoModule = (function (exports) {
 	 * _.eq(NaN, NaN);
 	 * // => true
 	 */
-	function eq(value, other) {
+
+	function eq$2(value, other) {
 	  return value === other || (value !== value && other !== other);
 	}
 
-	var eq_1 = eq;
+	var eq_1 = eq$2;
+
+	var eq$1 = eq_1;
 
 	/**
 	 * Gets the index at which the `key` is found in `array` of key-value pairs.
@@ -1599,17 +1678,19 @@ var SargassoModule = (function (exports) {
 	 * @param {*} key The key to search for.
 	 * @returns {number} Returns the index of the matched value, else `-1`.
 	 */
-	function assocIndexOf(array, key) {
+	function assocIndexOf$4(array, key) {
 	  var length = array.length;
 	  while (length--) {
-	    if (eq_1(array[length][0], key)) {
+	    if (eq$1(array[length][0], key)) {
 	      return length;
 	    }
 	  }
 	  return -1;
 	}
 
-	var _assocIndexOf = assocIndexOf;
+	var _assocIndexOf = assocIndexOf$4;
+
+	var assocIndexOf$3 = _assocIndexOf;
 
 	/** Used for built-in method references. */
 	var arrayProto = Array.prototype;
@@ -1626,9 +1707,9 @@ var SargassoModule = (function (exports) {
 	 * @param {string} key The key of the value to remove.
 	 * @returns {boolean} Returns `true` if the entry was removed, else `false`.
 	 */
-	function listCacheDelete(key) {
+	function listCacheDelete$1(key) {
 	  var data = this.__data__,
-	      index = _assocIndexOf(data, key);
+	      index = assocIndexOf$3(data, key);
 
 	  if (index < 0) {
 	    return false;
@@ -1643,7 +1724,9 @@ var SargassoModule = (function (exports) {
 	  return true;
 	}
 
-	var _listCacheDelete = listCacheDelete;
+	var _listCacheDelete = listCacheDelete$1;
+
+	var assocIndexOf$2 = _assocIndexOf;
 
 	/**
 	 * Gets the list cache value for `key`.
@@ -1654,14 +1737,16 @@ var SargassoModule = (function (exports) {
 	 * @param {string} key The key of the value to get.
 	 * @returns {*} Returns the entry value.
 	 */
-	function listCacheGet(key) {
+	function listCacheGet$1(key) {
 	  var data = this.__data__,
-	      index = _assocIndexOf(data, key);
+	      index = assocIndexOf$2(data, key);
 
 	  return index < 0 ? undefined : data[index][1];
 	}
 
-	var _listCacheGet = listCacheGet;
+	var _listCacheGet = listCacheGet$1;
+
+	var assocIndexOf$1 = _assocIndexOf;
 
 	/**
 	 * Checks if a list cache value for `key` exists.
@@ -1672,11 +1757,13 @@ var SargassoModule = (function (exports) {
 	 * @param {string} key The key of the entry to check.
 	 * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
 	 */
-	function listCacheHas(key) {
-	  return _assocIndexOf(this.__data__, key) > -1;
+	function listCacheHas$1(key) {
+	  return assocIndexOf$1(this.__data__, key) > -1;
 	}
 
-	var _listCacheHas = listCacheHas;
+	var _listCacheHas = listCacheHas$1;
+
+	var assocIndexOf = _assocIndexOf;
 
 	/**
 	 * Sets the list cache `key` to `value`.
@@ -1688,9 +1775,9 @@ var SargassoModule = (function (exports) {
 	 * @param {*} value The value to set.
 	 * @returns {Object} Returns the list cache instance.
 	 */
-	function listCacheSet(key, value) {
+	function listCacheSet$1(key, value) {
 	  var data = this.__data__,
-	      index = _assocIndexOf(data, key);
+	      index = assocIndexOf(data, key);
 
 	  if (index < 0) {
 	    ++this.size;
@@ -1701,7 +1788,13 @@ var SargassoModule = (function (exports) {
 	  return this;
 	}
 
-	var _listCacheSet = listCacheSet;
+	var _listCacheSet = listCacheSet$1;
+
+	var listCacheClear = _listCacheClear,
+	    listCacheDelete = _listCacheDelete,
+	    listCacheGet = _listCacheGet,
+	    listCacheHas = _listCacheHas,
+	    listCacheSet = _listCacheSet;
 
 	/**
 	 * Creates an list cache object.
@@ -1710,7 +1803,7 @@ var SargassoModule = (function (exports) {
 	 * @constructor
 	 * @param {Array} [entries] The key-value pairs to cache.
 	 */
-	function ListCache(entries) {
+	function ListCache$4(entries) {
 	  var index = -1,
 	      length = entries == null ? 0 : entries.length;
 
@@ -1722,13 +1815,15 @@ var SargassoModule = (function (exports) {
 	}
 
 	// Add methods to `ListCache`.
-	ListCache.prototype.clear = _listCacheClear;
-	ListCache.prototype['delete'] = _listCacheDelete;
-	ListCache.prototype.get = _listCacheGet;
-	ListCache.prototype.has = _listCacheHas;
-	ListCache.prototype.set = _listCacheSet;
+	ListCache$4.prototype.clear = listCacheClear;
+	ListCache$4.prototype['delete'] = listCacheDelete;
+	ListCache$4.prototype.get = listCacheGet;
+	ListCache$4.prototype.has = listCacheHas;
+	ListCache$4.prototype.set = listCacheSet;
 
-	var _ListCache = ListCache;
+	var _ListCache = ListCache$4;
+
+	var ListCache$3 = _ListCache;
 
 	/**
 	 * Removes all key-value entries from the stack.
@@ -1737,12 +1832,12 @@ var SargassoModule = (function (exports) {
 	 * @name clear
 	 * @memberOf Stack
 	 */
-	function stackClear() {
-	  this.__data__ = new _ListCache;
+	function stackClear$1() {
+	  this.__data__ = new ListCache$3;
 	  this.size = 0;
 	}
 
-	var _stackClear = stackClear;
+	var _stackClear = stackClear$1;
 
 	/**
 	 * Removes `key` and its value from the stack.
@@ -1753,7 +1848,8 @@ var SargassoModule = (function (exports) {
 	 * @param {string} key The key of the value to remove.
 	 * @returns {boolean} Returns `true` if the entry was removed, else `false`.
 	 */
-	function stackDelete(key) {
+
+	function stackDelete$1(key) {
 	  var data = this.__data__,
 	      result = data['delete'](key);
 
@@ -1761,7 +1857,7 @@ var SargassoModule = (function (exports) {
 	  return result;
 	}
 
-	var _stackDelete = stackDelete;
+	var _stackDelete = stackDelete$1;
 
 	/**
 	 * Gets the stack value for `key`.
@@ -1772,11 +1868,12 @@ var SargassoModule = (function (exports) {
 	 * @param {string} key The key of the value to get.
 	 * @returns {*} Returns the entry value.
 	 */
-	function stackGet(key) {
+
+	function stackGet$1(key) {
 	  return this.__data__.get(key);
 	}
 
-	var _stackGet = stackGet;
+	var _stackGet = stackGet$1;
 
 	/**
 	 * Checks if a stack value for `key` exists.
@@ -1787,11 +1884,15 @@ var SargassoModule = (function (exports) {
 	 * @param {string} key The key of the entry to check.
 	 * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
 	 */
-	function stackHas(key) {
+
+	function stackHas$1(key) {
 	  return this.__data__.has(key);
 	}
 
-	var _stackHas = stackHas;
+	var _stackHas = stackHas$1;
+
+	var baseGetTag$3 = _baseGetTag,
+	    isObject$1 = isObject_1;
 
 	/** `Object#toString` result references. */
 	var asyncTag = '[object AsyncFunction]',
@@ -1816,26 +1917,30 @@ var SargassoModule = (function (exports) {
 	 * _.isFunction(/abc/);
 	 * // => false
 	 */
-	function isFunction(value) {
-	  if (!isObject_1(value)) {
+	function isFunction$2(value) {
+	  if (!isObject$1(value)) {
 	    return false;
 	  }
 	  // The use of `Object#toString` avoids issues with the `typeof` operator
 	  // in Safari 9 which returns 'object' for typed arrays and other constructors.
-	  var tag = _baseGetTag(value);
+	  var tag = baseGetTag$3(value);
 	  return tag == funcTag$1 || tag == genTag || tag == asyncTag || tag == proxyTag;
 	}
 
-	var isFunction_1 = isFunction;
+	var isFunction_1 = isFunction$2;
+
+	var root$6 = _root;
 
 	/** Used to detect overreaching core-js shims. */
-	var coreJsData = _root['__core-js_shared__'];
+	var coreJsData$1 = root$6['__core-js_shared__'];
 
-	var _coreJsData = coreJsData;
+	var _coreJsData = coreJsData$1;
+
+	var coreJsData = _coreJsData;
 
 	/** Used to detect methods masquerading as native. */
 	var maskSrcKey = (function() {
-	  var uid = /[^.]+$/.exec(_coreJsData && _coreJsData.keys && _coreJsData.keys.IE_PROTO || '');
+	  var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
 	  return uid ? ('Symbol(src)_1.' + uid) : '';
 	}());
 
@@ -1846,13 +1951,14 @@ var SargassoModule = (function (exports) {
 	 * @param {Function} func The function to check.
 	 * @returns {boolean} Returns `true` if `func` is masked, else `false`.
 	 */
-	function isMasked(func) {
+	function isMasked$1(func) {
 	  return !!maskSrcKey && (maskSrcKey in func);
 	}
 
-	var _isMasked = isMasked;
+	var _isMasked = isMasked$1;
 
 	/** Used for built-in method references. */
+
 	var funcProto$1 = Function.prototype;
 
 	/** Used to resolve the decompiled source of functions. */
@@ -1865,7 +1971,7 @@ var SargassoModule = (function (exports) {
 	 * @param {Function} func The function to convert.
 	 * @returns {string} Returns the source code.
 	 */
-	function toSource(func) {
+	function toSource$2(func) {
 	  if (func != null) {
 	    try {
 	      return funcToString$1.call(func);
@@ -1877,7 +1983,12 @@ var SargassoModule = (function (exports) {
 	  return '';
 	}
 
-	var _toSource = toSource;
+	var _toSource = toSource$2;
+
+	var isFunction$1 = isFunction_1,
+	    isMasked = _isMasked,
+	    isObject = isObject_1,
+	    toSource$1 = _toSource;
 
 	/**
 	 * Used to match `RegExp`
@@ -1912,15 +2023,15 @@ var SargassoModule = (function (exports) {
 	 * @returns {boolean} Returns `true` if `value` is a native function,
 	 *  else `false`.
 	 */
-	function baseIsNative(value) {
-	  if (!isObject_1(value) || _isMasked(value)) {
+	function baseIsNative$1(value) {
+	  if (!isObject(value) || isMasked(value)) {
 	    return false;
 	  }
-	  var pattern = isFunction_1(value) ? reIsNative : reIsHostCtor;
-	  return pattern.test(_toSource(value));
+	  var pattern = isFunction$1(value) ? reIsNative : reIsHostCtor;
+	  return pattern.test(toSource$1(value));
 	}
 
-	var _baseIsNative = baseIsNative;
+	var _baseIsNative = baseIsNative$1;
 
 	/**
 	 * Gets the value at `key` of `object`.
@@ -1930,11 +2041,15 @@ var SargassoModule = (function (exports) {
 	 * @param {string} key The key of the property to get.
 	 * @returns {*} Returns the property value.
 	 */
-	function getValue(object, key) {
+
+	function getValue$1(object, key) {
 	  return object == null ? undefined : object[key];
 	}
 
-	var _getValue = getValue;
+	var _getValue = getValue$1;
+
+	var baseIsNative = _baseIsNative,
+	    getValue = _getValue;
 
 	/**
 	 * Gets the native function at `key` of `object`.
@@ -1944,22 +2059,29 @@ var SargassoModule = (function (exports) {
 	 * @param {string} key The key of the method to get.
 	 * @returns {*} Returns the function if it's native, else `undefined`.
 	 */
-	function getNative(object, key) {
-	  var value = _getValue(object, key);
-	  return _baseIsNative(value) ? value : undefined;
+	function getNative$6(object, key) {
+	  var value = getValue(object, key);
+	  return baseIsNative(value) ? value : undefined;
 	}
 
-	var _getNative = getNative;
+	var _getNative = getNative$6;
+
+	var getNative$5 = _getNative,
+	    root$5 = _root;
 
 	/* Built-in method references that are verified to be native. */
-	var Map = _getNative(_root, 'Map');
+	var Map$3 = getNative$5(root$5, 'Map');
 
-	var _Map = Map;
+	var _Map = Map$3;
+
+	var getNative$4 = _getNative;
 
 	/* Built-in method references that are verified to be native. */
-	var nativeCreate = _getNative(Object, 'create');
+	var nativeCreate$4 = getNative$4(Object, 'create');
 
-	var _nativeCreate = nativeCreate;
+	var _nativeCreate = nativeCreate$4;
+
+	var nativeCreate$3 = _nativeCreate;
 
 	/**
 	 * Removes all key-value entries from the hash.
@@ -1968,12 +2090,12 @@ var SargassoModule = (function (exports) {
 	 * @name clear
 	 * @memberOf Hash
 	 */
-	function hashClear() {
-	  this.__data__ = _nativeCreate ? _nativeCreate(null) : {};
+	function hashClear$1() {
+	  this.__data__ = nativeCreate$3 ? nativeCreate$3(null) : {};
 	  this.size = 0;
 	}
 
-	var _hashClear = hashClear;
+	var _hashClear = hashClear$1;
 
 	/**
 	 * Removes `key` and its value from the hash.
@@ -1985,13 +2107,16 @@ var SargassoModule = (function (exports) {
 	 * @param {string} key The key of the value to remove.
 	 * @returns {boolean} Returns `true` if the entry was removed, else `false`.
 	 */
-	function hashDelete(key) {
+
+	function hashDelete$1(key) {
 	  var result = this.has(key) && delete this.__data__[key];
 	  this.size -= result ? 1 : 0;
 	  return result;
 	}
 
-	var _hashDelete = hashDelete;
+	var _hashDelete = hashDelete$1;
+
+	var nativeCreate$2 = _nativeCreate;
 
 	/** Used to stand-in for `undefined` hash values. */
 	var HASH_UNDEFINED$2 = '__lodash_hash_undefined__';
@@ -2011,16 +2136,18 @@ var SargassoModule = (function (exports) {
 	 * @param {string} key The key of the value to get.
 	 * @returns {*} Returns the entry value.
 	 */
-	function hashGet(key) {
+	function hashGet$1(key) {
 	  var data = this.__data__;
-	  if (_nativeCreate) {
+	  if (nativeCreate$2) {
 	    var result = data[key];
 	    return result === HASH_UNDEFINED$2 ? undefined : result;
 	  }
 	  return hasOwnProperty$6.call(data, key) ? data[key] : undefined;
 	}
 
-	var _hashGet = hashGet;
+	var _hashGet = hashGet$1;
+
+	var nativeCreate$1 = _nativeCreate;
 
 	/** Used for built-in method references. */
 	var objectProto$7 = Object.prototype;
@@ -2037,12 +2164,14 @@ var SargassoModule = (function (exports) {
 	 * @param {string} key The key of the entry to check.
 	 * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
 	 */
-	function hashHas(key) {
+	function hashHas$1(key) {
 	  var data = this.__data__;
-	  return _nativeCreate ? (data[key] !== undefined) : hasOwnProperty$5.call(data, key);
+	  return nativeCreate$1 ? (data[key] !== undefined) : hasOwnProperty$5.call(data, key);
 	}
 
-	var _hashHas = hashHas;
+	var _hashHas = hashHas$1;
+
+	var nativeCreate = _nativeCreate;
 
 	/** Used to stand-in for `undefined` hash values. */
 	var HASH_UNDEFINED$1 = '__lodash_hash_undefined__';
@@ -2057,14 +2186,20 @@ var SargassoModule = (function (exports) {
 	 * @param {*} value The value to set.
 	 * @returns {Object} Returns the hash instance.
 	 */
-	function hashSet(key, value) {
+	function hashSet$1(key, value) {
 	  var data = this.__data__;
 	  this.size += this.has(key) ? 0 : 1;
-	  data[key] = (_nativeCreate && value === undefined) ? HASH_UNDEFINED$1 : value;
+	  data[key] = (nativeCreate && value === undefined) ? HASH_UNDEFINED$1 : value;
 	  return this;
 	}
 
-	var _hashSet = hashSet;
+	var _hashSet = hashSet$1;
+
+	var hashClear = _hashClear,
+	    hashDelete = _hashDelete,
+	    hashGet = _hashGet,
+	    hashHas = _hashHas,
+	    hashSet = _hashSet;
 
 	/**
 	 * Creates a hash object.
@@ -2073,7 +2208,7 @@ var SargassoModule = (function (exports) {
 	 * @constructor
 	 * @param {Array} [entries] The key-value pairs to cache.
 	 */
-	function Hash(entries) {
+	function Hash$1(entries) {
 	  var index = -1,
 	      length = entries == null ? 0 : entries.length;
 
@@ -2085,13 +2220,17 @@ var SargassoModule = (function (exports) {
 	}
 
 	// Add methods to `Hash`.
-	Hash.prototype.clear = _hashClear;
-	Hash.prototype['delete'] = _hashDelete;
-	Hash.prototype.get = _hashGet;
-	Hash.prototype.has = _hashHas;
-	Hash.prototype.set = _hashSet;
+	Hash$1.prototype.clear = hashClear;
+	Hash$1.prototype['delete'] = hashDelete;
+	Hash$1.prototype.get = hashGet;
+	Hash$1.prototype.has = hashHas;
+	Hash$1.prototype.set = hashSet;
 
-	var _Hash = Hash;
+	var _Hash = Hash$1;
+
+	var Hash = _Hash,
+	    ListCache$2 = _ListCache,
+	    Map$2 = _Map;
 
 	/**
 	 * Removes all key-value entries from the map.
@@ -2100,16 +2239,16 @@ var SargassoModule = (function (exports) {
 	 * @name clear
 	 * @memberOf MapCache
 	 */
-	function mapCacheClear() {
+	function mapCacheClear$1() {
 	  this.size = 0;
 	  this.__data__ = {
-	    'hash': new _Hash,
-	    'map': new (_Map || _ListCache),
-	    'string': new _Hash
+	    'hash': new Hash,
+	    'map': new (Map$2 || ListCache$2),
+	    'string': new Hash
 	  };
 	}
 
-	var _mapCacheClear = mapCacheClear;
+	var _mapCacheClear = mapCacheClear$1;
 
 	/**
 	 * Checks if `value` is suitable for use as unique object key.
@@ -2118,14 +2257,17 @@ var SargassoModule = (function (exports) {
 	 * @param {*} value The value to check.
 	 * @returns {boolean} Returns `true` if `value` is suitable, else `false`.
 	 */
-	function isKeyable(value) {
+
+	function isKeyable$1(value) {
 	  var type = typeof value;
 	  return (type == 'string' || type == 'number' || type == 'symbol' || type == 'boolean')
 	    ? (value !== '__proto__')
 	    : (value === null);
 	}
 
-	var _isKeyable = isKeyable;
+	var _isKeyable = isKeyable$1;
+
+	var isKeyable = _isKeyable;
 
 	/**
 	 * Gets the data for `map`.
@@ -2135,14 +2277,16 @@ var SargassoModule = (function (exports) {
 	 * @param {string} key The reference key.
 	 * @returns {*} Returns the map data.
 	 */
-	function getMapData(map, key) {
+	function getMapData$4(map, key) {
 	  var data = map.__data__;
-	  return _isKeyable(key)
+	  return isKeyable(key)
 	    ? data[typeof key == 'string' ? 'string' : 'hash']
 	    : data.map;
 	}
 
-	var _getMapData = getMapData;
+	var _getMapData = getMapData$4;
+
+	var getMapData$3 = _getMapData;
 
 	/**
 	 * Removes `key` and its value from the map.
@@ -2153,13 +2297,15 @@ var SargassoModule = (function (exports) {
 	 * @param {string} key The key of the value to remove.
 	 * @returns {boolean} Returns `true` if the entry was removed, else `false`.
 	 */
-	function mapCacheDelete(key) {
-	  var result = _getMapData(this, key)['delete'](key);
+	function mapCacheDelete$1(key) {
+	  var result = getMapData$3(this, key)['delete'](key);
 	  this.size -= result ? 1 : 0;
 	  return result;
 	}
 
-	var _mapCacheDelete = mapCacheDelete;
+	var _mapCacheDelete = mapCacheDelete$1;
+
+	var getMapData$2 = _getMapData;
 
 	/**
 	 * Gets the map value for `key`.
@@ -2170,11 +2316,13 @@ var SargassoModule = (function (exports) {
 	 * @param {string} key The key of the value to get.
 	 * @returns {*} Returns the entry value.
 	 */
-	function mapCacheGet(key) {
-	  return _getMapData(this, key).get(key);
+	function mapCacheGet$1(key) {
+	  return getMapData$2(this, key).get(key);
 	}
 
-	var _mapCacheGet = mapCacheGet;
+	var _mapCacheGet = mapCacheGet$1;
+
+	var getMapData$1 = _getMapData;
 
 	/**
 	 * Checks if a map value for `key` exists.
@@ -2185,11 +2333,13 @@ var SargassoModule = (function (exports) {
 	 * @param {string} key The key of the entry to check.
 	 * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
 	 */
-	function mapCacheHas(key) {
-	  return _getMapData(this, key).has(key);
+	function mapCacheHas$1(key) {
+	  return getMapData$1(this, key).has(key);
 	}
 
-	var _mapCacheHas = mapCacheHas;
+	var _mapCacheHas = mapCacheHas$1;
+
+	var getMapData = _getMapData;
 
 	/**
 	 * Sets the map `key` to `value`.
@@ -2201,8 +2351,8 @@ var SargassoModule = (function (exports) {
 	 * @param {*} value The value to set.
 	 * @returns {Object} Returns the map cache instance.
 	 */
-	function mapCacheSet(key, value) {
-	  var data = _getMapData(this, key),
+	function mapCacheSet$1(key, value) {
+	  var data = getMapData(this, key),
 	      size = data.size;
 
 	  data.set(key, value);
@@ -2210,7 +2360,13 @@ var SargassoModule = (function (exports) {
 	  return this;
 	}
 
-	var _mapCacheSet = mapCacheSet;
+	var _mapCacheSet = mapCacheSet$1;
+
+	var mapCacheClear = _mapCacheClear,
+	    mapCacheDelete = _mapCacheDelete,
+	    mapCacheGet = _mapCacheGet,
+	    mapCacheHas = _mapCacheHas,
+	    mapCacheSet = _mapCacheSet;
 
 	/**
 	 * Creates a map cache object to store key-value pairs.
@@ -2219,7 +2375,7 @@ var SargassoModule = (function (exports) {
 	 * @constructor
 	 * @param {Array} [entries] The key-value pairs to cache.
 	 */
-	function MapCache(entries) {
+	function MapCache$2(entries) {
 	  var index = -1,
 	      length = entries == null ? 0 : entries.length;
 
@@ -2231,13 +2387,17 @@ var SargassoModule = (function (exports) {
 	}
 
 	// Add methods to `MapCache`.
-	MapCache.prototype.clear = _mapCacheClear;
-	MapCache.prototype['delete'] = _mapCacheDelete;
-	MapCache.prototype.get = _mapCacheGet;
-	MapCache.prototype.has = _mapCacheHas;
-	MapCache.prototype.set = _mapCacheSet;
+	MapCache$2.prototype.clear = mapCacheClear;
+	MapCache$2.prototype['delete'] = mapCacheDelete;
+	MapCache$2.prototype.get = mapCacheGet;
+	MapCache$2.prototype.has = mapCacheHas;
+	MapCache$2.prototype.set = mapCacheSet;
 
-	var _MapCache = MapCache;
+	var _MapCache = MapCache$2;
+
+	var ListCache$1 = _ListCache,
+	    Map$1 = _Map,
+	    MapCache$1 = _MapCache;
 
 	/** Used as the size to enable large array optimizations. */
 	var LARGE_ARRAY_SIZE = 200;
@@ -2252,23 +2412,30 @@ var SargassoModule = (function (exports) {
 	 * @param {*} value The value to set.
 	 * @returns {Object} Returns the stack cache instance.
 	 */
-	function stackSet(key, value) {
+	function stackSet$1(key, value) {
 	  var data = this.__data__;
-	  if (data instanceof _ListCache) {
+	  if (data instanceof ListCache$1) {
 	    var pairs = data.__data__;
-	    if (!_Map || (pairs.length < LARGE_ARRAY_SIZE - 1)) {
+	    if (!Map$1 || (pairs.length < LARGE_ARRAY_SIZE - 1)) {
 	      pairs.push([key, value]);
 	      this.size = ++data.size;
 	      return this;
 	    }
-	    data = this.__data__ = new _MapCache(pairs);
+	    data = this.__data__ = new MapCache$1(pairs);
 	  }
 	  data.set(key, value);
 	  this.size = data.size;
 	  return this;
 	}
 
-	var _stackSet = stackSet;
+	var _stackSet = stackSet$1;
+
+	var ListCache = _ListCache,
+	    stackClear = _stackClear,
+	    stackDelete = _stackDelete,
+	    stackGet = _stackGet,
+	    stackHas = _stackHas,
+	    stackSet = _stackSet;
 
 	/**
 	 * Creates a stack cache object to store key-value pairs.
@@ -2277,21 +2444,22 @@ var SargassoModule = (function (exports) {
 	 * @constructor
 	 * @param {Array} [entries] The key-value pairs to cache.
 	 */
-	function Stack(entries) {
-	  var data = this.__data__ = new _ListCache(entries);
+	function Stack$1(entries) {
+	  var data = this.__data__ = new ListCache(entries);
 	  this.size = data.size;
 	}
 
 	// Add methods to `Stack`.
-	Stack.prototype.clear = _stackClear;
-	Stack.prototype['delete'] = _stackDelete;
-	Stack.prototype.get = _stackGet;
-	Stack.prototype.has = _stackHas;
-	Stack.prototype.set = _stackSet;
+	Stack$1.prototype.clear = stackClear;
+	Stack$1.prototype['delete'] = stackDelete;
+	Stack$1.prototype.get = stackGet;
+	Stack$1.prototype.has = stackHas;
+	Stack$1.prototype.set = stackSet;
 
-	var _Stack = Stack;
+	var _Stack = Stack$1;
 
 	/** Used to stand-in for `undefined` hash values. */
+
 	var HASH_UNDEFINED = '__lodash_hash_undefined__';
 
 	/**
@@ -2304,12 +2472,12 @@ var SargassoModule = (function (exports) {
 	 * @param {*} value The value to cache.
 	 * @returns {Object} Returns the cache instance.
 	 */
-	function setCacheAdd(value) {
+	function setCacheAdd$1(value) {
 	  this.__data__.set(value, HASH_UNDEFINED);
 	  return this;
 	}
 
-	var _setCacheAdd = setCacheAdd;
+	var _setCacheAdd = setCacheAdd$1;
 
 	/**
 	 * Checks if `value` is in the array cache.
@@ -2320,11 +2488,16 @@ var SargassoModule = (function (exports) {
 	 * @param {*} value The value to search for.
 	 * @returns {number} Returns `true` if `value` is found, else `false`.
 	 */
-	function setCacheHas(value) {
+
+	function setCacheHas$1(value) {
 	  return this.__data__.has(value);
 	}
 
-	var _setCacheHas = setCacheHas;
+	var _setCacheHas = setCacheHas$1;
+
+	var MapCache = _MapCache,
+	    setCacheAdd = _setCacheAdd,
+	    setCacheHas = _setCacheHas;
 
 	/**
 	 *
@@ -2334,21 +2507,21 @@ var SargassoModule = (function (exports) {
 	 * @constructor
 	 * @param {Array} [values] The values to cache.
 	 */
-	function SetCache(values) {
+	function SetCache$1(values) {
 	  var index = -1,
 	      length = values == null ? 0 : values.length;
 
-	  this.__data__ = new _MapCache;
+	  this.__data__ = new MapCache;
 	  while (++index < length) {
 	    this.add(values[index]);
 	  }
 	}
 
 	// Add methods to `SetCache`.
-	SetCache.prototype.add = SetCache.prototype.push = _setCacheAdd;
-	SetCache.prototype.has = _setCacheHas;
+	SetCache$1.prototype.add = SetCache$1.prototype.push = setCacheAdd;
+	SetCache$1.prototype.has = setCacheHas;
 
-	var _SetCache = SetCache;
+	var _SetCache = SetCache$1;
 
 	/**
 	 * A specialized version of `_.some` for arrays without support for iteratee
@@ -2360,7 +2533,8 @@ var SargassoModule = (function (exports) {
 	 * @returns {boolean} Returns `true` if any element passes the predicate check,
 	 *  else `false`.
 	 */
-	function arraySome(array, predicate) {
+
+	function arraySome$1(array, predicate) {
 	  var index = -1,
 	      length = array == null ? 0 : array.length;
 
@@ -2372,7 +2546,7 @@ var SargassoModule = (function (exports) {
 	  return false;
 	}
 
-	var _arraySome = arraySome;
+	var _arraySome = arraySome$1;
 
 	/**
 	 * Checks if a `cache` value for `key` exists.
@@ -2382,11 +2556,16 @@ var SargassoModule = (function (exports) {
 	 * @param {string} key The key of the entry to check.
 	 * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
 	 */
-	function cacheHas(cache, key) {
+
+	function cacheHas$1(cache, key) {
 	  return cache.has(key);
 	}
 
-	var _cacheHas = cacheHas;
+	var _cacheHas = cacheHas$1;
+
+	var SetCache = _SetCache,
+	    arraySome = _arraySome,
+	    cacheHas = _cacheHas;
 
 	/** Used to compose bitmasks for value comparisons. */
 	var COMPARE_PARTIAL_FLAG$3 = 1,
@@ -2405,7 +2584,7 @@ var SargassoModule = (function (exports) {
 	 * @param {Object} stack Tracks traversed `array` and `other` objects.
 	 * @returns {boolean} Returns `true` if the arrays are equivalent, else `false`.
 	 */
-	function equalArrays(array, other, bitmask, customizer, equalFunc, stack) {
+	function equalArrays$2(array, other, bitmask, customizer, equalFunc, stack) {
 	  var isPartial = bitmask & COMPARE_PARTIAL_FLAG$3,
 	      arrLength = array.length,
 	      othLength = other.length;
@@ -2421,7 +2600,7 @@ var SargassoModule = (function (exports) {
 	  }
 	  var index = -1,
 	      result = true,
-	      seen = (bitmask & COMPARE_UNORDERED_FLAG$1) ? new _SetCache : undefined;
+	      seen = (bitmask & COMPARE_UNORDERED_FLAG$1) ? new SetCache : undefined;
 
 	  stack.set(array, other);
 	  stack.set(other, array);
@@ -2445,8 +2624,8 @@ var SargassoModule = (function (exports) {
 	    }
 	    // Recursively compare arrays (susceptible to call stack limits).
 	    if (seen) {
-	      if (!_arraySome(other, function(othValue, othIndex) {
-	            if (!_cacheHas(seen, othIndex) &&
+	      if (!arraySome(other, function(othValue, othIndex) {
+	            if (!cacheHas(seen, othIndex) &&
 	                (arrValue === othValue || equalFunc(arrValue, othValue, bitmask, customizer, stack))) {
 	              return seen.push(othIndex);
 	            }
@@ -2467,12 +2646,14 @@ var SargassoModule = (function (exports) {
 	  return result;
 	}
 
-	var _equalArrays = equalArrays;
+	var _equalArrays = equalArrays$2;
+
+	var root$4 = _root;
 
 	/** Built-in value references. */
-	var Uint8Array = _root.Uint8Array;
+	var Uint8Array$1 = root$4.Uint8Array;
 
-	var _Uint8Array = Uint8Array;
+	var _Uint8Array = Uint8Array$1;
 
 	/**
 	 * Converts `map` to its key-value pairs.
@@ -2481,7 +2662,8 @@ var SargassoModule = (function (exports) {
 	 * @param {Object} map The map to convert.
 	 * @returns {Array} Returns the key-value pairs.
 	 */
-	function mapToArray(map) {
+
+	function mapToArray$1(map) {
 	  var index = -1,
 	      result = Array(map.size);
 
@@ -2491,7 +2673,7 @@ var SargassoModule = (function (exports) {
 	  return result;
 	}
 
-	var _mapToArray = mapToArray;
+	var _mapToArray = mapToArray$1;
 
 	/**
 	 * Converts `set` to an array of its values.
@@ -2500,7 +2682,8 @@ var SargassoModule = (function (exports) {
 	 * @param {Object} set The set to convert.
 	 * @returns {Array} Returns the values.
 	 */
-	function setToArray(set) {
+
+	function setToArray$1(set) {
 	  var index = -1,
 	      result = Array(set.size);
 
@@ -2510,7 +2693,14 @@ var SargassoModule = (function (exports) {
 	  return result;
 	}
 
-	var _setToArray = setToArray;
+	var _setToArray = setToArray$1;
+
+	var Symbol = _Symbol,
+	    Uint8Array = _Uint8Array,
+	    eq = eq_1,
+	    equalArrays$1 = _equalArrays,
+	    mapToArray = _mapToArray,
+	    setToArray = _setToArray;
 
 	/** Used to compose bitmasks for value comparisons. */
 	var COMPARE_PARTIAL_FLAG$2 = 1,
@@ -2531,7 +2721,7 @@ var SargassoModule = (function (exports) {
 	    dataViewTag$2 = '[object DataView]';
 
 	/** Used to convert symbols to primitives and strings. */
-	var symbolProto = _Symbol ? _Symbol.prototype : undefined,
+	var symbolProto = Symbol ? Symbol.prototype : undefined,
 	    symbolValueOf = symbolProto ? symbolProto.valueOf : undefined;
 
 	/**
@@ -2551,7 +2741,7 @@ var SargassoModule = (function (exports) {
 	 * @param {Object} stack Tracks traversed `object` and `other` objects.
 	 * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
 	 */
-	function equalByTag(object, other, tag, bitmask, customizer, equalFunc, stack) {
+	function equalByTag$1(object, other, tag, bitmask, customizer, equalFunc, stack) {
 	  switch (tag) {
 	    case dataViewTag$2:
 	      if ((object.byteLength != other.byteLength) ||
@@ -2563,7 +2753,7 @@ var SargassoModule = (function (exports) {
 
 	    case arrayBufferTag$1:
 	      if ((object.byteLength != other.byteLength) ||
-	          !equalFunc(new _Uint8Array(object), new _Uint8Array(other))) {
+	          !equalFunc(new Uint8Array(object), new Uint8Array(other))) {
 	        return false;
 	      }
 	      return true;
@@ -2573,7 +2763,7 @@ var SargassoModule = (function (exports) {
 	    case numberTag$1:
 	      // Coerce booleans to `1` or `0` and dates to milliseconds.
 	      // Invalid dates are coerced to `NaN`.
-	      return eq_1(+object, +other);
+	      return eq(+object, +other);
 
 	    case errorTag$1:
 	      return object.name == other.name && object.message == other.message;
@@ -2586,11 +2776,11 @@ var SargassoModule = (function (exports) {
 	      return object == (other + '');
 
 	    case mapTag$2:
-	      var convert = _mapToArray;
+	      var convert = mapToArray;
 
 	    case setTag$2:
 	      var isPartial = bitmask & COMPARE_PARTIAL_FLAG$2;
-	      convert || (convert = _setToArray);
+	      convert || (convert = setToArray);
 
 	      if (object.size != other.size && !isPartial) {
 	        return false;
@@ -2604,7 +2794,7 @@ var SargassoModule = (function (exports) {
 
 	      // Recursively compare objects (susceptible to call stack limits).
 	      stack.set(object, other);
-	      var result = _equalArrays(convert(object), convert(other), bitmask, customizer, equalFunc, stack);
+	      var result = equalArrays$1(convert(object), convert(other), bitmask, customizer, equalFunc, stack);
 	      stack['delete'](object);
 	      return result;
 
@@ -2616,7 +2806,7 @@ var SargassoModule = (function (exports) {
 	  return false;
 	}
 
-	var _equalByTag = equalByTag;
+	var _equalByTag = equalByTag$1;
 
 	/**
 	 * Appends the elements of `values` to `array`.
@@ -2626,7 +2816,8 @@ var SargassoModule = (function (exports) {
 	 * @param {Array} values The values to append.
 	 * @returns {Array} Returns `array`.
 	 */
-	function arrayPush(array, values) {
+
+	function arrayPush$1(array, values) {
 	  var index = -1,
 	      length = values.length,
 	      offset = array.length;
@@ -2637,7 +2828,10 @@ var SargassoModule = (function (exports) {
 	  return array;
 	}
 
-	var _arrayPush = arrayPush;
+	var _arrayPush = arrayPush$1;
+
+	var arrayPush = _arrayPush,
+	    isArray$2 = isArray_1;
 
 	/**
 	 * The base implementation of `getAllKeys` and `getAllKeysIn` which uses
@@ -2650,12 +2844,12 @@ var SargassoModule = (function (exports) {
 	 * @param {Function} symbolsFunc The function to get the symbols of `object`.
 	 * @returns {Array} Returns the array of property names and symbols.
 	 */
-	function baseGetAllKeys(object, keysFunc, symbolsFunc) {
+	function baseGetAllKeys$1(object, keysFunc, symbolsFunc) {
 	  var result = keysFunc(object);
-	  return isArray_1(object) ? result : _arrayPush(result, symbolsFunc(object));
+	  return isArray$2(object) ? result : arrayPush(result, symbolsFunc(object));
 	}
 
-	var _baseGetAllKeys = baseGetAllKeys;
+	var _baseGetAllKeys = baseGetAllKeys$1;
 
 	/**
 	 * A specialized version of `_.filter` for arrays without support for
@@ -2666,7 +2860,8 @@ var SargassoModule = (function (exports) {
 	 * @param {Function} predicate The function invoked per iteration.
 	 * @returns {Array} Returns the new filtered array.
 	 */
-	function arrayFilter(array, predicate) {
+
+	function arrayFilter$1(array, predicate) {
 	  var index = -1,
 	      length = array == null ? 0 : array.length,
 	      resIndex = 0,
@@ -2681,7 +2876,7 @@ var SargassoModule = (function (exports) {
 	  return result;
 	}
 
-	var _arrayFilter = arrayFilter;
+	var _arrayFilter = arrayFilter$1;
 
 	/**
 	 * This method returns a new empty array.
@@ -2701,11 +2896,15 @@ var SargassoModule = (function (exports) {
 	 * console.log(arrays[0] === arrays[1]);
 	 * // => false
 	 */
-	function stubArray() {
+
+	function stubArray$1() {
 	  return [];
 	}
 
-	var stubArray_1 = stubArray;
+	var stubArray_1 = stubArray$1;
+
+	var arrayFilter = _arrayFilter,
+	    stubArray = stubArray_1;
 
 	/** Used for built-in method references. */
 	var objectProto$6 = Object.prototype;
@@ -2723,17 +2922,17 @@ var SargassoModule = (function (exports) {
 	 * @param {Object} object The object to query.
 	 * @returns {Array} Returns the array of symbols.
 	 */
-	var getSymbols = !nativeGetSymbols ? stubArray_1 : function(object) {
+	var getSymbols$1 = !nativeGetSymbols ? stubArray : function(object) {
 	  if (object == null) {
 	    return [];
 	  }
 	  object = Object(object);
-	  return _arrayFilter(nativeGetSymbols(object), function(symbol) {
+	  return arrayFilter(nativeGetSymbols(object), function(symbol) {
 	    return propertyIsEnumerable$1.call(object, symbol);
 	  });
 	};
 
-	var _getSymbols = getSymbols;
+	var _getSymbols = getSymbols$1;
 
 	/**
 	 * The base implementation of `_.times` without support for iteratee shorthands
@@ -2744,7 +2943,8 @@ var SargassoModule = (function (exports) {
 	 * @param {Function} iteratee The function invoked per iteration.
 	 * @returns {Array} Returns the array of results.
 	 */
-	function baseTimes(n, iteratee) {
+
+	function baseTimes$1(n, iteratee) {
 	  var index = -1,
 	      result = Array(n);
 
@@ -2754,7 +2954,10 @@ var SargassoModule = (function (exports) {
 	  return result;
 	}
 
-	var _baseTimes = baseTimes;
+	var _baseTimes = baseTimes$1;
+
+	var baseGetTag$2 = _baseGetTag,
+	    isObjectLike$3 = isObjectLike_1;
 
 	/** `Object#toString` result references. */
 	var argsTag$2 = '[object Arguments]';
@@ -2766,11 +2969,14 @@ var SargassoModule = (function (exports) {
 	 * @param {*} value The value to check.
 	 * @returns {boolean} Returns `true` if `value` is an `arguments` object,
 	 */
-	function baseIsArguments(value) {
-	  return isObjectLike_1(value) && _baseGetTag(value) == argsTag$2;
+	function baseIsArguments$1(value) {
+	  return isObjectLike$3(value) && baseGetTag$2(value) == argsTag$2;
 	}
 
-	var _baseIsArguments = baseIsArguments;
+	var _baseIsArguments = baseIsArguments$1;
+
+	var baseIsArguments = _baseIsArguments,
+	    isObjectLike$2 = isObjectLike_1;
 
 	/** Used for built-in method references. */
 	var objectProto$5 = Object.prototype;
@@ -2799,12 +3005,14 @@ var SargassoModule = (function (exports) {
 	 * _.isArguments([1, 2, 3]);
 	 * // => false
 	 */
-	var isArguments = _baseIsArguments(function() { return arguments; }()) ? _baseIsArguments : function(value) {
-	  return isObjectLike_1(value) && hasOwnProperty$4.call(value, 'callee') &&
+	var isArguments$1 = baseIsArguments(function() { return arguments; }()) ? baseIsArguments : function(value) {
+	  return isObjectLike$2(value) && hasOwnProperty$4.call(value, 'callee') &&
 	    !propertyIsEnumerable.call(value, 'callee');
 	};
 
-	var isArguments_1 = isArguments;
+	var isArguments_1 = isArguments$1;
+
+	var isBuffer$2 = {exports: {}};
 
 	/**
 	 * This method returns `false`.
@@ -2819,13 +3027,17 @@ var SargassoModule = (function (exports) {
 	 * _.times(2, _.stubFalse);
 	 * // => [false, false]
 	 */
+
 	function stubFalse() {
 	  return false;
 	}
 
 	var stubFalse_1 = stubFalse;
 
-	var isBuffer_1 = createCommonjsModule(function (module, exports) {
+	(function (module, exports) {
+	var root = _root,
+	    stubFalse = stubFalse_1;
+
 	/** Detect free variable `exports`. */
 	var freeExports = 'object' == 'object' && exports && !exports.nodeType && exports;
 
@@ -2836,7 +3048,7 @@ var SargassoModule = (function (exports) {
 	var moduleExports = freeModule && freeModule.exports === freeExports;
 
 	/** Built-in value references. */
-	var Buffer = moduleExports ? _root.Buffer : undefined;
+	var Buffer = moduleExports ? root.Buffer : undefined;
 
 	/* Built-in method references for those with the same name as other `lodash` methods. */
 	var nativeIsBuffer = Buffer ? Buffer.isBuffer : undefined;
@@ -2858,12 +3070,15 @@ var SargassoModule = (function (exports) {
 	 * _.isBuffer(new Uint8Array(2));
 	 * // => false
 	 */
-	var isBuffer = nativeIsBuffer || stubFalse_1;
+	var isBuffer = nativeIsBuffer || stubFalse;
 
 	module.exports = isBuffer;
-	});
+	}(isBuffer$2, isBuffer$2.exports));
+
+	var isBuffer_1 = isBuffer$2.exports;
 
 	/** Used as references for various `Number` constants. */
+
 	var MAX_SAFE_INTEGER$1 = 9007199254740991;
 
 	/** Used to detect unsigned integer values. */
@@ -2877,7 +3092,7 @@ var SargassoModule = (function (exports) {
 	 * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
 	 * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
 	 */
-	function isIndex(value, length) {
+	function isIndex$1(value, length) {
 	  var type = typeof value;
 	  length = length == null ? MAX_SAFE_INTEGER$1 : length;
 
@@ -2887,9 +3102,10 @@ var SargassoModule = (function (exports) {
 	        (value > -1 && value % 1 == 0 && value < length);
 	}
 
-	var _isIndex = isIndex;
+	var _isIndex = isIndex$1;
 
 	/** Used as references for various `Number` constants. */
+
 	var MAX_SAFE_INTEGER = 9007199254740991;
 
 	/**
@@ -2918,12 +3134,16 @@ var SargassoModule = (function (exports) {
 	 * _.isLength('3');
 	 * // => false
 	 */
-	function isLength(value) {
+	function isLength$2(value) {
 	  return typeof value == 'number' &&
 	    value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
 	}
 
-	var isLength_1 = isLength;
+	var isLength_1 = isLength$2;
+
+	var baseGetTag$1 = _baseGetTag,
+	    isLength$1 = isLength_1,
+	    isObjectLike$1 = isObjectLike_1;
 
 	/** `Object#toString` result references. */
 	var argsTag$1 = '[object Arguments]',
@@ -2975,12 +3195,12 @@ var SargassoModule = (function (exports) {
 	 * @param {*} value The value to check.
 	 * @returns {boolean} Returns `true` if `value` is a typed array, else `false`.
 	 */
-	function baseIsTypedArray(value) {
-	  return isObjectLike_1(value) &&
-	    isLength_1(value.length) && !!typedArrayTags[_baseGetTag(value)];
+	function baseIsTypedArray$1(value) {
+	  return isObjectLike$1(value) &&
+	    isLength$1(value.length) && !!typedArrayTags[baseGetTag$1(value)];
 	}
 
-	var _baseIsTypedArray = baseIsTypedArray;
+	var _baseIsTypedArray = baseIsTypedArray$1;
 
 	/**
 	 * The base implementation of `_.unary` without support for storing metadata.
@@ -2989,15 +3209,20 @@ var SargassoModule = (function (exports) {
 	 * @param {Function} func The function to cap arguments for.
 	 * @returns {Function} Returns the new capped function.
 	 */
-	function baseUnary(func) {
+
+	function baseUnary$1(func) {
 	  return function(value) {
 	    return func(value);
 	  };
 	}
 
-	var _baseUnary = baseUnary;
+	var _baseUnary = baseUnary$1;
 
-	var _nodeUtil = createCommonjsModule(function (module, exports) {
+	var _nodeUtil$1 = {exports: {}};
+
+	(function (module, exports) {
+	var freeGlobal = _freeGlobal;
+
 	/** Detect free variable `exports`. */
 	var freeExports = 'object' == 'object' && exports && !exports.nodeType && exports;
 
@@ -3008,7 +3233,7 @@ var SargassoModule = (function (exports) {
 	var moduleExports = freeModule && freeModule.exports === freeExports;
 
 	/** Detect free variable `process` from Node.js. */
-	var freeProcess = moduleExports && _freeGlobal.process;
+	var freeProcess = moduleExports && freeGlobal.process;
 
 	/** Used to access faster Node.js helpers. */
 	var nodeUtil = (function() {
@@ -3026,10 +3251,16 @@ var SargassoModule = (function (exports) {
 	}());
 
 	module.exports = nodeUtil;
-	});
+	}(_nodeUtil$1, _nodeUtil$1.exports));
+
+	var _nodeUtil = _nodeUtil$1.exports;
+
+	var baseIsTypedArray = _baseIsTypedArray,
+	    baseUnary = _baseUnary,
+	    nodeUtil = _nodeUtil$1.exports;
 
 	/* Node.js helper references. */
-	var nodeIsTypedArray = _nodeUtil && _nodeUtil.isTypedArray;
+	var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
 
 	/**
 	 * Checks if `value` is classified as a typed array.
@@ -3048,9 +3279,16 @@ var SargassoModule = (function (exports) {
 	 * _.isTypedArray([]);
 	 * // => false
 	 */
-	var isTypedArray = nodeIsTypedArray ? _baseUnary(nodeIsTypedArray) : _baseIsTypedArray;
+	var isTypedArray$2 = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedArray;
 
-	var isTypedArray_1 = isTypedArray;
+	var isTypedArray_1 = isTypedArray$2;
+
+	var baseTimes = _baseTimes,
+	    isArguments = isArguments_1,
+	    isArray$1 = isArray_1,
+	    isBuffer$1 = isBuffer$2.exports,
+	    isIndex = _isIndex,
+	    isTypedArray$1 = isTypedArray_1;
 
 	/** Used for built-in method references. */
 	var objectProto$4 = Object.prototype;
@@ -3066,13 +3304,13 @@ var SargassoModule = (function (exports) {
 	 * @param {boolean} inherited Specify returning inherited property names.
 	 * @returns {Array} Returns the array of property names.
 	 */
-	function arrayLikeKeys(value, inherited) {
-	  var isArr = isArray_1(value),
-	      isArg = !isArr && isArguments_1(value),
-	      isBuff = !isArr && !isArg && isBuffer_1(value),
-	      isType = !isArr && !isArg && !isBuff && isTypedArray_1(value),
+	function arrayLikeKeys$1(value, inherited) {
+	  var isArr = isArray$1(value),
+	      isArg = !isArr && isArguments(value),
+	      isBuff = !isArr && !isArg && isBuffer$1(value),
+	      isType = !isArr && !isArg && !isBuff && isTypedArray$1(value),
 	      skipIndexes = isArr || isArg || isBuff || isType,
-	      result = skipIndexes ? _baseTimes(value.length, String) : [],
+	      result = skipIndexes ? baseTimes(value.length, String) : [],
 	      length = result.length;
 
 	  for (var key in value) {
@@ -3085,7 +3323,7 @@ var SargassoModule = (function (exports) {
 	           // PhantomJS 2 has enumerable non-index properties on typed arrays.
 	           (isType && (key == 'buffer' || key == 'byteLength' || key == 'byteOffset')) ||
 	           // Skip index properties.
-	           _isIndex(key, length)
+	           isIndex(key, length)
 	        ))) {
 	      result.push(key);
 	    }
@@ -3093,9 +3331,10 @@ var SargassoModule = (function (exports) {
 	  return result;
 	}
 
-	var _arrayLikeKeys = arrayLikeKeys;
+	var _arrayLikeKeys = arrayLikeKeys$1;
 
 	/** Used for built-in method references. */
+
 	var objectProto$3 = Object.prototype;
 
 	/**
@@ -3105,14 +3344,14 @@ var SargassoModule = (function (exports) {
 	 * @param {*} value The value to check.
 	 * @returns {boolean} Returns `true` if `value` is a prototype, else `false`.
 	 */
-	function isPrototype(value) {
+	function isPrototype$1(value) {
 	  var Ctor = value && value.constructor,
 	      proto = (typeof Ctor == 'function' && Ctor.prototype) || objectProto$3;
 
 	  return value === proto;
 	}
 
-	var _isPrototype = isPrototype;
+	var _isPrototype = isPrototype$1;
 
 	/**
 	 * Creates a unary function that invokes `func` with its argument transformed.
@@ -3122,18 +3361,24 @@ var SargassoModule = (function (exports) {
 	 * @param {Function} transform The argument transform.
 	 * @returns {Function} Returns the new function.
 	 */
-	function overArg(func, transform) {
+
+	function overArg$1(func, transform) {
 	  return function(arg) {
 	    return func(transform(arg));
 	  };
 	}
 
-	var _overArg = overArg;
+	var _overArg = overArg$1;
+
+	var overArg = _overArg;
 
 	/* Built-in method references for those with the same name as other `lodash` methods. */
-	var nativeKeys = _overArg(Object.keys, Object);
+	var nativeKeys$1 = overArg(Object.keys, Object);
 
-	var _nativeKeys = nativeKeys;
+	var _nativeKeys = nativeKeys$1;
+
+	var isPrototype = _isPrototype,
+	    nativeKeys = _nativeKeys;
 
 	/** Used for built-in method references. */
 	var objectProto$2 = Object.prototype;
@@ -3148,9 +3393,9 @@ var SargassoModule = (function (exports) {
 	 * @param {Object} object The object to query.
 	 * @returns {Array} Returns the array of property names.
 	 */
-	function baseKeys(object) {
-	  if (!_isPrototype(object)) {
-	    return _nativeKeys(object);
+	function baseKeys$1(object) {
+	  if (!isPrototype(object)) {
+	    return nativeKeys(object);
 	  }
 	  var result = [];
 	  for (var key in Object(object)) {
@@ -3161,7 +3406,10 @@ var SargassoModule = (function (exports) {
 	  return result;
 	}
 
-	var _baseKeys = baseKeys;
+	var _baseKeys = baseKeys$1;
+
+	var isFunction = isFunction_1,
+	    isLength = isLength_1;
 
 	/**
 	 * Checks if `value` is array-like. A value is considered array-like if it's
@@ -3188,11 +3436,15 @@ var SargassoModule = (function (exports) {
 	 * _.isArrayLike(_.noop);
 	 * // => false
 	 */
-	function isArrayLike(value) {
-	  return value != null && isLength_1(value.length) && !isFunction_1(value);
+	function isArrayLike$1(value) {
+	  return value != null && isLength(value.length) && !isFunction(value);
 	}
 
-	var isArrayLike_1 = isArrayLike;
+	var isArrayLike_1 = isArrayLike$1;
+
+	var arrayLikeKeys = _arrayLikeKeys,
+	    baseKeys = _baseKeys,
+	    isArrayLike = isArrayLike_1;
 
 	/**
 	 * Creates an array of the own enumerable property names of `object`.
@@ -3222,11 +3474,15 @@ var SargassoModule = (function (exports) {
 	 * _.keys('hi');
 	 * // => ['0', '1']
 	 */
-	function keys(object) {
-	  return isArrayLike_1(object) ? _arrayLikeKeys(object) : _baseKeys(object);
+	function keys$1(object) {
+	  return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
 	}
 
-	var keys_1 = keys;
+	var keys_1 = keys$1;
+
+	var baseGetAllKeys = _baseGetAllKeys,
+	    getSymbols = _getSymbols,
+	    keys = keys_1;
 
 	/**
 	 * Creates an array of own enumerable property names and symbols of `object`.
@@ -3235,11 +3491,13 @@ var SargassoModule = (function (exports) {
 	 * @param {Object} object The object to query.
 	 * @returns {Array} Returns the array of property names and symbols.
 	 */
-	function getAllKeys(object) {
-	  return _baseGetAllKeys(object, keys_1, _getSymbols);
+	function getAllKeys$1(object) {
+	  return baseGetAllKeys(object, keys, getSymbols);
 	}
 
-	var _getAllKeys = getAllKeys;
+	var _getAllKeys = getAllKeys$1;
+
+	var getAllKeys = _getAllKeys;
 
 	/** Used to compose bitmasks for value comparisons. */
 	var COMPARE_PARTIAL_FLAG$1 = 1;
@@ -3263,11 +3521,11 @@ var SargassoModule = (function (exports) {
 	 * @param {Object} stack Tracks traversed `object` and `other` objects.
 	 * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
 	 */
-	function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
+	function equalObjects$1(object, other, bitmask, customizer, equalFunc, stack) {
 	  var isPartial = bitmask & COMPARE_PARTIAL_FLAG$1,
-	      objProps = _getAllKeys(object),
+	      objProps = getAllKeys(object),
 	      objLength = objProps.length,
-	      othProps = _getAllKeys(other),
+	      othProps = getAllKeys(other),
 	      othLength = othProps.length;
 
 	  if (objLength != othLength && !isPartial) {
@@ -3328,27 +3586,47 @@ var SargassoModule = (function (exports) {
 	  return result;
 	}
 
-	var _equalObjects = equalObjects;
+	var _equalObjects = equalObjects$1;
+
+	var getNative$3 = _getNative,
+	    root$3 = _root;
 
 	/* Built-in method references that are verified to be native. */
-	var DataView = _getNative(_root, 'DataView');
+	var DataView$1 = getNative$3(root$3, 'DataView');
 
-	var _DataView = DataView;
+	var _DataView = DataView$1;
 
-	/* Built-in method references that are verified to be native. */
-	var Promise$1 = _getNative(_root, 'Promise');
-
-	var _Promise = Promise$1;
+	var getNative$2 = _getNative,
+	    root$2 = _root;
 
 	/* Built-in method references that are verified to be native. */
-	var Set = _getNative(_root, 'Set');
+	var Promise$2 = getNative$2(root$2, 'Promise');
 
-	var _Set = Set;
+	var _Promise = Promise$2;
+
+	var getNative$1 = _getNative,
+	    root$1 = _root;
 
 	/* Built-in method references that are verified to be native. */
-	var WeakMap$1 = _getNative(_root, 'WeakMap');
+	var Set$1 = getNative$1(root$1, 'Set');
 
-	var _WeakMap = WeakMap$1;
+	var _Set = Set$1;
+
+	var getNative = _getNative,
+	    root = _root;
+
+	/* Built-in method references that are verified to be native. */
+	var WeakMap$2 = getNative(root, 'WeakMap');
+
+	var _WeakMap = WeakMap$2;
+
+	var DataView = _DataView,
+	    Map = _Map,
+	    Promise$1 = _Promise,
+	    Set = _Set,
+	    WeakMap$1 = _WeakMap,
+	    baseGetTag = _baseGetTag,
+	    toSource = _toSource;
 
 	/** `Object#toString` result references. */
 	var mapTag = '[object Map]',
@@ -3360,11 +3638,11 @@ var SargassoModule = (function (exports) {
 	var dataViewTag = '[object DataView]';
 
 	/** Used to detect maps, sets, and weakmaps. */
-	var dataViewCtorString = _toSource(_DataView),
-	    mapCtorString = _toSource(_Map),
-	    promiseCtorString = _toSource(_Promise),
-	    setCtorString = _toSource(_Set),
-	    weakMapCtorString = _toSource(_WeakMap);
+	var dataViewCtorString = toSource(DataView),
+	    mapCtorString = toSource(Map),
+	    promiseCtorString = toSource(Promise$1),
+	    setCtorString = toSource(Set),
+	    weakMapCtorString = toSource(WeakMap$1);
 
 	/**
 	 * Gets the `toStringTag` of `value`.
@@ -3373,18 +3651,18 @@ var SargassoModule = (function (exports) {
 	 * @param {*} value The value to query.
 	 * @returns {string} Returns the `toStringTag`.
 	 */
-	var getTag = _baseGetTag;
+	var getTag$1 = baseGetTag;
 
 	// Fallback for data views, maps, sets, and weak maps in IE 11 and promises in Node.js < 6.
-	if ((_DataView && getTag(new _DataView(new ArrayBuffer(1))) != dataViewTag) ||
-	    (_Map && getTag(new _Map) != mapTag) ||
-	    (_Promise && getTag(_Promise.resolve()) != promiseTag) ||
-	    (_Set && getTag(new _Set) != setTag) ||
-	    (_WeakMap && getTag(new _WeakMap) != weakMapTag)) {
-	  getTag = function(value) {
-	    var result = _baseGetTag(value),
+	if ((DataView && getTag$1(new DataView(new ArrayBuffer(1))) != dataViewTag) ||
+	    (Map && getTag$1(new Map) != mapTag) ||
+	    (Promise$1 && getTag$1(Promise$1.resolve()) != promiseTag) ||
+	    (Set && getTag$1(new Set) != setTag) ||
+	    (WeakMap$1 && getTag$1(new WeakMap$1) != weakMapTag)) {
+	  getTag$1 = function(value) {
+	    var result = baseGetTag(value),
 	        Ctor = result == objectTag$1 ? value.constructor : undefined,
-	        ctorString = Ctor ? _toSource(Ctor) : '';
+	        ctorString = Ctor ? toSource(Ctor) : '';
 
 	    if (ctorString) {
 	      switch (ctorString) {
@@ -3399,7 +3677,16 @@ var SargassoModule = (function (exports) {
 	  };
 	}
 
-	var _getTag = getTag;
+	var _getTag = getTag$1;
+
+	var Stack = _Stack,
+	    equalArrays = _equalArrays,
+	    equalByTag = _equalByTag,
+	    equalObjects = _equalObjects,
+	    getTag = _getTag,
+	    isArray = isArray_1,
+	    isBuffer = isBuffer$2.exports,
+	    isTypedArray = isTypedArray_1;
 
 	/** Used to compose bitmasks for value comparisons. */
 	var COMPARE_PARTIAL_FLAG = 1;
@@ -3429,11 +3716,11 @@ var SargassoModule = (function (exports) {
 	 * @param {Object} [stack] Tracks traversed `object` and `other` objects.
 	 * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
 	 */
-	function baseIsEqualDeep(object, other, bitmask, customizer, equalFunc, stack) {
-	  var objIsArr = isArray_1(object),
-	      othIsArr = isArray_1(other),
-	      objTag = objIsArr ? arrayTag : _getTag(object),
-	      othTag = othIsArr ? arrayTag : _getTag(other);
+	function baseIsEqualDeep$1(object, other, bitmask, customizer, equalFunc, stack) {
+	  var objIsArr = isArray(object),
+	      othIsArr = isArray(other),
+	      objTag = objIsArr ? arrayTag : getTag(object),
+	      othTag = othIsArr ? arrayTag : getTag(other);
 
 	  objTag = objTag == argsTag ? objectTag : objTag;
 	  othTag = othTag == argsTag ? objectTag : othTag;
@@ -3442,18 +3729,18 @@ var SargassoModule = (function (exports) {
 	      othIsObj = othTag == objectTag,
 	      isSameTag = objTag == othTag;
 
-	  if (isSameTag && isBuffer_1(object)) {
-	    if (!isBuffer_1(other)) {
+	  if (isSameTag && isBuffer(object)) {
+	    if (!isBuffer(other)) {
 	      return false;
 	    }
 	    objIsArr = true;
 	    objIsObj = false;
 	  }
 	  if (isSameTag && !objIsObj) {
-	    stack || (stack = new _Stack);
-	    return (objIsArr || isTypedArray_1(object))
-	      ? _equalArrays(object, other, bitmask, customizer, equalFunc, stack)
-	      : _equalByTag(object, other, objTag, bitmask, customizer, equalFunc, stack);
+	    stack || (stack = new Stack);
+	    return (objIsArr || isTypedArray(object))
+	      ? equalArrays(object, other, bitmask, customizer, equalFunc, stack)
+	      : equalByTag(object, other, objTag, bitmask, customizer, equalFunc, stack);
 	  }
 	  if (!(bitmask & COMPARE_PARTIAL_FLAG)) {
 	    var objIsWrapped = objIsObj && hasOwnProperty.call(object, '__wrapped__'),
@@ -3463,18 +3750,21 @@ var SargassoModule = (function (exports) {
 	      var objUnwrapped = objIsWrapped ? object.value() : object,
 	          othUnwrapped = othIsWrapped ? other.value() : other;
 
-	      stack || (stack = new _Stack);
+	      stack || (stack = new Stack);
 	      return equalFunc(objUnwrapped, othUnwrapped, bitmask, customizer, stack);
 	    }
 	  }
 	  if (!isSameTag) {
 	    return false;
 	  }
-	  stack || (stack = new _Stack);
-	  return _equalObjects(object, other, bitmask, customizer, equalFunc, stack);
+	  stack || (stack = new Stack);
+	  return equalObjects(object, other, bitmask, customizer, equalFunc, stack);
 	}
 
-	var _baseIsEqualDeep = baseIsEqualDeep;
+	var _baseIsEqualDeep = baseIsEqualDeep$1;
+
+	var baseIsEqualDeep = _baseIsEqualDeep,
+	    isObjectLike = isObjectLike_1;
 
 	/**
 	 * The base implementation of `_.isEqual` which supports partial comparisons
@@ -3490,17 +3780,19 @@ var SargassoModule = (function (exports) {
 	 * @param {Object} [stack] Tracks traversed `value` and `other` objects.
 	 * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
 	 */
-	function baseIsEqual(value, other, bitmask, customizer, stack) {
+	function baseIsEqual$1(value, other, bitmask, customizer, stack) {
 	  if (value === other) {
 	    return true;
 	  }
-	  if (value == null || other == null || (!isObjectLike_1(value) && !isObjectLike_1(other))) {
+	  if (value == null || other == null || (!isObjectLike(value) && !isObjectLike(other))) {
 	    return value !== value && other !== other;
 	  }
-	  return _baseIsEqualDeep(value, other, bitmask, customizer, baseIsEqual, stack);
+	  return baseIsEqualDeep(value, other, bitmask, customizer, baseIsEqual$1, stack);
 	}
 
-	var _baseIsEqual = baseIsEqual;
+	var _baseIsEqual = baseIsEqual$1;
+
+	var baseIsEqual = _baseIsEqual;
 
 	/**
 	 * Performs a deep comparison between two values to determine if they are
@@ -3531,7 +3823,7 @@ var SargassoModule = (function (exports) {
 	 * // => false
 	 */
 	function isEqual(value, other) {
-	  return _baseIsEqual(value, other);
+	  return baseIsEqual(value, other);
 	}
 
 	var isEqual_1 = isEqual;
@@ -4153,6 +4445,8 @@ var SargassoModule = (function (exports) {
 	theWorkerWatcher = new WorkerWatcher();
 	theObservableObjectWatcher = new ObservableObjectWatcher();
 
+	var createCompounder = _createCompounder;
+
 	/**
 	 * Converts `string` to
 	 * [kebab case](https://en.wikipedia.org/wiki/Letter_case#Special_case_styles).
@@ -4174,7 +4468,7 @@ var SargassoModule = (function (exports) {
 	 * _.kebabCase('__FOO_BAR__');
 	 * // => 'foo-bar'
 	 */
-	var kebabCase = _createCompounder(function(result, word, index) {
+	var kebabCase = createCompounder(function(result, word, index) {
 	  return result + (index ? '-' : '') + word.toLowerCase();
 	});
 
@@ -5072,6 +5366,8 @@ var SargassoModule = (function (exports) {
 
 	registerSargassoClass('SargassoSupervisor', SargassoSupervisor);
 
+	var esCookie = {};
+
 	"use strict";
 	var __assign = (commonjsGlobal && commonjsGlobal.__assign) || function () {
 	    __assign = Object.assign || function(t) {
@@ -5084,7 +5380,7 @@ var SargassoModule = (function (exports) {
 	    };
 	    return __assign.apply(this, arguments);
 	};
-
+	esCookie.__esModule = true;
 	function stringifyAttribute(name, value) {
 	    if (!value) {
 	        return '';
@@ -5116,7 +5412,7 @@ var SargassoModule = (function (exports) {
 	        .replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent)
 	        + stringifyAttributes(attributes);
 	}
-	var encode_1 = encode;
+	var encode_1 = esCookie.encode = encode;
 	function parse(cookieString) {
 	    var result = {};
 	    var cookies = cookieString ? cookieString.split('; ') : [];
@@ -5137,32 +5433,23 @@ var SargassoModule = (function (exports) {
 	    }
 	    return result;
 	}
-	var parse_1 = parse;
+	var parse_1 = esCookie.parse = parse;
 	function getAll() {
 	    return parse(document.cookie);
 	}
-	var getAll_1 = getAll;
+	var getAll_1 = esCookie.getAll = getAll;
 	function get(name) {
 	    return getAll()[name];
 	}
-	var get_1 = get;
+	var get_1 = esCookie.get = get;
 	function set(name, value, attributes) {
 	    document.cookie = encode(name, value, __assign({ path: '/' }, attributes));
 	}
-	var set_1 = set;
+	var set_1 = esCookie.set = set;
 	function remove(name, attributes) {
 	    set(name, '', __assign(__assign({}, attributes), { expires: -1 }));
 	}
-	var remove_1 = remove;
-
-	var esCookie = /*#__PURE__*/Object.defineProperty({
-		encode: encode_1,
-		parse: parse_1,
-		getAll: getAll_1,
-		get: get_1,
-		set: set_1,
-		remove: remove_1
-	}, '__esModule', {value: true});
+	var remove_1 = esCookie.remove = remove;
 
 	/**
 		Breakpoints
