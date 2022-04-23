@@ -981,9 +981,9 @@ var SargassoModule = (function (exports) {
 	});
 
 
-	// tests is an array which must be all true
-	// if top level element is an array then sub array is evaluated as an 'or'
-	// ['test1','test2',['either','or']]
+	// tests is an array of validators which must be all evaluate to true
+	// if top level element is an sub array then the sub array is evaluated as an 'or'
+	// ['this','and',['either','or']]
 	const validate = (param, arg, tests) => {
 		// console.log(param, arg)
 		const allOf = tests.map((test) => {
@@ -5204,7 +5204,7 @@ var SargassoModule = (function (exports) {
 					this._isInViewport = false;
 				}
 			}
-		};
+		}
 
 		/*
 			@function workerMessage - hook called when worker posts a message
@@ -5521,7 +5521,7 @@ var SargassoModule = (function (exports) {
 			style.innerHTML = css;
 			document.getElementsByTagName('head')[0].appendChild(style);
 			this.detectGeometry();
-		};
+		}
 
 		didResize () {
 			super.didResize();
@@ -5621,11 +5621,11 @@ var SargassoModule = (function (exports) {
 			if (classes !== this.getCookie('responsive')) {
 				this.setCookie('responsive', classes);
 			}
-		};
+		}
 
 		getCookie (key) {
 			return esCookie.get(key)
-		};
+		}
 
 		setCookie (key, value, expires) {
 			const options = {
@@ -5634,12 +5634,12 @@ var SargassoModule = (function (exports) {
 				expires: expires
 			};
 			esCookie.set(key, value, options);
-		};
+		}
 
 		deleteCookie (key) {
 			this.setCookie(key, null);
-		};
-	};
+		}
+	}
 
 	registerSargassoClass('Breakpoints', Breakpoints);
 
@@ -5918,4 +5918,4 @@ var SargassoModule = (function (exports) {
 
 	return exports;
 
-}({}));
+})({});

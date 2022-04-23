@@ -1,9 +1,14 @@
 {
 	"name": "@pelagiccreatures/sargasso",
-	"version": "1.7.0",
+	"version": "2.0.0",
 	"description": "Simple, Fast, Reactive, Supervised Javascript controllers for custom html elements.",
 	"type": "module",
-	"browser": "index.js",
+	"browser": "dist/sargasso.mjs",
+	"targets": {
+    "browser": {
+      "includeNodeModules": true
+    }
+  },
 	"keywords": [
 		"javascript",
 		"es6",
@@ -21,22 +26,25 @@
 	"scripts": {
 		"test": "npx mocha-chrome http://localhost:8000/tests/index.html --ignore-exceptions",
 		"build": "npx rollup --no-treeshake -c rollup.config.js",
-		"build-example": "npx rollup --no-treeshake -c rollup.config.app.js"
+		"build-example": "npx rollup --no-treeshake -c rollup.config.app.js",
+		"build-module": "npx parcel build index.mjs"
 	},
 	"author": "Michael Rhodes",
 	"license": "MIT",
 	"devDependencies": {
-		"@rollup/plugin-commonjs": "^19.0.0",
+		"@rollup/plugin-commonjs": "^21.1.0",
 		"@rollup/plugin-json": "^4.1.0",
-		"@rollup/plugin-node-resolve": "^13.0.0",
-		"chai": "^4.3.3",
-		"core-js": "^3.15.1",
-		"mocha": "^9.0.1",
+		"@rollup/plugin-node-resolve": "^13.2.1",
+		"chai": "^4.3.6",
+		"core-js": "^3.22.2",
+		"mocha": "^9.2.2",
 		"mocha-chrome": "^2.2.0",
-		"rollup": "^2.52.2",
+		"parcel": "^2.5.0",
+		"rollup": "^2.70.2",
 		"rollup-plugin-terser": "^7.0.2",
 		"setimmediate": "^1.0.5",
-		"sinon": "^11.1.1"
+		"sinon": "^13.0.2",
+		"eslint": "^8.13.0"
 	},
 	"dependencies": {
 		"es-cookie": "^1.3.2",

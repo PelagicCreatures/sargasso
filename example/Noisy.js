@@ -1,7 +1,7 @@
 import {
 	Sargasso, registerSargassoClass
 }
-	from './Sargasso.js'
+	from '../lib/Sargasso'
 
 class Noisy extends Sargasso {
 	constructor (element, options = {}) {
