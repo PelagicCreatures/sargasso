@@ -1,18 +1,4 @@
-const elementTools = SargassoModule.utils.elementTools
-const testElement = document.createElement('div')
-testElement.setAttribute('id', 'test-element')
-const testElement1 = document.createElement('div')
-const nestedElement = document.createElement('div')
-const nestedElement2 = document.createElement('div')
-const deepNestedElement = document.createElement('div')
-nestedElement.appendChild(deepNestedElement)
 
-const container = document.getElementById('test-container')
-container.appendChild(testElement)
-testElement.appendChild(nestedElement)
-testElement.appendChild(nestedElement2)
-elementTools.addClass(nestedElement, 'nested-element')
-elementTools.addClass(nestedElement2, 'nested-element')
 
 function makeNode(html) {
 	const e = document.createElement('div')
@@ -28,27 +14,45 @@ function makeNode(html) {
 */
 
 describe('Sargasso', function () {
+
+
+	const testElement = document.createElement('div')
+	testElement.setAttribute('id', 'test-element')
+	const testElement1 = document.createElement('div')
+	const nestedElement = document.createElement('div')
+	const nestedElement2 = document.createElement('div')
+	const deepNestedElement = document.createElement('div')
+	nestedElement.appendChild(deepNestedElement)
+
+	const container = document.getElementById('test-container')
+	container.appendChild(testElement)
+	testElement.appendChild(nestedElement)
+	testElement.appendChild(nestedElement2)
+	nestedElement.classList.add('nested-element')
+	nestedElement2.classList.add('nested-element')
+
+
 	it('utils.hasClass', function (done) {
-		expect(elementTools.hasClass(testElement, 'test-class')).to.be.false
+		expect(SargassoModule.utils.elementTools.hasClass(testElement, 'test-class')).to.be.false
 		setImmediate(done)
 	})
 
 	it('utils.addClass', function (done) {
-		elementTools.addClass(testElement, 'test-class')
-		elementTools.addClass(testElement, ['test-class2', 'test-class3'])
-		expect(elementTools.hasClass(testElement, 'test-class')).to.be.true
-		expect(elementTools.hasClass(testElement, 'test-class2')).to.be.true
-		expect(elementTools.hasClass(testElement, 'test-class3')).to.be.true
+		SargassoModule.utils.elementTools.addClass(testElement, 'test-class')
+		SargassoModule.utils.elementTools.addClass(testElement, ['test-class2', 'test-class3'])
+		expect(SargassoModule.utils.elementTools.hasClass(testElement, 'test-class')).to.be.true
+		expect(SargassoModule.utils.elementTools.hasClass(testElement, 'test-class2')).to.be.true
+		expect(SargassoModule.utils.elementTools.hasClass(testElement, 'test-class3')).to.be.true
 		setImmediate(done)
 	})
 
 	it('utils.removeClass', function (done) {
-		elementTools.removeClass(testElement, 'test-class')
-		expect(elementTools.hasClass(testElement, 'test-class')).to.be.false
-		expect(elementTools.hasClass(testElement, 'test-class2')).to.be.true
-		elementTools.removeClass(testElement, ['test-class2', 'test-class3'])
-		expect(elementTools.hasClass(testElement, 'test-class2')).to.be.false
-		expect(elementTools.hasClass(testElement, 'test-class3')).to.be.false
+		SargassoModule.utils.elementTools.removeClass(testElement, 'test-class')
+		expect(SargassoModule.utils.elementTools.hasClass(testElement, 'test-class')).to.be.false
+		expect(SargassoModule.utils.elementTools.hasClass(testElement, 'test-class2')).to.be.true
+		SargassoModule.utils.elementTools.removeClass(testElement, ['test-class2', 'test-class3'])
+		expect(SargassoModule.utils.elementTools.hasClass(testElement, 'test-class2')).to.be.false
+		expect(SargassoModule.utils.elementTools.hasClass(testElement, 'test-class3')).to.be.false
 		setImmediate(done)
 	})
 
@@ -58,7 +62,7 @@ describe('Sargasso', function () {
 			color: 'black',
 			'border-color': 'pink'
 		}
-		elementTools.setCSS(testElement, css)
+		SargassoModule.utils.elementTools.setCSS(testElement, css)
 		expect(testElement.style.backgroundColor, 'background-color').to.equal('rgb(238, 238, 238)')
 		expect(testElement.style.color, 'color').to.equal('black')
 		expect(testElement.style.borderColor, 'border-color').to.equal('pink')
@@ -68,7 +72,7 @@ describe('Sargasso', function () {
 			color: '',
 			'border-color': ''
 		}
-		elementTools.setCSS(testElement, css)
+		SargassoModule.utils.elementTools.setCSS(testElement, css)
 
 		expect(testElement.style.backgroundColor).to.equal('')
 		expect(testElement.style.color).to.equal('')
@@ -78,25 +82,25 @@ describe('Sargasso', function () {
 	})
 
 	it('utils.setMetaData utils.getMetaData', function (done) {
-		elementTools.setMetaData(testElement, 'key', 'test')
-		expect(elementTools.getMetaData(testElement, 'key')).to.equal('test')
-		elementTools.setMetaData(testElement, 'key')
-		expect(elementTools.getMetaData(testElement, 'key')).to.be.an('undefined')
+		SargassoModule.utils.elementTools.setMetaData(testElement, 'key', 'test')
+		expect(SargassoModule.utils.elementTools.getMetaData(testElement, 'key')).to.equal('test')
+		SargassoModule.utils.elementTools.setMetaData(testElement, 'key')
+		expect(SargassoModule.utils.elementTools.getMetaData(testElement, 'key')).to.be.an('undefined')
 		setImmediate(done)
 	})
 
 	it('utils.isVisible', function (done) {
-		expect(elementTools.isVisible(testElement)).to.be.true
-		elementTools.addClass(testElement, 'hidden-display')
-		expect(elementTools.isVisible(testElement)).to.be.false
-		elementTools.removeClass(testElement, 'hidden-display')
+		expect(SargassoModule.utils.elementTools.isVisible(testElement)).to.be.true
+		SargassoModule.utils.elementTools.addClass(testElement, 'hidden-display')
+		expect(SargassoModule.utils.elementTools.isVisible(testElement)).to.be.false
+		SargassoModule.utils.elementTools.removeClass(testElement, 'hidden-display')
 		setImmediate(done)
 	})
 
 	it('utils.inViewPort', function (done) {
-		expect(elementTools.inViewPort(testElement)).to.be.false
+		expect(SargassoModule.utils.elementTools.inViewPort(testElement)).to.be.false
 		window.scrollTo(0, window.innerHeight)
-		expect(elementTools.inViewPort(testElement)).to.be.true
+		expect(SargassoModule.utils.elementTools.inViewPort(testElement)).to.be.true
 		window.scrollTo(0, 0)
 		setImmediate(done)
 	})
@@ -106,7 +110,7 @@ describe('Sargasso', function () {
 
 		// on
 		// test undelegated events - should see a click on the element or any of its child elements
-		elementTools.on('myid', testElement, 'click', fn)
+		SargassoModule.utils.elementTools.on('myid', testElement, 'click', fn)
 		testElement.click()
 		expect(fn.called).to.be.true
 
@@ -129,7 +133,7 @@ describe('Sargasso', function () {
 
 		// off
 		fn.resetHistory()
-		elementTools.off('myid', testElement, 'click')
+		SargassoModule.utils.elementTools.off('myid', testElement, 'click')
 		testElement.click()
 		expect(fn.called).to.be.false
 		setImmediate(done)
@@ -140,7 +144,7 @@ describe('Sargasso', function () {
 
 		// test once events are removed after trigger
 		fn.resetHistory()
-		elementTools.once('myid', testElement, 'click', fn)
+		SargassoModule.utils.elementTools.once('myid', testElement, 'click', fn)
 		testElement.click()
 		expect(fn.called).to.be.true
 
@@ -154,7 +158,7 @@ describe('Sargasso', function () {
 		const fn = sinon.spy()
 
 		// test delegated events
-		elementTools.on('myid', testElement, 'click', '.nested-element', fn)
+		SargassoModule.utils.elementTools.on('myid', testElement, 'click', '.nested-element', fn)
 
 		fn.resetHistory()
 		testElement.click()
@@ -173,7 +177,7 @@ describe('Sargasso', function () {
 		expect(fn.callCount).to.equal(1)
 
 		fn.resetHistory()
-		elementTools.off('myid', testElement, 'click', '.nested-element')
+		SargassoModule.utils.elementTools.off('myid', testElement, 'click', '.nested-element')
 		nestedElement.click()
 		nestedElement2.click()
 		expect(fn.callCount).to.equal(0)
@@ -184,10 +188,10 @@ describe('Sargasso', function () {
 		const fn = sinon.spy()
 
 		// offAll - remove all sargasso handlers from element
-		elementTools.on('myid', testElement, 'click', fn)
-		elementTools.on('myid2', testElement, 'click', '.nested-element', fn)
-		elementTools.once('myid3', testElement, 'click', fn)
-		elementTools.offAll(testElement)
+		SargassoModule.utils.elementTools.on('myid', testElement, 'click', fn)
+		SargassoModule.utils.elementTools.on('myid2', testElement, 'click', '.nested-element', fn)
+		SargassoModule.utils.elementTools.once('myid3', testElement, 'click', fn)
+		SargassoModule.utils.elementTools.offAll(testElement)
 		fn.resetHistory()
 		testElement.click()
 		nestedElement.click()

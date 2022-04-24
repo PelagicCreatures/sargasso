@@ -3,7 +3,7 @@ import nodeResolve from '@rollup/plugin-node-resolve'
 import json from '@rollup/plugin-json'
 
 export default {
-	input: './example/app.js',
+	input: './example/app.mjs',
 	output: [{
 		format: 'iife',
 		name: 'App',

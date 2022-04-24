@@ -5,12 +5,12 @@
 import {
 	Sargasso, utils, loadPageHandler
 }
-	from '../index.js' // or more likely from '@pelagiccreatures/sargasso'
+	from '../index' // or more likely from '@pelagiccreatures/sargasso'
 
 import {
 	Noisy
 }
-	from './Noisy.js'
+	from './Noisy'
 
 export {
 	Sargasso, utils, loadPageHandler

@@ -7,7 +7,7 @@ import {
 	from 'rollup-plugin-terser'
 
 export default {
-	input: './index.js',
+	input: './index.mjs',
 	output: [{
 		format: 'iife',
 		name: 'SargassoModule',

@@ -10,9 +10,9 @@
 			<div id="content" data-hijax>
 				<p><a href="/test-pre-flight">test pre flight</a></p>
 
-				<script id="injected" src="/example/injected.js" type="module"></script>
+				<script id="injected" src="/example/injected.mjs" type="module"></script>
 				<script id="ephemeral" type="module" data-ephemeral>
-					import {doIt} from "/example/injected.js"
+					import {doIt} from "/example/injected.mjs"
 					doIt()
 				</script>
 
