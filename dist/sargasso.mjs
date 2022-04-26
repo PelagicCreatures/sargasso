@@ -4438,7 +4438,7 @@ class $7f1bab351fef7d1e$export$c38d2c1bff643203 extends $33c965f1983345d4$export
         if (classes !== this.getCookie('responsive')) this.setCookie('responsive', classes);
     }
     getCookie(key) {
-        return (/*@__PURE__*/$parcel$interopDefault($f6533fdb015b2a84$exports)).get(key);
+        return $f6533fdb015b2a84$exports.get(key);
     }
     setCookie(key, value, expires) {
         const options = {
@@ -4446,7 +4446,7 @@ class $7f1bab351fef7d1e$export$c38d2c1bff643203 extends $33c965f1983345d4$export
             domain: this.options.cookieDomain || null,
             expires: expires
         };
-        (/*@__PURE__*/$parcel$interopDefault($f6533fdb015b2a84$exports)).set(key, value, options);
+        $f6533fdb015b2a84$exports.set(key, value, options);
     }
     deleteCookie(key) {
         this.setCookie(key, null);
