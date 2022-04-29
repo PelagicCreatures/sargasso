@@ -5016,6 +5016,10 @@ var SargassoModule = (function (exports) {
 			return this._observables[id]
 		}
 
+		getObservableData(id) {
+			return this._observables[id].data
+		}
+
 		observableStart(id, data) {
 			theObservableObjectWatcher.subscribe(this, id, data);
 			this._observables[id] = theObservableObjectWatcher.getObservable(id);
@@ -5044,12 +5048,13 @@ var SargassoModule = (function (exports) {
 		}
 
 		setTemplateArgs(args = {}) {
-			this._templateArgs = args.constructor && args.constructor.name === 'ObservableObject' ? args.data : args;
+			this._templateArgs = args;
 			this.render();
 		}
 
 		getTemplateArgs() {
-			return JSON.parse(JSON.stringify(this._templateArgs || {}))
+			const args = this._templateArgs || {};
+			return JSON.parse(JSON.stringify(args))
 		}
 
 		// this.render is a debounced call to this
@@ -5624,7 +5629,7 @@ var SargassoModule = (function (exports) {
 		}
 
 		getCookie (key) {
-			return esCookie.get(key)
+			return get_1(key)
 		}
 
 		setCookie (key, value, expires) {
@@ -5633,7 +5638,7 @@ var SargassoModule = (function (exports) {
 				domain: this.options.cookieDomain || null,
 				expires: expires
 			};
-			esCookie.set(key, value, options);
+			set_1(key, value, options);
 		}
 
 		deleteCookie (key) {

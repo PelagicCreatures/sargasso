@@ -5,13 +5,13 @@
 ```
 @author Michael Rhodes (except where noted)
 @license MIT
-Made in Barbados 🇧🇧 Copyright © 2020-2021 Michael Rhodes
+Made in Barbados 🇧🇧 Copyright © 2020-2022 Michael Rhodes
 ```
 
 ### Sargasso implements modern tools for:
+* Web pages
 * PWA (Progressive Web Apps)
 * SPA (single-page applications)
-* Web pages
 
 ### Key features
 * Element controller management for creation and clean destruction of custom elements as content changes
@@ -44,11 +44,11 @@ The Sargasso ecosystem includes modules for:
 
 API Stable
 
-We are trying to keep this project as forward looking so as to not burden this framework with lots of obsolete junk and polyfills so while it will probably not work on *every* ancient browser, it should work on any *reasonably* modern one. If you run into any problems, have questions, want to help or have any feedback let us know by opening a github issue.
+We are trying to keep this project as forward looking so as to not burden this framework with lots of obsolete junk and polyfills so while it will probably not work on *every* ancient browser, it will work on any *reasonably* modern one. If you run into any problems, have questions, want to help or have any feedback let us know by opening a github issue.
 
-### Usage Overview (Using CDN iife modules)
+### Usage Overview (Using CDN es modules)
 
-This simple example loads the framework using the CDN and defines a simple Sargasso element controller that says "Hi World!".
+This simple example loads the framework using the CDN and defines a simple Sargasso element controller that says "Hello World!".
 
 example/example1.html
 ```html
@@ -60,47 +60,44 @@ example/example1.html
 <body>
   <h3>First Sargasso Element</h3>
 
-  <sargasso-my-class id="custom">Using a custom element</sargasso-my-class>
+  <!-- sargasso custom element tag is the class name in KebabCase -->
+  <sargasso-hello-world></sargasso-hello-world>
 
-  <div data-sargasso-class="MyClass" id="data-attribute">Using data attribute</div>
-
-  <script src='https://cdn.jsdelivr.net/npm/@pelagiccreatures/sargasso/dist/sargasso.iife.js'></script>
-  <script defer>
-    window.onload = () => {
-
-      // define MyClass as a subclass of Sargasso
-      class MyClass extends SargassoModule.Sargasso {
-        start() {
-          // use an animation frame to set the element content
-          this.queueFrame(() => {
-            this.element.innerHTML = 'Hello World! (' + this.element.getAttribute('id') + ')'
-          })
-          super.start()
-        }
-      }
-
-      // Register MyClass to the Sargasso framework
-      SargassoModule.utils.registerSargassoClass('MyClass', MyClass)
-
-      // Start Sargasso
-      SargassoModule.utils.bootSargasso()
+  <!-- use javascript modules in browser -->
+  <script async src="https://unpkg.com/es-module-shims@0.13.1/dist/es-module-shims.js"></script>
+  <script type="importmap">
+  {
+    "imports": {
+      "@pelagiccreatures/sargasso": "https://unpkg.com/@pelagiccreatures/sargasso/dist/sargasso.mjs"
     }
+  }
+  </script>
+  <script type="module">
+    import { Sargasso, utils } from "@pelagiccreatures/sargasso"
+
+    // define HelloWorld as a subclass of Sargasso, classname in CamelCase
+    class HelloWorld extends Sargasso {
+      start() {
+        // use an animation frame
+        this.queueFrame(() => {
+          this.element.innerHTML = 'Hello World!'
+        })
+        super.start()
+      }
+    }
+
+    // Register HelloWorld class as a custom element
+    utils.registerSargassoClass('HelloWorld', HelloWorld)
+
+    // Start Sargasso
+    utils.bootSargasso()
   </script>
 </body>
 </html>
 ```
 [Try It](https://stackblitz.com/edit/sargasso-example-1)
 
-Sargasso element controllers are javascript Objects that are subclasses of the framework's Sargasso class. Custom behavior is defined by overriding various methods of the base class.
-
-#### Using data-sargasso-class to specify Sargasso classname
-Alternately, Sargasso watches the DOM for any elements tagged with the `data-sargasso-class` attribute which can be one classname or a list of classnames.
-
-```html
-<body data-sargasso-class="MyClass, MyOtherClass">This works in all browsers</body>
-```
-
-You can also defer the instantiation using the lazy method by tagging it with `data-lazy-sargasso-class` instead of `data-sargasso-class` which will only start up the controller when the element becomes visible in the viewport.
+Sargasso custom element controllers are javascript Objects that are subclasses of the framework's Sargasso class. Custom behavior is defined by overriding public methods of the base class.
 
 #### Custom Element tags to specify classname
 
@@ -116,11 +113,20 @@ Multiple sargasso classes can be supplied as unary attributes on the custom elem
 <sargasso-my-class sargasso-my-other-class>This works in <em>all reasonably modern</em> browsers</sargasso-my-class>
 ```
 
+#### Using data-sargasso-class to specify Sargasso classname
+Alternately, Sargasso watches the DOM for any elements tagged with the `data-sargasso-class` attribute which can be one classname or a list of classnames.
+
+```html
+<body data-sargasso-class="MyClass, MyOtherClass">This works in all browsers</body>
+```
+
+You can also defer the instantiation using the lazy method by tagging it with `data-lazy-sargasso-class` instead of `data-sargasso-class` which will only start up the controller when the element becomes visible in the viewport.
+
 ### Sargasso Object Lifecycle
 
 **tl;dr** The Sargasso Object life cycle is `constructor` > `start` > do stuff and until element removed from doc > `sleep` > `destroy`
 
-When a Sargasso element appears in the document, the framework supervisor will instantiate an object and call the `start()` method of the object. When removed from the DOM, 'sleep()' will be called allowing cleanup of any resources or handlers set up in start (note that event listeners created with 'this.on' and 'this.once' are automatically cleaned up.)
+When a Sargasso element appears in the document, the framework supervisor will instantiate an object and call the `start()` method of the object. When removed from the DOM, 'sleep()' will be called allowing cleanup of any resources or event handlers set up in start (note that event listeners created with 'this.on' and 'this.once' are automatically cleaned up.)
 
 ### Example with event handlers
 

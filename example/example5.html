@@ -3,94 +3,103 @@
 
 <head>
 	<title>Example Sargasso Element w/Data Observing &amp; Template rendering</title>
-	<style>
-		.red { color: #f00; }
-		.green { color: #0f0; }
-		.blue { color: #00f; }
-	</style>
 </head>
 
 <body>
 	<h3>Example Sargasso Element w/Data Observing &amp; Template rendering</h3>
 
-	<sargasso-my-class></sargasso-my-class>
+	<sargasso-to-do-list></sargasso-to-do-list>
 
-	<script src="/dist/sargasso.iife.js"></script>
-
-	<script defer type="module">
+	<script async src="https://unpkg.com/es-module-shims@0.13.1/dist/es-module-shims.js"></script>
+	<script type="importmap">
+	{
+		"imports": {
+			"@pelagiccreatures/sargasso": "/dist/sargasso.mjs"
+		}
+	}
+	</script>
+	<script type="module">
+		import { Sargasso, ObservableObject, utils } from "@pelagiccreatures/sargasso"
 		import {
 			html,render
 		} from 'https://unpkg.com/lit-html?module'
 
-		window.onload = () => {
+		// set up an ObservableObject with the id "todo"
+		let todo = {
+			list: [
+			]
+		};
 
-			// set up an ObservableObject with the id "shared-data"
-			let args = {
-				name: "World!",
-				cssClass: "red",
-				list: [
-					{ id: 1, name: "one" },
-					{ id: 2, name: "two" },
-					{ id: 3, name: "three" }
-				]
-			};
-			let observed = new SargassoModule.ObservableObject("shared-data", args);
+		window.todo = new ObservableObject("todo", todo).data;
 
+		// define MyClass as a subclass of Sargasso
+		// sargasso will render the template whenever data in
+		// ObservableObject "todo" is changed
+		class ToDoList extends Sargasso {
+			constructor(element, options = {}) {
+				super(element, options)
 
-			// define MyClass as a subclass of Sargasso
-			// sargasso will render the template whenever data in
-			// ObservableObject "shared-data" is changed
-			class MyClass extends SargassoModule.Sargasso {
-				start() {
-					super.start();
+				// hook up observable data
+				this.setTemplateArgs(window.todo);
 
-					// hook up observable data
-					this.setTemplateArgs(this.observableStart("shared-data"));
+				// define lit html template.
+				let template = (args) => html`
+					<strong>Look! A ToDo List!</strong>
+					<ul>
+						${args.list.map((item) => html`<li data-index=${item.id}><input type="checkbox" name=${item.id}> ${item.name}</li>`)}
+					</ul>
+					<input type="text" id="new" placeholder="add to list" autofocus> <input type="submit" value="add">
+				`;
 
-					// define a template. note sub template for <li>
-					let template = args => html`
-						<p class=${args.cssClass}>Hello ${args.name}</p>
-						<strong>Look! A List!</strong>
-						<ul>
-							${args.list.map((item) => html`<li data-index=${item.id}>${item.id}: ${item.name}</li>`)}
-						</ul>
-						<input type="text" id="new" placeholder="add to list" /><input type="submit" value="add" />
-					`;
+				this.setRenderer(render); // set lit-html render() as the renderer
+				this.setTemplate(template); // set template function
 
-					this.setRenderer(render); // set lit-html render() as the renderer
-					this.setTemplate(template); // set template function
-
-					// hook up form submitter to add item to list
-					this.on("click", '[type="submit"]', e => {
-						e.preventDefault();
-						let inp = this.element.querySelector("#new");
-						if(inp.value) {
-							let name = inp.value;
-							inp.value = "";
-
-							let observable = this.getObservable("shared-data");
-
-							observable.data.list.push({
-								id: observable.data.list.length + 1,
-								name: name
-							});
-						}
-					});
-				}
+				this.count = 0
 			}
 
-			// Register MyClass to the Sargasso framework
-			SargassoModule.utils.registerSargassoClass("MyClass", MyClass);
+			start() {
+				super.start();
 
+				this.observableStart("todo")
+
+				this.on("click", '[type="checkbox"]', e => {
+					let todo = this.getObservableData("todo");
+					let id = parseInt(e.target.getAttribute('name'))
+					for(let i = 0; i < todo.list.length; i++) {
+						const item = todo.list[i]
+						if(item.id === id) {
+							todo.list.splice(i, 1);
+							break
+						}
+					}
+				})
+
+				// hook up form submitter to add item to list
+				this.on("click", '[type="submit"]', e => {
+					let inp = this.element.querySelector("#new");
+					if(inp.value) {
+						let name = inp.value;
+						inp.value = "";
+
+						let todo = this.getObservableData("todo");
+
+						window.todo.list.push({
+							id: ++this.count,
+							done: false,
+							name: name
+						});
+					}
+				});
+			}
+		}
+
+		// Register MyClass to the Sargasso framework
+		utils.registerSargassoClass("ToDoList", ToDoList);
+
+		window.onload = () => {
 			// Start Sargasso
-			SargassoModule.utils.bootSargasso();
-
-			let classes = ["red", "green", "blue"];
-			setInterval(() => {
-				observed.data.cssClass = classes[Math.floor(Math.random() * classes.length)];
-				observed.data.name = observed.data.list[Math.floor(Math.random() * observed.data.list.length)].name;
-			}, 1000);
-		};
+			utils.bootSargasso();
+		}
 	</script>
 </body>
 

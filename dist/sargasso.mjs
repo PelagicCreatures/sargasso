@@ -4005,6 +4005,9 @@ const $33c965f1983345d4$var$eventNames = [
 	*************************************************/ getObservable(id) {
         return this._observables[id];
     }
+    getObservableData(id) {
+        return this._observables[id].data;
+    }
     observableStart(id, data) {
         $28e0c90eeff7adcf$export$788f7857dc8c77f5.subscribe(this, id, data);
         this._observables[id] = $28e0c90eeff7adcf$export$788f7857dc8c77f5.getObservable(id);
@@ -4026,11 +4029,12 @@ const $33c965f1983345d4$var$eventNames = [
         this.renderer = renderer;
     }
     setTemplateArgs(args = {}) {
-        this._templateArgs = args.constructor && args.constructor.name === 'ObservableObject' ? args.data : args;
+        this._templateArgs = args;
         this.render();
     }
     getTemplateArgs() {
-        return JSON.parse(JSON.stringify(this._templateArgs || {}));
+        const args = this._templateArgs || {};
+        return JSON.parse(JSON.stringify(args));
     }
     // this.render is a debounced call to this
     _render() {
