@@ -27,7 +27,7 @@
 		"test": "npx mocha-chrome http://localhost:8000/tests/index.html --ignore-exceptions",
 		"build": "npx rollup --no-treeshake -c rollup.config.js",
 		"build-example": "npx rollup --no-treeshake -c rollup.config.app.js",
-		"build-module": "npx parcel build index.mjs"
+		"build-module": "npx parcel build index.mjs; cp lib/breakpoints.js dist/breakpoints.js"
 	},
 	"author": "Michael Rhodes",
 	"license": "MIT",
@@ -47,7 +47,6 @@
 		"eslint": "^8.13.0"
 	},
 	"dependencies": {
-		"es-cookie": "^1.3.2",
 		"lodash": "^4.17.21"
 	},
 	"directories": {

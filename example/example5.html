@@ -20,7 +20,7 @@
   }
   </script>
   <script type="module">
-    import { Sargasso, ObservableObject, utils, services, system } from "@pelagiccreatures/sargasso"
+    import { Sargasso, ObservableObject, utils } from "@pelagiccreatures/sargasso"
     import {
       html,render
     } from 'https://unpkg.com/lit-html?module'
@@ -114,7 +114,7 @@
     // Register ToDoList custom element to the Sargasso framework
     utils.registerSargassoClass("ToDoList", ToDoList)
 
-    const supervisor = utils.bootSargasso()
+    utils.bootSargasso()
   </script>
 </body>
 </html>

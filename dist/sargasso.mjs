@@ -4240,190 +4240,48 @@ $33c965f1983345d4$export$22044c20eef36040('SargassoSupervisor', $c1f611f425340a0
 
 
 
-var $f6533fdb015b2a84$exports = {};
-"use strict";
-var $f6533fdb015b2a84$var$__assign = $f6533fdb015b2a84$exports && $f6533fdb015b2a84$exports.__assign || function() {
-    $f6533fdb015b2a84$var$__assign = Object.assign || function(t) {
-        for(var s, i = 1, n = arguments.length; i < n; i++){
-            s = arguments[i];
-            for(var p in s)if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+const $7f1bab351fef7d1e$export$f86ec3d89f756a21 = window.breakpoints || {
+    widths: [
+        {
+            className: 'breakpoint-phone',
+            maxWidth: 599
+        },
+        {
+            className: 'breakpoint-tablet',
+            maxWidth: 904
+        },
+        {
+            className: 'breakpoint-desktop',
+            maxWidth: undefined
         }
-        return t;
-    };
-    return $f6533fdb015b2a84$var$__assign.apply(this, arguments);
+    ]
 };
-$f6533fdb015b2a84$exports.__esModule = true;
-function $f6533fdb015b2a84$var$stringifyAttribute(name, value) {
-    if (!value) return '';
-    var stringified = '; ' + name;
-    if (value === true) return stringified; // boolean attributes shouldn't have a value
-    return stringified + '=' + value;
-}
-function $f6533fdb015b2a84$var$stringifyAttributes(attributes) {
-    if (typeof attributes.expires === 'number') {
-        var expires = new Date();
-        expires.setMilliseconds(expires.getMilliseconds() + attributes.expires * 864e+5);
-        attributes.expires = expires;
-    }
-    return $f6533fdb015b2a84$var$stringifyAttribute('Expires', attributes.expires ? attributes.expires.toUTCString() : '') + $f6533fdb015b2a84$var$stringifyAttribute('Domain', attributes.domain) + $f6533fdb015b2a84$var$stringifyAttribute('Path', attributes.path) + $f6533fdb015b2a84$var$stringifyAttribute('Secure', attributes.secure) + $f6533fdb015b2a84$var$stringifyAttribute('SameSite', attributes.sameSite);
-}
-function $f6533fdb015b2a84$var$encode(name, value, attributes) {
-    return encodeURIComponent(name).replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent) // allowed special characters
-    .replace(/\(/g, '%28').replace(/\)/g, '%29') // replace opening and closing parens
-     + '=' + encodeURIComponent(value)// allowed special characters
-    .replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent) + $f6533fdb015b2a84$var$stringifyAttributes(attributes);
-}
-$f6533fdb015b2a84$exports.encode = $f6533fdb015b2a84$var$encode;
-function $f6533fdb015b2a84$var$parse(cookieString) {
-    var result = {};
-    var cookies = cookieString ? cookieString.split('; ') : [];
-    var rdecode = /(%[\dA-F]{2})+/gi;
-    for(var i = 0; i < cookies.length; i++){
-        var parts = cookies[i].split('=');
-        var cookie = parts.slice(1).join('=');
-        if (cookie.charAt(0) === '"') cookie = cookie.slice(1, -1);
-        try {
-            var name_1 = parts[0].replace(rdecode, decodeURIComponent);
-            result[name_1] = cookie.replace(rdecode, decodeURIComponent);
-        } catch (e) {
-        // ignore cookies with invalid name/value encoding
-        }
-    }
-    return result;
-}
-$f6533fdb015b2a84$exports.parse = $f6533fdb015b2a84$var$parse;
-function $f6533fdb015b2a84$var$getAll() {
-    return $f6533fdb015b2a84$var$parse(document.cookie);
-}
-$f6533fdb015b2a84$exports.getAll = $f6533fdb015b2a84$var$getAll;
-function $f6533fdb015b2a84$var$get(name) {
-    return $f6533fdb015b2a84$var$getAll()[name];
-}
-$f6533fdb015b2a84$exports.get = $f6533fdb015b2a84$var$get;
-function $f6533fdb015b2a84$var$set(name, value, attributes) {
-    document.cookie = $f6533fdb015b2a84$var$encode(name, value, $f6533fdb015b2a84$var$__assign({
-        path: '/'
-    }, attributes));
-}
-$f6533fdb015b2a84$exports.set = $f6533fdb015b2a84$var$set;
-function $f6533fdb015b2a84$var$remove(name, attributes) {
-    $f6533fdb015b2a84$var$set(name, '', $f6533fdb015b2a84$var$__assign($f6533fdb015b2a84$var$__assign({}, attributes), {
-        expires: -1
-    }));
-}
-$f6533fdb015b2a84$exports.remove = $f6533fdb015b2a84$var$remove;
-
-
-const $7f1bab351fef7d1e$export$f86ec3d89f756a21 = [
-    {
-        className: 'screen-xs',
-        maxWidth: 599
-    },
-    {
-        className: 'screen-sm',
-        maxWidth: 1023
-    },
-    {
-        className: 'screen-md',
-        maxWidth: 1439
-    },
-    {
-        className: 'screen-lg',
-        maxWidth: 1999
-    },
-    {
-        className: 'screen-xl',
-        maxWidth: undefined
-    }
-];
 class $7f1bab351fef7d1e$export$c38d2c1bff643203 extends $33c965f1983345d4$export$d7944a94c1afb262 {
     constructor(element, options = {}){
         options.watchResize = true;
         super(element, options);
-        if (options.widths) this.options.widths = options.widths;
-        else this.options.widths = $7f1bab351fef7d1e$export$f86ec3d89f756a21;
+        this.options.widths = options.widths || $7f1bab351fef7d1e$export$f86ec3d89f756a21;
         this.scale = undefined;
-        this.disabled = false;
-        this.forceScale = undefined;
-        this.orientation = undefined;
         this.widths = [];
         this.classes = [];
+        this.debouncedDetectGeometry = (/*@__PURE__*/$parcel$interopDefault($883871a813e4aea5$exports))(()=>{
+            this.detectGeometry();
+        }, 100, {
+            leading: true,
+            maxWait: 250
+        });
     }
     start() {
         super.start();
-        let css = '.show-hide{display:none;}\n';
-        this.widths.push(0);
-        for(let i = 0; i < this.options.widths.length; i++){
-            if (this.options.widths[i].maxWidth) this.widths.push(this.options.widths[i].maxWidth);
-            this.classes.push(this.options.widths[i].className);
-            css += '.' + this.options.widths[i].className + ' .hidden-' + this.options.widths[i].className + '{display:none;}\n';
-            css += '.not-' + this.options.widths[i].className + ' .hidden-not-' + this.options.widths[i].className + '{display:none;}\n';
-            css += '.' + this.options.widths[i].className + ' .shown-' + this.options.widths[i].className + '{display:block;}\n';
-            css += '.not-' + this.options.widths[i].className + ' .shown-not-' + this.options.widths[i].className + '{display:block;}\n';
-        }
-        const style = document.createElement('style');
-        style.type = 'text/css';
-        style.innerHTML = css;
-        document.getElementsByTagName('head')[0].appendChild(style);
-        this.detectGeometry();
+        this.debouncedDetectGeometry();
     }
     didResize() {
-        super.didResize();
-        this.detectGeometry();
-    }
-    disableResponsive(scale) {
-        $fa90420f3b30b29c$export$6f53260fffa88f1c.addClass(document.body, 'disable-responsive');
-        this.disabled = true;
-        this.forceScale = scale;
-        this.detectGeometry();
-    }
-    enableResponsive() {
-        $fa90420f3b30b29c$export$6f53260fffa88f1c.removeClass(document.body, 'disable-responsive');
-        this.disabled = false;
-        this.forceScale = '';
-        this.detectGeometry();
+        this.debouncedDetectGeometry();
     }
     detectGeometry() {
-        let newScale = this.classes[this.widths.length - 1];
-        if (this.disabled) newScale = this.forceScale;
-        else {
-            const ww = window.innerWidth;
-            const wh = window.innerHeight;
-            if (wh > ww) {
-                if (this.orientation !== 'portrait') {
-                    const frame = ()=>{
-                        $fa90420f3b30b29c$export$6f53260fffa88f1c.removeClass(document.body, 'landscape');
-                        $fa90420f3b30b29c$export$6f53260fffa88f1c.addClass(document.body, 'portrait');
-                    };
-                    this.queueFrame(frame);
-                    this.orientation = 'portrait';
-                }
-            } else if (this.orientation !== 'landscape') {
-                const frame = ()=>{
-                    $fa90420f3b30b29c$export$6f53260fffa88f1c.removeClass(document.body, 'portrait');
-                    $fa90420f3b30b29c$export$6f53260fffa88f1c.addClass(document.body, 'landscape');
-                };
-                this.queueFrame(frame);
-                this.orientation = 'landscape';
-            }
-            for(let i = 0; i < this.widths.length - 1; i++)if (ww >= this.widths[i] && ww < this.widths[i + 1]) {
-                newScale = this.classes[i];
-                break;
-            }
-        }
-        let changed = 0;
+        const newScale = window.doBreakpoints(this.options.widths);
         if (newScale !== this.scale) {
-            ++changed;
             const frame = ()=>{
-                for(let i = 0; i < this.classes.length; i++)if (this.classes[i] !== newScale) {
-                    $fa90420f3b30b29c$export$6f53260fffa88f1c.addClass(document.body, 'not-' + this.classes[i]);
-                    $fa90420f3b30b29c$export$6f53260fffa88f1c.removeClass(document.body, this.classes[i]);
-                    $fa90420f3b30b29c$export$6f53260fffa88f1c.removeClass(document.body, 'shown-' + this.classes[i]);
-                    $fa90420f3b30b29c$export$6f53260fffa88f1c.removeClass(document.body, 'hidden-' + this.classes[i]);
-                } else $fa90420f3b30b29c$export$6f53260fffa88f1c.removeClass(document.body, 'not-' + this.classes[i]);
-                $fa90420f3b30b29c$export$6f53260fffa88f1c.addClass(document.body, newScale);
-                $fa90420f3b30b29c$export$6f53260fffa88f1c.addClass(document.body, 'shown-' + newScale);
-                $fa90420f3b30b29c$export$6f53260fffa88f1c.addClass(document.body, 'hidden-' + newScale);
                 this.notifyAll('didBreakpoint', [
                     newScale
                 ]);
@@ -4431,29 +4289,6 @@ class $7f1bab351fef7d1e$export$c38d2c1bff643203 extends $33c965f1983345d4$export
             this.queueFrame(frame);
         }
         this.scale = newScale;
-        if (changed) this.setHints();
-    }
-    setHints() {
-        let classes = '';
-        if (this.scale) {
-            if (classes) classes += ' ';
-            classes += this.scale;
-        }
-        if (classes !== this.getCookie('responsive')) this.setCookie('responsive', classes);
-    }
-    getCookie(key) {
-        return $f6533fdb015b2a84$exports.get(key);
-    }
-    setCookie(key, value, expires) {
-        const options = {
-            path: '/',
-            domain: this.options.cookieDomain || null,
-            expires: expires
-        };
-        $f6533fdb015b2a84$exports.set(key, value, options);
-    }
-    deleteCookie(key) {
-        this.setCookie(key, null);
     }
 }
 $33c965f1983345d4$export$22044c20eef36040('Breakpoints', $7f1bab351fef7d1e$export$c38d2c1bff643203);

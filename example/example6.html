@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, user-scalable=no, minimal-ui, viewport-fit=cover">
+  <title>Breakpoints</title>
+  <style>
+    td,th {
+        text-align:center;
+        padding: 8px;
+        border: thin solid black;
+    }
+  </style>
+</head>
+<body>
+  <script src="/dist/Breakpoints.js"></script>
+
+  <h3>Example Sargasso Breakpoints</h3>
+
+  <sargasso-watch-breakpoint></sargasso-watch-breakpoint>
+
+  <table>
+    <th>breakpoint</th>
+    <th>shown-xxx</th>
+    <th>hidden-xxx</th>
+    <th>shown-not-xxx</th>
+    <th>hidden-not-xxx</th>
+    <tr>
+      <td>phone</td>
+      <td><div class="show-hide shown-breakpoint-phone">&#128077;</div></td>
+      <td><div class="hidden-breakpoint-phone">&#128077;</div></td>
+      <td><div class="show-hide shown-not-breakpoint-phone">&#128077;</div></td>
+      <td><div class="hidden-not-breakpoint-phone">&#128077;</div></td>
+    </tr>
+    <tr>
+      <td>tablet</td>
+      <td><div class="show-hide shown-breakpoint-tablet">&#128077;</div></td>
+      <td><div class="hidden-breakpoint-tablet">&#128077;</div></td>
+      <td><div class="show-hide shown-not-breakpoint-tablet">&#128077;</div></td>
+      <td><div class="hidden-not-breakpoint-tablet">&#128077;</div></td>
+    </tr>
+    <tr>
+      <td>desktop</td>
+      <td><div class="show-hide shown-breakpoint-desktop">&#128077;</div></td>
+      <td><div class="hidden-breakpoint-desktop">&#128077;</div></td>
+      <td><div class="show-hide shown-not-breakpoint-desktop">&#128077;</div></td>
+      <td><div class="hidden-not-breakpoint-desktop">&#128077;</div></td>
+    </tr>
+  </table>
+
+
+  <!-- enable es6 modules and import maps -->
+  <script async src="https://unpkg.com/es-module-shims@0.13.1/dist/es-module-shims.js"></script>
+  <!-- https://unpkg.com/@pelagiccreatures/sargasso/dist/sargasso.mjs -->
+  <script type="importmap">
+  {
+    "imports": {
+      "@pelagiccreatures/sargasso": "/dist/sargasso.mjs"
+    }
+  }
+  </script>
+  <script type="module">
+    import { Sargasso, utils} from "@pelagiccreatures/sargasso"
+    class WatchBreakpoint extends Sargasso {
+      constructor(element, options = {}){
+        options.watchResize = true
+        super(element,options)
+        this.breakpoint = undefined
+      }
+      didBreakpoint (breakpoint) {
+        this.breakpoint = breakpoint
+        this.element.innerHTML = '<p>current breakpoint: <strong>' + breakpoint + '</strong></p>'
+      }
+      didResize() {
+        this.element.innerHTML = '<p>did resize, within <strong>' + this.breakpoint + '</strong> breakpoint.</p>'
+      }
+    }
+    utils.registerSargassoClass("WatchBreakpoint", WatchBreakpoint)
+
+    utils.bootSargasso({breakpoints:{}})
+  </script>
+</body>
+</html>
