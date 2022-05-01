@@ -991,7 +991,7 @@ const $2db055cf8ef21bb4$export$a22775fa5e2eebd9 = (param, arg, tests)=>{
 };
 
 
-const $fa90420f3b30b29c$var$elementMetaData = new WeakMap();
+const $fa90420f3b30b29c$export$8350ba437fdadadb = new WeakMap();
 const $fa90420f3b30b29c$var$hasClass = (element, cssClass)=>{
     $2db055cf8ef21bb4$export$a22775fa5e2eebd9('hasClass element', element, [
         'isDefined',
@@ -1114,10 +1114,10 @@ const $fa90420f3b30b29c$var$setMetaData = (element, k, v)=>{
             'isObject'
         ]
     ]);
-    const data = $fa90420f3b30b29c$var$elementMetaData.get(element) || {};
+    const data = $fa90420f3b30b29c$export$8350ba437fdadadb.get(element) || {};
     if (v) data[k] = v;
     else delete data[k];
-    $fa90420f3b30b29c$var$elementMetaData.set(element, data);
+    $fa90420f3b30b29c$export$8350ba437fdadadb.set(element, data);
 };
 const $fa90420f3b30b29c$var$getMetaData = (element, k)=>{
     $2db055cf8ef21bb4$export$a22775fa5e2eebd9('getMetaData element', element, [
@@ -1128,7 +1128,7 @@ const $fa90420f3b30b29c$var$getMetaData = (element, k)=>{
         'isDefined',
         'isString'
     ]);
-    const data = $fa90420f3b30b29c$var$elementMetaData.get(element) || {};
+    const data = $fa90420f3b30b29c$export$8350ba437fdadadb.get(element) || {};
     if (k) return data[k];
     else return data;
 };
@@ -1221,7 +1221,7 @@ const $fa90420f3b30b29c$var$offAll = function(container) {
         'isDefined',
         'isEventTarget'
     ]);
-    const data = $fa90420f3b30b29c$var$elementMetaData.get(container) || {};
+    const data = $fa90420f3b30b29c$export$8350ba437fdadadb.get(container) || {};
     const handlers = [];
     for(const k1 in data){
         if (Object.prototype.hasOwnProperty.call(data, k1)) {
@@ -4634,6 +4634,7 @@ const $454bbecc12774327$export$80ed8a0252d89225 = (options = {})=>{
     };
     const supervisor = new $c1f611f425340a0a$export$26b75d03ac531c24(document.body, options);
     supervisor.start(options);
+    return supervisor;
 };
 
 
@@ -4654,7 +4655,12 @@ const $2935212e7130b60d$export$bce7a36871692cab = {
     theWorkerWatcher: $28e0c90eeff7adcf$export$fa28dfcc49831a91,
     theObservableObjectWatcher: $28e0c90eeff7adcf$export$788f7857dc8c77f5
 };
+const $2935212e7130b60d$export$505f1cb98cb78c0d = {
+    liveElements: $33c965f1983345d4$export$85e745b96b6487a7,
+    registeredClasses: $33c965f1983345d4$export$ac297e650eeb1e78,
+    elementMetaData: $fa90420f3b30b29c$export$8350ba437fdadadb
+};
 
 
-export {$2935212e7130b60d$export$eab97d15b1788b8d as utils, $2935212e7130b60d$export$bce7a36871692cab as services, $33c965f1983345d4$export$d7944a94c1afb262 as Sargasso, $454bbecc12774327$export$7869d9d42a3fc8a6 as loadPageHandler, $792b173a6e02c603$export$b176171395436676 as ObservableObject};
+export {$2935212e7130b60d$export$eab97d15b1788b8d as utils, $2935212e7130b60d$export$bce7a36871692cab as services, $2935212e7130b60d$export$505f1cb98cb78c0d as system, $33c965f1983345d4$export$d7944a94c1afb262 as Sargasso, $454bbecc12774327$export$7869d9d42a3fc8a6 as loadPageHandler, $792b173a6e02c603$export$b176171395436676 as ObservableObject};
 //# sourceMappingURL=sargasso.mjs.map

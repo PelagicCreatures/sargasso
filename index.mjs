@@ -10,7 +10,7 @@
 	*/
 
 import {
-	registerSargassoClass, Sargasso
+	registerSargassoClass, Sargasso, liveElements, registeredClasses
 }
 	from './lib/Sargasso'
 
@@ -20,7 +20,7 @@ import {
 	from './lib/checkArgs'
 
 import {
-	elementTools
+	elementTools, elementMetaData
 }
 	from './lib/utils'
 
@@ -56,6 +56,12 @@ const services = {
 	theObservableObjectWatcher: theObservableObjectWatcher
 }
 
+const system = {
+	liveElements: liveElements,
+	registeredClasses: registeredClasses,
+	elementMetaData: elementMetaData
+}
+
 export {
-	Sargasso, utils, loadPageHandler, services, ObservableObject
+	Sargasso, utils, loadPageHandler, services, ObservableObject, system
 }

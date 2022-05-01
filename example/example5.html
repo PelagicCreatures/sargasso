@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <title>Example Sargasso Element w/Data Observing &amp; Template Rendering</title>
+  <title>Example Sargasso Web Component w/Observed Data &amp; Template Rendering</title>
 </head>
-
 <body>
-  <h3>Example Sargasso Element w/Data Observing &amp; Template Rendering</h3>
+  <h3>Example Sargasso Web Component w/Observed Data &amp; Template Rendering</h3>
 
-  <!-- ToDoList custom element -->
+  <!-- insert ToDoList Web Component into page -->
   <sargasso-to-do-list></sargasso-to-do-list>
 
-  <!-- enable es6 modules -->
+  <!-- enable es6 modules and import maps -->
   <script async src="https://unpkg.com/es-module-shims@0.13.1/dist/es-module-shims.js"></script>
   <!-- https://unpkg.com/@pelagiccreatures/sargasso/dist/sargasso.mjs -->
   <script type="importmap">
@@ -22,40 +20,30 @@
   }
   </script>
   <script type="module">
-    import { Sargasso, ObservableObject, utils } from "@pelagiccreatures/sargasso"
+    import { Sargasso, ObservableObject, utils, services, system } from "@pelagiccreatures/sargasso"
     import {
       html,render
     } from 'https://unpkg.com/lit-html?module'
 
-    // set up an ObservableObject with the id "todo"
+    // data structure for todo list
     let todo = {
-      count: 0,
+      nextId: 2,
       list: [
+        { id: 1, name: "first item" }
       ]
     };
 
-    // set up proxy/reflect notifictaion service for todo
-    window.todo = new ObservableObject("todo", todo).data;
+    // create an ObservableObject with the id "todo"
+    const observableToDo = new ObservableObject("todo", todo);
 
-    // Define ToDoList as a subclass of Sargasso
+    // Define ToDoList Web Component as a subclass of Sargasso
     // Sargasso will re-render the template whenever data in ObservableObject "todo" is changed
     class ToDoList extends Sargasso {
       constructor(element, options = {}) {
         options.shadowDOM = true // put the element in a shadow DOM
         super(element, options)
 
-
-        // define lit html template.
-        let template = (args) => html`
-          <strong>Look! A ToDo List!</strong>
-          <ul>
-            ${args.list.map((item) => html`<li data-index=${item.id}><input type="checkbox" id=${item.id}> ${item.name}</li>`)}
-          </ul>
-          <input type="text" id="new" placeholder="add to list" autofocus> <input type="submit" value="add item">
-        `;
-
-        this.setRenderer(render); // set lit-html render() as the renderer
-        this.setTemplate(template); // set template function
+        this.buildTemplate()
       }
 
       start() {
@@ -63,50 +51,70 @@
 
         // start watching for changes
         this.observableStart("todo")
+
         // hook up observable data - any changes will re-render element
         this.setTemplateArgs(this.getObservableData("todo"));
 
+        // delegated 'click' event handler for add item button
+        this.on("click", '[type="submit"]', e => {
+          this.addItem()
+        });
 
-        // delegated click event handler for checkboxes
-        // remove item from list
+        // delegated 'click' event handler for checkboxes
         this.on("click", '[type="checkbox"]', e => {
           e.preventDefault()
-          let todo = this.getObservableData("todo");
-          let id = parseInt(e.target.getAttribute('id'))
-          for(let i = 0; i < todo.list.length; i++) {
-            const item = todo.list[i]
-            if(item.id === id) {
-              todo.list.splice(i, 1);
-              break
-            }
-          }
+          this.removeItem(parseInt(e.srcElement.getAttribute('id')))
         })
+      }
 
-        // delegated click event handler for add item button
-        // add item to list
-        this.on("click", '[type="submit"]', e => {
-          let inp = this.element.querySelector("#new");
-          if(inp.value) {
-            let name = inp.value;
-            inp.value = "";
+      // define and install lit html template to render the component
+      buildTemplate() {
+        let template = (todo) => html`
+          <ol>
+            ${todo.list.map((item) => html`
+              <li>
+                <input type="checkbox" id=${item.id}>
+                <label for=${item.id}>${item.name}</label>
+              </li>
+            `)}
+          </ol>
+          <input type="text" id="new" placeholder="add to list" autofocus> <input type="submit" value="add item">
+        `;
 
-            let todo = this.getObservableData("todo");
+        this.setRenderer(render); // set lit-html render() as the renderer
+        this.setTemplate(template); // set template function
+      }
 
-            todo.list.push({
-              id: ++todo.count,
-              done: false,
-              name: name
-            });
-          }
-        });
+      // push a new to do item onto list
+      addItem() {
+        const todo = this.getObservableData("todo")
+        let inp = this.element.querySelector("#new");
+        if(inp.value) {
+          todo.list.push({
+            id: todo.nextId++,
+            name: inp.value
+          });
+          inp.value = ""
+          inp.focus()
+        }
+      }
+
+      // remove item from list
+      removeItem(id) {
+        const todo = this.getObservableData("todo")
+        const i = todo.list.findIndex((element)=> {
+          return element.id === id
+        })
+        if(i !== -1) {
+          todo.list.splice(i, 1)
+        }
       }
     }
 
     // Register ToDoList custom element to the Sargasso framework
     utils.registerSargassoClass("ToDoList", ToDoList)
 
-    utils.bootSargasso()
+    const supervisor = utils.bootSargasso()
   </script>
 </body>
-
 </html>
