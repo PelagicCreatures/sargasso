@@ -12,7 +12,7 @@
   </style>
 </head>
 <body>
-  <script src="/dist/Breakpoints.js"></script>
+  <script src="/dist/breakpoints.js"></script>
 
   <h3>Example Sargasso Breakpoints</h3>
 
@@ -68,7 +68,9 @@
       }
       didBreakpoint (breakpoint) {
         this.breakpoint = breakpoint
-        this.element.innerHTML = '<p>current breakpoint: <strong>' + breakpoint + '</strong></p>'
+				this.queueFrame(()=>{
+					this.element.innerHTML = '<p>current breakpoint: <strong>' + breakpoint + '</strong></p>'
+				})
       }
       didResize() {
         this.element.innerHTML = '<p>did resize, within <strong>' + this.breakpoint + '</strong> breakpoint.</p>'

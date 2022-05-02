@@ -33,10 +33,10 @@ window.doBreakpoints = () => {
 			for(let c = 0; c < classes.length; c++) {
 				if(c == i) {
 					css += '.shown-' + breakpoints.widths[i].className + '{display:block;}\n'
-					css += '.hidden-' + breakpoints.widths[i].className + '{display:none;}\n'
+					css += '.hidden-' + breakpoints.widths[i].className + '{display:none!important;}\n'
 				}
 				else {
-					css += '.hidden-not-' + breakpoints.widths[c].className + '{display:none;}\n'
+					css += '.hidden-not-' + breakpoints.widths[c].className + '{display:none!important;}\n'
 					css += '.shown-not-' + breakpoints.widths[c].className + '{display:block;}\n'
 				}
 			}
@@ -71,6 +71,14 @@ window.doBreakpoints = () => {
 		document.body.classList.remove(window.sargassoScale)
 	}
 	window.sargassoScale = newScale
+	for(const c of classes) {
+		if(c === newScale) {
+			document.body.classList.remove('not-' + c)
+		}
+		else {
+			document.body.classList.add('not-' + c)
+		}
+	}
 	document.body.classList.add(window.sargassoScale)
 
 	return newScale
