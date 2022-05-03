@@ -5122,14 +5122,14 @@ var SargassoModule = (function (exports) {
 			super.unSubscribe(observer);
 		}
 
-		notify (id, type, path, value, source) {
+		notify (id, type, path, newValue, previousValue) {
 			if (!this.registeredObservableObjects[id]) {
 				throw (new Error('ObservableObject notify ' + id + ' does not exist'))
 			}
 			const observers = this.registeredObservableObjects[id].observers;
 			observers.forEach((observer) => {
 				if (observer.observableChanged) {
-					observer.observableChanged(id, type, path, value, source);
+					observer.observableChanged(id, type, path, newValue, previousValue);
 				}
 			});
 		}
@@ -5497,10 +5497,12 @@ var SargassoModule = (function (exports) {
 		/*
 			@function observableChange - listen for changes to observable object
 			@param { String } id - id of observable
-			@param { String } property - property that changed
-			@param { String } value - new value
+			@param { String } type - type of observable
+			@param { String } path - path that changed
+			@param { String } newValue - new value
+			@param { String } previousValue - old value
 			*/
-		observableChanged(id, property, value) {
+		observableChanged(id, type, path, newValue, previousValue) {
 			this.render();
 		}
 
@@ -6110,8 +6112,7 @@ var SargassoModule = (function (exports) {
 			this.debouncedDetectGeometry = debounce_1(() => {
 				this.detectGeometry();
 			}, 100, {
-				leading: true,
-				maxWait: 250
+				maxWait: 150
 			});
 		}
 

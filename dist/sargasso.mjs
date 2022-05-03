@@ -4092,11 +4092,11 @@ class $04abf88b58b0ffcd$var$ObservableObjectWatcher extends $04abf88b58b0ffcd$va
         if (!observers.length && this.registeredObservableObjects[id].managed) this.observableDestroy(id);
         super.unSubscribe(observer);
     }
-    notify(id, type, path, value, source) {
+    notify(id, type, path, newValue, previousValue) {
         if (!this.registeredObservableObjects[id]) throw new Error('ObservableObject notify ' + id + ' does not exist');
         const observers = this.registeredObservableObjects[id].observers;
         observers.forEach((observer)=>{
-            if (observer.observableChanged) observer.observableChanged(id, type, path, value, source);
+            if (observer.observableChanged) observer.observableChanged(id, type, path, newValue, previousValue);
         });
     }
 }
@@ -4375,9 +4375,11 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
     /*
 		@function observableChange - listen for changes to observable object
 		@param { String } id - id of observable
-		@param { String } property - property that changed
-		@param { String } value - new value
-		*/ observableChanged(id, property, value) {
+		@param { String } type - type of observable
+		@param { String } path - path that changed
+		@param { String } newValue - new value
+		@param { String } previousValue - old value
+		*/ observableChanged(id, type, path, newValue, previousValue) {
         this.render();
     }
     /****************************************************
@@ -4798,8 +4800,7 @@ class $3b466f211d4b9a1d$export$c38d2c1bff643203 extends $a2dfa52ef2fbbb46$export
         this.debouncedDetectGeometry = (/*@__PURE__*/$parcel$interopDefault($9fe0242a38a556ef$exports))(()=>{
             this.detectGeometry();
         }, 100, {
-            leading: true,
-            maxWait: 250
+            maxWait: 150
         });
     }
     start() {
