@@ -1,4 +1,4 @@
-import { Sargasso, registerSargassoClass } from './Sargasso'
+import { Sargasso, utils } from '@pelagiccreatures/sargasso'
 import { html, render } from 'lit-html'
 
 class SargassoComponent extends Sargasso {
@@ -160,7 +160,7 @@ class SargassoComponent extends Sargasso {
 	}
 }
 
-registerSargassoClass('SargassoComponent', SargassoComponent)
+utils.registerSargassoClass('SargassoComponent', SargassoComponent)
 
 export {
 	SargassoComponent

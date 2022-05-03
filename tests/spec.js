@@ -13,6 +13,11 @@ function makeNode(html) {
 			nested element <- delegated event
 */
 
+function wait(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
 describe('Sargasso', function () {
 
 
@@ -384,45 +389,48 @@ describe('Sargasso', function () {
 		}
 		const observed = new SargassoModule.ObservableObject('shared-data', args)
 
-		let count = 0
-		observed.bind('test-bind-1', (id, prop, val) => {
-			++count
+		const count = {connect:0,update:0,disconnect:0}
+		observed.bind('test-bind-1', (id, type, path, newValue, previousValue) => {
+			++count[type]
 		})
 
-		observed.bind('test-bind-2', (id, prop, val) => {
-			++count
+		observed.bind('test-bind-2', (id, type, path, newValue, previousValue) => {
+			++count[type]
 		})
 
-		observed.bind('test-bind-3', (id, prop, val) => {
-			++count
+		observed.bind('test-bind-3', (id, type, path, newValue, previousValue) => {
+			++count[type]
 		}, 'hello')
 
 		expect(Object.keys(observed.bound['*']).length).to.equal(2)
 		expect(Object.keys(observed.bound.hello).length).to.equal(1)
 
-		expect(count).to.equal(3)
+		expect(count['connect']).to.equal(3)
 
 		observed.data.hello += '!'
 
-		expect(count).to.equal(6)
+		wait(10).then(()=>{
+			expect(count['update']).to.equal(3)
 
-		observed.unbind('test-bind-1')
-		observed.unbind('test-bind-2')
-		observed.unbind('test-bind-3', 'hello')
+			observed.unbind('test-bind-1')
+			observed.unbind('test-bind-2')
+			observed.unbind('test-bind-3', 'hello')
 
-		observed.data.hello += '!'
+			observed.data.hello += '!'
 
-		expect(Object.keys(observed.bound['*']).length).to.equal(0)
-		expect(count).to.equal(6)
-
-		done()
+			wait(10).then(()=>{
+				expect(Object.keys(observed.bound['*']).length).to.equal(0)
+				expect(count['update']).to.equal(3)
+				done()
+			})
+		})
 	})
 
 	it('Sargasso observable', function (done) {
-		let count = 0
+		const count = {connect:0,add:0,disconnect:0}
 		class InstrumentedDOMClass extends SargassoModule.Sargasso {
-			observableChanged(id, property, value) {
-				++count
+			observableChanged(id, type, path, newValue, previousValue) {
+				++count[type]
 			}
 		}
 
@@ -432,13 +440,12 @@ describe('Sargasso', function () {
 
 		observed.data.test = 1
 
-		expect(count).to.equal(1)
-
-		o.destroy()
-
-		expect(SargassoModule.services.theObservableObjectWatcher.observers.length).to.equal(0)
-
-		done()
+		wait(10).then(()=>{
+			expect(count['add']).to.equal(1)
+			o.destroy()
+			expect(SargassoModule.services.theObservableObjectWatcher.observers.length).to.equal(0)
+			done()
+		})
 	})
 
 	/*

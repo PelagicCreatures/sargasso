@@ -25,20 +25,22 @@
   {
     "imports": {
       "@pelagiccreatures/sargasso": "/dist/sargasso.mjs",
+      "@pelagiccreatures/sargasso/modules/SargassoComponent": "/dist/modules/SargassoComponent.mjs",
       "lit-html": "https://unpkg.com/lit-html?module"
     }
   }
   </script>
   <script type="module">
-    import { Sargasso, ObservableObject, SargassoComponent, utils } from "@pelagiccreatures/sargasso"
+    import { Sargasso, ObservableObject, utils } from "@pelagiccreatures/sargasso"
+		import { SargassoComponent } from "@pelagiccreatures/sargasso/modules/SargassoComponent"
     import {
       html,render
     } from 'lit-html'
 
     // data structure for todo list
     let todo = {
-      lastId: 0,
-      list: []
+      lastId: 1,
+      list: [{id:1,name:"Pre Existing"}]
     };
 
     // create an ObservableObject with the id "todo"
@@ -139,7 +141,7 @@
     // any change to data will trigger notification to all watchers
     setTimeout(()=>{
       proxied.list.push({id:++proxied.lastId,name:'Added programmatically'})
-    }, 2000)
+    }, 500)
 
   </script>
 </body>

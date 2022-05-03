@@ -1,5 +1,3 @@
-import {render as $8Ln3R$render, html as $8Ln3R$html} from "lit-html";
-
 var $parcel$global =
 typeof globalThis !== 'undefined'
   ? globalThis
@@ -3724,7 +3722,7 @@ const $4bd7951ed406c253$export$7ec259ba0528fb23 = (id)=>{
         if ($4bd7951ed406c253$var$registeredObservables[this.id]) throw new Error('ObservableObject ' + id + ' already exists.');
         this.bound = {} // watchers to sync on value change
         ;
-        this.data = $70f23c7c95ce5dd7$exports.create(data, true, (changes)=>{
+        this.data = $70f23c7c95ce5dd7$exports.create(data, false, (changes)=>{
             this.sync(changes);
         });
         this.options = options;
@@ -5008,129 +5006,6 @@ const $be4ac01db6cf9f9d$export$80ed8a0252d89225 = (options = {})=>{
 
 
 
-
-
-class $1d13337eab472697$export$da2f2f1de028dda3 extends $a2dfa52ef2fbbb46$export$d7944a94c1afb262 {
-    constructor(element, options = {}){
-        options.shadowDOM = options.shadowDOM === undefined ? true : options.shadowDOM;
-        super(element, options);
-        // attributes that affect structure of template - requires template rebuild and render
-        this.templateAttributes = [];
-        // observed attributes - change will trigger render only
-        this.renderAttributes = [];
-        // current attribute values
-        this.templateOptions = {};
-        this.obervableId = (this._hostElement || this.element).getAttribute('data-observable-id');
-        if (this.obervableId) this.observableData = this.observableStart(this.obervableId);
-        this.renderOptions = this.observableStart('SargassoComponent-' + this.uid, {});
-        this.pendingLinkTagCount = 0;
-    }
-    start() {
-        super.start();
-        this.getAttributes();
-        this.watchAttributes() // watch attributes on host element
-        ;
-        this.setTemplateArgs({
-            attributes: this.renderOptions.data,
-            data: this.observableData.data
-        });
-        this.elegant() // set graceful rendering kludge
-        ;
-        this.buildTemplate() // build and install lit-html template
-        ;
-        if (this._template) this.setRenderer($8Ln3R$render) // set lit-html render() as the renderer
-        ;
-    }
-    watchAttributes() {
-        // all attributes to observe
-        this.allAttributes = this.templateAttributes.concat(this.renderAttributes);
-        // watch for changes to host element attributes
-        this.attributeObserver = new MutationObserver((mutations)=>{
-            let needSync = false;
-            let needRebuild = false;
-            mutations.forEach((mutation)=>{
-                if (mutation.type === "attributes") {
-                    if (this.allAttributes.indexOf(mutation.attributeName) !== -1) {
-                        needSync = true;
-                        if (this.templateAttributes.indexOf(mutation.attributeName) !== -1) needRebuild = true;
-                    }
-                }
-            });
-            if (needSync) {
-                this.getAttributes();
-                if (needRebuild) {
-                    this.buildTemplate();
-                    this.render();
-                }
-            }
-        });
-        this.attributeObserver.observe(this._hostElement || this.element, {
-            attributes: true
-        });
-    }
-    getAttributes() {
-        for (const attr of this.templateAttributes)this.templateOptions[attr] = (this._hostElement || this.element).getAttribute(attr) || (this._hostElement || this.element).hasAttribute(attr);
-        for (const attr1 of this.renderAttributes)this.renderOptions.data[attr1] = (this._hostElement || this.element).getAttribute(attr1) || (this._hostElement || this.element).hasAttribute(attr1);
-    }
-    buildTemplate() {
-        const template = (args)=>$8Ln3R$html`
-			<style>
-				.web-component-body {
-					opacity: 0;
-					transition: opacity .25s ease-in-out;
-				}
-				.web-component-body--loaded { opacity: 1; }
-			</style>
-			<div class="web-component-body">
-				<p>using default buildTemplate - override buildTemplate to customize component markup</p>
-				<p>args: ${JSON.stringify(args)}
-			</div>
-		`
-        ;
-        this.setTemplate(template) // set template function
-        ;
-    }
-    sleep() {
-        if (this.attributeObserver) this.attributeObserver.disconnect();
-        if (this.styleObserver) this.styleObserver.disconnect();
-        super.sleep();
-    }
-    reveal() {
-        if (this.element.querySelector('.web-component-body')) this.element.querySelector('.web-component-body').classList.add('web-component-body--loaded');
-    }
-    _render() {
-        super._render();
-        if (!this.pendingLinkTagCount) this.reveal();
-    }
-    elegant() {
-        // convoluted scheme to cover janky rendering
-        // hide element until all the css is ready within the component
-        const nodes = [
-            "LINK"
-        ];
-        const nodeLoaded = (e)=>{
-            e.target.removeEventListener("load", nodeLoaded);
-            if (!--this.pendingLinkTagCount) {
-                this.reveal();
-                this.styleObserver.disconnect();
-            }
-        };
-        this.styleObserver = new MutationObserver((mutations)=>{
-            mutations.forEach((mutation)=>{
-                for(let i = 0; i < mutation.addedNodes.length; i++){
-                    const node = mutation.addedNodes[i];
-                    if (nodes.indexOf(node.nodeName.toUpperCase()) !== -1) node.addEventListener("load", nodeLoaded);
-                }
-            });
-        });
-        this.styleObserver.observe(this.element, {
-            childList: true
-        });
-    }
-}
-$a2dfa52ef2fbbb46$export$22044c20eef36040('SargassoComponent', $1d13337eab472697$export$da2f2f1de028dda3);
-
-
 const $36a01d5a29783b8e$export$eab97d15b1788b8d = {
     registerSargassoClass: $a2dfa52ef2fbbb46$export$22044c20eef36040,
     bootSargasso: $be4ac01db6cf9f9d$export$80ed8a0252d89225,
@@ -5153,5 +5028,5 @@ const $36a01d5a29783b8e$export$505f1cb98cb78c0d = {
 };
 
 
-export {$36a01d5a29783b8e$export$eab97d15b1788b8d as utils, $36a01d5a29783b8e$export$bce7a36871692cab as services, $36a01d5a29783b8e$export$505f1cb98cb78c0d as system, $a2dfa52ef2fbbb46$export$d7944a94c1afb262 as Sargasso, $be4ac01db6cf9f9d$export$7869d9d42a3fc8a6 as loadPageHandler, $4bd7951ed406c253$export$b176171395436676 as ObservableObject, $1d13337eab472697$export$da2f2f1de028dda3 as SargassoComponent};
+export {$36a01d5a29783b8e$export$eab97d15b1788b8d as utils, $36a01d5a29783b8e$export$bce7a36871692cab as services, $36a01d5a29783b8e$export$505f1cb98cb78c0d as system, $a2dfa52ef2fbbb46$export$d7944a94c1afb262 as Sargasso, $be4ac01db6cf9f9d$export$7869d9d42a3fc8a6 as loadPageHandler, $4bd7951ed406c253$export$b176171395436676 as ObservableObject};
 //# sourceMappingURL=sargasso.mjs.map
