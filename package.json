@@ -1,6 +1,6 @@
 {
 	"name": "@pelagiccreatures/sargasso",
-	"version": "2.1.0",
+	"version": "2.2.0",
 	"description": "Simple, Fast, Reactive, Supervised Javascript controllers for custom html elements.",
 	"type": "module",
 	"browser": "dist/sargasso.mjs",
@@ -48,7 +48,7 @@
 		"setimmediate": "^1.0.5",
 		"sinon": "^13.0.2"
 	},
-	"peerDependencies" :{
+	"peerDependencies": {
 		"lit-html": "^2.2.3"
 	},
 	"dependencies": {
