@@ -3776,17 +3776,17 @@ const $792b173a6e02c603$export$7ec259ba0528fb23 = (id)=>{
 		@param { String } property - property that changed
 		*/ sync(changes) {
         for (const change of changes){
-            console.log(change);
             const type = change.type;
-            const property = change.property;
-            const target = change.target;
-            const value = change.newValue;
-            Object.keys(this.bound['*'] || {}).forEach((k)=>{
-                this.bound['*'][k](this.id, property, value);
-            });
-            Object.keys(this.bound[property] || {}).forEach((k)=>{
-                this.bound[property][k](this.id, property, value);
-            });
+            const path = change.currentPath;
+            const newValue = change.newValue;
+            const previousValue = change.previousValue;
+            const channels = [];
+            for(const p in this.bound)if (p === '*') channels.push(p);
+            else {
+                const re = new RegExp('^' + p.replace('.', '\\.'));
+                if (path.match(re)) channels.push(p);
+            }
+            for (const channel of channels)for(const subscriber in this.bound[channel])this.bound[channel][subscriber](this.id, type, path, newValue, previousValue);
         }
     }
 }
@@ -4091,11 +4091,11 @@ class $28e0c90eeff7adcf$var$ObservableObjectWatcher extends $28e0c90eeff7adcf$va
         if (!observers.length && this.registeredObservableObjects[id].managed) this.observableDestroy(id);
         super.unSubscribe(observer);
     }
-    notify(id, property, value, source) {
+    notify(id, type, path, value, source) {
         if (!this.registeredObservableObjects[id]) throw new Error('ObservableObject notify ' + id + ' does not exist');
         const observers = this.registeredObservableObjects[id].observers;
         observers.forEach((observer)=>{
-            if (observer.observableChanged) observer.observableChanged(id, property, value, source);
+            if (observer.observableChanged) observer.observableChanged(id, type, path, value, source);
         });
     }
 }

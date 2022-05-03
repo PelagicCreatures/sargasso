@@ -27,6 +27,6 @@ Made in Barbados 🇧🇧 Copyright © 2020-2022 Michael Rhodes
 * Template literals and rendering tools such as [lit-html](https://lit-html.polymer-project.org/)
 * Shadow DOM
 
-The result is lean (<50k), highly performant and clean library that simplifies the implementation of the complex technologies behind modern progressive web apps and web sites.
+The result is lean, highly performant framework that simplifies the implementation of the complex technologies behind modern progressive web apps and web sites.
 
 [Documentation & Guides](https://github.com/PelagicCreatures/sargasso/wiki)
