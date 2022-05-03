@@ -6,7 +6,9 @@
 	"browser": "dist/sargasso.mjs",
 	"targets": {
 		"browser": {
-			"includeNodeModules": true
+			"includeNodeModules": {
+				"lit-html": false
+			}
 		}
 	},
 	"keywords": [
@@ -47,6 +49,7 @@
 		"sinon": "^13.0.2"
 	},
 	"dependencies": {
+		"lit-html": "^2.2.3",
 		"lodash": "^4.17.21",
 		"observable-slim": "^0.1.5"
 	},
