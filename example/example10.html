@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Example Web Component: Material Buttons</title>
+
+  <!--
+    The Material Design implementation uses css variables to apply themes.
+    Web components can see these variables even when shadow DOM is applied.
+    Variables can be scoped to particular components using classes.
+  -->
+  <style >
+    :root {
+      --mdc-theme-primary: red;
+      --mdc-theme-secondary: purple;
+      --mdc-theme-background: grey;
+      --mdc-theme-surface: silver;
+      --mdc-theme-on-primary: white;
+      --mdc-theme-on-secondary: blue;
+      --mdc-theme-on-surface: black;
+    }
+
+    .custom-theme1 {
+      --mdc-typography-font-family: 'Inspiration';
+      --mdc-theme-primary: #333;
+    }
+
+    .custom-theme2 {
+      --mdc-theme-primary: blue;
+    }
+  </style>
+
+  <!-- ICONS - fonts pierce shadow DOM barrier web components fit into document style -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+</head>
+<body>
+  <h3>Example Web Component</h3>
+
+  <p>
+    <sargasso-button class="custom-theme1" outlined icon-leading icon="bookmark" label="click me" id="button1"></sargasso-button>
+  </p>
+
+  <p>
+    <sargasso-button raised icon-leading icon="bookmark" label="click me" id="button2"></sargasso-button>
+  </p>
+
+  <p>
+    <sargasso-button class="custom-theme2" icon-leading icon="bookmark" label="click me" id="button3"></sargasso-button>
+  </p>
+
+  <!-- enable es6 modules and import maps -->
+  <script async src="https://unpkg.com/es-module-shims@0.13.1/dist/es-module-shims.js"></script>
+  <!-- https://unpkg.com/@pelagiccreatures/sargasso/dist/sargasso.mjs -->
+  <script type="importmap">
+  {
+    "imports": {
+      "@pelagiccreatures/sargasso": "/dist/sargasso.mjs",
+      "@pelagiccreatures/sargasso/modules/SargassoComponent": "/dist/modules/SargassoComponent.mjs",
+      "@pelagiccreatures/sargasso/modules/Button": "/dist/modules/MaterialButton.mjs",
+      "@material/ripple":"https://unpkg.com/@material/ripple@14.0.0/index.js?module",
+      "lit-html": "https://unpkg.com/lit-html?module"
+    }
+  }
+  </script>
+  <script type="module">
+    import { Sargasso, ObservableObject, utils } from "@pelagiccreatures/sargasso"
+    import { Button } from "@pelagiccreatures/sargasso/modules/Button"
+
+    utils.bootSargasso()
+
+    // attach click handlers. Component appearance and behavior is controlled by changing attributes
+    utils.elementTools.on('clicker', document.body, 'click', 'sargasso-button', (e) => {
+      e.target.setAttribute('disabled','')
+      e.target.setAttribute('label','done')
+    })
+  </script>
+</body>
+</html>

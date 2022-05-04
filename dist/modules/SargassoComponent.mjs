@@ -32,7 +32,7 @@ class SargassoComponent extends Sargasso {
 		this.watchAttributes() // watch attributes on host element
 		this.setTemplateArgs({
 			attributes:this.renderOptions.data,
-			data:this.observableData.data
+			data: this.observableData ? this.observableData.data : undefined
 		})
 		this.elegant() // set graceful rendering kludge
 		this.buildTemplate() // build and install lit-html template
