@@ -16,8 +16,14 @@ var SargassoModule = (function (exports) {
 	}
 
 	function getAugmentedNamespace(n) {
-		if (n.__esModule) return n;
-		var a = Object.defineProperty({}, '__esModule', {value: true});
+	  var f = n.default;
+		if (typeof f == "function") {
+			var a = function () {
+				return f.apply(this, arguments);
+			};
+			a.prototype = f.prototype;
+	  } else a = {};
+	  Object.defineProperty(a, '__esModule', {value: true});
 		Object.keys(n).forEach(function (k) {
 			var d = Object.getOwnPropertyDescriptor(n, k);
 			Object.defineProperty(a, k, d.get ? d : {
@@ -28,10 +34,6 @@ var SargassoModule = (function (exports) {
 			});
 		});
 		return a;
-	}
-
-	function commonjsRequire (path) {
-		throw new Error('Could not dynamically require "' + path + '". Please configure the dynamicRequireTargets or/and ignoreDynamicRequires option of @rollup/plugin-commonjs appropriately for this require call to work.');
 	}
 
 	/** Detect free variable `global` from Node.js. */
@@ -3035,45 +3037,45 @@ var SargassoModule = (function (exports) {
 	var stubFalse_1 = stubFalse;
 
 	(function (module, exports) {
-	var root = _root,
-	    stubFalse = stubFalse_1;
+		var root = _root,
+		    stubFalse = stubFalse_1;
 
-	/** Detect free variable `exports`. */
-	var freeExports = 'object' == 'object' && exports && !exports.nodeType && exports;
+		/** Detect free variable `exports`. */
+		var freeExports = 'object' == 'object' && exports && !exports.nodeType && exports;
 
-	/** Detect free variable `module`. */
-	var freeModule = freeExports && 'object' == 'object' && module && !module.nodeType && module;
+		/** Detect free variable `module`. */
+		var freeModule = freeExports && 'object' == 'object' && module && !module.nodeType && module;
 
-	/** Detect the popular CommonJS extension `module.exports`. */
-	var moduleExports = freeModule && freeModule.exports === freeExports;
+		/** Detect the popular CommonJS extension `module.exports`. */
+		var moduleExports = freeModule && freeModule.exports === freeExports;
 
-	/** Built-in value references. */
-	var Buffer = moduleExports ? root.Buffer : undefined;
+		/** Built-in value references. */
+		var Buffer = moduleExports ? root.Buffer : undefined;
 
-	/* Built-in method references for those with the same name as other `lodash` methods. */
-	var nativeIsBuffer = Buffer ? Buffer.isBuffer : undefined;
+		/* Built-in method references for those with the same name as other `lodash` methods. */
+		var nativeIsBuffer = Buffer ? Buffer.isBuffer : undefined;
 
-	/**
-	 * Checks if `value` is a buffer.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.3.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a buffer, else `false`.
-	 * @example
-	 *
-	 * _.isBuffer(new Buffer(2));
-	 * // => true
-	 *
-	 * _.isBuffer(new Uint8Array(2));
-	 * // => false
-	 */
-	var isBuffer = nativeIsBuffer || stubFalse;
+		/**
+		 * Checks if `value` is a buffer.
+		 *
+		 * @static
+		 * @memberOf _
+		 * @since 4.3.0
+		 * @category Lang
+		 * @param {*} value The value to check.
+		 * @returns {boolean} Returns `true` if `value` is a buffer, else `false`.
+		 * @example
+		 *
+		 * _.isBuffer(new Buffer(2));
+		 * // => true
+		 *
+		 * _.isBuffer(new Uint8Array(2));
+		 * // => false
+		 */
+		var isBuffer = nativeIsBuffer || stubFalse;
 
-	module.exports = isBuffer;
-	}(isBuffer$2, isBuffer$2.exports));
+		module.exports = isBuffer;
+	} (isBuffer$2, isBuffer$2.exports));
 
 	var isBuffer_1 = isBuffer$2.exports;
 
@@ -3221,37 +3223,37 @@ var SargassoModule = (function (exports) {
 	var _nodeUtil$1 = {exports: {}};
 
 	(function (module, exports) {
-	var freeGlobal = _freeGlobal;
+		var freeGlobal = _freeGlobal;
 
-	/** Detect free variable `exports`. */
-	var freeExports = 'object' == 'object' && exports && !exports.nodeType && exports;
+		/** Detect free variable `exports`. */
+		var freeExports = 'object' == 'object' && exports && !exports.nodeType && exports;
 
-	/** Detect free variable `module`. */
-	var freeModule = freeExports && 'object' == 'object' && module && !module.nodeType && module;
+		/** Detect free variable `module`. */
+		var freeModule = freeExports && 'object' == 'object' && module && !module.nodeType && module;
 
-	/** Detect the popular CommonJS extension `module.exports`. */
-	var moduleExports = freeModule && freeModule.exports === freeExports;
+		/** Detect the popular CommonJS extension `module.exports`. */
+		var moduleExports = freeModule && freeModule.exports === freeExports;
 
-	/** Detect free variable `process` from Node.js. */
-	var freeProcess = moduleExports && freeGlobal.process;
+		/** Detect free variable `process` from Node.js. */
+		var freeProcess = moduleExports && freeGlobal.process;
 
-	/** Used to access faster Node.js helpers. */
-	var nodeUtil = (function() {
-	  try {
-	    // Use `util.types` for Node.js 10+.
-	    var types = freeModule && freeModule.require && freeModule.require('util').types;
+		/** Used to access faster Node.js helpers. */
+		var nodeUtil = (function() {
+		  try {
+		    // Use `util.types` for Node.js 10+.
+		    var types = freeModule && freeModule.require && freeModule.require('util').types;
 
-	    if (types) {
-	      return types;
-	    }
+		    if (types) {
+		      return types;
+		    }
 
-	    // Legacy `process.binding('util')` for Node.js < 10.
-	    return freeProcess && freeProcess.binding && freeProcess.binding('util');
-	  } catch (e) {}
-	}());
+		    // Legacy `process.binding('util')` for Node.js < 10.
+		    return freeProcess && freeProcess.binding && freeProcess.binding('util');
+		  } catch (e) {}
+		}());
 
-	module.exports = nodeUtil;
-	}(_nodeUtil$1, _nodeUtil$1.exports));
+		module.exports = nodeUtil;
+	} (_nodeUtil$1, _nodeUtil$1.exports));
 
 	var _nodeUtil = _nodeUtil$1.exports;
 
@@ -3828,7 +3830,7 @@ var SargassoModule = (function (exports) {
 
 	var isEqual_1 = isEqual;
 
-	var observableSlim$1 = {exports: {}};
+	var observableSlim = {exports: {}};
 
 	/*
 	 * 	Observable Slim
@@ -4550,9 +4552,7 @@ var SargassoModule = (function (exports) {
 	})();
 
 	// Export in a try catch to prevent this from erroring out on older browsers
-	try { observableSlim$1.exports = ObservableSlim; } catch (err) {};
-
-	var observableSlim = observableSlim$1.exports;
+	try { observableSlim.exports = ObservableSlim; } catch (err) {};
 
 	/*
 		build Proxy to observe changes to object properties
@@ -4586,7 +4586,7 @@ var SargassoModule = (function (exports) {
 
 			this.bound = {}; // watchers to sync on value change
 
-			this.data = observableSlim$1.exports.create(data, false, (changes)=>{
+			this.data = observableSlim.exports.create(data, false, (changes)=>{
 				this.sync(changes);
 			});
 
@@ -4599,7 +4599,7 @@ var SargassoModule = (function (exports) {
 			@function destroy - remove all bindings
 			*/
 		destroy () {
-			observableSlim$1.exports.pause(this.data);
+			observableSlim.exports.pause(this.data);
 
 			delete registeredObservables[this.id];
 			delete this.data;
@@ -4609,7 +4609,7 @@ var SargassoModule = (function (exports) {
 				});
 			});
 
-			observableSlim$1.exports.remove(this.data);
+			observableSlim.exports.remove(this.data);
 		}
 
 		/*
