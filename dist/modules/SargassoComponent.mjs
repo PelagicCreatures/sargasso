@@ -122,7 +122,11 @@ class SargassoComponent extends Sargasso {
 
 	_render () {
 		super._render()
-		if(!this.pendingLinkTagCount) {
+		this.didRender()
+	}
+
+	didRender () {
+		if(!this.pendingLinkTagCount && !this.element.querySelector('.web-component-body--loaded')) {
 			this.reveal()
 		}
 	}

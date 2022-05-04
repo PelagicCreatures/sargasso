@@ -105,8 +105,8 @@ class Button extends SargassoComponent {
 		super.sleep()
 	}
 
-	_render () {
-		super._render()
+	didRender () {
+		super.didRender()
 		this.instantiateMDC()
 	}
 
