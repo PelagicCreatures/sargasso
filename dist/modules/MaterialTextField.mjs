@@ -13,7 +13,7 @@ class TextField extends SargassoComponent {
 		this.templateAttributes = ['filled', 'outlined', 'no-label', 'textarea', 'disabled', 'with-internal-counter', 'helper', 'character-counter', 'prefix', 'suffix', 'icon-leading', 'icon-trailing', 'resizer']
 
 		// observed attributes - render only on change
-		this.renderAttributes = ['label', 'value', 'helper-text', 'prefix-text', 'suffix-text', 'icon-leading-name', 'icon-trailing-name', 'label-floating', 'rows', 'cols']
+		this.renderAttributes = ['label', 'value', 'helper-text', 'prefix-text', 'suffix-text', 'icon-leading-icon', 'icon-trailing-icon', 'rows', 'cols']
 
 		this.pendingLinkTagCount = 1 // reveal after css files to loaded
 
@@ -56,12 +56,12 @@ class TextField extends SargassoComponent {
 
 		if(this.templateOptions['icon-leading']) {
 			classes.push('mdc-text-field--with-leading-icon')
-			iconLeading = (args) => html`<i class="material-icons mdc-text-field__icon mdc-text-field__icon--leading" tabindex="0" role="button">${args.attributes['icon-leading-name']}</i>`
+			iconLeading = (args) => html`<i class="material-icons mdc-text-field__icon mdc-text-field__icon--leading" tabindex="0" role="button">${args.attributes['icon-leading-icon']}</i>`
 		}
 
 		if(this.templateOptions['icon-trailing']) {
 			classes.push('mdc-text-field--with-trailing-icon')
-			iconTrailing = (args) => html`<i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button">${args.attributes['icon-leading-name']}</i>`
+			iconTrailing = (args) => html`<i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button">${args.attributes['icon-trailing-icon']}</i>`
 		}
 
 		if(this.templateOptions['prefix']) {
@@ -73,7 +73,7 @@ class TextField extends SargassoComponent {
 		}
 
 		if(this.templateOptions['helper']) {
-			helper = (args) => html`<div class="mdc-text-field-helper-line"><div class="mdc-text-field-helper-text" id="my-helper-id" aria-hidden="true">${args.attributes['helper-line']}</div></div>`
+			helper = (args) => html`<div class="mdc-text-field-helper-line"><div class="mdc-text-field-helper-text" id="my-helper-id" aria-hidden="true">${args.attributes['helper-text']}</div></div>`
 		}
 
 		const inputClasses = classes.join(' ')
@@ -86,11 +86,11 @@ class TextField extends SargassoComponent {
 				if(this.templateOptions.resizer) {
 					markup = (args) => html`
 						<label class="${inputClasses}">
-						  <span class="mdc-text-field__ripple"></span>
-						  <span class="mdc-text-field__resizer">
-						    <textarea class="mdc-text-field__input" rows="8" cols="40" aria-label="Label"></textarea>
-						  </span>
-						  <span class="mdc-line-ripple"></span>
+							<span class="mdc-text-field__ripple"></span>
+							<span class="mdc-text-field__resizer">
+								<textarea class="mdc-text-field__input" rows="8" cols="40" aria-label="Label"></textarea>
+							</span>
+							<span class="mdc-line-ripple"></span>
 						</label>
 						${helper(args)}
 					`
@@ -98,9 +98,9 @@ class TextField extends SargassoComponent {
 				else {
 					markup = (args) => html`
 						<label class="${inputClasses}">
-						  <span class="mdc-text-field__ripple"></span>
-						  <textarea class="mdc-text-field__input" rows="8" cols="40" aria-label="Label"></textarea>
-						  <span class="mdc-line-ripple"></span>
+							<span class="mdc-text-field__ripple"></span>
+							<textarea class="mdc-text-field__input" rows="8" cols="40" aria-label="Label"></textarea>
+							<span class="mdc-line-ripple"></span>
 						</label>
 						${helper(args)}
 					`
