@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Example Web Component: Material Text Field</title>
+
+  <!--
+    The Material Design implementation uses css variables to apply themes.
+    Web components can see these variables even when shadow DOM is applied.
+    Variables can be scoped to particular components using classes.
+  -->
+  <style >
+    :root {
+      --mdc-theme-primary: red;
+      --mdc-theme-secondary: purple;
+      --mdc-theme-background: grey;
+      --mdc-theme-surface: silver;
+      --mdc-theme-on-primary: white;
+      --mdc-theme-on-secondary: blue;
+      --mdc-theme-on-surface: black;
+    }
+
+    .custom-theme1 {
+      --mdc-typography-font-family: 'Inspiration';
+      --mdc-theme-primary: #333;
+    }
+
+    .custom-theme2 {
+      --mdc-theme-primary: blue;
+    }
+  </style>
+
+  <!-- ICONS - fonts pierce shadow DOM barrier web components fit into document style -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+</head>
+<body>
+  <h3>Example Web Component: Material Text Field</h3>
+
+	<h3>Simple text field no-label</h3>
+	<sargasso-text-field filled no-label id="input"></sargasso-text-field>
+	<sargasso-text-field outlined no-label></sargasso-text-field>
+
+	<h3>Simple text field w/label</h3>
+	<sargasso-text-field filled label="type here"></sargasso-text-field>
+	<sargasso-text-field outlined label="type here"></sargasso-text-field>
+
+	<h3>Simple text field w/label, prefix, suffix & initial value</h3>
+	<sargasso-text-field filled label="type here" value="inital value" prefix prefix-text="$" suffix suffix-text=".00"></sargasso-text-field>
+	<sargasso-text-field outlined label="type here" value="inital value"></sargasso-text-field>
+
+	<h3>Simple text field w/all the sugar</h3>
+	<sargasso-text-field filled label="type here" icon-leading icon-leading-icon="bookmark" icon-trailing icon-trailing-icon="close" helper helper-text="helper text" character-counter maxlength="10"></sargasso-text-field>
+	<sargasso-text-field outlined label="type here" icon-leading icon-leading-icon="bookmark" icon-trailing icon-trailing-icon="close" helper helper-text="helper text" character-counter maxlength="10"></sargasso-text-field>
+
+	<h3>Simple Textarea</h3>
+	<sargasso-text-field filled textarea no-label></sargasso-text-field>
+	<sargasso-text-field outlined textarea no-label></sargasso-text-field>
+
+	<h3>Simple Textarea w/label</h3>
+	<sargasso-text-field filled textarea label="type here"></sargasso-text-field>
+	<sargasso-text-field outlined textarea label="type here"></sargasso-text-field>
+
+	<h3>Simple Textarea w/resizer</h3>
+	<sargasso-text-field filled textarea label="type here" resizer></sargasso-text-field>
+	<sargasso-text-field outlined textarea label="type here" resizer></sargasso-text-field>
+
+	<h3>Simple Textarea  w/all the sugar</h3>
+	<sargasso-text-field filled label="type here"  helper helper-text="helper text" character-counter maxlength="10" cols="30" rows="5"></sargasso-text-field>
+	<sargasso-text-field outlined label="type here"  helper helper-text="helper text" character-counter maxlength="10" cols="30" rows="5"></sargasso-text-field>
+
+
+  <!-- enable es6 modules and import maps -->
+  <script async src="https://unpkg.com/es-module-shims@0.13.1/dist/es-module-shims.js"></script>
+  <!-- https://unpkg.com/@pelagiccreatures/sargasso/dist/sargasso.mjs -->
+  <script type="importmap">
+  {
+    "imports": {
+      "@pelagiccreatures/sargasso": "/dist/sargasso.mjs",
+      "@pelagiccreatures/sargasso/modules/SargassoComponent": "/dist/modules/SargassoComponent.mjs",
+			"@pelagiccreatures/sargasso/modules/TextField": "/dist/modules/MaterialTextField.mjs",
+      "@material/ripple":"https://unpkg.com/@material/ripple@14.0.0/index.js?module",
+			"@material/textfield":"https://unpkg.com/@material/textfield@14.0.0/index.js?module",
+			"@material/textfield/icon":"https://unpkg.com/@material/textfield@14.0.0/icon/index.js?module",
+			"@material/textfield/character-counter":"https://unpkg.com/@material/textfield@14.0.0/character-counter/index.js?module",
+      "lit-html": "https://unpkg.com/lit-html?module"
+    }
+  }
+  </script>
+  <script type="module">
+    import { Sargasso, ObservableObject, utils } from "@pelagiccreatures/sargasso"
+		import { TextField } from "@pelagiccreatures/sargasso/modules/TextField"
+
+    utils.bootSargasso()
+
+		utils.elementTools.on('changer', document.body, 'sargasso-change focus blur', 'sargasso-text-field', (e) => {
+			console.log(e.type,e.detail.value)
+		},true)
+  </script>
+</body>
+</html>

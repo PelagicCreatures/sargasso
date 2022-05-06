@@ -48,22 +48,6 @@
     <sargasso-button class="custom-theme2" icon-leading icon="bookmark" label="click me" id="button3"></sargasso-button>
   </p>
 
-	<p>
-		<sargasso-text-field outlined label="type here" icon-leading icon-leading-icon="bookmark" helper helper-text="helper text"></sargasso-text-field>
-	</p>
-
-	<p>
-		<sargasso-text-field outlined textarea resizer label="type here"></sargasso-text-field>
-	</p>
-
-	<p>
-		<sargasso-text-field filled label="type here"></sargasso-text-field>
-	</p>
-
-	<p>
-		<sargasso-text-field filled textarea label="type here"></sargasso-text-field>
-	</p>
-
   <!-- enable es6 modules and import maps -->
   <script async src="https://unpkg.com/es-module-shims@0.13.1/dist/es-module-shims.js"></script>
   <!-- https://unpkg.com/@pelagiccreatures/sargasso/dist/sargasso.mjs -->
@@ -73,10 +57,7 @@
       "@pelagiccreatures/sargasso": "/dist/sargasso.mjs",
       "@pelagiccreatures/sargasso/modules/SargassoComponent": "/dist/modules/SargassoComponent.mjs",
       "@pelagiccreatures/sargasso/modules/Button": "/dist/modules/MaterialButton.mjs",
-			"@pelagiccreatures/sargasso/modules/TextField": "/dist/modules/MaterialTextField.mjs",
       "@material/ripple":"https://unpkg.com/@material/ripple@14.0.0/index.js?module",
-			"@material/textfield":"https://unpkg.com/@material/textfield@14.0.0/index.js?module",
-			"@material/textfield/icon":"https://unpkg.com/@material/textfield@14.0.0/icon/index.js?module",
       "lit-html": "https://unpkg.com/lit-html?module"
     }
   }
@@ -84,7 +65,6 @@
   <script type="module">
     import { Sargasso, ObservableObject, utils } from "@pelagiccreatures/sargasso"
     import { Button } from "@pelagiccreatures/sargasso/modules/Button"
-		import { TextField } from "@pelagiccreatures/sargasso/modules/TextField"
 
     utils.bootSargasso()
 
