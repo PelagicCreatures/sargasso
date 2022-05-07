@@ -3,6 +3,10 @@ import { html, render } from 'lit-html'
 
 class SargassoComponent extends Sargasso {
 	constructor (element, options = {}) {
+
+		// get the options before we go beyond the shadow DOM horizon
+		options.componentOptions = window.sagassoComponentOptions || {}
+
 		options.shadowDOM = options.shadowDOM === undefined ? true : options.shadowDOM
 		super(element, options)
 
@@ -32,7 +36,8 @@ class SargassoComponent extends Sargasso {
 		this.watchAttributes() // watch attributes on host element
 		this.setTemplateArgs({
 			attributes:this.renderOptions.data,
-			data: this.observableData ? this.observableData.data : undefined
+			data: this.observableData ? this.observableData.data : undefined,
+			componentOptions: this.options.componentOptions || {}
 		})
 		this.elegant() // set graceful rendering kludge
 		this.buildTemplate() // build and install lit-html template
@@ -77,11 +82,11 @@ class SargassoComponent extends Sargasso {
 
 	getAttributes () {
 		for(const attr of this.templateAttributes) {
-			this.templateOptions[attr] = (this._hostElement || this.element).getAttribute(attr) || (this._hostElement || this.element).hasAttribute(attr)
+			this.templateOptions[attr] = (this._hostElement || this.element).getAttribute(attr) || (this._hostElement || this.element).hasAttribute(attr) || undefined
 		}
 
 		for(const attr of this.renderAttributes) {
-			this.renderOptions.data[attr] = (this._hostElement || this.element).getAttribute(attr) || (this._hostElement || this.element).hasAttribute(attr)
+			this.renderOptions.data[attr] = (this._hostElement || this.element).getAttribute(attr) || (this._hostElement || this.element).hasAttribute(attr) || undefined
 		}
 	}
 

@@ -29,7 +29,7 @@
 		"test": "npx mocha-chrome http://localhost:8000/tests/index.html --ignore-exceptions",
 		"build": "npx rollup --no-treeshake -c rollup.config.js",
 		"build-example": "npx rollup --no-treeshake -c rollup.config.app.js",
-		"build-module": "npx parcel build index.mjs; cp lib/modules/SargassoComponent.mjs dist/modules/SargassoComponent.mjs; cp lib/modules/MaterialButton.mjs dist/modules/MaterialButton.mjs; cp lib/modules/MaterialTextField.mjs dist/modules/MaterialTextField.mjs; cp lib/breakpoints.js dist/breakpoints.js; npx terser dist/sargasso.mjs --output dist/sargasso.min.mjs; npx terser dist/breakpoints.js --output dist/breakpoints.min.js"
+		"build-module": "sh build-module.sh"
 	},
 	"author": "Michael Rhodes",
 	"license": "MIT",

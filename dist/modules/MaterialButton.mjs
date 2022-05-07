@@ -53,7 +53,7 @@ class Button extends SargassoComponent {
 				:host {
 					display: inline-block
 				}
-				
+
 				.web-component-body {
 					opacity: 0;
 					transition: opacity .25s ease-in-out;
@@ -83,7 +83,7 @@ class Button extends SargassoComponent {
 				only loaded once even if there are many buttons on the page
 
 				-->
-			<link href="https://unpkg.com/@material/button@14.0.0/dist/mdc.button.css" rel="stylesheet">
+			<link href="${args.componentOptions.Material.Button.css}" rel="stylesheet">
 
 			<div class="web-component-body">
 				<div class="mdc-touch-target-wrapper">

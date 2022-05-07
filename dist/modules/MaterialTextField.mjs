@@ -1,5 +1,6 @@
 import { utils } from '@pelagiccreatures/sargasso'
 import { html } from 'lit-html'
+import { ifDefined } from 'lit-html/directives/if-defined';
 import { MDCTextField } from '@material/textfield';
 import { MDCTextFieldIcon } from '@material/textfield/icon'
 import { MDCTextFieldCharacterCounter } from '@material/textfield/character-counter';
@@ -14,7 +15,7 @@ class TextField extends SargassoComponent {
 		this.templateAttributes = ['filled', 'outlined', 'no-label', 'textarea', 'helper', 'prefix', 'suffix', 'icon-leading', 'icon-trailing', 'resizer', 'disabled', 'character-counter', 'with-internal-counter']
 
 		// observed attributes - render only on change
-		this.renderAttributes = ['label', 'value', 'helper-text', 'prefix-text', 'suffix-text', 'icon-leading-icon', 'icon-trailing-icon', 'rows', 'cols', 'maxlength', 'disabled']
+		this.renderAttributes = ['type', 'label', 'value', 'helper-text', 'prefix-text', 'suffix-text', 'icon-leading-icon', 'icon-trailing-icon', 'rows', 'cols', 'minlength', 'maxlength', 'disabled', 'required', 'max', 'min', 'step', 'autocomplete', 'list', 'maxlength', 'minlength', 'multiple', 'pattern', 'readonly']
 
 		this.pendingLinkTagCount = 1 // reveal after css files to loaded
 
@@ -76,7 +77,7 @@ class TextField extends SargassoComponent {
 		}
 
 		if(!this.templateOptions['no-label']) {
-			label = (args) => html`<span class="mdc-floating-label ?mdc-floating-label--float-above=${args.attributes.value}" id="my-label-id">${args.attributes.label}</span>`
+			label = (args) => html`<span class="mdc-floating-label ${args.attributes.value ? 'mdc-floating-label--float-above' : ''}" id="my-label-id">${args.attributes.label}</span>`
 		}
 
 		if(this.templateOptions['icon-leading']) {
@@ -159,7 +160,24 @@ class TextField extends SargassoComponent {
 						${label(args)}
 						${iconLeading(args)}
 						${prefix(args)}
-						<input class="mdc-text-field__input" type="text" aria-labelledby="my-label-id" value="${args.attributes.value || ''}" ?disabled=${args.attributes.disabled} maxlength=${args.attributes.maxlength}>
+						<input
+							type=${args.attributes.type || 'text'}
+							value=${ifDefined(args.attributes.value)}
+							class="mdc-text-field__input"
+							aria-labelledby="my-label-id"
+							maxlength=${ifDefined(args.attributes.maxlength)}
+							minlength=${ifDefined(args.attributes.minlength)}
+							max=${ifDefined(args.attributes.max)}
+							min=${ifDefined(args.attributes.min)}
+							step=${ifDefined(args.attributes.step)}
+							pattern=${ifDefined(args.attributes.pattern)}
+							?disabled=${args.attributes.disabled}
+							?required=${args.attributes.required}
+							?autocomplete=${args.attributes.autocomplete}
+							?list=${args.attributes.list}
+							?multiple=${args.attributes.multiple}
+							?readonly=${args.attributes.readonly}
+						>
 						${suffix(args)}
 						${iconTrailing(args)}
 						<span class="mdc-line-ripple"></span>
@@ -217,7 +235,24 @@ class TextField extends SargassoComponent {
 						</span>
 						${iconLeading(args)}
 						${prefix(args)}
-						<input type="text" class="mdc-text-field__input" aria-labelledby="my-label-id" value="${args.attributes.value || ''}" ?disabled=${args.attributes.disabled} maxlength=${args.attributes.maxlength}>
+						<input
+							type=${args.attributes.type || 'text'}
+							value=${ifDefined(args.attributes.value)}
+							class="mdc-text-field__input"
+							aria-labelledby="my-label-id"
+							maxlength=${ifDefined(args.attributes.maxlength)}
+							minlength=${ifDefined(args.attributes.minlength)}
+							max=${ifDefined(args.attributes.max)}
+							min=${ifDefined(args.attributes.min)}
+							step=${ifDefined(args.attributes.step)}
+							pattern=${ifDefined(args.attributes.pattern)}
+							?disabled=${args.attributes.disabled}
+							?required=${args.attributes.required}
+							?autocomplete=${args.attributes.autocomplete}
+							?list=${args.attributes.list}
+							?multiple=${args.attributes.multiple}
+							?readonly=${args.attributes.readonly}
+						>
 						${suffix(args)}
 						${iconTrailing(args)}
 					</label>
@@ -259,9 +294,8 @@ class TextField extends SargassoComponent {
 			<!--
 				loading css inside the shadow DOM but it still uses the cache so it's
 				only loaded once even if there are many buttons on the page
-
 				-->
-			<link href="https://unpkg.com/@material/textfield@14.0.0/dist/mdc.textfield.css" rel="stylesheet">
+			<link href="${args.componentOptions.Material.TextField.css}" rel="stylesheet">
 
 			${markup(args)}
 		`
@@ -282,21 +316,29 @@ class TextField extends SargassoComponent {
 		this.instantiateMDC()
 	}
 
+	reveal() {
+		super.reveal()
+		this.instantiateMDC()
+	}
+
 	instantiateMDC () {
-		let el = this.element.querySelector('.mdc-text-field')
-		if(el && !el.classList.contains('mdc-text-field-upgraded')) {
-			this.toDestroy.push(new MDCTextField(el))
-		}
+		// mdc does some things that require the element to be visible (measuring label notch in outline)
+		if(!this.pendingLinkTagCount) {
+			let el = this.element.querySelector('.mdc-text-field')
+			if(el && !el.classList.contains('mdc-text-field-upgraded')) {
+				this.toDestroy.push(new MDCTextField(el))
+			}
 
-		el = this.element.querySelector('.mdc-text-field-character-counter')
-		if(el && !el.classList.contains('mdc-text-field-character-counter-upgraded')) {
-			this.toDestroy.push(new MDCTextFieldCharacterCounter(el))
-		}
+			el = this.element.querySelector('.mdc-text-field-character-counter')
+			if(el && !el.classList.contains('mdc-text-field-character-counter-upgraded')) {
+				this.toDestroy.push(new MDCTextFieldCharacterCounter(el))
+			}
 
-		const els = this.element.querySelectorAll('.mdc-text-field-icon')
-		for(const e of els) {
-			if(e && !e.classList.contains('mdc-text-field-icon-upgraded')) {
-				this.toDestroy.push(new MDCTextFieldIcon(e))
+			const els = this.element.querySelectorAll('.mdc-text-field-icon')
+			for(const e of els) {
+				if(e && !e.classList.contains('mdc-text-field-icon-upgraded')) {
+					this.toDestroy.push(new MDCTextFieldIcon(e))
+				}
 			}
 		}
 	}

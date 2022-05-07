@@ -36,37 +36,37 @@
 <body>
   <h3>Example Web Component: Material Text Field</h3>
 
-	<h3>Simple text field no-label</h3>
-	<sargasso-text-field filled no-label id="input"></sargasso-text-field>
-	<sargasso-text-field outlined no-label></sargasso-text-field>
+  <h3>Simple text field no-label</h3>
+  <sargasso-text-field filled no-label id="input"></sargasso-text-field>
+  <sargasso-text-field outlined no-label></sargasso-text-field>
 
-	<h3>Simple text field w/label</h3>
-	<sargasso-text-field filled label="type here"></sargasso-text-field>
-	<sargasso-text-field outlined label="type here"></sargasso-text-field>
+  <h3>Simple text field w/label</h3>
+  <sargasso-text-field filled label="type here"></sargasso-text-field>
+  <sargasso-text-field outlined label="type here"></sargasso-text-field>
 
-	<h3>Simple text field w/label, prefix, suffix & initial value</h3>
-	<sargasso-text-field filled label="type here" value="inital value" prefix prefix-text="$" suffix suffix-text=".00"></sargasso-text-field>
-	<sargasso-text-field outlined label="type here" value="inital value"></sargasso-text-field>
+  <h3>Simple text field w/label, prefix, suffix & initial value</h3>
+  <sargasso-text-field filled label="type here" value="100" prefix prefix-text="$" suffix suffix-text=".00"></sargasso-text-field>
+  <sargasso-text-field outlined label="type here" value="100" prefix prefix-text="$" suffix suffix-text=".00"></sargasso-text-field>
 
-	<h3>Simple text field w/all the sugar</h3>
-	<sargasso-text-field filled label="type here" icon-leading icon-leading-icon="bookmark" icon-trailing icon-trailing-icon="close" helper helper-text="helper text" character-counter maxlength="10"></sargasso-text-field>
-	<sargasso-text-field outlined label="type here" icon-leading icon-leading-icon="bookmark" icon-trailing icon-trailing-icon="close" helper helper-text="helper text" character-counter maxlength="10"></sargasso-text-field>
+  <h3>Simple text field w/all the sugar</h3>
+  <sargasso-text-field filled label="type here" icon-leading icon-leading-icon="bookmark" icon-trailing icon-trailing-icon="close" helper helper-text="helper text" character-counter minlength="2" maxlength="10" required></sargasso-text-field>
+  <sargasso-text-field outlined label="type here" icon-leading icon-leading-icon="bookmark" icon-trailing icon-trailing-icon="close" helper helper-text="helper text" character-counter minlength="2"  maxlength="10"  required></sargasso-text-field>
 
-	<h3>Simple Textarea</h3>
-	<sargasso-text-field filled textarea no-label></sargasso-text-field>
-	<sargasso-text-field outlined textarea no-label></sargasso-text-field>
+  <h3>Simple Textarea</h3>
+  <sargasso-text-field filled textarea no-label></sargasso-text-field>
+  <sargasso-text-field outlined textarea no-label></sargasso-text-field>
 
-	<h3>Simple Textarea w/label</h3>
-	<sargasso-text-field filled textarea label="type here"></sargasso-text-field>
-	<sargasso-text-field outlined textarea label="type here"></sargasso-text-field>
+  <h3>Simple Textarea w/label</h3>
+  <sargasso-text-field filled textarea label="type here"></sargasso-text-field>
+  <sargasso-text-field outlined textarea label="type here"></sargasso-text-field>
 
-	<h3>Simple Textarea w/resizer</h3>
-	<sargasso-text-field filled textarea label="type here" resizer></sargasso-text-field>
-	<sargasso-text-field outlined textarea label="type here" resizer></sargasso-text-field>
+  <h3>Simple Textarea w/resizer</h3>
+  <sargasso-text-field filled textarea label="type here" resizer></sargasso-text-field>
+  <sargasso-text-field outlined textarea label="type here" resizer></sargasso-text-field>
 
-	<h3>Simple Textarea  w/all the sugar</h3>
-	<sargasso-text-field filled label="type here"  helper helper-text="helper text" character-counter maxlength="10" cols="30" rows="5"></sargasso-text-field>
-	<sargasso-text-field outlined label="type here"  helper helper-text="helper text" character-counter maxlength="10" cols="30" rows="5"></sargasso-text-field>
+  <h3>Simple Textarea  w/all the sugar</h3>
+  <sargasso-text-field filled label="type here"  helper helper-text="helper text" character-counter maxlength="10" cols="30" rows="5"></sargasso-text-field>
+  <sargasso-text-field outlined label="type here"  helper helper-text="helper text" character-counter maxlength="10" cols="30" rows="5"></sargasso-text-field>
 
 
   <!-- enable es6 modules and import maps -->
@@ -77,24 +77,36 @@
     "imports": {
       "@pelagiccreatures/sargasso": "/dist/sargasso.mjs",
       "@pelagiccreatures/sargasso/modules/SargassoComponent": "/dist/modules/SargassoComponent.mjs",
-			"@pelagiccreatures/sargasso/modules/TextField": "/dist/modules/MaterialTextField.mjs",
+      "@pelagiccreatures/sargasso/modules/TextField": "/dist/modules/MaterialTextField.mjs",
       "@material/ripple":"https://unpkg.com/@material/ripple@14.0.0/index.js?module",
-			"@material/textfield":"https://unpkg.com/@material/textfield@14.0.0/index.js?module",
-			"@material/textfield/icon":"https://unpkg.com/@material/textfield@14.0.0/icon/index.js?module",
-			"@material/textfield/character-counter":"https://unpkg.com/@material/textfield@14.0.0/character-counter/index.js?module",
-      "lit-html": "https://unpkg.com/lit-html?module"
+      "@material/textfield":"https://unpkg.com/@material/textfield@14.0.0/index.js?module",
+      "@material/textfield/icon":"https://unpkg.com/@material/textfield@14.0.0/icon/index.js?module",
+      "@material/textfield/character-counter":"https://unpkg.com/@material/textfield@14.0.0/character-counter/index.js?module",
+      "lit-html": "https://unpkg.com/lit-html?module",
+			"lit-html/directives/if-defined": "https://unpkg.com/lit-html/directives/if-defined?module"
     }
   }
   </script>
+
+  <script>
+    window.sagassoComponentOptions = {
+      'Material': {
+        'TextField': {
+          css: 'https://unpkg.com/@material/textfield@14.0.0/dist/mdc.textfield.min.css'
+        }
+      }
+    }
+  </script>
+
   <script type="module">
     import { Sargasso, ObservableObject, utils } from "@pelagiccreatures/sargasso"
-		import { TextField } from "@pelagiccreatures/sargasso/modules/TextField"
-
+    import { TextField } from "@pelagiccreatures/sargasso/modules/TextField"
     utils.bootSargasso()
 
-		utils.elementTools.on('changer', document.body, 'sargasso-change focus blur', 'sargasso-text-field', (e) => {
-			console.log(e.type,e.detail.value)
-		},true)
+
+    utils.elementTools.on('changer', document.body, 'sargasso-change focus blur', 'sargasso-text-field', (e) => {
+      console.log(e.type,e.detail.value)
+    },true)
   </script>
 </body>
 </html>
