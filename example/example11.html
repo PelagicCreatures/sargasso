@@ -104,8 +104,8 @@
     utils.bootSargasso()
 
 
-    utils.elementTools.on('changer', document.body, 'sargasso-change focus blur', 'sargasso-text-field', (e) => {
-      console.log(e.type,e.detail.value)
+    utils.elementTools.on('changer', document.body, 'change', 'sargasso-text-field', (e) => {
+      console.log(e.type,e.composedPath())
     },true)
   </script>
 </body>
