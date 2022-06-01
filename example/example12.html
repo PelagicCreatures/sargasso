@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Example 1</title>
+</head>
+<body>
+  <h3>First Sargasso Custom Element</h3>
+
+  <!-- sargasso custom element tag is the class name in KebabCase -->
+  <hello-world></hello-world>
+
+  <!-- use javascript modules in browser -->
+  <script async src="https://unpkg.com/es-module-shims@0.13.1/dist/es-module-shims.js"></script>
+  <!-- https://unpkg.com/@pelagiccreatures/sargasso/dist/sargasso.mjs -->
+  <script type="importmap">
+  {
+    "imports": {
+      "@pelagiccreatures/sargasso": "/dist/sargasso.mjs"
+    }
+  }
+  </script>
+  <script type="module">
+    window.sargassoOptions = {
+      customElementPrefix: ''
+    }
+    import { Sargasso, utils } from "@pelagiccreatures/sargasso"
+
+    // define HelloWorld as a subclass of Sargasso, classname in CamelCase
+    class HelloWorld extends Sargasso {
+      start() {
+        // use an animation frame
+        this.queueFrame(() => {
+          this.element.innerHTML = 'Hello World!'
+        })
+        super.start()
+      }
+    }
+
+    // Register HelloWorld class as a custom element
+    utils.registerSargassoClass('HelloWorld', HelloWorld)
+
+    // Start Sargasso
+    utils.bootSargasso()
+  </script>
+</body>
+</html>

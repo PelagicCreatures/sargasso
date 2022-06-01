@@ -5272,7 +5272,10 @@ var SargassoModule = (function (exports) {
 			}`;
 
 			const fn = new Function('registeredClasses', customElementClassFactory)(registeredClasses);
-			customElements.define('sargasso-' + kebabCase_1(className), fn);
+
+			const options = window.sargassoOptions || {};
+			const prefix = typeof options.customElementPrefix !== 'undefined' ? options.customElementPrefix : 'sargasso-';
+			customElements.define(prefix + kebabCase_1(className), fn);
 		}
 	};
 

@@ -4218,7 +4218,9 @@ const $a2dfa52ef2fbbb46$export$ac297e650eeb1e78 = {};
 				}
 			}`;
         const fn = new Function('registeredClasses', customElementClassFactory)($a2dfa52ef2fbbb46$export$ac297e650eeb1e78);
-        customElements.define('sargasso-' + (/*@__PURE__*/$parcel$interopDefault($31f21d7381765a96$exports))(className), fn);
+        const options = window.sargassoOptions || {};
+        const prefix = typeof options.customElementPrefix !== 'undefined' ? options.customElementPrefix : 'sargasso-';
+        customElements.define(prefix + (/*@__PURE__*/$parcel$interopDefault($31f21d7381765a96$exports))(className), fn);
     }
 };
 // the public event handlers to implement in subclasses
