@@ -72,13 +72,13 @@ module.exports = isBuffer;
 parcelRequire.register("1L8e3", function(module, exports) {
 
 var $1ebaC = parcelRequire("1ebaC");
-/** Detect free variable `self`. */ var $14808faa5f8c8a68$var$freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-/** Used as a reference to the global object. */ var $14808faa5f8c8a68$var$root = $1ebaC || $14808faa5f8c8a68$var$freeSelf || Function('return this')();
+/** Detect free variable `self`. */ var $14808faa5f8c8a68$var$freeSelf = typeof self == "object" && self && self.Object === Object && self;
+/** Used as a reference to the global object. */ var $14808faa5f8c8a68$var$root = $1ebaC || $14808faa5f8c8a68$var$freeSelf || Function("return this")();
 module.exports = $14808faa5f8c8a68$var$root;
 
 });
 parcelRequire.register("1ebaC", function(module, exports) {
-/** Detect free variable `global` from Node.js. */ var $0e4fc3715c6357d7$var$freeGlobal = typeof $parcel$global == 'object' && $parcel$global && $parcel$global.Object === Object && $parcel$global;
+/** Detect free variable `global` from Node.js. */ var $0e4fc3715c6357d7$var$freeGlobal = typeof $parcel$global == "object" && $parcel$global && $parcel$global.Object === Object && $parcel$global;
 module.exports = $0e4fc3715c6357d7$var$freeGlobal;
 
 });
@@ -115,17 +115,42 @@ var $1ebaC = parcelRequire("1ebaC");
 /** Used to access faster Node.js helpers. */ var nodeUtil = function() {
     try {
         // Use `util.types` for Node.js 10+.
-        var types = freeModule && freeModule.require && freeModule.require('util').types;
+        var types = freeModule && freeModule.require && freeModule.require("util").types;
         if (types) return types;
         // Legacy `process.binding('util')` for Node.js < 10.
-        return freeProcess && freeProcess.binding && freeProcess.binding('util');
+        return freeProcess && freeProcess.binding && freeProcess.binding("util");
     } catch (e) {}
 }();
 module.exports = nodeUtil;
 
 });
 
-var $f607bceeeb5e2d09$exports = {};
+/*
+	Sargasso
+
+	Simple, Fast, Reactive, supervised Javascript controllers for html elements.
+
+	@author Michael Rhodes (except where noted)
+	@license MIT
+	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+
+	*/ /**
+	Sargasso
+
+	Base class for responsive Sargasso element controllers. Subclass this to
+	define specific behavior. If you mutate the DOM in your code you
+	should use frames for best results.
+
+	@author Michael Rhodes (except where noted)
+	@license MIT
+	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+**/ /**
+	Utility routines for Sargasso classes
+
+	@author Michael Rhodes (except where noted)
+	@license MIT
+	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+**/ var $f607bceeeb5e2d09$exports = {};
 var $0745e7b81ed4912f$exports = {};
 var $7e1ecfdf389d92c6$exports = {};
 var $7a2b2b2f83ad6f6d$exports = {};
@@ -234,7 +259,7 @@ var $52d77f049103ac4f$exports = {};
 $52d77f049103ac4f$exports = $52d77f049103ac4f$var$objectToString;
 
 
-/** `Object#toString` result references. */ var $53ca50918c8f42fc$var$nullTag = '[object Null]', $53ca50918c8f42fc$var$undefinedTag = '[object Undefined]';
+/** `Object#toString` result references. */ var $53ca50918c8f42fc$var$nullTag = "[object Null]", $53ca50918c8f42fc$var$undefinedTag = "[object Undefined]";
 /** Built-in value references. */ var $53ca50918c8f42fc$var$symToStringTag = $ffe5cb85635c33de$exports ? $ffe5cb85635c33de$exports.toStringTag : undefined;
 /**
  * The base implementation of `getTag` without fallbacks for buggy environments.
@@ -274,12 +299,12 @@ var $b368e37f27e03050$exports = {};
  * _.isObjectLike(null);
  * // => false
  */ function $b368e37f27e03050$var$isObjectLike(value) {
-    return value != null && typeof value == 'object';
+    return value != null && typeof value == "object";
 }
 $b368e37f27e03050$exports = $b368e37f27e03050$var$isObjectLike;
 
 
-/** `Object#toString` result references. */ var $bec3d46dc1b60d6f$var$symbolTag = '[object Symbol]';
+/** `Object#toString` result references. */ var $bec3d46dc1b60d6f$var$symbolTag = "[object Symbol]";
 /**
  * Checks if `value` is classified as a `Symbol` primitive or object.
  *
@@ -297,7 +322,7 @@ $b368e37f27e03050$exports = $b368e37f27e03050$var$isObjectLike;
  * _.isSymbol('abc');
  * // => false
  */ function $bec3d46dc1b60d6f$var$isSymbol(value) {
-    return typeof value == 'symbol' || $b368e37f27e03050$exports(value) && $53ca50918c8f42fc$exports(value) == $bec3d46dc1b60d6f$var$symbolTag;
+    return typeof value == "symbol" || $b368e37f27e03050$exports(value) && $53ca50918c8f42fc$exports(value) == $bec3d46dc1b60d6f$var$symbolTag;
 }
 $bec3d46dc1b60d6f$exports = $bec3d46dc1b60d6f$var$isSymbol;
 
@@ -313,12 +338,12 @@ $bec3d46dc1b60d6f$exports = $bec3d46dc1b60d6f$var$isSymbol;
  * @returns {string} Returns the string.
  */ function $7a2b2b2f83ad6f6d$var$baseToString(value) {
     // Exit early for strings to avoid a performance hit in some environments.
-    if (typeof value == 'string') return value;
+    if (typeof value == "string") return value;
     if ($34086da6808d3266$exports(value)) // Recursively convert values (susceptible to call stack limits).
-    return $f8af86708420c403$exports(value, $7a2b2b2f83ad6f6d$var$baseToString) + '';
-    if ($bec3d46dc1b60d6f$exports(value)) return $7a2b2b2f83ad6f6d$var$symbolToString ? $7a2b2b2f83ad6f6d$var$symbolToString.call(value) : '';
-    var result = value + '';
-    return result == '0' && 1 / value == -$7a2b2b2f83ad6f6d$var$INFINITY ? '-0' : result;
+    return $f8af86708420c403$exports(value, $7a2b2b2f83ad6f6d$var$baseToString) + "";
+    if ($bec3d46dc1b60d6f$exports(value)) return $7a2b2b2f83ad6f6d$var$symbolToString ? $7a2b2b2f83ad6f6d$var$symbolToString.call(value) : "";
+    var result = value + "";
+    return result == "0" && 1 / value == -$7a2b2b2f83ad6f6d$var$INFINITY ? "-0" : result;
 }
 $7a2b2b2f83ad6f6d$exports = $7a2b2b2f83ad6f6d$var$baseToString;
 
@@ -344,7 +369,7 @@ $7a2b2b2f83ad6f6d$exports = $7a2b2b2f83ad6f6d$var$baseToString;
  * _.toString([1, 2, 3]);
  * // => '1,2,3'
  */ function $7e1ecfdf389d92c6$var$toString(value) {
-    return value == null ? '' : $7a2b2b2f83ad6f6d$exports(value);
+    return value == null ? "" : $7a2b2b2f83ad6f6d$exports(value);
 }
 $7e1ecfdf389d92c6$exports = $7e1ecfdf389d92c6$var$toString;
 
@@ -392,9 +417,9 @@ $3b4acbdc98e77351$exports = $3b4acbdc98e77351$var$castSlice;
 
 
 var $93f3a2ffd335ec40$exports = {};
-/** Used to compose unicode character classes. */ var $93f3a2ffd335ec40$var$rsAstralRange = '\\ud800-\\udfff', $93f3a2ffd335ec40$var$rsComboMarksRange = '\\u0300-\\u036f', $93f3a2ffd335ec40$var$reComboHalfMarksRange = '\\ufe20-\\ufe2f', $93f3a2ffd335ec40$var$rsComboSymbolsRange = '\\u20d0-\\u20ff', $93f3a2ffd335ec40$var$rsComboRange = $93f3a2ffd335ec40$var$rsComboMarksRange + $93f3a2ffd335ec40$var$reComboHalfMarksRange + $93f3a2ffd335ec40$var$rsComboSymbolsRange, $93f3a2ffd335ec40$var$rsVarRange = '\\ufe0e\\ufe0f';
-/** Used to compose unicode capture groups. */ var $93f3a2ffd335ec40$var$rsZWJ = '\\u200d';
-/** Used to detect strings with [zero-width joiners or code points from the astral planes](http://eev.ee/blog/2015/09/12/dark-corners-of-unicode/). */ var $93f3a2ffd335ec40$var$reHasUnicode = RegExp('[' + $93f3a2ffd335ec40$var$rsZWJ + $93f3a2ffd335ec40$var$rsAstralRange + $93f3a2ffd335ec40$var$rsComboRange + $93f3a2ffd335ec40$var$rsVarRange + ']');
+/** Used to compose unicode character classes. */ var $93f3a2ffd335ec40$var$rsAstralRange = "\ud800-\udfff", $93f3a2ffd335ec40$var$rsComboMarksRange = "\\u0300-\\u036f", $93f3a2ffd335ec40$var$reComboHalfMarksRange = "\\ufe20-\\ufe2f", $93f3a2ffd335ec40$var$rsComboSymbolsRange = "\\u20d0-\\u20ff", $93f3a2ffd335ec40$var$rsComboRange = $93f3a2ffd335ec40$var$rsComboMarksRange + $93f3a2ffd335ec40$var$reComboHalfMarksRange + $93f3a2ffd335ec40$var$rsComboSymbolsRange, $93f3a2ffd335ec40$var$rsVarRange = "\\ufe0e\\ufe0f";
+/** Used to compose unicode capture groups. */ var $93f3a2ffd335ec40$var$rsZWJ = "\\u200d";
+/** Used to detect strings with [zero-width joiners or code points from the astral planes](http://eev.ee/blog/2015/09/12/dark-corners-of-unicode/). */ var $93f3a2ffd335ec40$var$reHasUnicode = RegExp("[" + $93f3a2ffd335ec40$var$rsZWJ + $93f3a2ffd335ec40$var$rsAstralRange + $93f3a2ffd335ec40$var$rsComboRange + $93f3a2ffd335ec40$var$rsVarRange + "]");
 /**
  * Checks if `string` contains Unicode symbols.
  *
@@ -416,27 +441,27 @@ var $9e19d9c70f58c6f3$exports = {};
  * @param {string} string The string to convert.
  * @returns {Array} Returns the converted array.
  */ function $9e19d9c70f58c6f3$var$asciiToArray(string) {
-    return string.split('');
+    return string.split("");
 }
 $9e19d9c70f58c6f3$exports = $9e19d9c70f58c6f3$var$asciiToArray;
 
 
 
 var $0123e61a06da5fd2$exports = {};
-/** Used to compose unicode character classes. */ var $0123e61a06da5fd2$var$rsAstralRange = '\\ud800-\\udfff', $0123e61a06da5fd2$var$rsComboMarksRange = '\\u0300-\\u036f', $0123e61a06da5fd2$var$reComboHalfMarksRange = '\\ufe20-\\ufe2f', $0123e61a06da5fd2$var$rsComboSymbolsRange = '\\u20d0-\\u20ff', $0123e61a06da5fd2$var$rsComboRange = $0123e61a06da5fd2$var$rsComboMarksRange + $0123e61a06da5fd2$var$reComboHalfMarksRange + $0123e61a06da5fd2$var$rsComboSymbolsRange, $0123e61a06da5fd2$var$rsVarRange = '\\ufe0e\\ufe0f';
-/** Used to compose unicode capture groups. */ var $0123e61a06da5fd2$var$rsAstral = '[' + $0123e61a06da5fd2$var$rsAstralRange + ']', $0123e61a06da5fd2$var$rsCombo = '[' + $0123e61a06da5fd2$var$rsComboRange + ']', $0123e61a06da5fd2$var$rsFitz = '\\ud83c[\\udffb-\\udfff]', $0123e61a06da5fd2$var$rsModifier = '(?:' + $0123e61a06da5fd2$var$rsCombo + '|' + $0123e61a06da5fd2$var$rsFitz + ')', $0123e61a06da5fd2$var$rsNonAstral = '[^' + $0123e61a06da5fd2$var$rsAstralRange + ']', $0123e61a06da5fd2$var$rsRegional = '(?:\\ud83c[\\udde6-\\uddff]){2}', $0123e61a06da5fd2$var$rsSurrPair = '[\\ud800-\\udbff][\\udc00-\\udfff]', $0123e61a06da5fd2$var$rsZWJ = '\\u200d';
-/** Used to compose unicode regexes. */ var $0123e61a06da5fd2$var$reOptMod = $0123e61a06da5fd2$var$rsModifier + '?', $0123e61a06da5fd2$var$rsOptVar = '[' + $0123e61a06da5fd2$var$rsVarRange + ']?', $0123e61a06da5fd2$var$rsOptJoin = '(?:' + $0123e61a06da5fd2$var$rsZWJ + '(?:' + [
+/** Used to compose unicode character classes. */ var $0123e61a06da5fd2$var$rsAstralRange = "\ud800-\udfff", $0123e61a06da5fd2$var$rsComboMarksRange = "\\u0300-\\u036f", $0123e61a06da5fd2$var$reComboHalfMarksRange = "\\ufe20-\\ufe2f", $0123e61a06da5fd2$var$rsComboSymbolsRange = "\\u20d0-\\u20ff", $0123e61a06da5fd2$var$rsComboRange = $0123e61a06da5fd2$var$rsComboMarksRange + $0123e61a06da5fd2$var$reComboHalfMarksRange + $0123e61a06da5fd2$var$rsComboSymbolsRange, $0123e61a06da5fd2$var$rsVarRange = "\\ufe0e\\ufe0f";
+/** Used to compose unicode capture groups. */ var $0123e61a06da5fd2$var$rsAstral = "[" + $0123e61a06da5fd2$var$rsAstralRange + "]", $0123e61a06da5fd2$var$rsCombo = "[" + $0123e61a06da5fd2$var$rsComboRange + "]", $0123e61a06da5fd2$var$rsFitz = "\ud83c[\udffb-\udfff]", $0123e61a06da5fd2$var$rsModifier = "(?:" + $0123e61a06da5fd2$var$rsCombo + "|" + $0123e61a06da5fd2$var$rsFitz + ")", $0123e61a06da5fd2$var$rsNonAstral = "[^" + $0123e61a06da5fd2$var$rsAstralRange + "]", $0123e61a06da5fd2$var$rsRegional = "(?:\ud83c[\udde6-\uddff]){2}", $0123e61a06da5fd2$var$rsSurrPair = "[\ud800-\udbff][\udc00-\udfff]", $0123e61a06da5fd2$var$rsZWJ = "\\u200d";
+/** Used to compose unicode regexes. */ var $0123e61a06da5fd2$var$reOptMod = $0123e61a06da5fd2$var$rsModifier + "?", $0123e61a06da5fd2$var$rsOptVar = "[" + $0123e61a06da5fd2$var$rsVarRange + "]?", $0123e61a06da5fd2$var$rsOptJoin = "(?:" + $0123e61a06da5fd2$var$rsZWJ + "(?:" + [
     $0123e61a06da5fd2$var$rsNonAstral,
     $0123e61a06da5fd2$var$rsRegional,
     $0123e61a06da5fd2$var$rsSurrPair
-].join('|') + ')' + $0123e61a06da5fd2$var$rsOptVar + $0123e61a06da5fd2$var$reOptMod + ')*', $0123e61a06da5fd2$var$rsSeq = $0123e61a06da5fd2$var$rsOptVar + $0123e61a06da5fd2$var$reOptMod + $0123e61a06da5fd2$var$rsOptJoin, $0123e61a06da5fd2$var$rsSymbol = '(?:' + [
-    $0123e61a06da5fd2$var$rsNonAstral + $0123e61a06da5fd2$var$rsCombo + '?',
+].join("|") + ")" + $0123e61a06da5fd2$var$rsOptVar + $0123e61a06da5fd2$var$reOptMod + ")*", $0123e61a06da5fd2$var$rsSeq = $0123e61a06da5fd2$var$rsOptVar + $0123e61a06da5fd2$var$reOptMod + $0123e61a06da5fd2$var$rsOptJoin, $0123e61a06da5fd2$var$rsSymbol = "(?:" + [
+    $0123e61a06da5fd2$var$rsNonAstral + $0123e61a06da5fd2$var$rsCombo + "?",
     $0123e61a06da5fd2$var$rsCombo,
     $0123e61a06da5fd2$var$rsRegional,
     $0123e61a06da5fd2$var$rsSurrPair,
     $0123e61a06da5fd2$var$rsAstral
-].join('|') + ')';
-/** Used to match [string symbols](https://mathiasbynens.be/notes/javascript-unicode). */ var $0123e61a06da5fd2$var$reUnicode = RegExp($0123e61a06da5fd2$var$rsFitz + '(?=' + $0123e61a06da5fd2$var$rsFitz + ')|' + $0123e61a06da5fd2$var$rsSymbol + $0123e61a06da5fd2$var$rsSeq, 'g');
+].join("|") + ")";
+/** Used to match [string symbols](https://mathiasbynens.be/notes/javascript-unicode). */ var $0123e61a06da5fd2$var$reUnicode = RegExp($0123e61a06da5fd2$var$rsFitz + "(?=" + $0123e61a06da5fd2$var$rsFitz + ")|" + $0123e61a06da5fd2$var$rsSymbol + $0123e61a06da5fd2$var$rsSeq, "g");
 /**
  * Converts a Unicode `string` to an array.
  *
@@ -473,7 +498,7 @@ $b0e6c43a60da8e0f$exports = $b0e6c43a60da8e0f$var$stringToArray;
         string = $7e1ecfdf389d92c6$exports(string);
         var strSymbols = $93f3a2ffd335ec40$exports(string) ? $b0e6c43a60da8e0f$exports(string) : undefined;
         var chr = strSymbols ? strSymbols[0] : string.charAt(0);
-        var trailing = strSymbols ? $3b4acbdc98e77351$exports(strSymbols, 1).join('') : string.slice(1);
+        var trailing = strSymbols ? $3b4acbdc98e77351$exports(strSymbols, 1).join("") : string.slice(1);
         return chr[methodName]() + trailing;
     };
 }
@@ -496,7 +521,7 @@ $4dfb89d706e7ff0e$exports = $4dfb89d706e7ff0e$var$createCaseFirst;
  *
  * _.upperFirst('FRED');
  * // => 'FRED'
- */ var $e7ead7ba38a53db3$var$upperFirst = $4dfb89d706e7ff0e$exports('toUpperCase');
+ */ var $e7ead7ba38a53db3$var$upperFirst = $4dfb89d706e7ff0e$exports("toUpperCase");
 $e7ead7ba38a53db3$exports = $e7ead7ba38a53db3$var$upperFirst;
 
 
@@ -561,197 +586,197 @@ $b41e0ab485371d59$exports = $b41e0ab485371d59$var$basePropertyOf;
 
 /** Used to map Latin Unicode letters to basic Latin letters. */ var $e51659915f7a5703$var$deburredLetters = {
     // Latin-1 Supplement block.
-    '\xc0': 'A',
-    '\xc1': 'A',
-    '\xc2': 'A',
-    '\xc3': 'A',
-    '\xc4': 'A',
-    '\xc5': 'A',
-    '\xe0': 'a',
-    '\xe1': 'a',
-    '\xe2': 'a',
-    '\xe3': 'a',
-    '\xe4': 'a',
-    '\xe5': 'a',
-    '\xc7': 'C',
-    '\xe7': 'c',
-    '\xd0': 'D',
-    '\xf0': 'd',
-    '\xc8': 'E',
-    '\xc9': 'E',
-    '\xca': 'E',
-    '\xcb': 'E',
-    '\xe8': 'e',
-    '\xe9': 'e',
-    '\xea': 'e',
-    '\xeb': 'e',
-    '\xcc': 'I',
-    '\xcd': 'I',
-    '\xce': 'I',
-    '\xcf': 'I',
-    '\xec': 'i',
-    '\xed': 'i',
-    '\xee': 'i',
-    '\xef': 'i',
-    '\xd1': 'N',
-    '\xf1': 'n',
-    '\xd2': 'O',
-    '\xd3': 'O',
-    '\xd4': 'O',
-    '\xd5': 'O',
-    '\xd6': 'O',
-    '\xd8': 'O',
-    '\xf2': 'o',
-    '\xf3': 'o',
-    '\xf4': 'o',
-    '\xf5': 'o',
-    '\xf6': 'o',
-    '\xf8': 'o',
-    '\xd9': 'U',
-    '\xda': 'U',
-    '\xdb': 'U',
-    '\xdc': 'U',
-    '\xf9': 'u',
-    '\xfa': 'u',
-    '\xfb': 'u',
-    '\xfc': 'u',
-    '\xdd': 'Y',
-    '\xfd': 'y',
-    '\xff': 'y',
-    '\xc6': 'Ae',
-    '\xe6': 'ae',
-    '\xde': 'Th',
-    '\xfe': 'th',
-    '\xdf': 'ss',
+    "\xc0": "A",
+    "\xc1": "A",
+    "\xc2": "A",
+    "\xc3": "A",
+    "\xc4": "A",
+    "\xc5": "A",
+    "\xe0": "a",
+    "\xe1": "a",
+    "\xe2": "a",
+    "\xe3": "a",
+    "\xe4": "a",
+    "\xe5": "a",
+    "\xc7": "C",
+    "\xe7": "c",
+    "\xd0": "D",
+    "\xf0": "d",
+    "\xc8": "E",
+    "\xc9": "E",
+    "\xca": "E",
+    "\xcb": "E",
+    "\xe8": "e",
+    "\xe9": "e",
+    "\xea": "e",
+    "\xeb": "e",
+    "\xcc": "I",
+    "\xcd": "I",
+    "\xce": "I",
+    "\xcf": "I",
+    "\xec": "i",
+    "\xed": "i",
+    "\xee": "i",
+    "\xef": "i",
+    "\xd1": "N",
+    "\xf1": "n",
+    "\xd2": "O",
+    "\xd3": "O",
+    "\xd4": "O",
+    "\xd5": "O",
+    "\xd6": "O",
+    "\xd8": "O",
+    "\xf2": "o",
+    "\xf3": "o",
+    "\xf4": "o",
+    "\xf5": "o",
+    "\xf6": "o",
+    "\xf8": "o",
+    "\xd9": "U",
+    "\xda": "U",
+    "\xdb": "U",
+    "\xdc": "U",
+    "\xf9": "u",
+    "\xfa": "u",
+    "\xfb": "u",
+    "\xfc": "u",
+    "\xdd": "Y",
+    "\xfd": "y",
+    "\xff": "y",
+    "\xc6": "Ae",
+    "\xe6": "ae",
+    "\xde": "Th",
+    "\xfe": "th",
+    "\xdf": "ss",
     // Latin Extended-A block.
-    '\u0100': 'A',
-    '\u0102': 'A',
-    '\u0104': 'A',
-    '\u0101': 'a',
-    '\u0103': 'a',
-    '\u0105': 'a',
-    '\u0106': 'C',
-    '\u0108': 'C',
-    '\u010a': 'C',
-    '\u010c': 'C',
-    '\u0107': 'c',
-    '\u0109': 'c',
-    '\u010b': 'c',
-    '\u010d': 'c',
-    '\u010e': 'D',
-    '\u0110': 'D',
-    '\u010f': 'd',
-    '\u0111': 'd',
-    '\u0112': 'E',
-    '\u0114': 'E',
-    '\u0116': 'E',
-    '\u0118': 'E',
-    '\u011a': 'E',
-    '\u0113': 'e',
-    '\u0115': 'e',
-    '\u0117': 'e',
-    '\u0119': 'e',
-    '\u011b': 'e',
-    '\u011c': 'G',
-    '\u011e': 'G',
-    '\u0120': 'G',
-    '\u0122': 'G',
-    '\u011d': 'g',
-    '\u011f': 'g',
-    '\u0121': 'g',
-    '\u0123': 'g',
-    '\u0124': 'H',
-    '\u0126': 'H',
-    '\u0125': 'h',
-    '\u0127': 'h',
-    '\u0128': 'I',
-    '\u012a': 'I',
-    '\u012c': 'I',
-    '\u012e': 'I',
-    '\u0130': 'I',
-    '\u0129': 'i',
-    '\u012b': 'i',
-    '\u012d': 'i',
-    '\u012f': 'i',
-    '\u0131': 'i',
-    '\u0134': 'J',
-    '\u0135': 'j',
-    '\u0136': 'K',
-    '\u0137': 'k',
-    '\u0138': 'k',
-    '\u0139': 'L',
-    '\u013b': 'L',
-    '\u013d': 'L',
-    '\u013f': 'L',
-    '\u0141': 'L',
-    '\u013a': 'l',
-    '\u013c': 'l',
-    '\u013e': 'l',
-    '\u0140': 'l',
-    '\u0142': 'l',
-    '\u0143': 'N',
-    '\u0145': 'N',
-    '\u0147': 'N',
-    '\u014a': 'N',
-    '\u0144': 'n',
-    '\u0146': 'n',
-    '\u0148': 'n',
-    '\u014b': 'n',
-    '\u014c': 'O',
-    '\u014e': 'O',
-    '\u0150': 'O',
-    '\u014d': 'o',
-    '\u014f': 'o',
-    '\u0151': 'o',
-    '\u0154': 'R',
-    '\u0156': 'R',
-    '\u0158': 'R',
-    '\u0155': 'r',
-    '\u0157': 'r',
-    '\u0159': 'r',
-    '\u015a': 'S',
-    '\u015c': 'S',
-    '\u015e': 'S',
-    '\u0160': 'S',
-    '\u015b': 's',
-    '\u015d': 's',
-    '\u015f': 's',
-    '\u0161': 's',
-    '\u0162': 'T',
-    '\u0164': 'T',
-    '\u0166': 'T',
-    '\u0163': 't',
-    '\u0165': 't',
-    '\u0167': 't',
-    '\u0168': 'U',
-    '\u016a': 'U',
-    '\u016c': 'U',
-    '\u016e': 'U',
-    '\u0170': 'U',
-    '\u0172': 'U',
-    '\u0169': 'u',
-    '\u016b': 'u',
-    '\u016d': 'u',
-    '\u016f': 'u',
-    '\u0171': 'u',
-    '\u0173': 'u',
-    '\u0174': 'W',
-    '\u0175': 'w',
-    '\u0176': 'Y',
-    '\u0177': 'y',
-    '\u0178': 'Y',
-    '\u0179': 'Z',
-    '\u017b': 'Z',
-    '\u017d': 'Z',
-    '\u017a': 'z',
-    '\u017c': 'z',
-    '\u017e': 'z',
-    '\u0132': 'IJ',
-    '\u0133': 'ij',
-    '\u0152': 'Oe',
-    '\u0153': 'oe',
-    '\u0149': "'n",
-    '\u017f': 's'
+    "Ā": "A",
+    "Ă": "A",
+    "Ą": "A",
+    "ā": "a",
+    "ă": "a",
+    "ą": "a",
+    "Ć": "C",
+    "Ĉ": "C",
+    "Ċ": "C",
+    "Č": "C",
+    "ć": "c",
+    "ĉ": "c",
+    "ċ": "c",
+    "č": "c",
+    "Ď": "D",
+    "Đ": "D",
+    "ď": "d",
+    "đ": "d",
+    "Ē": "E",
+    "Ĕ": "E",
+    "Ė": "E",
+    "Ę": "E",
+    "Ě": "E",
+    "ē": "e",
+    "ĕ": "e",
+    "ė": "e",
+    "ę": "e",
+    "ě": "e",
+    "Ĝ": "G",
+    "Ğ": "G",
+    "Ġ": "G",
+    "Ģ": "G",
+    "ĝ": "g",
+    "ğ": "g",
+    "ġ": "g",
+    "ģ": "g",
+    "Ĥ": "H",
+    "Ħ": "H",
+    "ĥ": "h",
+    "ħ": "h",
+    "Ĩ": "I",
+    "Ī": "I",
+    "Ĭ": "I",
+    "Į": "I",
+    "İ": "I",
+    "ĩ": "i",
+    "ī": "i",
+    "ĭ": "i",
+    "į": "i",
+    "ı": "i",
+    "Ĵ": "J",
+    "ĵ": "j",
+    "Ķ": "K",
+    "ķ": "k",
+    "ĸ": "k",
+    "Ĺ": "L",
+    "Ļ": "L",
+    "Ľ": "L",
+    "Ŀ": "L",
+    "Ł": "L",
+    "ĺ": "l",
+    "ļ": "l",
+    "ľ": "l",
+    "ŀ": "l",
+    "ł": "l",
+    "Ń": "N",
+    "Ņ": "N",
+    "Ň": "N",
+    "Ŋ": "N",
+    "ń": "n",
+    "ņ": "n",
+    "ň": "n",
+    "ŋ": "n",
+    "Ō": "O",
+    "Ŏ": "O",
+    "Ő": "O",
+    "ō": "o",
+    "ŏ": "o",
+    "ő": "o",
+    "Ŕ": "R",
+    "Ŗ": "R",
+    "Ř": "R",
+    "ŕ": "r",
+    "ŗ": "r",
+    "ř": "r",
+    "Ś": "S",
+    "Ŝ": "S",
+    "Ş": "S",
+    "Š": "S",
+    "ś": "s",
+    "ŝ": "s",
+    "ş": "s",
+    "š": "s",
+    "Ţ": "T",
+    "Ť": "T",
+    "Ŧ": "T",
+    "ţ": "t",
+    "ť": "t",
+    "ŧ": "t",
+    "Ũ": "U",
+    "Ū": "U",
+    "Ŭ": "U",
+    "Ů": "U",
+    "Ű": "U",
+    "Ų": "U",
+    "ũ": "u",
+    "ū": "u",
+    "ŭ": "u",
+    "ů": "u",
+    "ű": "u",
+    "ų": "u",
+    "Ŵ": "W",
+    "ŵ": "w",
+    "Ŷ": "Y",
+    "ŷ": "y",
+    "Ÿ": "Y",
+    "Ź": "Z",
+    "Ż": "Z",
+    "Ž": "Z",
+    "ź": "z",
+    "ż": "z",
+    "ž": "z",
+    "Ĳ": "IJ",
+    "ĳ": "ij",
+    "Œ": "Oe",
+    "œ": "oe",
+    "ŉ": "'n",
+    "ſ": "s"
 };
 /**
  * Used by `_.deburr` to convert Latin-1 Supplement and Latin Extended-A
@@ -766,12 +791,12 @@ $e51659915f7a5703$exports = $e51659915f7a5703$var$deburrLetter;
 
 
 /** Used to match Latin Unicode letters (excluding mathematical operators). */ var $d655d6225e4a8e0f$var$reLatin = /[\xc0-\xd6\xd8-\xf6\xf8-\xff\u0100-\u017f]/g;
-/** Used to compose unicode character classes. */ var $d655d6225e4a8e0f$var$rsComboMarksRange = '\\u0300-\\u036f', $d655d6225e4a8e0f$var$reComboHalfMarksRange = '\\ufe20-\\ufe2f', $d655d6225e4a8e0f$var$rsComboSymbolsRange = '\\u20d0-\\u20ff', $d655d6225e4a8e0f$var$rsComboRange = $d655d6225e4a8e0f$var$rsComboMarksRange + $d655d6225e4a8e0f$var$reComboHalfMarksRange + $d655d6225e4a8e0f$var$rsComboSymbolsRange;
-/** Used to compose unicode capture groups. */ var $d655d6225e4a8e0f$var$rsCombo = '[' + $d655d6225e4a8e0f$var$rsComboRange + ']';
+/** Used to compose unicode character classes. */ var $d655d6225e4a8e0f$var$rsComboMarksRange = "\\u0300-\\u036f", $d655d6225e4a8e0f$var$reComboHalfMarksRange = "\\ufe20-\\ufe2f", $d655d6225e4a8e0f$var$rsComboSymbolsRange = "\\u20d0-\\u20ff", $d655d6225e4a8e0f$var$rsComboRange = $d655d6225e4a8e0f$var$rsComboMarksRange + $d655d6225e4a8e0f$var$reComboHalfMarksRange + $d655d6225e4a8e0f$var$rsComboSymbolsRange;
+/** Used to compose unicode capture groups. */ var $d655d6225e4a8e0f$var$rsCombo = "[" + $d655d6225e4a8e0f$var$rsComboRange + "]";
 /**
  * Used to match [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks) and
  * [combining diacritical marks for symbols](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks_for_Symbols).
- */ var $d655d6225e4a8e0f$var$reComboMark = RegExp($d655d6225e4a8e0f$var$rsCombo, 'g');
+ */ var $d655d6225e4a8e0f$var$reComboMark = RegExp($d655d6225e4a8e0f$var$rsCombo, "g");
 /**
  * Deburrs `string` by converting
  * [Latin-1 Supplement](https://en.wikipedia.org/wiki/Latin-1_Supplement_(Unicode_block)#Character_table)
@@ -791,7 +816,7 @@ $e51659915f7a5703$exports = $e51659915f7a5703$var$deburrLetter;
  * // => 'deja vu'
  */ function $d655d6225e4a8e0f$var$deburr(string) {
     string = $7e1ecfdf389d92c6$exports(string);
-    return string && string.replace($d655d6225e4a8e0f$var$reLatin, $e51659915f7a5703$exports).replace($d655d6225e4a8e0f$var$reComboMark, '');
+    return string && string.replace($d655d6225e4a8e0f$var$reLatin, $e51659915f7a5703$exports).replace($d655d6225e4a8e0f$var$reComboMark, "");
 }
 $d655d6225e4a8e0f$exports = $d655d6225e4a8e0f$var$deburr;
 
@@ -827,35 +852,35 @@ $fc2ee8078f991d8f$exports = $fc2ee8078f991d8f$var$hasUnicodeWord;
 
 
 var $77e592970b837f45$exports = {};
-/** Used to compose unicode character classes. */ var $77e592970b837f45$var$rsAstralRange = '\\ud800-\\udfff', $77e592970b837f45$var$rsComboMarksRange = '\\u0300-\\u036f', $77e592970b837f45$var$reComboHalfMarksRange = '\\ufe20-\\ufe2f', $77e592970b837f45$var$rsComboSymbolsRange = '\\u20d0-\\u20ff', $77e592970b837f45$var$rsComboRange = $77e592970b837f45$var$rsComboMarksRange + $77e592970b837f45$var$reComboHalfMarksRange + $77e592970b837f45$var$rsComboSymbolsRange, $77e592970b837f45$var$rsDingbatRange = '\\u2700-\\u27bf', $77e592970b837f45$var$rsLowerRange = 'a-z\\xdf-\\xf6\\xf8-\\xff', $77e592970b837f45$var$rsMathOpRange = '\\xac\\xb1\\xd7\\xf7', $77e592970b837f45$var$rsNonCharRange = '\\x00-\\x2f\\x3a-\\x40\\x5b-\\x60\\x7b-\\xbf', $77e592970b837f45$var$rsPunctuationRange = '\\u2000-\\u206f', $77e592970b837f45$var$rsSpaceRange = ' \\t\\x0b\\f\\xa0\\ufeff\\n\\r\\u2028\\u2029\\u1680\\u180e\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u202f\\u205f\\u3000', $77e592970b837f45$var$rsUpperRange = 'A-Z\\xc0-\\xd6\\xd8-\\xde', $77e592970b837f45$var$rsVarRange = '\\ufe0e\\ufe0f', $77e592970b837f45$var$rsBreakRange = $77e592970b837f45$var$rsMathOpRange + $77e592970b837f45$var$rsNonCharRange + $77e592970b837f45$var$rsPunctuationRange + $77e592970b837f45$var$rsSpaceRange;
-/** Used to compose unicode capture groups. */ var $77e592970b837f45$var$rsApos = "['\u2019]", $77e592970b837f45$var$rsBreak = '[' + $77e592970b837f45$var$rsBreakRange + ']', $77e592970b837f45$var$rsCombo = '[' + $77e592970b837f45$var$rsComboRange + ']', $77e592970b837f45$var$rsDigits = '\\d+', $77e592970b837f45$var$rsDingbat = '[' + $77e592970b837f45$var$rsDingbatRange + ']', $77e592970b837f45$var$rsLower = '[' + $77e592970b837f45$var$rsLowerRange + ']', $77e592970b837f45$var$rsMisc = '[^' + $77e592970b837f45$var$rsAstralRange + $77e592970b837f45$var$rsBreakRange + $77e592970b837f45$var$rsDigits + $77e592970b837f45$var$rsDingbatRange + $77e592970b837f45$var$rsLowerRange + $77e592970b837f45$var$rsUpperRange + ']', $77e592970b837f45$var$rsFitz = '\\ud83c[\\udffb-\\udfff]', $77e592970b837f45$var$rsModifier = '(?:' + $77e592970b837f45$var$rsCombo + '|' + $77e592970b837f45$var$rsFitz + ')', $77e592970b837f45$var$rsNonAstral = '[^' + $77e592970b837f45$var$rsAstralRange + ']', $77e592970b837f45$var$rsRegional = '(?:\\ud83c[\\udde6-\\uddff]){2}', $77e592970b837f45$var$rsSurrPair = '[\\ud800-\\udbff][\\udc00-\\udfff]', $77e592970b837f45$var$rsUpper = '[' + $77e592970b837f45$var$rsUpperRange + ']', $77e592970b837f45$var$rsZWJ = '\\u200d';
-/** Used to compose unicode regexes. */ var $77e592970b837f45$var$rsMiscLower = '(?:' + $77e592970b837f45$var$rsLower + '|' + $77e592970b837f45$var$rsMisc + ')', $77e592970b837f45$var$rsMiscUpper = '(?:' + $77e592970b837f45$var$rsUpper + '|' + $77e592970b837f45$var$rsMisc + ')', $77e592970b837f45$var$rsOptContrLower = '(?:' + $77e592970b837f45$var$rsApos + '(?:d|ll|m|re|s|t|ve))?', $77e592970b837f45$var$rsOptContrUpper = '(?:' + $77e592970b837f45$var$rsApos + '(?:D|LL|M|RE|S|T|VE))?', $77e592970b837f45$var$reOptMod = $77e592970b837f45$var$rsModifier + '?', $77e592970b837f45$var$rsOptVar = '[' + $77e592970b837f45$var$rsVarRange + ']?', $77e592970b837f45$var$rsOptJoin = '(?:' + $77e592970b837f45$var$rsZWJ + '(?:' + [
+/** Used to compose unicode character classes. */ var $77e592970b837f45$var$rsAstralRange = "\ud800-\udfff", $77e592970b837f45$var$rsComboMarksRange = "\\u0300-\\u036f", $77e592970b837f45$var$reComboHalfMarksRange = "\\ufe20-\\ufe2f", $77e592970b837f45$var$rsComboSymbolsRange = "\\u20d0-\\u20ff", $77e592970b837f45$var$rsComboRange = $77e592970b837f45$var$rsComboMarksRange + $77e592970b837f45$var$reComboHalfMarksRange + $77e592970b837f45$var$rsComboSymbolsRange, $77e592970b837f45$var$rsDingbatRange = "\\u2700-\\u27bf", $77e592970b837f45$var$rsLowerRange = "a-z\\xdf-\\xf6\\xf8-\\xff", $77e592970b837f45$var$rsMathOpRange = "\\xac\\xb1\\xd7\\xf7", $77e592970b837f45$var$rsNonCharRange = "\\x00-\\x2f\\x3a-\\x40\\x5b-\\x60\\x7b-\\xbf", $77e592970b837f45$var$rsPunctuationRange = "\\u2000-\\u206f", $77e592970b837f45$var$rsSpaceRange = " \\t\\x0b\\f\\xa0\\ufeff\\n\\r\\u2028\\u2029\\u1680\\u180e\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u202f\\u205f\\u3000", $77e592970b837f45$var$rsUpperRange = "A-Z\\xc0-\\xd6\\xd8-\\xde", $77e592970b837f45$var$rsVarRange = "\\ufe0e\\ufe0f", $77e592970b837f45$var$rsBreakRange = $77e592970b837f45$var$rsMathOpRange + $77e592970b837f45$var$rsNonCharRange + $77e592970b837f45$var$rsPunctuationRange + $77e592970b837f45$var$rsSpaceRange;
+/** Used to compose unicode capture groups. */ var $77e592970b837f45$var$rsApos = "['’]", $77e592970b837f45$var$rsBreak = "[" + $77e592970b837f45$var$rsBreakRange + "]", $77e592970b837f45$var$rsCombo = "[" + $77e592970b837f45$var$rsComboRange + "]", $77e592970b837f45$var$rsDigits = "\\d+", $77e592970b837f45$var$rsDingbat = "[" + $77e592970b837f45$var$rsDingbatRange + "]", $77e592970b837f45$var$rsLower = "[" + $77e592970b837f45$var$rsLowerRange + "]", $77e592970b837f45$var$rsMisc = "[^" + $77e592970b837f45$var$rsAstralRange + $77e592970b837f45$var$rsBreakRange + $77e592970b837f45$var$rsDigits + $77e592970b837f45$var$rsDingbatRange + $77e592970b837f45$var$rsLowerRange + $77e592970b837f45$var$rsUpperRange + "]", $77e592970b837f45$var$rsFitz = "\ud83c[\udffb-\udfff]", $77e592970b837f45$var$rsModifier = "(?:" + $77e592970b837f45$var$rsCombo + "|" + $77e592970b837f45$var$rsFitz + ")", $77e592970b837f45$var$rsNonAstral = "[^" + $77e592970b837f45$var$rsAstralRange + "]", $77e592970b837f45$var$rsRegional = "(?:\ud83c[\udde6-\uddff]){2}", $77e592970b837f45$var$rsSurrPair = "[\ud800-\udbff][\udc00-\udfff]", $77e592970b837f45$var$rsUpper = "[" + $77e592970b837f45$var$rsUpperRange + "]", $77e592970b837f45$var$rsZWJ = "\\u200d";
+/** Used to compose unicode regexes. */ var $77e592970b837f45$var$rsMiscLower = "(?:" + $77e592970b837f45$var$rsLower + "|" + $77e592970b837f45$var$rsMisc + ")", $77e592970b837f45$var$rsMiscUpper = "(?:" + $77e592970b837f45$var$rsUpper + "|" + $77e592970b837f45$var$rsMisc + ")", $77e592970b837f45$var$rsOptContrLower = "(?:" + $77e592970b837f45$var$rsApos + "(?:d|ll|m|re|s|t|ve))?", $77e592970b837f45$var$rsOptContrUpper = "(?:" + $77e592970b837f45$var$rsApos + "(?:D|LL|M|RE|S|T|VE))?", $77e592970b837f45$var$reOptMod = $77e592970b837f45$var$rsModifier + "?", $77e592970b837f45$var$rsOptVar = "[" + $77e592970b837f45$var$rsVarRange + "]?", $77e592970b837f45$var$rsOptJoin = "(?:" + $77e592970b837f45$var$rsZWJ + "(?:" + [
     $77e592970b837f45$var$rsNonAstral,
     $77e592970b837f45$var$rsRegional,
     $77e592970b837f45$var$rsSurrPair
-].join('|') + ')' + $77e592970b837f45$var$rsOptVar + $77e592970b837f45$var$reOptMod + ')*', $77e592970b837f45$var$rsOrdLower = '\\d*(?:1st|2nd|3rd|(?![123])\\dth)(?=\\b|[A-Z_])', $77e592970b837f45$var$rsOrdUpper = '\\d*(?:1ST|2ND|3RD|(?![123])\\dTH)(?=\\b|[a-z_])', $77e592970b837f45$var$rsSeq = $77e592970b837f45$var$rsOptVar + $77e592970b837f45$var$reOptMod + $77e592970b837f45$var$rsOptJoin, $77e592970b837f45$var$rsEmoji = '(?:' + [
+].join("|") + ")" + $77e592970b837f45$var$rsOptVar + $77e592970b837f45$var$reOptMod + ")*", $77e592970b837f45$var$rsOrdLower = "\\d*(?:1st|2nd|3rd|(?![123])\\dth)(?=\\b|[A-Z_])", $77e592970b837f45$var$rsOrdUpper = "\\d*(?:1ST|2ND|3RD|(?![123])\\dTH)(?=\\b|[a-z_])", $77e592970b837f45$var$rsSeq = $77e592970b837f45$var$rsOptVar + $77e592970b837f45$var$reOptMod + $77e592970b837f45$var$rsOptJoin, $77e592970b837f45$var$rsEmoji = "(?:" + [
     $77e592970b837f45$var$rsDingbat,
     $77e592970b837f45$var$rsRegional,
     $77e592970b837f45$var$rsSurrPair
-].join('|') + ')' + $77e592970b837f45$var$rsSeq;
+].join("|") + ")" + $77e592970b837f45$var$rsSeq;
 /** Used to match complex or compound words. */ var $77e592970b837f45$var$reUnicodeWord = RegExp([
-    $77e592970b837f45$var$rsUpper + '?' + $77e592970b837f45$var$rsLower + '+' + $77e592970b837f45$var$rsOptContrLower + '(?=' + [
+    $77e592970b837f45$var$rsUpper + "?" + $77e592970b837f45$var$rsLower + "+" + $77e592970b837f45$var$rsOptContrLower + "(?=" + [
         $77e592970b837f45$var$rsBreak,
         $77e592970b837f45$var$rsUpper,
-        '$'
-    ].join('|') + ')',
-    $77e592970b837f45$var$rsMiscUpper + '+' + $77e592970b837f45$var$rsOptContrUpper + '(?=' + [
+        "$"
+    ].join("|") + ")",
+    $77e592970b837f45$var$rsMiscUpper + "+" + $77e592970b837f45$var$rsOptContrUpper + "(?=" + [
         $77e592970b837f45$var$rsBreak,
         $77e592970b837f45$var$rsUpper + $77e592970b837f45$var$rsMiscLower,
-        '$'
-    ].join('|') + ')',
-    $77e592970b837f45$var$rsUpper + '?' + $77e592970b837f45$var$rsMiscLower + '+' + $77e592970b837f45$var$rsOptContrLower,
-    $77e592970b837f45$var$rsUpper + '+' + $77e592970b837f45$var$rsOptContrUpper,
+        "$"
+    ].join("|") + ")",
+    $77e592970b837f45$var$rsUpper + "?" + $77e592970b837f45$var$rsMiscLower + "+" + $77e592970b837f45$var$rsOptContrLower,
+    $77e592970b837f45$var$rsUpper + "+" + $77e592970b837f45$var$rsOptContrUpper,
     $77e592970b837f45$var$rsOrdUpper,
     $77e592970b837f45$var$rsOrdLower,
     $77e592970b837f45$var$rsDigits,
     $77e592970b837f45$var$rsEmoji
-].join('|'), 'g');
+].join("|"), "g");
 /**
  * Splits a Unicode `string` into an array of its words.
  *
@@ -895,8 +920,8 @@ $77e592970b837f45$exports = $77e592970b837f45$var$unicodeWords;
 $d9fa79f409c33b58$exports = $d9fa79f409c33b58$var$words;
 
 
-/** Used to compose unicode capture groups. */ var $05f54b383665cf57$var$rsApos = "['\u2019]";
-/** Used to match apostrophes. */ var $05f54b383665cf57$var$reApos = RegExp($05f54b383665cf57$var$rsApos, 'g');
+/** Used to compose unicode capture groups. */ var $05f54b383665cf57$var$rsApos = "['’]";
+/** Used to match apostrophes. */ var $05f54b383665cf57$var$reApos = RegExp($05f54b383665cf57$var$rsApos, "g");
 /**
  * Creates a function like `_.camelCase`.
  *
@@ -905,7 +930,7 @@ $d9fa79f409c33b58$exports = $d9fa79f409c33b58$var$words;
  * @returns {Function} Returns the new compounder function.
  */ function $05f54b383665cf57$var$createCompounder(callback) {
     return function(string) {
-        return $1502142813b4d9a5$exports($d9fa79f409c33b58$exports($d655d6225e4a8e0f$exports(string).replace($05f54b383665cf57$var$reApos, '')), callback, '');
+        return $1502142813b4d9a5$exports($d9fa79f409c33b58$exports($d655d6225e4a8e0f$exports(string).replace($05f54b383665cf57$var$reApos, "")), callback, "");
     };
 }
 $05f54b383665cf57$exports = $05f54b383665cf57$var$createCompounder;
@@ -941,38 +966,38 @@ const $6f44ddd09e194478$var$validators = {};
 const $6f44ddd09e194478$export$636d763ed7be9e97 = (name, fn)=>{
     $6f44ddd09e194478$var$validators[name] = fn;
 };
-$6f44ddd09e194478$export$636d763ed7be9e97('isDefined', (arg)=>{
+$6f44ddd09e194478$export$636d763ed7be9e97("isDefined", (arg)=>{
     return arg !== undefined;
 });
-$6f44ddd09e194478$export$636d763ed7be9e97('isUnDefined', (arg)=>{
+$6f44ddd09e194478$export$636d763ed7be9e97("isUnDefined", (arg)=>{
     return arg === undefined;
 });
-$6f44ddd09e194478$export$636d763ed7be9e97('isNull', (arg)=>{
+$6f44ddd09e194478$export$636d763ed7be9e97("isNull", (arg)=>{
     return arg === null;
 });
-$6f44ddd09e194478$export$636d763ed7be9e97('isElement', (arg)=>{
+$6f44ddd09e194478$export$636d763ed7be9e97("isElement", (arg)=>{
     return arg && (arg instanceof Element || arg instanceof Window);
 });
-$6f44ddd09e194478$export$636d763ed7be9e97('isEventTarget', (arg)=>{
+$6f44ddd09e194478$export$636d763ed7be9e97("isEventTarget", (arg)=>{
     return arg && arg instanceof EventTarget;
 });
-$6f44ddd09e194478$export$636d763ed7be9e97('isString', (arg)=>{
-    return arg && (typeof arg === 'string' || arg instanceof String);
+$6f44ddd09e194478$export$636d763ed7be9e97("isString", (arg)=>{
+    return arg && (typeof arg === "string" || arg instanceof String);
 });
-$6f44ddd09e194478$export$636d763ed7be9e97('isArray', (arg)=>{
+$6f44ddd09e194478$export$636d763ed7be9e97("isArray", (arg)=>{
     return arg && arg instanceof Array;
 });
-$6f44ddd09e194478$export$636d763ed7be9e97('notEmpty', (arg)=>{
-    return arg instanceof Array ? arg.length !== 0 : arg !== '';
+$6f44ddd09e194478$export$636d763ed7be9e97("notEmpty", (arg)=>{
+    return arg instanceof Array ? arg.length !== 0 : arg !== "";
 });
-$6f44ddd09e194478$export$636d763ed7be9e97('isEmpty', (arg)=>{
-    return arg === undefined || !arg || (arg instanceof Array ? arg.length === 0 : arg === '');
+$6f44ddd09e194478$export$636d763ed7be9e97("isEmpty", (arg)=>{
+    return arg === undefined || !arg || (arg instanceof Array ? arg.length === 0 : arg === "");
 });
-$6f44ddd09e194478$export$636d763ed7be9e97('isObject', (arg)=>{
+$6f44ddd09e194478$export$636d763ed7be9e97("isObject", (arg)=>{
     return arg && arg instanceof Object;
 });
-$6f44ddd09e194478$export$636d763ed7be9e97('isFunction', (arg)=>{
-    return arg && typeof arg === 'function';
+$6f44ddd09e194478$export$636d763ed7be9e97("isFunction", (arg)=>{
+    return arg && typeof arg === "function";
 });
 // tests is an array of validators which must be all evaluate to true
 // if top level element is an sub array then the sub array is evaluated as an 'or'
@@ -987,22 +1012,22 @@ const $6f44ddd09e194478$export$a22775fa5e2eebd9 = (param, arg, tests)=>{
             return anyOf.indexOf(true) !== -1;
         } else return $6f44ddd09e194478$var$validators[test] && $6f44ddd09e194478$var$validators[test](arg);
     });
-    if (allOf.indexOf(false) !== -1) throw new Error('call to ' + param + ' invalid value: ' + arg + ' ' + tests, 0 + allOf);
+    if (allOf.indexOf(false) !== -1) throw new Error("call to " + param + " invalid value: " + arg + " " + tests, 0 + allOf);
 };
 
 
 const $d6606c57579c6e5f$export$8350ba437fdadadb = new WeakMap();
 const $d6606c57579c6e5f$var$hasClass = (element, cssClass)=>{
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('hasClass element', element, [
-        'isDefined',
-        'isElement'
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("hasClass element", element, [
+        "isDefined",
+        "isElement"
     ]);
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('hasClass cssClass', cssClass, [
-        'isDefined',
-        'notEmpty',
-        'isString'
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("hasClass cssClass", cssClass, [
+        "isDefined",
+        "notEmpty",
+        "isString"
     ]);
-    const className = element.className || '';
+    const className = element.className || "";
     const classes = className.split(/\s+/);
     return classes.indexOf(cssClass) !== -1;
 };
@@ -1011,64 +1036,64 @@ const $d6606c57579c6e5f$var$hasClass = (element, cssClass)=>{
 // a list delimited by comma or space 'class1 class3 class4'
 // an array ['class1','class2']
 const $d6606c57579c6e5f$var$addClass = (element, addClasses)=>{
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('addClass element', element, [
-        'isDefined',
-        'isElement'
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("addClass element", element, [
+        "isDefined",
+        "isElement"
     ]);
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('addClass addClasses', addClasses, [
-        'isDefined',
-        'notEmpty',
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("addClass addClasses", addClasses, [
+        "isDefined",
+        "notEmpty",
         [
-            'isString',
-            'isArray'
+            "isString",
+            "isArray"
         ]
     ]);
-    const className = element.className || '';
+    const className = element.className || "";
     const classes = className.split(/\s+/);
     if (!Array.isArray(addClasses)) addClasses = addClasses.split(/[\s,]/);
     addClasses.forEach((c)=>{
         c = c.trim();
         if (classes.indexOf(c) === -1) classes.push(c);
     });
-    element.className = classes.join(' ');
+    element.className = classes.join(" ");
 };
 // removeClasses can be:
 // a string 'someclass'
 // a list delimited by comma or space 'class1 class3 class4'
 // an array ['class1','class2']
 const $d6606c57579c6e5f$var$removeClass = (element, removeClasses)=>{
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('removeClass element', element, [
-        'isDefined',
-        'isElement'
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("removeClass element", element, [
+        "isDefined",
+        "isElement"
     ]);
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('removeClass removeClasses', removeClasses, [
-        'isDefined',
-        'notEmpty',
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("removeClass removeClasses", removeClasses, [
+        "isDefined",
+        "notEmpty",
         [
-            'isString',
-            'isArray'
+            "isString",
+            "isArray"
         ]
     ]);
-    const className = element.className || '';
+    const className = element.className || "";
     const classes = className.split(/\s+/);
     if (!Array.isArray(removeClasses)) removeClasses = removeClasses.split(/[\s,]/);
     removeClasses.forEach((c)=>{
         c = c.trim();
         if (classes.indexOf(c) !== -1) classes.splice(classes.indexOf(c), 1);
     });
-    element.className = classes.join(' ');
+    element.className = classes.join(" ");
 };
 const $d6606c57579c6e5f$var$isVisible = (element)=>{
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('isVisible element', element, [
-        'isDefined',
-        'isElement'
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("isVisible element", element, [
+        "isDefined",
+        "isElement"
     ]);
     return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length);
 };
 const $d6606c57579c6e5f$var$inViewPort = (element, container = window)=>{
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('inViewPort element', element, [
-        'isDefined',
-        'isElement'
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("inViewPort element", element, [
+        "isDefined",
+        "isElement"
     ]);
     const rect = element.getBoundingClientRect();
     const visible = $d6606c57579c6e5f$var$isVisible(element);
@@ -1082,36 +1107,36 @@ const $d6606c57579c6e5f$var$inViewPort = (element, container = window)=>{
 	element: element to apply to
 	css: JSON object with properties in kebab-case or camelCase (or even in snake_case and seperate words)
 */ const $d6606c57579c6e5f$var$css = (element, css)=>{
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('css element', element, [
-        'isDefined',
-        'isElement'
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("css element", element, [
+        "isDefined",
+        "isElement"
     ]);
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('css css', css, [
-        'isDefined',
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("css css", css, [
+        "isDefined",
         [
-            'isObject'
+            "isObject"
         ]
     ]);
     for(const prop in css)if (Object.prototype.hasOwnProperty.call(css, prop)) {
-        const key = (/*@__PURE__*/$parcel$interopDefault($f607bceeeb5e2d09$exports))(prop);
+        const key = (0, (/*@__PURE__*/$parcel$interopDefault($f607bceeeb5e2d09$exports)))(prop);
         element.style[key] = css[prop] !== null ? css[prop] : null;
     }
 };
 const $d6606c57579c6e5f$var$setMetaData = (element, k, v)=>{
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('setMetaData element', element, [
-        'isDefined',
-        'isElement'
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("setMetaData element", element, [
+        "isDefined",
+        "isElement"
     ]);
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('setMetaData k', k, [
-        'isDefined',
-        'isString'
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("setMetaData k", k, [
+        "isDefined",
+        "isString"
     ]);
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('setMetaData v', v, [
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("setMetaData v", v, [
         [
-            'isUnDefined',
-            'isNull',
-            'isString',
-            'isObject'
+            "isUnDefined",
+            "isNull",
+            "isString",
+            "isObject"
         ]
     ]);
     const data = $d6606c57579c6e5f$export$8350ba437fdadadb.get(element) || {};
@@ -1120,13 +1145,13 @@ const $d6606c57579c6e5f$var$setMetaData = (element, k, v)=>{
     $d6606c57579c6e5f$export$8350ba437fdadadb.set(element, data);
 };
 const $d6606c57579c6e5f$var$getMetaData = (element, k)=>{
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('getMetaData element', element, [
-        'isDefined',
-        'isElement'
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("getMetaData element", element, [
+        "isDefined",
+        "isElement"
     ]);
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('getMetaData k', k, [
-        'isDefined',
-        'isString'
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("getMetaData k", k, [
+        "isDefined",
+        "isString"
     ]);
     const data = $d6606c57579c6e5f$export$8350ba437fdadadb.get(element) || {};
     if (k) return data[k];
@@ -1134,37 +1159,37 @@ const $d6606c57579c6e5f$var$getMetaData = (element, k)=>{
 };
 const $d6606c57579c6e5f$var$on = function(uid, container, events, selector, fn, options, once) {
     // selector is optional
-    if (typeof selector === 'function') {
+    if (typeof selector === "function") {
         once = options;
         options = fn;
         fn = selector;
         selector = undefined;
     }
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('on uid', uid, [
-        'isDefined',
-        'notEmpty'
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("on uid", uid, [
+        "isDefined",
+        "notEmpty"
     ]);
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('on container', container, [
-        'isDefined',
-        'isEventTarget'
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("on container", container, [
+        "isDefined",
+        "isEventTarget"
     ]);
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('on events', events, [
-        'isDefined',
-        'isString'
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("on events", events, [
+        "isDefined",
+        "isString"
     ]);
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('on fn', fn, [
-        'isDefined',
-        'isFunction'
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("on fn", fn, [
+        "isDefined",
+        "isFunction"
     ]);
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('on selector', selector, [
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("on selector", selector, [
         [
-            'isEmpty',
-            'isString'
+            "isEmpty",
+            "isString"
         ]
     ]);
-    const k = 'on:' + uid + '-' + events + '-' + selector;
+    const k = "on:" + uid + "-" + events + "-" + selector;
     if ($d6606c57579c6e5f$var$getMetaData(container, k)) {
-        console.error('Error: Sargasso utils.on: duplicate event handler specification. %o %s', container, k);
+        console.error("Error: Sargasso utils.on: duplicate event handler specification. %o %s", container, k);
         return;
     }
     const handler = (e)=>{
@@ -1188,25 +1213,25 @@ const $d6606c57579c6e5f$var$on = function(uid, container, events, selector, fn, 
     });
 };
 const $d6606c57579c6e5f$var$off = function(uid, container, events, selector) {
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('off uid', uid, [
-        'isDefined',
-        'notEmpty'
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("off uid", uid, [
+        "isDefined",
+        "notEmpty"
     ]);
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('off container', container, [
-        'isDefined',
-        'isEventTarget'
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("off container", container, [
+        "isDefined",
+        "isEventTarget"
     ]);
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('off events', events, [
-        'isDefined',
-        'isString'
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("off events", events, [
+        "isDefined",
+        "isString"
     ]);
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('off selector', selector, [
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("off selector", selector, [
         [
-            'isEmpty',
-            'isString'
+            "isEmpty",
+            "isString"
         ]
     ]);
-    const k = 'on:' + uid + '-' + events + '-' + selector;
+    const k = "on:" + uid + "-" + events + "-" + selector;
     const data = $d6606c57579c6e5f$var$getMetaData(container, k);
     if (data) {
         events.split(/[\s,]+/).forEach((evt)=>{
@@ -1217,15 +1242,15 @@ const $d6606c57579c6e5f$var$off = function(uid, container, events, selector) {
 };
 // remove all (on,once) event handlers for element
 const $d6606c57579c6e5f$var$offAll = function(container) {
-    $6f44ddd09e194478$export$a22775fa5e2eebd9('offAll container', container, [
-        'isDefined',
-        'isEventTarget'
+    (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("offAll container", container, [
+        "isDefined",
+        "isEventTarget"
     ]);
     const data = $d6606c57579c6e5f$export$8350ba437fdadadb.get(container) || {};
     const handlers = [];
-    for(const k1 in data){
-        if (Object.prototype.hasOwnProperty.call(data, k1)) {
-            if (k1.match(/^on:/)) handlers.push(k1);
+    for(const k in data){
+        if (Object.prototype.hasOwnProperty.call(data, k)) {
+            if (k.match(/^on:/)) handlers.push(k);
         }
     }
     handlers.forEach((k)=>{
@@ -1233,7 +1258,7 @@ const $d6606c57579c6e5f$var$offAll = function(container) {
     });
 };
 const $d6606c57579c6e5f$var$once = function(uid, container, events, selector, fn, options) {
-    if (typeof selector === 'function') {
+    if (typeof selector === "function") {
         options = fn;
         fn = selector;
         selector = undefined;
@@ -1256,7 +1281,20 @@ const $d6606c57579c6e5f$export$6f53260fffa88f1c = {
 };
 
 
+/**
+	Shared event observers used by Sargasso classes.
 
+	When these observers have subscribers they watch for events
+	and notify the subscriber's specific event handler
+	method when they occur.
+
+	@author Michael Rhodes (except where noted)
+	@license MIT
+	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+
+	Subscribers to these services must imlement handler methods
+	EG. watchDOM, watchScroll, watchResize, watchOrientation
+**/ 
 var $9fe0242a38a556ef$exports = {};
 var $816eb14f7bbed98c$exports = {};
 /**
@@ -1285,7 +1323,7 @@ var $816eb14f7bbed98c$exports = {};
  * // => false
  */ function $816eb14f7bbed98c$var$isObject(value) {
     var type = typeof value;
-    return value != null && (type == 'object' || type == 'function');
+    return value != null && (type == "object" || type == "function");
 }
 $816eb14f7bbed98c$exports = $816eb14f7bbed98c$var$isObject;
 
@@ -1341,7 +1379,7 @@ $4acab59e3676128a$exports = $4acab59e3676128a$var$trimmedEndIndex;
  * @param {string} string The string to trim.
  * @returns {string} Returns the trimmed string.
  */ function $f7bf55f7842b5f46$var$baseTrim(string) {
-    return string ? string.slice(0, $4acab59e3676128a$exports(string) + 1).replace($f7bf55f7842b5f46$var$reTrimStart, '') : string;
+    return string ? string.slice(0, $4acab59e3676128a$exports(string) + 1).replace($f7bf55f7842b5f46$var$reTrimStart, "") : string;
 }
 $f7bf55f7842b5f46$exports = $f7bf55f7842b5f46$var$baseTrim;
 
@@ -1376,13 +1414,13 @@ $f7bf55f7842b5f46$exports = $f7bf55f7842b5f46$var$baseTrim;
  * _.toNumber('3.2');
  * // => 3.2
  */ function $d26967c9d79595a6$var$toNumber(value) {
-    if (typeof value == 'number') return value;
+    if (typeof value == "number") return value;
     if ($bec3d46dc1b60d6f$exports(value)) return $d26967c9d79595a6$var$NAN;
     if ($816eb14f7bbed98c$exports(value)) {
-        var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
-        value = $816eb14f7bbed98c$exports(other) ? other + '' : other;
+        var other = typeof value.valueOf == "function" ? value.valueOf() : value;
+        value = $816eb14f7bbed98c$exports(other) ? other + "" : other;
     }
-    if (typeof value != 'string') return value === 0 ? value : +value;
+    if (typeof value != "string") return value === 0 ? value : +value;
     value = $f7bf55f7842b5f46$exports(value);
     var isBinary = $d26967c9d79595a6$var$reIsBinary.test(value);
     return isBinary || $d26967c9d79595a6$var$reIsOctal.test(value) ? $d26967c9d79595a6$var$freeParseInt(value.slice(2), isBinary ? 2 : 8) : $d26967c9d79595a6$var$reIsBadHex.test(value) ? $d26967c9d79595a6$var$NAN : +value;
@@ -1390,7 +1428,7 @@ $f7bf55f7842b5f46$exports = $f7bf55f7842b5f46$var$baseTrim;
 $d26967c9d79595a6$exports = $d26967c9d79595a6$var$toNumber;
 
 
-/** Error message constants. */ var $9fe0242a38a556ef$var$FUNC_ERROR_TEXT = 'Expected a function';
+/** Error message constants. */ var $9fe0242a38a556ef$var$FUNC_ERROR_TEXT = "Expected a function";
 /* Built-in method references for those with the same name as other `lodash` methods. */ var $9fe0242a38a556ef$var$nativeMax = Math.max, $9fe0242a38a556ef$var$nativeMin = Math.min;
 /**
  * Creates a debounced function that delays invoking `func` until after `wait`
@@ -1447,13 +1485,13 @@ $d26967c9d79595a6$exports = $d26967c9d79595a6$var$toNumber;
  * jQuery(window).on('popstate', debounced.cancel);
  */ function $9fe0242a38a556ef$var$debounce(func, wait, options) {
     var lastArgs, lastThis, maxWait, result, timerId, lastCallTime, lastInvokeTime = 0, leading = false, maxing = false, trailing = true;
-    if (typeof func != 'function') throw new TypeError($9fe0242a38a556ef$var$FUNC_ERROR_TEXT);
+    if (typeof func != "function") throw new TypeError($9fe0242a38a556ef$var$FUNC_ERROR_TEXT);
     wait = $d26967c9d79595a6$exports(wait) || 0;
     if ($816eb14f7bbed98c$exports(options)) {
         leading = !!options.leading;
-        maxing = 'maxWait' in options;
+        maxing = "maxWait" in options;
         maxWait = maxing ? $9fe0242a38a556ef$var$nativeMax($d26967c9d79595a6$exports(options.maxWait) || 0, wait) : maxWait;
-        trailing = 'trailing' in options ? !!options.trailing : trailing;
+        trailing = "trailing" in options ? !!options.trailing : trailing;
     }
     function invokeFunc(time) {
         var args = lastArgs, thisArg = lastThis;
@@ -1699,7 +1737,7 @@ $3109520e431d9815$exports = $3109520e431d9815$var$listCacheSet;
 }
 // Add methods to `ListCache`.
 $befa5ac17bc7d29a$var$ListCache.prototype.clear = $2467bc0a63f137bd$exports;
-$befa5ac17bc7d29a$var$ListCache.prototype['delete'] = $311c1cc022c49f6a$exports;
+$befa5ac17bc7d29a$var$ListCache.prototype["delete"] = $311c1cc022c49f6a$exports;
 $befa5ac17bc7d29a$var$ListCache.prototype.get = $864f87a7fda9dcd7$exports;
 $befa5ac17bc7d29a$var$ListCache.prototype.has = $ea469776b64ae772$exports;
 $befa5ac17bc7d29a$var$ListCache.prototype.set = $3109520e431d9815$exports;
@@ -1731,7 +1769,7 @@ var $face63b26bdedd60$exports = {};
  * @param {string} key The key of the value to remove.
  * @returns {boolean} Returns `true` if the entry was removed, else `false`.
  */ function $face63b26bdedd60$var$stackDelete(key) {
-    var data = this.__data__, result = data['delete'](key);
+    var data = this.__data__, result = data["delete"](key);
     this.size = data.size;
     return result;
 }
@@ -1776,7 +1814,7 @@ var $56556b6db65e376c$exports = {};
 var $8dab48d4f627075c$exports = {};
 
 
-/** `Object#toString` result references. */ var $8dab48d4f627075c$var$asyncTag = '[object AsyncFunction]', $8dab48d4f627075c$var$funcTag = '[object Function]', $8dab48d4f627075c$var$genTag = '[object GeneratorFunction]', $8dab48d4f627075c$var$proxyTag = '[object Proxy]';
+/** `Object#toString` result references. */ var $8dab48d4f627075c$var$asyncTag = "[object AsyncFunction]", $8dab48d4f627075c$var$funcTag = "[object Function]", $8dab48d4f627075c$var$genTag = "[object GeneratorFunction]", $8dab48d4f627075c$var$proxyTag = "[object Proxy]";
 /**
  * Checks if `value` is classified as a `Function` object.
  *
@@ -1812,8 +1850,8 @@ $d69990299823c247$exports = $d69990299823c247$var$coreJsData;
 
 
 /** Used to detect methods masquerading as native. */ var $922735684a48c520$var$maskSrcKey = function() {
-    var uid = /[^.]+$/.exec($d69990299823c247$exports && $d69990299823c247$exports.keys && $d69990299823c247$exports.keys.IE_PROTO || '');
-    return uid ? 'Symbol(src)_1.' + uid : '';
+    var uid = /[^.]+$/.exec($d69990299823c247$exports && $d69990299823c247$exports.keys && $d69990299823c247$exports.keys.IE_PROTO || "");
+    return uid ? "Symbol(src)_1." + uid : "";
 }();
 /**
  * Checks if `func` has its source masked.
@@ -1843,10 +1881,10 @@ var $1e323287d9dee311$exports = {};
             return $1e323287d9dee311$var$funcToString.call(func);
         } catch (e) {}
         try {
-            return func + '';
+            return func + "";
         } catch (e1) {}
     }
-    return '';
+    return "";
 }
 $1e323287d9dee311$exports = $1e323287d9dee311$var$toSource;
 
@@ -1859,7 +1897,7 @@ $1e323287d9dee311$exports = $1e323287d9dee311$var$toSource;
 /** Used for built-in method references. */ var $56556b6db65e376c$var$funcProto = Function.prototype, $56556b6db65e376c$var$objectProto = Object.prototype;
 /** Used to resolve the decompiled source of functions. */ var $56556b6db65e376c$var$funcToString = $56556b6db65e376c$var$funcProto.toString;
 /** Used to check objects for own properties. */ var $56556b6db65e376c$var$hasOwnProperty = $56556b6db65e376c$var$objectProto.hasOwnProperty;
-/** Used to detect if a method is native. */ var $56556b6db65e376c$var$reIsNative = RegExp('^' + $56556b6db65e376c$var$funcToString.call($56556b6db65e376c$var$hasOwnProperty).replace($56556b6db65e376c$var$reRegExpChar, '\\$&').replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$');
+/** Used to detect if a method is native. */ var $56556b6db65e376c$var$reIsNative = RegExp("^" + $56556b6db65e376c$var$funcToString.call($56556b6db65e376c$var$hasOwnProperty).replace($56556b6db65e376c$var$reRegExpChar, "\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$");
 /**
  * The base implementation of `_.isNative` without bad shim checks.
  *
@@ -1905,7 +1943,7 @@ $e147fdecd23b4e69$exports = $e147fdecd23b4e69$var$getNative;
 
 
 var $1L8e3 = parcelRequire("1L8e3");
-/* Built-in method references that are verified to be native. */ var $ac35e0129841718c$var$Map = $e147fdecd23b4e69$exports($1L8e3, 'Map');
+/* Built-in method references that are verified to be native. */ var $ac35e0129841718c$var$Map = $e147fdecd23b4e69$exports($1L8e3, "Map");
 $ac35e0129841718c$exports = $ac35e0129841718c$var$Map;
 
 
@@ -1915,7 +1953,7 @@ var $65d79b91bc6e085b$exports = {};
 var $823eca4cf944aae4$exports = {};
 var $1ef3728df89a8e7b$exports = {};
 
-/* Built-in method references that are verified to be native. */ var $1ef3728df89a8e7b$var$nativeCreate = $e147fdecd23b4e69$exports(Object, 'create');
+/* Built-in method references that are verified to be native. */ var $1ef3728df89a8e7b$var$nativeCreate = $e147fdecd23b4e69$exports(Object, "create");
 $1ef3728df89a8e7b$exports = $1ef3728df89a8e7b$var$nativeCreate;
 
 
@@ -1952,7 +1990,7 @@ $539e82209077e9d6$exports = $539e82209077e9d6$var$hashDelete;
 
 var $3e56a861b4e1a8bc$exports = {};
 
-/** Used to stand-in for `undefined` hash values. */ var $3e56a861b4e1a8bc$var$HASH_UNDEFINED = '__lodash_hash_undefined__';
+/** Used to stand-in for `undefined` hash values. */ var $3e56a861b4e1a8bc$var$HASH_UNDEFINED = "__lodash_hash_undefined__";
 /** Used for built-in method references. */ var $3e56a861b4e1a8bc$var$objectProto = Object.prototype;
 /** Used to check objects for own properties. */ var $3e56a861b4e1a8bc$var$hasOwnProperty = $3e56a861b4e1a8bc$var$objectProto.hasOwnProperty;
 /**
@@ -1995,7 +2033,7 @@ $203a84547f7bfd91$exports = $203a84547f7bfd91$var$hashHas;
 
 var $888bbdf5456eb395$exports = {};
 
-/** Used to stand-in for `undefined` hash values. */ var $888bbdf5456eb395$var$HASH_UNDEFINED = '__lodash_hash_undefined__';
+/** Used to stand-in for `undefined` hash values. */ var $888bbdf5456eb395$var$HASH_UNDEFINED = "__lodash_hash_undefined__";
 /**
  * Sets the hash `key` to `value`.
  *
@@ -2030,7 +2068,7 @@ $888bbdf5456eb395$exports = $888bbdf5456eb395$var$hashSet;
 }
 // Add methods to `Hash`.
 $65d79b91bc6e085b$var$Hash.prototype.clear = $823eca4cf944aae4$exports;
-$65d79b91bc6e085b$var$Hash.prototype['delete'] = $539e82209077e9d6$exports;
+$65d79b91bc6e085b$var$Hash.prototype["delete"] = $539e82209077e9d6$exports;
 $65d79b91bc6e085b$var$Hash.prototype.get = $3e56a861b4e1a8bc$exports;
 $65d79b91bc6e085b$var$Hash.prototype.has = $203a84547f7bfd91$exports;
 $65d79b91bc6e085b$var$Hash.prototype.set = $888bbdf5456eb395$exports;
@@ -2048,9 +2086,9 @@ $65d79b91bc6e085b$exports = $65d79b91bc6e085b$var$Hash;
  */ function $bc6818500c3ac2ae$var$mapCacheClear() {
     this.size = 0;
     this.__data__ = {
-        'hash': new $65d79b91bc6e085b$exports,
-        'map': new ($ac35e0129841718c$exports || $befa5ac17bc7d29a$exports),
-        'string': new $65d79b91bc6e085b$exports
+        "hash": new $65d79b91bc6e085b$exports,
+        "map": new ($ac35e0129841718c$exports || $befa5ac17bc7d29a$exports),
+        "string": new $65d79b91bc6e085b$exports
     };
 }
 $bc6818500c3ac2ae$exports = $bc6818500c3ac2ae$var$mapCacheClear;
@@ -2067,7 +2105,7 @@ var $2a9177b4614eab07$exports = {};
  * @returns {boolean} Returns `true` if `value` is suitable, else `false`.
  */ function $2a9177b4614eab07$var$isKeyable(value) {
     var type = typeof value;
-    return type == 'string' || type == 'number' || type == 'symbol' || type == 'boolean' ? value !== '__proto__' : value === null;
+    return type == "string" || type == "number" || type == "symbol" || type == "boolean" ? value !== "__proto__" : value === null;
 }
 $2a9177b4614eab07$exports = $2a9177b4614eab07$var$isKeyable;
 
@@ -2081,7 +2119,7 @@ $2a9177b4614eab07$exports = $2a9177b4614eab07$var$isKeyable;
  * @returns {*} Returns the map data.
  */ function $b064397b7f702f73$var$getMapData(map, key) {
     var data = map.__data__;
-    return $2a9177b4614eab07$exports(key) ? data[typeof key == 'string' ? 'string' : 'hash'] : data.map;
+    return $2a9177b4614eab07$exports(key) ? data[typeof key == "string" ? "string" : "hash"] : data.map;
 }
 $b064397b7f702f73$exports = $b064397b7f702f73$var$getMapData;
 
@@ -2095,7 +2133,7 @@ $b064397b7f702f73$exports = $b064397b7f702f73$var$getMapData;
  * @param {string} key The key of the value to remove.
  * @returns {boolean} Returns `true` if the entry was removed, else `false`.
  */ function $9c1616a72133c793$var$mapCacheDelete(key) {
-    var result = $b064397b7f702f73$exports(this, key)['delete'](key);
+    var result = $b064397b7f702f73$exports(this, key)["delete"](key);
     this.size -= result ? 1 : 0;
     return result;
 }
@@ -2170,7 +2208,7 @@ $94f0960fb87c327c$exports = $94f0960fb87c327c$var$mapCacheSet;
 }
 // Add methods to `MapCache`.
 $91f3b3dcdbb16fef$var$MapCache.prototype.clear = $bc6818500c3ac2ae$exports;
-$91f3b3dcdbb16fef$var$MapCache.prototype['delete'] = $9c1616a72133c793$exports;
+$91f3b3dcdbb16fef$var$MapCache.prototype["delete"] = $9c1616a72133c793$exports;
 $91f3b3dcdbb16fef$var$MapCache.prototype.get = $16f75c65ee0ca1a4$exports;
 $91f3b3dcdbb16fef$var$MapCache.prototype.has = $36a03f82297621f4$exports;
 $91f3b3dcdbb16fef$var$MapCache.prototype.set = $94f0960fb87c327c$exports;
@@ -2220,7 +2258,7 @@ $c5f16e543d471460$exports = $c5f16e543d471460$var$stackSet;
 }
 // Add methods to `Stack`.
 $db9f4a25626a9022$var$Stack.prototype.clear = $cc60611b30e8e31c$exports;
-$db9f4a25626a9022$var$Stack.prototype['delete'] = $face63b26bdedd60$exports;
+$db9f4a25626a9022$var$Stack.prototype["delete"] = $face63b26bdedd60$exports;
 $db9f4a25626a9022$var$Stack.prototype.get = $d7803b2d82266dcd$exports;
 $db9f4a25626a9022$var$Stack.prototype.has = $9f0a792355e2347e$exports;
 $db9f4a25626a9022$var$Stack.prototype.set = $c5f16e543d471460$exports;
@@ -2231,7 +2269,7 @@ var $86d3b251fe0271e9$exports = {};
 var $ecef678e691a1ada$exports = {};
 
 var $0d28433c16edc771$exports = {};
-/** Used to stand-in for `undefined` hash values. */ var $0d28433c16edc771$var$HASH_UNDEFINED = '__lodash_hash_undefined__';
+/** Used to stand-in for `undefined` hash values. */ var $0d28433c16edc771$var$HASH_UNDEFINED = "__lodash_hash_undefined__";
 /**
  * Adds `value` to the array cache.
  *
@@ -2340,8 +2378,8 @@ $2bfbe69611785045$exports = $2bfbe69611785045$var$cacheHas;
     stack.set(other, array);
     // Ignore non-index properties.
     while(++index < arrLength){
-        var arrValue = array[index], othValue1 = other[index];
-        if (customizer) var compared = isPartial ? customizer(othValue1, arrValue, index, other, array, stack) : customizer(arrValue, othValue1, index, array, other, stack);
+        var arrValue = array[index], othValue = other[index];
+        if (customizer) var compared = isPartial ? customizer(othValue, arrValue, index, other, array, stack) : customizer(arrValue, othValue, index, array, other, stack);
         if (compared !== undefined) {
             if (compared) continue;
             result = false;
@@ -2355,13 +2393,13 @@ $2bfbe69611785045$exports = $2bfbe69611785045$var$cacheHas;
                 result = false;
                 break;
             }
-        } else if (!(arrValue === othValue1 || equalFunc(arrValue, othValue1, bitmask, customizer, stack))) {
+        } else if (!(arrValue === othValue || equalFunc(arrValue, othValue, bitmask, customizer, stack))) {
             result = false;
             break;
         }
     }
-    stack['delete'](array);
-    stack['delete'](other);
+    stack["delete"](array);
+    stack["delete"](other);
     return result;
 }
 $86d3b251fe0271e9$exports = $86d3b251fe0271e9$var$equalArrays;
@@ -2416,8 +2454,8 @@ $2d7ffe33955adfe5$exports = $2d7ffe33955adfe5$var$setToArray;
 
 
 /** Used to compose bitmasks for value comparisons. */ var $93c61eea91a15499$var$COMPARE_PARTIAL_FLAG = 1, $93c61eea91a15499$var$COMPARE_UNORDERED_FLAG = 2;
-/** `Object#toString` result references. */ var $93c61eea91a15499$var$boolTag = '[object Boolean]', $93c61eea91a15499$var$dateTag = '[object Date]', $93c61eea91a15499$var$errorTag = '[object Error]', $93c61eea91a15499$var$mapTag = '[object Map]', $93c61eea91a15499$var$numberTag = '[object Number]', $93c61eea91a15499$var$regexpTag = '[object RegExp]', $93c61eea91a15499$var$setTag = '[object Set]', $93c61eea91a15499$var$stringTag = '[object String]', $93c61eea91a15499$var$symbolTag = '[object Symbol]';
-var $93c61eea91a15499$var$arrayBufferTag = '[object ArrayBuffer]', $93c61eea91a15499$var$dataViewTag = '[object DataView]';
+/** `Object#toString` result references. */ var $93c61eea91a15499$var$boolTag = "[object Boolean]", $93c61eea91a15499$var$dateTag = "[object Date]", $93c61eea91a15499$var$errorTag = "[object Error]", $93c61eea91a15499$var$mapTag = "[object Map]", $93c61eea91a15499$var$numberTag = "[object Number]", $93c61eea91a15499$var$regexpTag = "[object RegExp]", $93c61eea91a15499$var$setTag = "[object Set]", $93c61eea91a15499$var$stringTag = "[object String]", $93c61eea91a15499$var$symbolTag = "[object Symbol]";
+var $93c61eea91a15499$var$arrayBufferTag = "[object ArrayBuffer]", $93c61eea91a15499$var$dataViewTag = "[object DataView]";
 /** Used to convert symbols to primitives and strings. */ var $93c61eea91a15499$var$symbolProto = $ffe5cb85635c33de$exports ? $ffe5cb85635c33de$exports.prototype : undefined, $93c61eea91a15499$var$symbolValueOf = $93c61eea91a15499$var$symbolProto ? $93c61eea91a15499$var$symbolProto.valueOf : undefined;
 /**
  * A specialized version of `baseIsEqualDeep` for comparing objects of
@@ -2457,7 +2495,7 @@ var $93c61eea91a15499$var$arrayBufferTag = '[object ArrayBuffer]', $93c61eea91a1
             // Coerce regexes to strings and treat strings, primitives and objects,
             // as equal. See http://www.ecma-international.org/ecma-262/7.0/#sec-regexp.prototype.tostring
             // for more details.
-            return object == other + '';
+            return object == other + "";
         case $93c61eea91a15499$var$mapTag:
             var convert = $bc7976f0c7d7cba0$exports;
         case $93c61eea91a15499$var$setTag:
@@ -2471,7 +2509,7 @@ var $93c61eea91a15499$var$arrayBufferTag = '[object ArrayBuffer]', $93c61eea91a1
             // Recursively compare objects (susceptible to call stack limits).
             stack.set(object, other);
             var result = $86d3b251fe0271e9$exports(convert(object), convert(other), bitmask, customizer, equalFunc, stack);
-            stack['delete'](object);
+            stack["delete"](object);
             return result;
         case $93c61eea91a15499$var$symbolTag:
             if ($93c61eea91a15499$var$symbolValueOf) return $93c61eea91a15499$var$symbolValueOf.call(object) == $93c61eea91a15499$var$symbolValueOf.call(other);
@@ -2605,7 +2643,7 @@ var $53b6151ac72e62a2$exports = {};
 var $2cc935ff0b1c0877$exports = {};
 
 
-/** `Object#toString` result references. */ var $2cc935ff0b1c0877$var$argsTag = '[object Arguments]';
+/** `Object#toString` result references. */ var $2cc935ff0b1c0877$var$argsTag = "[object Arguments]";
 /**
  * The base implementation of `_.isArguments`.
  *
@@ -2642,7 +2680,7 @@ $2cc935ff0b1c0877$exports = $2cc935ff0b1c0877$var$baseIsArguments;
  */ var $53b6151ac72e62a2$var$isArguments = $2cc935ff0b1c0877$exports(function() {
     return arguments;
 }()) ? $2cc935ff0b1c0877$exports : function(value) {
-    return $b368e37f27e03050$exports(value) && $53b6151ac72e62a2$var$hasOwnProperty.call(value, 'callee') && !$53b6151ac72e62a2$var$propertyIsEnumerable.call(value, 'callee');
+    return $b368e37f27e03050$exports(value) && $53b6151ac72e62a2$var$hasOwnProperty.call(value, "callee") && !$53b6151ac72e62a2$var$propertyIsEnumerable.call(value, "callee");
 };
 $53b6151ac72e62a2$exports = $53b6151ac72e62a2$var$isArguments;
 
@@ -2663,7 +2701,7 @@ var $b889575f7e4d9c4d$exports = {};
  */ function $b889575f7e4d9c4d$var$isIndex(value, length) {
     var type = typeof value;
     length = length == null ? $b889575f7e4d9c4d$var$MAX_SAFE_INTEGER : length;
-    return !!length && (type == 'number' || type != 'symbol' && $b889575f7e4d9c4d$var$reIsUint.test(value)) && value > -1 && value % 1 == 0 && value < length;
+    return !!length && (type == "number" || type != "symbol" && $b889575f7e4d9c4d$var$reIsUint.test(value)) && value > -1 && value % 1 == 0 && value < length;
 }
 $b889575f7e4d9c4d$exports = $b889575f7e4d9c4d$var$isIndex;
 
@@ -2699,14 +2737,14 @@ var $68aa96500b8a892d$exports = {};
  * _.isLength('3');
  * // => false
  */ function $68aa96500b8a892d$var$isLength(value) {
-    return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= $68aa96500b8a892d$var$MAX_SAFE_INTEGER;
+    return typeof value == "number" && value > -1 && value % 1 == 0 && value <= $68aa96500b8a892d$var$MAX_SAFE_INTEGER;
 }
 $68aa96500b8a892d$exports = $68aa96500b8a892d$var$isLength;
 
 
 
-/** `Object#toString` result references. */ var $b4a91e510df145c4$var$argsTag = '[object Arguments]', $b4a91e510df145c4$var$arrayTag = '[object Array]', $b4a91e510df145c4$var$boolTag = '[object Boolean]', $b4a91e510df145c4$var$dateTag = '[object Date]', $b4a91e510df145c4$var$errorTag = '[object Error]', $b4a91e510df145c4$var$funcTag = '[object Function]', $b4a91e510df145c4$var$mapTag = '[object Map]', $b4a91e510df145c4$var$numberTag = '[object Number]', $b4a91e510df145c4$var$objectTag = '[object Object]', $b4a91e510df145c4$var$regexpTag = '[object RegExp]', $b4a91e510df145c4$var$setTag = '[object Set]', $b4a91e510df145c4$var$stringTag = '[object String]', $b4a91e510df145c4$var$weakMapTag = '[object WeakMap]';
-var $b4a91e510df145c4$var$arrayBufferTag = '[object ArrayBuffer]', $b4a91e510df145c4$var$dataViewTag = '[object DataView]', $b4a91e510df145c4$var$float32Tag = '[object Float32Array]', $b4a91e510df145c4$var$float64Tag = '[object Float64Array]', $b4a91e510df145c4$var$int8Tag = '[object Int8Array]', $b4a91e510df145c4$var$int16Tag = '[object Int16Array]', $b4a91e510df145c4$var$int32Tag = '[object Int32Array]', $b4a91e510df145c4$var$uint8Tag = '[object Uint8Array]', $b4a91e510df145c4$var$uint8ClampedTag = '[object Uint8ClampedArray]', $b4a91e510df145c4$var$uint16Tag = '[object Uint16Array]', $b4a91e510df145c4$var$uint32Tag = '[object Uint32Array]';
+/** `Object#toString` result references. */ var $b4a91e510df145c4$var$argsTag = "[object Arguments]", $b4a91e510df145c4$var$arrayTag = "[object Array]", $b4a91e510df145c4$var$boolTag = "[object Boolean]", $b4a91e510df145c4$var$dateTag = "[object Date]", $b4a91e510df145c4$var$errorTag = "[object Error]", $b4a91e510df145c4$var$funcTag = "[object Function]", $b4a91e510df145c4$var$mapTag = "[object Map]", $b4a91e510df145c4$var$numberTag = "[object Number]", $b4a91e510df145c4$var$objectTag = "[object Object]", $b4a91e510df145c4$var$regexpTag = "[object RegExp]", $b4a91e510df145c4$var$setTag = "[object Set]", $b4a91e510df145c4$var$stringTag = "[object String]", $b4a91e510df145c4$var$weakMapTag = "[object WeakMap]";
+var $b4a91e510df145c4$var$arrayBufferTag = "[object ArrayBuffer]", $b4a91e510df145c4$var$dataViewTag = "[object DataView]", $b4a91e510df145c4$var$float32Tag = "[object Float32Array]", $b4a91e510df145c4$var$float64Tag = "[object Float64Array]", $b4a91e510df145c4$var$int8Tag = "[object Int8Array]", $b4a91e510df145c4$var$int16Tag = "[object Int16Array]", $b4a91e510df145c4$var$int32Tag = "[object Int32Array]", $b4a91e510df145c4$var$uint8Tag = "[object Uint8Array]", $b4a91e510df145c4$var$uint8ClampedTag = "[object Uint8ClampedArray]", $b4a91e510df145c4$var$uint16Tag = "[object Uint16Array]", $b4a91e510df145c4$var$uint32Tag = "[object Uint32Array]";
 /** Used to identify `toStringTag` values of typed arrays. */ var $b4a91e510df145c4$var$typedArrayTags = {};
 $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$float32Tag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$float64Tag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$int8Tag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$int16Tag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$int32Tag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$uint8Tag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$uint8ClampedTag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$uint16Tag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$uint32Tag] = true;
 $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$argsTag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$arrayTag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$arrayBufferTag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$boolTag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$dataViewTag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$dateTag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$errorTag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$funcTag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$mapTag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$numberTag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$objectTag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$regexpTag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$setTag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$stringTag] = $b4a91e510df145c4$var$typedArrayTags[$b4a91e510df145c4$var$weakMapTag] = false;
@@ -2772,7 +2810,9 @@ $0fc5618c5023df76$exports = $0fc5618c5023df76$var$isTypedArray;
  */ function $cd22f820aa5dc5fd$var$arrayLikeKeys(value, inherited) {
     var isArr = $34086da6808d3266$exports(value), isArg = !isArr && $53b6151ac72e62a2$exports(value), isBuff = !isArr && !isArg && $8tgsd(value), isType = !isArr && !isArg && !isBuff && $0fc5618c5023df76$exports(value), skipIndexes = isArr || isArg || isBuff || isType, result = skipIndexes ? $871552966855d35d$exports(value.length, String) : [], length = result.length;
     for(var key in value)if ((inherited || $cd22f820aa5dc5fd$var$hasOwnProperty.call(value, key)) && !(skipIndexes && // Safari 9 has enumerable `arguments.length` in strict mode.
-    (key == 'length' || isBuff && (key == 'offset' || key == 'parent') || isType && (key == 'buffer' || key == 'byteLength' || key == 'byteOffset') || // Skip index properties.
+    (key == "length" || // Node.js 0.10 has enumerable non-index properties on buffers.
+    isBuff && (key == "offset" || key == "parent") || // PhantomJS 2 has enumerable non-index properties on typed arrays.
+    isType && (key == "buffer" || key == "byteLength" || key == "byteOffset") || // Skip index properties.
     $b889575f7e4d9c4d$exports(key, length)))) result.push(key);
     return result;
 }
@@ -2789,7 +2829,7 @@ var $4dfb267a3233b84c$exports = {};
  * @param {*} value The value to check.
  * @returns {boolean} Returns `true` if `value` is a prototype, else `false`.
  */ function $4dfb267a3233b84c$var$isPrototype(value) {
-    var Ctor = value && value.constructor, proto = typeof Ctor == 'function' && Ctor.prototype || $4dfb267a3233b84c$var$objectProto;
+    var Ctor = value && value.constructor, proto = typeof Ctor == "function" && Ctor.prototype || $4dfb267a3233b84c$var$objectProto;
     return value === proto;
 }
 $4dfb267a3233b84c$exports = $4dfb267a3233b84c$var$isPrototype;
@@ -2827,7 +2867,7 @@ $231f64b1f6313b79$exports = $231f64b1f6313b79$var$nativeKeys;
  */ function $a0f2c92b506ef13d$var$baseKeys(object) {
     if (!$4dfb267a3233b84c$exports(object)) return $231f64b1f6313b79$exports(object);
     var result = [];
-    for(var key in Object(object))if ($a0f2c92b506ef13d$var$hasOwnProperty.call(object, key) && key != 'constructor') result.push(key);
+    for(var key in Object(object))if ($a0f2c92b506ef13d$var$hasOwnProperty.call(object, key) && key != "constructor") result.push(key);
     return result;
 }
 $a0f2c92b506ef13d$exports = $a0f2c92b506ef13d$var$baseKeys;
@@ -2951,15 +2991,15 @@ $a5f7c433610a9a42$exports = $a5f7c433610a9a42$var$getAllKeys;
             result = false;
             break;
         }
-        skipCtor || (skipCtor = key == 'constructor');
+        skipCtor || (skipCtor = key == "constructor");
     }
     if (result && !skipCtor) {
         var objCtor = object.constructor, othCtor = other.constructor;
         // Non `Object` object instances with different constructors are not equal.
-        if (objCtor != othCtor && 'constructor' in object && 'constructor' in other && !(typeof objCtor == 'function' && objCtor instanceof objCtor && typeof othCtor == 'function' && othCtor instanceof othCtor)) result = false;
+        if (objCtor != othCtor && "constructor" in object && "constructor" in other && !(typeof objCtor == "function" && objCtor instanceof objCtor && typeof othCtor == "function" && othCtor instanceof othCtor)) result = false;
     }
-    stack['delete'](object);
-    stack['delete'](other);
+    stack["delete"](object);
+    stack["delete"](other);
     return result;
 }
 $388cd1ca7d9db2b7$exports = $388cd1ca7d9db2b7$var$equalObjects;
@@ -2970,7 +3010,7 @@ var $b8aaa06ae0d87b56$exports = {};
 
 
 var $1L8e3 = parcelRequire("1L8e3");
-/* Built-in method references that are verified to be native. */ var $b8aaa06ae0d87b56$var$DataView = $e147fdecd23b4e69$exports($1L8e3, 'DataView');
+/* Built-in method references that are verified to be native. */ var $b8aaa06ae0d87b56$var$DataView = $e147fdecd23b4e69$exports($1L8e3, "DataView");
 $b8aaa06ae0d87b56$exports = $b8aaa06ae0d87b56$var$DataView;
 
 
@@ -2979,7 +3019,7 @@ var $5669c796a37383ca$exports = {};
 
 
 var $1L8e3 = parcelRequire("1L8e3");
-/* Built-in method references that are verified to be native. */ var $5669c796a37383ca$var$Promise = $e147fdecd23b4e69$exports($1L8e3, 'Promise');
+/* Built-in method references that are verified to be native. */ var $5669c796a37383ca$var$Promise = $e147fdecd23b4e69$exports($1L8e3, "Promise");
 $5669c796a37383ca$exports = $5669c796a37383ca$var$Promise;
 
 
@@ -2987,7 +3027,7 @@ var $320c314d4762cfb1$exports = {};
 
 
 var $1L8e3 = parcelRequire("1L8e3");
-/* Built-in method references that are verified to be native. */ var $320c314d4762cfb1$var$Set = $e147fdecd23b4e69$exports($1L8e3, 'Set');
+/* Built-in method references that are verified to be native. */ var $320c314d4762cfb1$var$Set = $e147fdecd23b4e69$exports($1L8e3, "Set");
 $320c314d4762cfb1$exports = $320c314d4762cfb1$var$Set;
 
 
@@ -2995,14 +3035,14 @@ var $23bacf134d92b468$exports = {};
 
 
 var $1L8e3 = parcelRequire("1L8e3");
-/* Built-in method references that are verified to be native. */ var $23bacf134d92b468$var$WeakMap = $e147fdecd23b4e69$exports($1L8e3, 'WeakMap');
+/* Built-in method references that are verified to be native. */ var $23bacf134d92b468$var$WeakMap = $e147fdecd23b4e69$exports($1L8e3, "WeakMap");
 $23bacf134d92b468$exports = $23bacf134d92b468$var$WeakMap;
 
 
 
 
-/** `Object#toString` result references. */ var $a2d6d557c826d8e7$var$mapTag = '[object Map]', $a2d6d557c826d8e7$var$objectTag = '[object Object]', $a2d6d557c826d8e7$var$promiseTag = '[object Promise]', $a2d6d557c826d8e7$var$setTag = '[object Set]', $a2d6d557c826d8e7$var$weakMapTag = '[object WeakMap]';
-var $a2d6d557c826d8e7$var$dataViewTag = '[object DataView]';
+/** `Object#toString` result references. */ var $a2d6d557c826d8e7$var$mapTag = "[object Map]", $a2d6d557c826d8e7$var$objectTag = "[object Object]", $a2d6d557c826d8e7$var$promiseTag = "[object Promise]", $a2d6d557c826d8e7$var$setTag = "[object Set]", $a2d6d557c826d8e7$var$weakMapTag = "[object WeakMap]";
+var $a2d6d557c826d8e7$var$dataViewTag = "[object DataView]";
 /** Used to detect maps, sets, and weakmaps. */ var $a2d6d557c826d8e7$var$dataViewCtorString = $1e323287d9dee311$exports($b8aaa06ae0d87b56$exports), $a2d6d557c826d8e7$var$mapCtorString = $1e323287d9dee311$exports($ac35e0129841718c$exports), $a2d6d557c826d8e7$var$promiseCtorString = $1e323287d9dee311$exports($5669c796a37383ca$exports), $a2d6d557c826d8e7$var$setCtorString = $1e323287d9dee311$exports($320c314d4762cfb1$exports), $a2d6d557c826d8e7$var$weakMapCtorString = $1e323287d9dee311$exports($23bacf134d92b468$exports);
 /**
  * Gets the `toStringTag` of `value`.
@@ -3013,7 +3053,7 @@ var $a2d6d557c826d8e7$var$dataViewTag = '[object DataView]';
  */ var $a2d6d557c826d8e7$var$getTag = $53ca50918c8f42fc$exports;
 // Fallback for data views, maps, sets, and weak maps in IE 11 and promises in Node.js < 6.
 if ($b8aaa06ae0d87b56$exports && $a2d6d557c826d8e7$var$getTag(new $b8aaa06ae0d87b56$exports(new ArrayBuffer(1))) != $a2d6d557c826d8e7$var$dataViewTag || $ac35e0129841718c$exports && $a2d6d557c826d8e7$var$getTag(new $ac35e0129841718c$exports) != $a2d6d557c826d8e7$var$mapTag || $5669c796a37383ca$exports && $a2d6d557c826d8e7$var$getTag($5669c796a37383ca$exports.resolve()) != $a2d6d557c826d8e7$var$promiseTag || $320c314d4762cfb1$exports && $a2d6d557c826d8e7$var$getTag(new $320c314d4762cfb1$exports) != $a2d6d557c826d8e7$var$setTag || $23bacf134d92b468$exports && $a2d6d557c826d8e7$var$getTag(new $23bacf134d92b468$exports) != $a2d6d557c826d8e7$var$weakMapTag) $a2d6d557c826d8e7$var$getTag = function(value) {
-    var result = $53ca50918c8f42fc$exports(value), Ctor = result == $a2d6d557c826d8e7$var$objectTag ? value.constructor : undefined, ctorString = Ctor ? $1e323287d9dee311$exports(Ctor) : '';
+    var result = $53ca50918c8f42fc$exports(value), Ctor = result == $a2d6d557c826d8e7$var$objectTag ? value.constructor : undefined, ctorString = Ctor ? $1e323287d9dee311$exports(Ctor) : "";
     if (ctorString) switch(ctorString){
         case $a2d6d557c826d8e7$var$dataViewCtorString:
             return $a2d6d557c826d8e7$var$dataViewTag;
@@ -3036,7 +3076,7 @@ $a2d6d557c826d8e7$exports = $a2d6d557c826d8e7$var$getTag;
 var $8tgsd = parcelRequire("8tgsd");
 
 /** Used to compose bitmasks for value comparisons. */ var $cbeb2879b695ddbc$var$COMPARE_PARTIAL_FLAG = 1;
-/** `Object#toString` result references. */ var $cbeb2879b695ddbc$var$argsTag = '[object Arguments]', $cbeb2879b695ddbc$var$arrayTag = '[object Array]', $cbeb2879b695ddbc$var$objectTag = '[object Object]';
+/** `Object#toString` result references. */ var $cbeb2879b695ddbc$var$argsTag = "[object Arguments]", $cbeb2879b695ddbc$var$arrayTag = "[object Array]", $cbeb2879b695ddbc$var$objectTag = "[object Object]";
 /** Used for built-in method references. */ var $cbeb2879b695ddbc$var$objectProto = Object.prototype;
 /** Used to check objects for own properties. */ var $cbeb2879b695ddbc$var$hasOwnProperty = $cbeb2879b695ddbc$var$objectProto.hasOwnProperty;
 /**
@@ -3067,7 +3107,7 @@ var $8tgsd = parcelRequire("8tgsd");
         return objIsArr || $0fc5618c5023df76$exports(object) ? $86d3b251fe0271e9$exports(object, other, bitmask, customizer, equalFunc, stack) : $93c61eea91a15499$exports(object, other, objTag, bitmask, customizer, equalFunc, stack);
     }
     if (!(bitmask & $cbeb2879b695ddbc$var$COMPARE_PARTIAL_FLAG)) {
-        var objIsWrapped = objIsObj && $cbeb2879b695ddbc$var$hasOwnProperty.call(object, '__wrapped__'), othIsWrapped = othIsObj && $cbeb2879b695ddbc$var$hasOwnProperty.call(other, '__wrapped__');
+        var objIsWrapped = objIsObj && $cbeb2879b695ddbc$var$hasOwnProperty.call(object, "__wrapped__"), othIsWrapped = othIsObj && $cbeb2879b695ddbc$var$hasOwnProperty.call(other, "__wrapped__");
         if (objIsWrapped || othIsWrapped) {
             var objUnwrapped = objIsWrapped ? object.value() : object, othUnwrapped = othIsWrapped ? other.value() : other;
             stack || (stack = new $db9f4a25626a9022$exports);
@@ -3139,7 +3179,7 @@ $27b078180f7cecc3$exports = $27b078180f7cecc3$var$isEqual;
 var $70f23c7c95ce5dd7$exports = {};
 /*
  * 	Observable Slim
- *	Version 0.1.5
+ *	Version 0.1.6
  * 	https://github.com/elliotnb/observable-slim
  *
  * 	Licensed under the MIT license:
@@ -3164,51 +3204,56 @@ var $70f23c7c95ce5dd7$exports = {};
     // to track that a given Proxy was modified from the 'set' handler
     var dupProxy = null;
     var _getProperty = function(obj, path) {
-        return path.split('.').reduce(function(prev, curr) {
+        return path.split(".").reduce(function(prev, curr) {
             return prev ? prev[curr] : undefined;
         }, obj || self);
     };
-    /*	Function: _create
-				Private internal function that is invoked to create a new ES6 Proxy whose changes we can observe through
-				the Observerable.observe() method.
-
-			Parameters:
-				target 				- required, plain JavaScript object that we want to observe for changes.
-				domDelay 			- batch up changes on a 10ms delay so a series of changes can be processed in one DOM update.
-				originalObservable 	- object, the original observable created by the user, exists for recursion purposes,
-									  allows one observable to observe change on any nested/child objects.
-				originalPath 		- array of objects, each object having the properties 'target' and 'property' -- target referring to the observed object itself
-									  and property referring to the name of that object in the nested structure. the path of the property in relation to the target 
-									  on the original observable, exists for recursion purposes, allows one observable to observe change on any nested/child objects. 
-
-			Returns:
-				An ES6 Proxy object.
-	*/ var _create = function(target1, domDelay, originalObservable, originalPath) {
+    /**
+	 * Create a new ES6 `Proxy` whose changes we can observe through the `observe()` method.
+	 * @param {object} target Plain object that we want to observe for changes.
+	 * @param {boolean|number} domDelay If `true`, then the observed changes to `target` will be batched up on a 10ms delay (via `setTimeout()`).
+	 * If `false`, then the `observer` function will be immediately invoked after each individual change made to `target`. It is helpful to set
+	 * `domDelay` to `true` when your `observer` function makes DOM manipulations (fewer DOM redraws means better performance). If a number greater
+	 * than zero, then it defines the DOM delay in milliseconds.
+	 * @param {function(ObservableSlimChange[])} [observer] Function that will be invoked when a change is made to the proxy of `target`.
+	 * When invoked, this function is passed a single argument: an array of `ObservableSlimChange` detailing each change that has been made.
+	 * @param {object} originalObservable The original observable created by the user, exists for recursion purposes, allows one observable to observe
+	 * change on any nested/child objects.
+	 * @param {{target: object, property: string}[]} originalPath Array of objects, each object having the properties `target` and `property`:
+	 * `target` is referring to the observed object itself and `property` referring to the name of that object in the nested structure.
+	 * The path of the property in relation to the target on the original observable, exists for recursion purposes, allows one observable to observe
+	 * change on any nested/child objects.
+	 * @returns {ProxyConstructor} Proxy of the target object.
+	 */ var _create = function(target, domDelay, originalObservable, originalPath) {
         var observable = originalObservable || null;
         // record the nested path taken to access this object -- if there was no path then we provide the first empty entry
         var path = originalPath || [
             {
-                "target": target1,
+                "target": target,
                 "property": ""
             }
         ];
         paths.push(path);
         // in order to accurately report the "previous value" of the "length" property on an Array
-        // we must use a helper property because intercepting a length change is not always possible as of 8/13/2018 in 
+        // we must use a helper property because intercepting a length change is not always possible as of 8/13/2018 in
         // Chrome -- the new `length` value is already set by the time the `set` handler is invoked
-        if (target1 instanceof Array) target1.__length = target1.length;
+        if (target instanceof Array) {
+            if (!target.hasOwnProperty("__length")) Object.defineProperty(target, "__length", {
+                enumerable: false,
+                value: target.length,
+                writable: true
+            });
+            else target.__length = target.length;
+        }
         var changes = [];
-        /*	Function: _getPath
-				Returns a string of the nested path (in relation to the top-level observed object)
-				of the property being modified or deleted.
-			Parameters:
-				target - the object whose property is being modified or deleted.
-				property - the string name of the property
-				jsonPointer - optional, set to true if the string path should be formatted as a JSON pointer.
-
-			Returns:
-				String of the nested path (e.g., hello.testing.1.bar or, if JSON pointer, /hello/testing/1/bar
-		*/ var _getPath = function(target, property, jsonPointer) {
+        /**
+		 * Returns a string of the nested path (in relation to the top-level observed object) of the property being modified or deleted.
+		 * @param {object} target Plain object that we want to observe for changes.
+		 * @param {string} property Property name.
+		 * @param {boolean} [jsonPointer] Set to `true` if the string path should be formatted as a JSON pointer rather than with the dot notation
+		 * (`false` as default).
+		 * @returns {string} Nested path (e.g., `hello.testing.1.bar` or, if JSON pointer, `/hello/testing/1/bar`).
+		 */ var _getPath = function(target, property, jsonPointer) {
             var fullPath = "";
             var lastTarget = null;
             // loop over each item in the path and append it to full path
@@ -3230,9 +3275,10 @@ var $70f23c7c95ce5dd7$exports = {};
         var _notifyObservers = function(numChanges) {
             // if the observable is paused, then we don't want to execute any of the observer functions
             if (observable.paused === true) return;
-            // execute observer functions on a 10ms settimeout, this prevents the observer functions from being executed
+            var domDelayIsNumber = typeof domDelay === "number";
+            // execute observer functions on a 10ms setTimeout, this prevents the observer functions from being executed
             // separately on every change -- this is necessary because the observer functions will often trigger UI updates
-            if (domDelay === true) setTimeout(function() {
+            if (domDelayIsNumber || domDelay === true) setTimeout(function() {
                 if (numChanges === changes.length) {
                     // we create a copy of changes before passing it to the observer functions because even if the observer function
                     // throws an error, we still need to ensure that changes is reset to an empty array so that old changes don't persist
@@ -3241,14 +3287,14 @@ var $70f23c7c95ce5dd7$exports = {};
                     // invoke any functions that are observing changes
                     for(var i = 0; i < observable.observers.length; i++)observable.observers[i](changesCopy);
                 }
-            }, 10);
+            }, domDelayIsNumber && domDelay > 0 ? domDelay : 10);
             else {
                 // we create a copy of changes before passing it to the observer functions because even if the observer function
                 // throws an error, we still need to ensure that changes is reset to an empty array so that old changes don't persist
-                var changesCopy1 = changes.slice(0);
+                var changesCopy = changes.slice(0);
                 changes = [];
                 // invoke any functions that are observing changes
-                for(var i1 = 0; i1 < observable.observers.length; i1++)observable.observers[i1](changesCopy1);
+                for(var i = 0; i < observable.observers.length; i++)observable.observers[i](changesCopy);
             }
         };
         var handler = {
@@ -3264,8 +3310,9 @@ var $70f23c7c95ce5dd7$exports = {};
                     return _getProperty(observable.parentProxy, parentPath.join("."));
                 };
                 else if (property === "__getPath") {
-                    var parentPath1 = _getPath(target, "__getParent");
-                    return parentPath1.slice(0, -12);
+                    // strip off the 12 characters for ".__getParent"
+                    var parentPath = _getPath(target, "__getParent");
+                    return parentPath.slice(0, -12);
                 }
                 // for performance improvements, we assign this to a variable so we do not have to lookup the property value again
                 var targetProp = target[property];
@@ -3282,9 +3329,9 @@ var $70f23c7c95ce5dd7$exports = {};
                     if (targetProp.__targetPosition > -1 && targets[targetProp.__targetPosition] !== null) {
                         // loop over the proxies that we've created for this object
                         var ttp = targetsProxy[targetProp.__targetPosition];
-                        for(var i2 = 0, l = ttp.length; i2 < l; i2++){
+                        for(var i = 0, l = ttp.length; i < l; i++){
                             // if we find a proxy that was setup for this particular observable, then return that proxy
-                            if (observable === ttp[i2].observable) return ttp[i2].proxy;
+                            if (observable === ttp[i].observable) return ttp[i].proxy;
                         }
                     }
                     // if we're arrived here, then that means there is no proxy for the object the user just accessed, so we
@@ -3338,7 +3385,7 @@ var $70f23c7c95ce5dd7$exports = {};
                 _notifyObservers(changes.length);
                 return true;
             },
-            set: function(target2, property1, value, receiver) {
+            set: function(target, property, value, receiver) {
                 // if the value we're assigning is an object, then we want to ensure
                 // that we're assigning the original object, not the proxy, in order to avoid mixing
                 // the actual targets and proxies -- creates issues with path logging if we don't do this
@@ -3350,36 +3397,36 @@ var $70f23c7c95ce5dd7$exports = {};
                     dupProxy = null;
                 }
                 // improve performance by saving direct references to the property
-                var targetProp = target2[property1];
+                var targetProp = target[property];
                 // Only record this change if:
-                // 	1. the new value differs from the old one 
+                // 	1. the new value differs from the old one
                 //	2. OR if this proxy was not the original proxy to receive the change
                 // 	3. OR the modified target is an array and the modified property is "length" and our helper property __length indicates that the array length has changed
                 //
                 // Regarding #3 above: mutations of arrays via .push or .splice actually modify the .length before the set handler is invoked
                 // so in order to accurately report the correct previousValue for the .length, we have to use a helper property.
-                if (targetProp !== value || originalChange === false || property1 === "length" && target2 instanceof Array && target2.__length !== value) {
+                if (targetProp !== value || originalChange === false || property === "length" && target instanceof Array && target.__length !== value) {
                     var foundObservable = true;
                     var typeOfTargetProp = typeof targetProp;
-                    // determine if we're adding something new or modifying somethat that already existed
+                    // determine if we're adding something new or modifying some that already existed
                     var type = "update";
                     if (typeOfTargetProp === "undefined") type = "add";
                     // store the change that just occurred. it is important that we store the change before invoking the other proxies so that the previousValue is correct
                     changes.push({
                         "type": type,
-                        "target": target2,
-                        "property": property1,
+                        "target": target,
+                        "property": property,
                         "newValue": value,
-                        "previousValue": receiver[property1],
-                        "currentPath": _getPath(target2, property1),
-                        "jsonPointer": _getPath(target2, property1, true),
+                        "previousValue": receiver[property],
+                        "currentPath": _getPath(target, property),
+                        "jsonPointer": _getPath(target, property, true),
                         "proxy": proxy
                     });
                     // mutations of arrays via .push or .splice actually modify the .length before the set handler is invoked
                     // so in order to accurately report the correct previousValue for the .length, we have to use a helper property.
-                    if (property1 === "length" && target2 instanceof Array && target2.__length !== value) {
-                        changes[changes.length - 1].previousValue = target2.__length;
-                        target2.__length = value;
+                    if (property === "length" && target instanceof Array && target.__length !== value) {
+                        changes[changes.length - 1].previousValue = target.__length;
+                        target.__length = value;
                     }
                     // !!IMPORTANT!! if this proxy was the first proxy to receive the change, then we need to go check and see
                     // if there are other proxies for the same project. if there are, then we will modify those proxies as well so the other
@@ -3388,9 +3435,9 @@ var $70f23c7c95ce5dd7$exports = {};
                         // because the value actually differs than the previous value
                         // we need to store the new value on the original target object,
                         // but only as long as changes have not been paused
-                        if (!observable.changesPaused) target2[property1] = value;
+                        if (!observable.changesPaused) target[property] = value;
                         foundObservable = false;
-                        var targetPosition = target2.__targetPosition;
+                        var targetPosition = target.__targetPosition;
                         var z = targetsProxy[targetPosition].length;
                         // find the parent target for this observable -- if the target for that observable has not been removed
                         // from the targets array, then that means the observable is still active and we should notify the observers of this change
@@ -3404,22 +3451,22 @@ var $70f23c7c95ce5dd7$exports = {};
                         }
                         // if we didn't find an observable for this proxy, then that means .remove(proxy) was likely invoked
                         // so we no longer need to notify any observer function about the changes, but we still need to update the
-                        // value of the underlying original objectm see below: target[property] = value;
+                        // value of the underlying original objects see below: target[property] = value;
                         if (foundObservable) {
                             // loop over each proxy and see if the target for this change has any other proxies
-                            var currentTargetProxy1 = targetsProxy[targetPosition];
-                            for(var b = 0, l1 = currentTargetProxy1.length; b < l1; b++)// if the same target has a different proxy
-                            if (currentTargetProxy1[b].proxy !== proxy) {
+                            var currentTargetProxy = targetsProxy[targetPosition];
+                            for(var b = 0, l = currentTargetProxy.length; b < l; b++)// if the same target has a different proxy
+                            if (currentTargetProxy[b].proxy !== proxy) {
                                 // !!IMPORTANT!! store the proxy as a duplicate proxy (dupProxy) -- this will adjust the behavior above appropriately (that is,
                                 // prevent a change on dupProxy from re-triggering the same change on other proxies)
-                                dupProxy = currentTargetProxy1[b].proxy;
+                                dupProxy = currentTargetProxy[b].proxy;
                                 // invoke the same change on the different proxy for the same target object. it is important that we make this change *after* we invoke the same change
                                 // on any other proxies so that the previousValue can show up correct for the other proxies
-                                currentTargetProxy1[b].proxy[property1] = value;
+                                currentTargetProxy[b].proxy[property] = value;
                             }
                             // if the property being overwritten is an object, then that means this observable
                             // will need to stop monitoring this object and any nested objects underneath the overwritten object else they'll become
-                            // orphaned and grow memory usage. we excute this on a setTimeout so that the clean-up process does not block
+                            // orphaned and grow memory usage. we execute this on a setTimeout so that the clean-up process does not block
                             // the UI rendering -- there's no need to execute the clean up immediately
                             setTimeout(function() {
                                 if (typeOfTargetProp === "object" && targetProp !== null) {
@@ -3427,9 +3474,9 @@ var $70f23c7c95ce5dd7$exports = {};
                                     // if it does still exist on the object, then we don't want to stop observing it. this resolves
                                     // an issue where array .sort() triggers objects to be overwritten, but instead of being overwritten
                                     // and discarded, they are shuffled to a new position in the array
-                                    var keys1 = Object.keys(target2);
-                                    for(var i3 = 0, l5 = keys1.length; i3 < l5; i3++){
-                                        if (target2[keys1[i3]] === targetProp) return;
+                                    var keys = Object.keys(target);
+                                    for(var i = 0, l = keys.length; i < l; i++){
+                                        if (target[keys[i]] === targetProp) return;
                                     }
                                     var stillExists = false;
                                     // now we perform the more expensive search recursively through the target object.
@@ -3446,7 +3493,7 @@ var $70f23c7c95ce5dd7$exports = {};
                                                 return;
                                             }
                                         }
-                                    })(target2);
+                                    })(target);
                                     // even though targetProp was overwritten, if it still exists somewhere else on the object,
                                     // then we don't want to remove the observable for that object (targetProp)
                                     if (stillExists === true) return;
@@ -3485,7 +3532,7 @@ var $70f23c7c95ce5dd7$exports = {};
                         }
                     // TO DO: the next block of code resolves test case #29, but it results in poor IE11 performance with very large objects.
                     // UPDATE: need to re-evaluate IE11 performance due to major performance overhaul from 12/23/2018.
-                    // 
+                    //
                     // if the value we've just set is an object, then we'll need to iterate over it in order to initialize the
                     // observers/proxies on all nested children of the object
                     /* if (value instanceof Object && value !== null) {
@@ -3504,19 +3551,19 @@ var $70f23c7c95ce5dd7$exports = {};
                 return true;
             }
         };
-        var __targetPosition = target1.__targetPosition;
-        if (!(__targetPosition > -1)) Object.defineProperty(target1, "__targetPosition", {
+        var __targetPosition = target.__targetPosition;
+        if (!(__targetPosition > -1)) Object.defineProperty(target, "__targetPosition", {
             value: targets.length,
             writable: false,
             enumerable: false,
             configurable: false
         });
         // create the proxy that we'll use to observe any changes
-        var proxy = new Proxy(target1, handler);
+        var proxy = new Proxy(target, handler);
         // we don't want to create a new observable if this function was invoked recursively
         if (observable === null) {
             observable = {
-                "parentTarget": target1,
+                "parentTarget": target,
                 "domDelay": domDelay,
                 "parentProxy": proxy,
                 "observers": [],
@@ -3526,9 +3573,9 @@ var $70f23c7c95ce5dd7$exports = {};
             };
             observables.push(observable);
         }
-        // store the proxy we've created so it isn't re-created unnecessairly via get handler
+        // store the proxy we've created so it isn't re-created unnecessarily via get handler
         var proxyItem = {
-            "target": target1,
+            "target": target,
             "proxy": proxy,
             "observable": observable
         };
@@ -3537,38 +3584,47 @@ var $70f23c7c95ce5dd7$exports = {};
         if (__targetPosition > -1) {
             // the targets array is set to null for the position of this particular object, then we know that
             // the observable was removed some point in time for this object -- so we need to set the reference again
-            if (targets[__targetPosition] === null) targets[__targetPosition] = target1;
+            if (targets[__targetPosition] === null) targets[__targetPosition] = target;
             targetsProxy[__targetPosition].push(proxyItem);
         // else this is a target object that we had not yet created a Proxy for, so we must add it to targets,
         // and push a new array on to targetsProxy containing the new Proxy
         } else {
-            targets.push(target1);
+            targets.push(target);
             targetsProxy.push([
                 proxyItem
             ]);
         }
         return proxy;
     };
-    return {
-        /*	Method:
-				Public method that is invoked to create a new ES6 Proxy whose changes we can observe
-				through the Observerable.observe() method.
-
-			Parameters
-				target - Object, required, plain JavaScript object that we want to observe for changes.
-				domDelay - Boolean, required, if true, then batch up changes on a 10ms delay so a series of changes can be processed in one DOM update.
-				observer - Function, optional, will be invoked when a change is made to the proxy.
-
-			Returns:
-				An ES6 Proxy object.
-		*/ create: function(target3, domDelay, observer) {
+    /**
+	 * @typedef {object} ObservableSlimChange Observed change.
+	 * @property {"add"|"update"|"delete"} type Change type.
+	 * @property {string} property Property name.
+	 * @property {string} currentPath Property path with the dot notation (e.g. `foo.0.bar`).
+	 * @property {string} jsonPointer Property path with the JSON pointer syntax (e.g. `/foo/0/bar`). See https://datatracker.ietf.org/doc/html/rfc6901.
+	 * @property {object} target Target object.
+	 * @property {ProxyConstructor} proxy Proxy of the target object.
+	 * @property {*} newValue New value of the property.
+	 * @property {*} [previousValue] Previous value of the property
+	 */ return {
+        /**
+		 * Create a new ES6 `Proxy` whose changes we can observe through the `observe()` method.
+		 * @param {object} target Plain object that we want to observe for changes.
+		 * @param {boolean|number} domDelay If `true`, then the observed changes to `target` will be batched up on a 10ms delay (via `setTimeout()`).
+		 * If `false`, then the `observer` function will be immediately invoked after each individual change made to `target`. It is helpful to set
+		 * `domDelay` to `true` when your `observer` function makes DOM manipulations (fewer DOM redraws means better performance). If a number greater
+		 * than zero, then it defines the DOM delay in milliseconds.
+		 * @param {function(ObservableSlimChange[])} [observer] Function that will be invoked when a change is made to the proxy of `target`.
+		 * When invoked, this function is passed a single argument: an array of `ObservableSlimChange` detailing each change that has been made.
+		 * @returns {ProxyConstructor} Proxy of the target object.
+		 */ create: function(target, domDelay, observer) {
             // test if the target is a Proxy, if it is then we need to retrieve the original object behind the Proxy.
             // we do not allow creating proxies of proxies because -- given the recursive design of ObservableSlim -- it would lead to sharp increases in memory usage
-            if (target3.__isProxy === true) var target3 = target3.__getTarget;
+            if (target.__isProxy === true) var target = target.__getTarget;
             // fire off the _create() method -- it will create a new observable and proxy and return the proxy
-            var proxy1 = _create(target3, domDelay);
+            var proxy = _create(target, domDelay);
             // assign the observer function
-            if (typeof observer === "function") this.observe(proxy1, observer);
+            if (typeof observer === "function") this.observe(proxy, observer);
             // recursively loop over all nested objects on the proxy we've just created
             // this will allow the top observable to observe any changes that occur on a nested object
             (function iterate(proxy) {
@@ -3578,20 +3634,16 @@ var $70f23c7c95ce5dd7$exports = {};
                     var property = keys[i];
                     if (target[property] instanceof Object && target[property] !== null) iterate(proxy[property]);
                 }
-            })(proxy1);
-            return proxy1;
+            })(proxy);
+            return proxy;
         },
-        /*	Method: observe
-				This method is used to add a new observer function to an existing proxy.
-
-			Parameters:
-				proxy 	- the ES6 Proxy returned by the create() method. We want to observe changes made to this object.
-				observer 	- this function will be invoked when a change is made to the observable (not to be confused with the
-							  observer defined in the create() method).
-
-			Returns:
-				Nothing.
-		*/ observe: function(proxy, observer) {
+        /**
+		 * Add a new observer function to an existing proxy.
+		 * @param {ProxyConstructor} proxy An ES6 `Proxy` created by the `create()` method.
+		 * @param {function(ObservableSlimChange[])} observer Function that will be invoked when a change is made to the proxy of `target`.
+		 * When invoked, this function is passed a single argument: an array of `ObservableSlimChange` detailing each change that has been made.
+		 * @returns {void} Does not return any value.
+		 */ observe: function(proxy, observer) {
             // loop over all the observables created by the _create() function
             var i = observables.length;
             while(i--)if (observables[i].parentProxy === proxy) {
@@ -3599,12 +3651,11 @@ var $70f23c7c95ce5dd7$exports = {};
                 break;
             }
         },
-        /*	Method: pause
-				This method will prevent any observer functions from being invoked when a change occurs to a proxy.
-
-			Parameters:
-				proxy 	- the ES6 Proxy returned by the create() method.
-		*/ pause: function(proxy) {
+        /**
+		 * Prevent any observer functions from being invoked when a change occurs to a proxy.
+		 * @param {ProxyConstructor} proxy An ES6 `Proxy` created by the `create()` method.
+		 * @returns {void} Does not return any value.
+		 */ pause: function(proxy) {
             var i = observables.length;
             var foundMatch = false;
             while(i--)if (observables[i].parentProxy === proxy) {
@@ -3614,12 +3665,11 @@ var $70f23c7c95ce5dd7$exports = {};
             }
             if (foundMatch == false) throw new Error("ObseravableSlim could not pause observable -- matching proxy not found.");
         },
-        /*	Method: resume
-				This method will resume execution of any observer functions when a change is made to a proxy.
-
-			Parameters:
-				proxy 	- the ES6 Proxy returned by the create() method.
-		*/ resume: function(proxy) {
+        /**
+		 * Resume execution of any observer functions when a change is made to a proxy.
+		 * @param {ProxyConstructor} proxy An ES6 `Proxy` created by the `create()` method.
+		 * @returns {void} Does not return any value.
+		 */ resume: function(proxy) {
             var i = observables.length;
             var foundMatch = false;
             while(i--)if (observables[i].parentProxy === proxy) {
@@ -3629,14 +3679,12 @@ var $70f23c7c95ce5dd7$exports = {};
             }
             if (foundMatch == false) throw new Error("ObseravableSlim could not resume observable -- matching proxy not found.");
         },
-        /*	Method: pauseChanges
-				This method will prevent any changes (i.e., set, and deleteProperty) from being written to the target
-				object.  However, the observer functions will still be invoked to let you know what changes WOULD have
-				been made.  This can be useful if the changes need to be approved by an external source before the
-				changes take effect.
-
-			Parameters:
-				proxy	- the ES6 Proxy returned by the create() method.
+        /**
+		 * Prevent any changes (i.e., `set`, and `deleteProperty`) from being written to the target object.
+		 * However, the observer functions will still be invoked to let you know what changes **WOULD** have been made.
+		 * This can be useful if the changes need to be approved by an external source before the changes take effect.
+		 * @param {ProxyConstructor} proxy An ES6 `Proxy` created by the `create()` method.
+		 * @returns {void} Does not return any value.
 		 */ pauseChanges: function(proxy) {
             var i = observables.length;
             var foundMatch = false;
@@ -3647,11 +3695,10 @@ var $70f23c7c95ce5dd7$exports = {};
             }
             if (foundMatch == false) throw new Error("ObseravableSlim could not pause changes on observable -- matching proxy not found.");
         },
-        /*	Method: resumeChanges
-				This method will resume the changes that were taking place prior to the call to pauseChanges().
-
-			Parameters:
-				proxy	- the ES6 Proxy returned by the create() method.
+        /**
+		 * Resume the changes that were taking place prior to the call to `pauseChanges()` method.
+		 * @param {ProxyConstructor} proxy An ES6 `Proxy` created by the `create()` method.
+		 * @returns {void} Does not return any value.
 		 */ resumeChanges: function(proxy) {
             var i = observables.length;
             var foundMatch = false;
@@ -3662,13 +3709,11 @@ var $70f23c7c95ce5dd7$exports = {};
             }
             if (foundMatch == false) throw new Error("ObseravableSlim could not resume changes on observable -- matching proxy not found.");
         },
-        /*	Method: remove
-				This method will remove the observable and proxy thereby preventing any further callback observers for
-				changes occuring to the target object.
-
-			Parameters:
-				proxy 	- the ES6 Proxy returned by the create() method.
-		*/ remove: function(proxy) {
+        /**
+		 * Remove the observable and proxy thereby preventing any further callback observers for changes occurring to the target object.
+		 * @param {ProxyConstructor} proxy An ES6 `Proxy` created by the `create()` method.
+		 * @returns {void} Does not return any value.
+		 */ remove: function(proxy) {
             var matchedObservable = null;
             var foundMatch = false;
             var c = observables.length;
@@ -3685,7 +3730,7 @@ var $70f23c7c95ce5dd7$exports = {};
                     // if there are no more proxies for this target object
                     // then we null out the position for this object on the targets array
                     // since we are essentially no longer observing this object.
-                    // we do not splice it off the targets array, because if we re-observe the same 
+                    // we do not splice it off the targets array, because if we re-observe the same
                     // object at a later time, the property __targetPosition cannot be redefined.
                     if (targetsProxy[a].length === 0) targets[a] = null;
                 }
@@ -3719,7 +3764,7 @@ const $4bd7951ed406c253$export$7ec259ba0528fb23 = (id)=>{
 		@param { Object } options - optional, used by subclasses
 		*/ constructor(id, data = {}, options = {}){
         this.id = id;
-        if ($4bd7951ed406c253$var$registeredObservables[this.id]) throw new Error('ObservableObject ' + id + ' already exists.');
+        if ($4bd7951ed406c253$var$registeredObservables[this.id]) throw new Error("ObservableObject " + id + " already exists.");
         this.bound = {} // watchers to sync on value change
         ;
         this.data = $70f23c7c95ce5dd7$exports.create(data, false, (changes)=>{
@@ -3759,17 +3804,17 @@ const $4bd7951ed406c253$export$7ec259ba0528fb23 = (id)=>{
 
 		Otherwise just the value is supplied
 		(value) => {}
-		*/ bind(id, fn, property = '*') {
+		*/ bind(id, fn, property = "*") {
         if (!this.bound[property]) this.bound[property] = {};
         this.bound[property][id] = fn;
-        fn(this.id, 'connect');
+        fn(this.id, "connect");
     }
     /*
 		@function unbind - unattach observer
 		@param { String } id - unique id of observer function
 		@param { String } property - optional name of property being observed
-		*/ unbind(id, property = '*') {
-        this.bound[property][id](this.id, 'disconnect');
+		*/ unbind(id, property = "*") {
+        this.bound[property][id](this.id, "disconnect");
         if (this.bound[property] && this.bound[property][id]) delete this.bound[property][id];
     }
     /*
@@ -3782,9 +3827,9 @@ const $4bd7951ed406c253$export$7ec259ba0528fb23 = (id)=>{
             const newValue = change.newValue;
             const previousValue = change.previousValue;
             const channels = [];
-            for(const p in this.bound)if (p === '*') channels.push(p);
+            for(const p in this.bound)if (p === "*") channels.push(p);
             else {
-                const re = new RegExp('^' + p.replace('.', '\\.'));
+                const re = new RegExp("^" + p.replace(".", "\\."));
                 if (path.match(re)) channels.push(p);
             }
             for (const channel of channels)for(const subscriber in this.bound[channel])this.bound[channel][subscriber](this.id, type, path, newValue, previousValue);
@@ -3848,7 +3893,7 @@ class $04abf88b58b0ffcd$export$d36264ac4e7cee7d extends $04abf88b58b0ffcd$var$Ob
     constructor(options = {}){
         super(options);
         // debounce - just need to know if a change occured, not every change
-        this.mutationHandler = (/*@__PURE__*/$parcel$interopDefault($9fe0242a38a556ef$exports))((mutations, observer)=>{
+        this.mutationHandler = (0, (/*@__PURE__*/$parcel$interopDefault($9fe0242a38a556ef$exports)))((mutations, observer)=>{
             this.observeDOM(this.options.shadowDOM || document.body);
         }, 25, {
             maxWait: 100
@@ -3871,7 +3916,7 @@ class $04abf88b58b0ffcd$export$d36264ac4e7cee7d extends $04abf88b58b0ffcd$var$Ob
         this.mutationObserver.disconnect();
     }
     observeDOM(root) {
-        this.notifyObservers('watchDOM', [
+        this.notifyObservers("watchDOM", [
             root || this.options.shadowDOM || document.body
         ]);
     }
@@ -3911,19 +3956,19 @@ class $04abf88b58b0ffcd$var$ScrollWatcher extends $04abf88b58b0ffcd$var$Observer
     }
     wakeup() {
         super.wakeup();
-        $d6606c57579c6e5f$export$6f53260fffa88f1c.on('theScrollWatcher', this.scrollElement, 'scroll', ()=>{
+        (0, $d6606c57579c6e5f$export$6f53260fffa88f1c).on("theScrollWatcher", this.scrollElement, "scroll", ()=>{
             this.trigger();
         });
     }
     sleep() {
         super.sleep();
-        $d6606c57579c6e5f$export$6f53260fffa88f1c.off('theScrollWatcher', this.scrollElement, 'scroll');
+        (0, $d6606c57579c6e5f$export$6f53260fffa88f1c).off("theScrollWatcher", this.scrollElement, "scroll");
     }
     inViewPort(element) {
-        return $d6606c57579c6e5f$export$6f53260fffa88f1c.inViewPort(element, this.scrollElement);
+        return (0, $d6606c57579c6e5f$export$6f53260fffa88f1c).inViewPort(element, this.scrollElement);
     }
     watchScroll() {
-        this.notifyObservers('watchScroll');
+        this.notifyObservers("watchScroll");
     }
     scrollTop(newTop) {
         if (this.scrollElement === window) {
@@ -3938,7 +3983,7 @@ class $04abf88b58b0ffcd$var$ScrollWatcher extends $04abf88b58b0ffcd$var$Observer
 class $04abf88b58b0ffcd$var$ResizeWatcher extends $04abf88b58b0ffcd$var$ObserverSubscriptionManager {
     constructor(options){
         super(options);
-        this.debounce = (/*@__PURE__*/$parcel$interopDefault($9fe0242a38a556ef$exports))(()=>{
+        this.debounce = (0, (/*@__PURE__*/$parcel$interopDefault($9fe0242a38a556ef$exports)))(()=>{
             this.watchResize();
         }, 250);
     }
@@ -3948,22 +3993,22 @@ class $04abf88b58b0ffcd$var$ResizeWatcher extends $04abf88b58b0ffcd$var$Observer
     }
     wakeup() {
         super.wakeup();
-        window.addEventListener('resize', this.debounce, false);
+        window.addEventListener("resize", this.debounce, false);
     }
     sleep() {
         super.sleep();
-        window.removeEventListener('resize', this.debounce);
+        window.removeEventListener("resize", this.debounce);
     }
     watchResize() {
-        this.notifyObservers('watchResize');
+        this.notifyObservers("watchResize");
     }
 }
 class $04abf88b58b0ffcd$var$OrientationWatcher extends $04abf88b58b0ffcd$var$ObserverSubscriptionManager {
     constructor(options){
         super(options);
-        if ('onorientationchange' in window) $d6606c57579c6e5f$export$6f53260fffa88f1c.addClass(document.body, 'have-orientation');
-        else $d6606c57579c6e5f$export$6f53260fffa88f1c.addClass(document.body, 'no-orientation');
-        this.debounce = (/*@__PURE__*/$parcel$interopDefault($9fe0242a38a556ef$exports))(()=>{
+        if ("onorientationchange" in window) (0, $d6606c57579c6e5f$export$6f53260fffa88f1c).addClass(document.body, "have-orientation");
+        else (0, $d6606c57579c6e5f$export$6f53260fffa88f1c).addClass(document.body, "no-orientation");
+        this.debounce = (0, (/*@__PURE__*/$parcel$interopDefault($9fe0242a38a556ef$exports)))(()=>{
             this.watchOrientation();
         }, 250);
     }
@@ -3973,14 +4018,14 @@ class $04abf88b58b0ffcd$var$OrientationWatcher extends $04abf88b58b0ffcd$var$Obs
     }
     wakeup() {
         super.wakeup();
-        if ('onorientationchange' in window) window.addEventListener('orientationchange', this.debounce, false);
+        if ("onorientationchange" in window) window.addEventListener("orientationchange", this.debounce, false);
     }
     sleep() {
         super.sleep();
-        if ('onorientationchange' in window) window.removeEventListener('orientationchange', this.debounce);
+        if ("onorientationchange" in window) window.removeEventListener("orientationchange", this.debounce);
     }
     watchOrientation() {
-        this.notifyObservers('watchOrientation');
+        this.notifyObservers("watchOrientation");
     }
 }
 // keep track of who is using web workers and
@@ -3999,7 +4044,7 @@ class $04abf88b58b0ffcd$var$WorkerWatcher extends $04abf88b58b0ffcd$var$Observer
                 const blob = new Blob([
                     codeOrURL
                 ], {
-                    type: 'text/javascript'
+                    type: "text/javascript"
                 });
                 blobURL = URL.createObjectURL(blob);
                 revoke = true;
@@ -4016,13 +4061,13 @@ class $04abf88b58b0ffcd$var$WorkerWatcher extends $04abf88b58b0ffcd$var$Observer
         return this.workers[id].worker;
     }
     subscribe(observer, id) {
-        if (!this.workers[id]) throw new Error('worker ' + id + ' does not exist');
+        if (!this.workers[id]) throw new Error("worker " + id + " does not exist");
         const workerObservers = this.workers[id].observers;
         workerObservers.push(observer);
         super.subscribe(observer);
     }
     unSubscribe(observer, id) {
-        if (!this.workers[id]) throw new Error('worker ' + id + ' does not exist');
+        if (!this.workers[id]) throw new Error("worker " + id + " does not exist");
         const workerObservers = this.workers[id].observers;
         if (workerObservers.indexOf(observer) !== -1) workerObservers.splice(workerObservers.indexOf(observer), 1);
         if (!workerObservers.length) {
@@ -4053,9 +4098,9 @@ class $04abf88b58b0ffcd$var$ObservableObjectWatcher extends $04abf88b58b0ffcd$va
         return this.registeredObservableObjects[id] ? this.registeredObservableObjects[id].observable : undefined;
     }
     observableStart(id, data) {
-        const foundObservable = $4bd7951ed406c253$export$7ec259ba0528fb23(id);
+        const foundObservable = (0, $4bd7951ed406c253$export$7ec259ba0528fb23)(id);
         // trying to define with data but already exists
-        if (foundObservable && data !== undefined) throw new Error('ObservableObject ' + id + ' already exists, can\'t build.');
+        if (foundObservable && data !== undefined) throw new Error("ObservableObject " + id + " already exists, can't build.");
         if (!this.registeredObservableObjects[id]) {
             if (foundObservable) this.registeredObservableObjects[id] = {
                 id: id,
@@ -4065,7 +4110,7 @@ class $04abf88b58b0ffcd$var$ObservableObjectWatcher extends $04abf88b58b0ffcd$va
             };
             else this.registeredObservableObjects[id] = {
                 id: id,
-                observable: new $4bd7951ed406c253$export$b176171395436676(id, data),
+                observable: new (0, $4bd7951ed406c253$export$b176171395436676)(id, data),
                 observers: [],
                 managed: true
             };
@@ -4075,7 +4120,7 @@ class $04abf88b58b0ffcd$var$ObservableObjectWatcher extends $04abf88b58b0ffcd$va
     }
     // delete an observable
     observableDestroy(id) {
-        if (!this.registeredObservableObjects[id]) throw new Error('ObservableObject observableDestroy ' + id + ' does not exist');
+        if (!this.registeredObservableObjects[id]) throw new Error("ObservableObject observableDestroy " + id + " does not exist");
         this.registeredObservableObjects[id].observable.unbind(this.constructor.name);
         this.registeredObservableObjects[id].observable.destroy();
         delete this.registeredObservableObjects[id];
@@ -4086,14 +4131,14 @@ class $04abf88b58b0ffcd$var$ObservableObjectWatcher extends $04abf88b58b0ffcd$va
         super.subscribe(observer);
     }
     unSubscribe(observer, id) {
-        if (!this.registeredObservableObjects[id]) throw new Error('ObservableObject unSubscribe ' + id + ' does not exist');
+        if (!this.registeredObservableObjects[id]) throw new Error("ObservableObject unSubscribe " + id + " does not exist");
         const observers = this.registeredObservableObjects[id].observers;
         if (observers.indexOf(observer) !== -1) observers.splice(observers.indexOf(observer), 1);
         if (!observers.length && this.registeredObservableObjects[id].managed) this.observableDestroy(id);
         super.unSubscribe(observer);
     }
     notify(id, type, path, newValue, previousValue) {
-        if (!this.registeredObservableObjects[id]) throw new Error('ObservableObject notify ' + id + ' does not exist');
+        if (!this.registeredObservableObjects[id]) throw new Error("ObservableObject notify " + id + " does not exist");
         const observers = this.registeredObservableObjects[id].observers;
         observers.forEach((observer)=>{
             if (observer.observableChanged) observer.observableChanged(id, type, path, newValue, previousValue);
@@ -4133,7 +4178,7 @@ var $31f21d7381765a96$exports = {};
  * _.kebabCase('__FOO_BAR__');
  * // => 'foo-bar'
  */ var $31f21d7381765a96$var$kebabCase = $05f54b383665cf57$exports(function(result, word, index) {
-    return result + (index ? '-' : '') + word.toLowerCase();
+    return result + (index ? "-" : "") + word.toLowerCase();
 });
 $31f21d7381765a96$exports = $31f21d7381765a96$var$kebabCase;
 
@@ -4143,7 +4188,7 @@ let $a2dfa52ef2fbbb46$var$unique = 0 // unique IDs for controllers
 ;
 const $a2dfa52ef2fbbb46$export$85e745b96b6487a7 = [] // instantiated controllers
 ;
-const $a2dfa52ef2fbbb46$var$supportsCustomElements = 'customElements' in window // browser supports custom elements
+const $a2dfa52ef2fbbb46$var$supportsCustomElements = "customElements" in window // browser supports custom elements
 ;
 const $a2dfa52ef2fbbb46$export$ac297e650eeb1e78 = {};
 /*
@@ -4168,7 +4213,7 @@ const $a2dfa52ef2fbbb46$export$ac297e650eeb1e78 = {};
 		<sargasso-my-subclass></sargasso-my-subclass>
 
 	*/ const $a2dfa52ef2fbbb46$export$22044c20eef36040 = (className, object)=>{
-    if ($a2dfa52ef2fbbb46$export$ac297e650eeb1e78[className]) throw new Error('Sargasso class ' + className + ' is already registered.');
+    if ($a2dfa52ef2fbbb46$export$ac297e650eeb1e78[className]) throw new Error("Sargasso class " + className + " is already registered.");
     $a2dfa52ef2fbbb46$export$ac297e650eeb1e78[className] = object;
     if ($a2dfa52ef2fbbb46$var$supportsCustomElements) {
         /*
@@ -4217,48 +4262,48 @@ const $a2dfa52ef2fbbb46$export$ac297e650eeb1e78 = {};
 					this.helpers = [] // nuke the reference for trash collection
 				}
 			}`;
-        const fn = new Function('registeredClasses', customElementClassFactory)($a2dfa52ef2fbbb46$export$ac297e650eeb1e78);
+        const fn = new Function("registeredClasses", customElementClassFactory)($a2dfa52ef2fbbb46$export$ac297e650eeb1e78);
         const options = window.sargassoOptions || {};
-        const prefix = typeof options.customElementPrefix !== 'undefined' ? options.customElementPrefix : 'sargasso-';
-        customElements.define(prefix + (/*@__PURE__*/$parcel$interopDefault($31f21d7381765a96$exports))(className), fn);
+        const prefix = typeof options.customElementPrefix !== "undefined" ? options.customElementPrefix : "sargasso-";
+        customElements.define(prefix + (0, (/*@__PURE__*/$parcel$interopDefault($31f21d7381765a96$exports)))(className), fn);
     }
 };
 // the public event handlers to implement in subclasses
 const $a2dfa52ef2fbbb46$var$eventNames = [
-    'DOMChanged',
-    'didScroll',
-    'didResize',
-    'didBreakpoint',
-    'enterViewport',
-    'exitViewport',
-    'enterFullscreen',
-    'exitFullscreen',
-    'newPage',
-    'elementEvent',
-    'workerOnMessage',
-    'observableChanged'
+    "DOMChanged",
+    "didScroll",
+    "didResize",
+    "didBreakpoint",
+    "enterViewport",
+    "exitViewport",
+    "enterFullscreen",
+    "exitFullscreen",
+    "newPage",
+    "elementEvent",
+    "workerOnMessage",
+    "observableChanged"
 ];
 /*
 	@class Sargasso -  the superclass for all element controllers
 	*/ class $a2dfa52ef2fbbb46$export$d7944a94c1afb262 {
     constructor(element, options = {}){
-        $6f44ddd09e194478$export$a22775fa5e2eebd9('Sargasso constructor element', element, [
-            'isDefined',
-            'isElement'
+        (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("Sargasso constructor element", element, [
+            "isDefined",
+            "isElement"
         ]);
-        $6f44ddd09e194478$export$a22775fa5e2eebd9('Sargasso constructor options', options, [
-            'isDefined',
+        (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("Sargasso constructor options", options, [
+            "isDefined",
             [
-                'isObject'
+                "isObject"
             ]
         ]);
         this.uid = ++$a2dfa52ef2fbbb46$var$unique;
         this.element = element;
         if (options.shadowDOM) {
             this._shadowDOM = element.attachShadow({
-                mode: 'open'
+                mode: "open"
             });
-            this._shadowRoot = document.createElement('div');
+            this._shadowRoot = document.createElement("div");
             this._shadowDOM.append(this._shadowRoot);
             this._hostElement = this.element;
             this.element = this._shadowRoot;
@@ -4272,7 +4317,7 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
         this._template = undefined;
         this._templateArgs = {};
         this._started = false;
-        this.render = (/*@__PURE__*/$parcel$interopDefault($9fe0242a38a556ef$exports))(()=>{
+        this.render = (0, (/*@__PURE__*/$parcel$interopDefault($9fe0242a38a556ef$exports)))(()=>{
             this._render();
         }, 100, {
             maxWait: 250
@@ -4285,23 +4330,23 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
 
 		Note: always call super.start() in at the top of your subclass start method
 		*/ start() {
-        const registeredResponsiveControllers = this.getMetaData('registeredResponsiveControllers') || [];
+        const registeredResponsiveControllers = this.getMetaData("registeredResponsiveControllers") || [];
         registeredResponsiveControllers.push(this);
-        this.setMetaData('registeredResponsiveControllers', registeredResponsiveControllers);
+        this.setMetaData("registeredResponsiveControllers", registeredResponsiveControllers);
         this.setMetaData(this.constructor.name, this);
         $a2dfa52ef2fbbb46$export$85e745b96b6487a7.push(this);
         // if using shadow DOM, build a DOMWatcher to observe changes
         if (this._shadowDOM) {
-            if (!this._shadowDOMWatcher) this._shadowDOMWatcher = new $04abf88b58b0ffcd$export$d36264ac4e7cee7d({
+            if (!this._shadowDOMWatcher) this._shadowDOMWatcher = new (0, $04abf88b58b0ffcd$export$d36264ac4e7cee7d)({
                 shadowDOM: this._shadowRoot
             });
             this._shadowDOMWatcher.subscribe(this);
         }
         // subscribe to desired event services
-        if (this.options.watchDOM) $04abf88b58b0ffcd$export$77e1d49fdb880d27.subscribe(this);
-        if (this.options.watchScroll || this.options.watchViewport) $04abf88b58b0ffcd$export$c7320459fd5267c0.subscribe(this);
-        if (this.options.watchResize || this.options.watchViewport) $04abf88b58b0ffcd$export$497098c8185e6e33.subscribe(this);
-        if (this.options.watchOrientation || this.options.watchViewport) $04abf88b58b0ffcd$export$296acd8d6f329fa3.subscribe(this);
+        if (this.options.watchDOM) (0, $04abf88b58b0ffcd$export$77e1d49fdb880d27).subscribe(this);
+        if (this.options.watchScroll || this.options.watchViewport) (0, $04abf88b58b0ffcd$export$c7320459fd5267c0).subscribe(this);
+        if (this.options.watchResize || this.options.watchViewport) (0, $04abf88b58b0ffcd$export$497098c8185e6e33).subscribe(this);
+        if (this.options.watchOrientation || this.options.watchViewport) (0, $04abf88b58b0ffcd$export$296acd8d6f329fa3).subscribe(this);
         /*
 			listen for 'sargasso' events
 			Call the method named in e.detail.sargassoEvent or call this.elementEvent
@@ -4309,7 +4354,7 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
             if (e.detail && e.detail.sargassoEvent && $a2dfa52ef2fbbb46$var$eventNames.indexOf(e.detail.sargassoEvent) !== -1) this[e.detail.sargassoEvent].apply(this, e.detail.sargassoEventOptions || []);
             else this.elementEvent(e);
         };
-        this.element.addEventListener('sargasso', this.elementListener);
+        this.element.addEventListener("sargasso", this.elementListener);
         this._started = true;
     }
     /*
@@ -4320,12 +4365,12 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
 		Note: always call super.sleep() at the end of your subclass sleep method
 		*/ sleep() {
         if (this._shadowDOM) this._shadowDOMWatcher.unSubscribe(this);
-        if (this.options.watchDOM) $04abf88b58b0ffcd$export$77e1d49fdb880d27.unSubscribe(this);
-        if (this.options.watchScroll || this.options.watchViewport) $04abf88b58b0ffcd$export$c7320459fd5267c0.unSubscribe(this);
-        if (this.options.watchResize || this.options.watchViewport) $04abf88b58b0ffcd$export$497098c8185e6e33.unSubscribe(this);
-        if (this.options.watchOrientation || this.options.watchViewport) $04abf88b58b0ffcd$export$296acd8d6f329fa3.unSubscribe(this);
-        this.element.removeEventListener('sargasso', this.elementListener);
-        $d6606c57579c6e5f$export$6f53260fffa88f1c.offAll(this.element) // remove all dangling event listeners created with on/once
+        if (this.options.watchDOM) (0, $04abf88b58b0ffcd$export$77e1d49fdb880d27).unSubscribe(this);
+        if (this.options.watchScroll || this.options.watchViewport) (0, $04abf88b58b0ffcd$export$c7320459fd5267c0).unSubscribe(this);
+        if (this.options.watchResize || this.options.watchViewport) (0, $04abf88b58b0ffcd$export$497098c8185e6e33).unSubscribe(this);
+        if (this.options.watchOrientation || this.options.watchViewport) (0, $04abf88b58b0ffcd$export$296acd8d6f329fa3).unSubscribe(this);
+        this.element.removeEventListener("sargasso", this.elementListener);
+        (0, $d6606c57579c6e5f$export$6f53260fffa88f1c).offAll(this.element) // remove all dangling event listeners created with on/once
         ;
         this._started = false;
     }
@@ -4391,14 +4436,14 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
 		@param { String } - key name for value
 		@param { Object } - value or JSON object, null will remove from key from metadate
 		*/ setMetaData(k, v) {
-        $d6606c57579c6e5f$export$6f53260fffa88f1c.setMetaData(this.element, k, v);
+        (0, $d6606c57579c6e5f$export$6f53260fffa88f1c).setMetaData(this.element, k, v);
     }
     /*
 		@function getMetaData - Retrieve metadata
 		@param { String } key - name of value to return
 		@return { Object } if key is found otherwise undefined
 		*/ getMetaData(k) {
-        return $d6606c57579c6e5f$export$6f53260fffa88f1c.getMetaData(this.element, k);
+        return (0, $d6606c57579c6e5f$export$6f53260fffa88f1c).getMetaData(this.element, k);
     }
     /*
 		@function on - add delegated event handler for this.element
@@ -4407,14 +4452,14 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
 		@param { Function } fn - event handler function
 		@param { Object } [options] - for addEventListener
 		*/ on(evt, selector, fn, options) {
-        $d6606c57579c6e5f$export$6f53260fffa88f1c.on(this.constructor.name + '-' + this.uid, this.element, evt, selector, fn, options);
+        (0, $d6606c57579c6e5f$export$6f53260fffa88f1c).on(this.constructor.name + "-" + this.uid, this.element, evt, selector, fn, options);
     }
     /*
 		@function off - Remove delegated event handler
 		@param { String} evt - HTML element event name
 		@param { String } [selector] - element query selector
 		*/ off(evt, selector) {
-        $d6606c57579c6e5f$export$6f53260fffa88f1c.off(this.constructor.name + '-' + this.uid, this.element, evt, selector);
+        (0, $d6606c57579c6e5f$export$6f53260fffa88f1c).off(this.constructor.name + "-" + this.uid, this.element, evt, selector);
     }
     /*
 		@function once - add delegated event handler for this.element witch executes only once
@@ -4423,14 +4468,14 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
 		@param { Function } fn - event handler function
 		@param { Object } [options] - for addEventListener
 		*/ once(evt, selector, fn, options) {
-        $d6606c57579c6e5f$export$6f53260fffa88f1c.once(this.constructor.name + '-' + this.uid, this.element, evt, selector, fn, options);
+        (0, $d6606c57579c6e5f$export$6f53260fffa88f1c).once(this.constructor.name + "-" + this.uid, this.element, evt, selector, fn, options);
     }
     /*
 		@function notifyAll - broadcast 'event' to all instantiated sargasso controllers
 		@param { String } event - name of sargasso event
 		@param { Object } params - array of params to attach to event
 		*/ notifyAll(event, params) {
-        if ($a2dfa52ef2fbbb46$var$eventNames.indexOf(event) === -1) throw new Error('invalid event name ' + event);
+        if ($a2dfa52ef2fbbb46$var$eventNames.indexOf(event) === -1) throw new Error("invalid event name " + event);
         for(let i = 0; i < $a2dfa52ef2fbbb46$export$85e745b96b6487a7.length; i++){
             const peer = $a2dfa52ef2fbbb46$export$85e745b96b6487a7[i];
             if (peer !== this && peer[event]) peer[event].apply(peer, params);
@@ -4441,8 +4486,8 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
 		@param { String } event - name of sargasso event
 		@param { Object } params - array of params to attach to event
 		*/ notifyElement(element, event, params) {
-        if ($a2dfa52ef2fbbb46$var$eventNames.indexOf(event) === -1) throw new Error('invalid event name ' + event);
-        const registeredResponsiveControllers = this.getMetaData('registeredResponsiveControllers');
+        if ($a2dfa52ef2fbbb46$var$eventNames.indexOf(event) === -1) throw new Error("invalid event name " + event);
+        const registeredResponsiveControllers = this.getMetaData("registeredResponsiveControllers");
         if (registeredResponsiveControllers) for(let i = 0; i < registeredResponsiveControllers.length; i++){
             const peer = registeredResponsiveControllers[i];
             if (peer !== this && peer[event]) peer[event].apply(peer, params);
@@ -4480,19 +4525,19 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
     /**********************************************************************
 	ELEMENT UTILITIES - convienience methods for manipilating HTML elements
 	***********************************************************************/ hasClass(cssClass) {
-        return $d6606c57579c6e5f$export$6f53260fffa88f1c.hasClass(this.element, cssClass);
+        return (0, $d6606c57579c6e5f$export$6f53260fffa88f1c).hasClass(this.element, cssClass);
     }
     addClass(cssClasses) {
-        $d6606c57579c6e5f$export$6f53260fffa88f1c.addClass(this.element, cssClasses);
+        (0, $d6606c57579c6e5f$export$6f53260fffa88f1c).addClass(this.element, cssClasses);
     }
     removeClass(cssClasses) {
-        $d6606c57579c6e5f$export$6f53260fffa88f1c.removeClass(this.element, cssClasses);
+        (0, $d6606c57579c6e5f$export$6f53260fffa88f1c).removeClass(this.element, cssClasses);
     }
     setCSS(cssObject) {
-        $d6606c57579c6e5f$export$6f53260fffa88f1c.setCSS(this.element, cssObject);
+        (0, $d6606c57579c6e5f$export$6f53260fffa88f1c).setCSS(this.element, cssObject);
     }
     isVisible() {
-        return $d6606c57579c6e5f$export$6f53260fffa88f1c.isVisible(this.element);
+        return (0, $d6606c57579c6e5f$export$6f53260fffa88f1c).isVisible(this.element);
     }
     /*
 		@function workerStart - start a web worker
@@ -4521,8 +4566,8 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
 		this.workerPostMessage('pointless-stuff', {answer:42})
 
 		*/ workerStart(id, codeOrURL) {
-        this._workers[id] = $04abf88b58b0ffcd$export$fa28dfcc49831a91.registerWorker(id, codeOrURL);
-        $04abf88b58b0ffcd$export$fa28dfcc49831a91.subscribe(this, id);
+        this._workers[id] = (0, $04abf88b58b0ffcd$export$fa28dfcc49831a91).registerWorker(id, codeOrURL);
+        (0, $04abf88b58b0ffcd$export$fa28dfcc49831a91).subscribe(this, id);
         return this._workers[id];
     }
     /*
@@ -4544,13 +4589,13 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
         return this._observables[id].data;
     }
     observableStart(id, data) {
-        $04abf88b58b0ffcd$export$788f7857dc8c77f5.subscribe(this, id, data);
-        this._observables[id] = $04abf88b58b0ffcd$export$788f7857dc8c77f5.getObservable(id);
+        (0, $04abf88b58b0ffcd$export$788f7857dc8c77f5).subscribe(this, id, data);
+        this._observables[id] = (0, $04abf88b58b0ffcd$export$788f7857dc8c77f5).getObservable(id);
         return this._observables[id];
     }
     observableStop(id) {
         if (this._observables[id]) {
-            $04abf88b58b0ffcd$export$788f7857dc8c77f5.unSubscribe(this, id);
+            (0, $04abf88b58b0ffcd$export$788f7857dc8c77f5).unSubscribe(this, id);
             delete this._observables[id];
         }
     }
@@ -4598,7 +4643,7 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
 		@function _stopWorker - stop a worker
 		*/ _stopWorker(id) {
         if (this._workers[id]) {
-            $04abf88b58b0ffcd$export$fa28dfcc49831a91.unSubscribe(this, id);
+            (0, $04abf88b58b0ffcd$export$fa28dfcc49831a91).unSubscribe(this, id);
             delete this._workers[id];
         }
     }
@@ -4614,11 +4659,11 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
         this.observableStopAll();
         this._flushQueue();
         if (this._started) this.sleep();
-        const registeredResponsiveControllers = this.getMetaData('registeredResponsiveControllers');
+        const registeredResponsiveControllers = this.getMetaData("registeredResponsiveControllers");
         if (registeredResponsiveControllers) {
             if (registeredResponsiveControllers.indexOf(this) !== -1) {
                 registeredResponsiveControllers.splice(registeredResponsiveControllers.indexOf(this), 1);
-                this.setMetaData('registeredResponsiveControllers', registeredResponsiveControllers);
+                this.setMetaData("registeredResponsiveControllers", registeredResponsiveControllers);
             }
         }
         this.setMetaData(this.constructor.name, null);
@@ -4633,7 +4678,7 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
         if (root === this._shadowRoot) // something happend this element's my shadow DOM, tell in the DOM about it
         // so dom observers can take actions such as instantiating new sargasso
         // controllers, etc.
-        $04abf88b58b0ffcd$export$77e1d49fdb880d27.observeDOM(this._shadowRoot);
+        (0, $04abf88b58b0ffcd$export$77e1d49fdb880d27).observeDOM(this._shadowRoot);
         else this.DOMChanged(root);
     }
     /*
@@ -4657,7 +4702,7 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
     /*
 		@function inViewport - hook called if options.watchViewPort set and this.element enters viewport
 		*/ inViewport() {
-        if ($04abf88b58b0ffcd$export$c7320459fd5267c0.inViewPort(this.element)) {
+        if ((0, $04abf88b58b0ffcd$export$c7320459fd5267c0).inViewPort(this.element)) {
             if (!this._isInViewport) {
                 this.enterViewport();
                 this._isInViewport = true;
@@ -4684,16 +4729,37 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
         if (document.fullscreenElement && document.fullscreenElement === this.element) document.exitFullscreen();
     }
 }
-$a2dfa52ef2fbbb46$export$22044c20eef36040('Sargasso', $a2dfa52ef2fbbb46$export$d7944a94c1afb262);
+$a2dfa52ef2fbbb46$export$22044c20eef36040("Sargasso", $a2dfa52ef2fbbb46$export$d7944a94c1afb262);
 
 
 
 
+/**
+	SargassoSupervisor
+
+	Sargasso class which watches the document for new content and instantiates
+	Sargasso classes liested in element's data-sargasso-class attribute.
+	Once instantiated, Sargasso objects are trash collected when element is
+	removed from the DOM
+
+	@author Michael Rhodes (except where noted)
+	@license MIT
+	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+**/ 
+/**
+	LazyInstantiate
+
+	Sargasso class watches the document for new content and instantiates
+	Sargasso classes liested in element's data-lazy-sargasso-class only when
+	the element scrolls into view
+
+	@author Michael Rhodes (except where noted)
+	@license MIT
+	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+**/ 
 
 
-
-
-class $c4dab3631bcf0e71$export$10307b0c33312dbb extends $a2dfa52ef2fbbb46$export$d7944a94c1afb262 {
+class $c4dab3631bcf0e71$export$10307b0c33312dbb extends (0, $a2dfa52ef2fbbb46$export$d7944a94c1afb262) {
     constructor(element, options = {}){
         options.watchScroll = true;
         options.watchResize = true;
@@ -4715,44 +4781,44 @@ class $c4dab3631bcf0e71$export$10307b0c33312dbb extends $a2dfa52ef2fbbb46$export
     }
     // watch viewport and instantiate lazy-instantiate-responsive things when visible
     lazyHandler(root = document) {
-        const els = root.querySelectorAll('[data-lazy-sargasso-class]');
+        const els = root.querySelectorAll("[data-lazy-sargasso-class]");
         for(let i = 0; i < els.length; i++){
             const element = els[i];
-            if ($04abf88b58b0ffcd$export$c7320459fd5267c0.inViewPort(element)) {
-                const cls = element.getAttribute('data-lazy-sargasso-class').split(/\s*,\s*/);
+            if ((0, $04abf88b58b0ffcd$export$c7320459fd5267c0).inViewPort(element)) {
+                const cls = element.getAttribute("data-lazy-sargasso-class").split(/\s*,\s*/);
                 for(let j = 0; j < cls.length; j++){
-                    const thing = new $a2dfa52ef2fbbb46$export$ac297e650eeb1e78[cls[j]](els[i]);
+                    const thing = new (0, $a2dfa52ef2fbbb46$export$ac297e650eeb1e78)[cls[j]](els[i]);
                     thing.start();
                 }
-                element.removeAttribute('data-lazy-sargasso-class');
+                element.removeAttribute("data-lazy-sargasso-class");
             }
         }
     }
 }
-$a2dfa52ef2fbbb46$export$22044c20eef36040('LazyInstantiate', $c4dab3631bcf0e71$export$10307b0c33312dbb);
+(0, $a2dfa52ef2fbbb46$export$22044c20eef36040)("LazyInstantiate", $c4dab3631bcf0e71$export$10307b0c33312dbb);
 
 
-class $6d79acc30e030818$export$26b75d03ac531c24 extends $a2dfa52ef2fbbb46$export$d7944a94c1afb262 {
+class $6d79acc30e030818$export$26b75d03ac531c24 extends (0, $a2dfa52ef2fbbb46$export$d7944a94c1afb262) {
     constructor(element, options = {}){
         super(element, {
             watchDOM: true,
             mortal: false
         });
-        this.lazy = new $c4dab3631bcf0e71$export$10307b0c33312dbb(element, options);
+        this.lazy = new (0, $c4dab3631bcf0e71$export$10307b0c33312dbb)(element, options);
     }
     start() {
         this.lazy.start();
         super.start();
     }
     instantiate(element) {
-        const cls = element.getAttribute('data-sargasso-class').split(/\s*,\s*/);
+        const cls = element.getAttribute("data-sargasso-class").split(/\s*,\s*/);
         for(let i = 0; i < cls.length; i++)try {
-            const thing = new $a2dfa52ef2fbbb46$export$ac297e650eeb1e78[cls[i]](element);
+            const thing = new (0, $a2dfa52ef2fbbb46$export$ac297e650eeb1e78)[cls[i]](element);
             thing.start();
         } catch (e) {
-            console.log('error instantiating ' + cls[i], e, $a2dfa52ef2fbbb46$export$ac297e650eeb1e78);
+            console.log("error instantiating " + cls[i], e, (0, $a2dfa52ef2fbbb46$export$ac297e650eeb1e78));
         }
-        element.removeAttribute('data-sargasso-class');
+        element.removeAttribute("data-sargasso-class");
     }
     newPage() {
         this.doIt();
@@ -4761,37 +4827,47 @@ class $6d79acc30e030818$export$26b75d03ac531c24 extends $a2dfa52ef2fbbb46$export
         this.doIt(root);
     }
     doIt(root = document.body) {
-        if (root.getAttribute('data-sargasso-class')) this.instantiate(root);
-        const elements = root.querySelectorAll('[data-sargasso-class]');
+        if (root.getAttribute("data-sargasso-class")) this.instantiate(root);
+        const elements = root.querySelectorAll("[data-sargasso-class]");
         for (const element of elements)this.instantiate(element);
         // check for dangling live elements and kill them
         const toCleanup = [];
-        for(let i = 0; i < $a2dfa52ef2fbbb46$export$85e745b96b6487a7.length; i++)if (!$a2dfa52ef2fbbb46$export$85e745b96b6487a7[i].options.immortal && !$a2dfa52ef2fbbb46$export$85e745b96b6487a7[i].options.isCustomElement && !document.body.contains($a2dfa52ef2fbbb46$export$85e745b96b6487a7[i].element)) toCleanup.push($a2dfa52ef2fbbb46$export$85e745b96b6487a7[i]);
+        for(let i = 0; i < (0, $a2dfa52ef2fbbb46$export$85e745b96b6487a7).length; i++)if (!(0, $a2dfa52ef2fbbb46$export$85e745b96b6487a7)[i].options.immortal && !(0, $a2dfa52ef2fbbb46$export$85e745b96b6487a7)[i].options.isCustomElement && !document.body.contains((0, $a2dfa52ef2fbbb46$export$85e745b96b6487a7)[i].element)) toCleanup.push((0, $a2dfa52ef2fbbb46$export$85e745b96b6487a7)[i]);
         for(let i1 = 0; i1 < toCleanup.length; i1++)toCleanup[i1].destroy();
     }
 }
-$a2dfa52ef2fbbb46$export$22044c20eef36040('SargassoSupervisor', $6d79acc30e030818$export$26b75d03ac531c24);
+(0, $a2dfa52ef2fbbb46$export$22044c20eef36040)("SargassoSupervisor", $6d79acc30e030818$export$26b75d03ac531c24);
 
 
+/**
+	Breakpoints
 
+	Sargasso class that maintains css classes on the document body
+	to be used in css rules for implementing visibility and
+	responsive behavior
+
+	@author Michael Rhodes (except where noted)
+	@license MIT
+	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+**/ 
 
 const $3b466f211d4b9a1d$export$f86ec3d89f756a21 = window.breakpoints || {
     widths: [
         {
-            className: 'breakpoint-phone',
+            className: "breakpoint-phone",
             maxWidth: 599
         },
         {
-            className: 'breakpoint-tablet',
+            className: "breakpoint-tablet",
             maxWidth: 904
         },
         {
-            className: 'breakpoint-desktop',
+            className: "breakpoint-desktop",
             maxWidth: undefined
         }
     ]
 };
-class $3b466f211d4b9a1d$export$c38d2c1bff643203 extends $a2dfa52ef2fbbb46$export$d7944a94c1afb262 {
+class $3b466f211d4b9a1d$export$c38d2c1bff643203 extends (0, $a2dfa52ef2fbbb46$export$d7944a94c1afb262) {
     constructor(element, options = {}){
         options.watchResize = true;
         super(element, options);
@@ -4799,7 +4875,7 @@ class $3b466f211d4b9a1d$export$c38d2c1bff643203 extends $a2dfa52ef2fbbb46$export
         this.scale = undefined;
         this.widths = [];
         this.classes = [];
-        this.debouncedDetectGeometry = (/*@__PURE__*/$parcel$interopDefault($9fe0242a38a556ef$exports))(()=>{
+        this.debouncedDetectGeometry = (0, (/*@__PURE__*/$parcel$interopDefault($9fe0242a38a556ef$exports)))(()=>{
             this.detectGeometry();
         }, 100, {
             maxWait: 150
@@ -4816,7 +4892,7 @@ class $3b466f211d4b9a1d$export$c38d2c1bff643203 extends $a2dfa52ef2fbbb46$export
         const newScale = window.doBreakpoints(this.options.widths);
         if (newScale !== this.scale) {
             const frame = ()=>{
-                this.notifyAll('didBreakpoint', [
+                this.notifyAll("didBreakpoint", [
                     newScale
                 ]);
             };
@@ -4825,31 +4901,41 @@ class $3b466f211d4b9a1d$export$c38d2c1bff643203 extends $a2dfa52ef2fbbb46$export
         this.scale = newScale;
     }
 }
-$a2dfa52ef2fbbb46$export$22044c20eef36040('Breakpoints', $3b466f211d4b9a1d$export$c38d2c1bff643203);
+(0, $a2dfa52ef2fbbb46$export$22044c20eef36040)("Breakpoints", $3b466f211d4b9a1d$export$c38d2c1bff643203);
 
 
+/**
+	HijaxLoader
+
+	Sargasso class that captures links on the page and loads pages
+	using AJAX only replacing elements on the page that are marked
+	with data-hijax attributes.
+
+	@author Michael Rhodes (except where noted)
+	@license MIT
+	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+**/ 
 
 
-
-class $f5869982bc3ea7c2$export$8c08cf4432b2f5b3 extends $a2dfa52ef2fbbb46$export$d7944a94c1afb262 {
+class $f5869982bc3ea7c2$export$8c08cf4432b2f5b3 extends (0, $a2dfa52ef2fbbb46$export$d7944a94c1afb262) {
     constructor(element, options = {}){
         options.watchDOM = true;
         options.immortal = true;
         super(element, options);
-        this.excludeRegex = new RegExp('^(//|http|javascript|mailto|#)', 'i');
+        this.excludeRegex = new RegExp("^(//|http|javascript|mailto|#)", "i");
         this.currentPage = location.pathname + location.search;
         this.cachedMarkup = {};
     }
     start() {
         // set up hijax markup cache
-        const containers = document.querySelectorAll('[data-hijax-skip-unchanged]');
+        const containers = document.querySelectorAll("[data-hijax-skip-unchanged]");
         for(let i = 0; i < containers.length; i++){
             const container = containers[i];
-            const id = container.getAttribute('id');
+            const id = container.getAttribute("id");
             this.cachedMarkup[id] = container.innerHTML;
         }
         super.start();
-        window.addEventListener('popstate', (e)=>{
+        window.addEventListener("popstate", (e)=>{
             this.watchPopState(e);
         }, false);
     }
@@ -4861,13 +4947,13 @@ class $f5869982bc3ea7c2$export$8c08cf4432b2f5b3 extends $a2dfa52ef2fbbb46$export
         if (location.pathname + location.search !== this.currentPage) this.preFlight(location.pathname + location.search);
     }
     hijaxLinks(fragment) {
-        const links = fragment ? fragment.getElementsByTagName('a') : this.element.getElementsByTagName('a');
+        const links = fragment ? fragment.getElementsByTagName("a") : this.element.getElementsByTagName("a");
         for(let i = 0; i < links.length; i++){
             const link = links[i];
-            const href = link.getAttribute('href');
-            if (href && !link.getAttribute('data-hijaxed') && !link.getAttribute('target') && !link.hasAttribute('data-no-hijax') && !this.excludeRegex.exec(href)) {
-                link.setAttribute('data-hijaxed', true);
-                link.addEventListener('click', (e)=>{
+            const href = link.getAttribute("href");
+            if (href && !link.getAttribute("data-hijaxed") && !link.getAttribute("target") && !link.hasAttribute("data-no-hijax") && !this.excludeRegex.exec(href)) {
+                link.setAttribute("data-hijaxed", true);
+                link.addEventListener("click", (e)=>{
                     e.preventDefault();
                     this.setPage(href);
                 }, false);
@@ -4885,50 +4971,50 @@ class $f5869982bc3ea7c2$export$8c08cf4432b2f5b3 extends $a2dfa52ef2fbbb46$export
         if (!this.options.preFlight) return this.loadPage(url);
         this.options.preFlight(url, (err, handled, rewrite)=>{
             if (err) {
-                if (this.options.onError) this.options.onError('danger', err);
-                else alert('Error loading page: ' + err);
+                if (this.options.onError) this.options.onError("danger", err);
+                else alert("Error loading page: " + err);
             }
             if (handled) this.currentPage = location.pathname + location.search;
             else this.loadPage(rewrite || url);
         });
     }
     loadPage(url) {
-        const frame1 = ()=>{
-            $d6606c57579c6e5f$export$6f53260fffa88f1c.addClass(document.body, 'hijax-loading');
+        const frame = ()=>{
+            (0, $d6606c57579c6e5f$export$6f53260fffa88f1c).addClass(document.body, "hijax-loading");
         };
-        this.queueFrame(frame1);
+        this.queueFrame(frame);
         if (this.options.onExitPage) this.options.onExitPage();
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', url);
-        xhr.setRequestHeader('Sargasso-Hijax', 1);
-        xhr.setRequestHeader('x-digitopia-hijax', 1);
+        xhr.open("GET", url);
+        xhr.setRequestHeader("Sargasso-Hijax", 1);
+        xhr.setRequestHeader("x-digitopia-hijax", 1);
         if (this.options.onLoading) {
             this.options.onLoading();
             xhr.onreadystatechange = this.options.onLoading;
         }
         xhr.onload = ()=>{
-            if (xhr.status === 301 || xhr.status === 302 || xhr.getResponseHeader('Sargasso-Location')) {
-                const loc = xhr.getResponseHeader('Location') ? xhr.getResponseHeader('Location') : xhr.getResponseHeader('Sargasso-Location');
+            if (xhr.status === 301 || xhr.status === 302 || xhr.getResponseHeader("Sargasso-Location")) {
+                const loc = xhr.getResponseHeader("Location") ? xhr.getResponseHeader("Location") : xhr.getResponseHeader("Sargasso-Location");
                 this.setPage(loc);
             } else if (xhr.status === 200) {
-                $04abf88b58b0ffcd$export$c7320459fd5267c0.scrollTop(0);
+                (0, $04abf88b58b0ffcd$export$c7320459fd5267c0).scrollTop(0);
                 this.mergePage(xhr.responseText);
                 const oldPage = this.currentPage;
                 const frame = ()=>{
-                    this.notifyAll('newPage', [
+                    this.notifyAll("newPage", [
                         oldPage,
                         location.pathname + location.search
                     ]);
-                    $d6606c57579c6e5f$export$6f53260fffa88f1c.removeClass(document.body, 'hijax-loading');
+                    (0, $d6606c57579c6e5f$export$6f53260fffa88f1c).removeClass(document.body, "hijax-loading");
                 };
                 this.queueFrame(frame);
                 this.currentPage = location.pathname + location.search;
             } else {
-                const flashLevel = xhr.getResponseHeader('Sargasso-Flash-Level') || 'danger';
-                let flashMessage = xhr.getResponseHeader('Sargasso-Flash-Message') || xhr.statusText;
-                if (!flashMessage) flashMessage = 'Could not connect to server.';
+                const flashLevel = xhr.getResponseHeader("Sargasso-Flash-Level") || "danger";
+                let flashMessage = xhr.getResponseHeader("Sargasso-Flash-Message") || xhr.statusText;
+                if (!flashMessage) flashMessage = "Could not connect to server.";
                 if (this.options.onError) this.options.onError(flashLevel, flashMessage);
-                else alert('Error loading page: ' + flashMessage);
+                else alert("Error loading page: " + flashMessage);
             }
         };
         xhr.send();
@@ -4936,34 +5022,34 @@ class $f5869982bc3ea7c2$export$8c08cf4432b2f5b3 extends $a2dfa52ef2fbbb46$export
     processScripts(scripts) {
         Array.from(scripts).forEach((script)=>{
             script.remove();
-            const id = script.getAttribute('id');
+            const id = script.getAttribute("id");
             if (!document.getElementById(id)) // script.onload = function () {}
-            document.getElementsByTagName('head')[0].appendChild(script);
+            document.getElementsByTagName("head")[0].appendChild(script);
         });
     }
     mergePage(html) {
-        const ephemerals = document.querySelectorAll('[data-ephemeral]');
+        const ephemerals = document.querySelectorAll("[data-ephemeral]");
         Array.from(ephemerals).forEach((ephemeral)=>{
             ephemeral.remove();
         });
         const doc = html.split(/(<body[^>]*>|<\/body>)/ig);
         const fragment = $f5869982bc3ea7c2$var$makeFragment(doc[2]);
-        const containers = document.querySelectorAll('[data-hijax]');
+        const containers = document.querySelectorAll("[data-hijax]");
         for(let i = 0; i < containers.length; i++){
             const container = containers[i];
-            const id = container.getAttribute('id');
+            const id = container.getAttribute("id");
             const replace = fragment.getElementById(id);
             // compare raw markup for changes
-            if (container.hasAttribute('data-hijax-skip-unchanged')) {
+            if (container.hasAttribute("data-hijax-skip-unchanged")) {
                 if (this.cachedMarkup[id] === replace.innerHTML) continue;
                 this.cachedMarkup[id] = replace.innerHTML;
             }
             // use a key found in data-hijax-cache-key on a child element found by css selector defined in data-hijax-cache-key-selector
-            const k = container.getAttribute('data-hijax-cache-key-selector');
+            const k = container.getAttribute("data-hijax-cache-key-selector");
             if (k) {
-                if (replace.querySelector(k) && container.querySelector(k) && container.querySelector(k).getAttribute('data-hijax-cache-key') === replace.querySelector(k).getAttribute('data-hijax-cache-key')) continue;
+                if (replace.querySelector(k) && container.querySelector(k) && container.querySelector(k).getAttribute("data-hijax-cache-key") === replace.querySelector(k).getAttribute("data-hijax-cache-key")) continue;
             }
-            this.processScripts(replace.querySelectorAll('script'));
+            this.processScripts(replace.querySelectorAll("script"));
             const frame = ()=>{
                 container.parentNode.replaceChild(replace, container);
                 if (this.options.onEnterPage) this.options.onEnterPage();
@@ -4973,14 +5059,14 @@ class $f5869982bc3ea7c2$export$8c08cf4432b2f5b3 extends $a2dfa52ef2fbbb46$export
         }
     }
 }
-$a2dfa52ef2fbbb46$export$22044c20eef36040('HijaxLoader', $f5869982bc3ea7c2$export$8c08cf4432b2f5b3);
+(0, $a2dfa52ef2fbbb46$export$22044c20eef36040)("HijaxLoader", $f5869982bc3ea7c2$export$8c08cf4432b2f5b3);
 // shims for borked browsers
 // =========================
 const $f5869982bc3ea7c2$var$makeFragment = (html)=>{
     if (document.createRange && document.createRange().createContextualFragment) return document.createRange().createContextualFragment(html);
     const fragment = document.createDocumentFragment();
-    const div = document.createElement('div');
-    div.insertAdjacentHTML('afterBegin', html);
+    const div = document.createElement("div");
+    div.insertAdjacentHTML("afterBegin", html);
     fragment.appendChild(div);
     return fragment;
 };
@@ -4989,19 +5075,19 @@ const $f5869982bc3ea7c2$var$makeFragment = (html)=>{
 
 let $be4ac01db6cf9f9d$export$7869d9d42a3fc8a6;
 const $be4ac01db6cf9f9d$export$80ed8a0252d89225 = (options = {})=>{
-    if (options.scrollElement) $04abf88b58b0ffcd$export$c7320459fd5267c0.setOptions(options);
+    if (options.scrollElement) (0, $04abf88b58b0ffcd$export$c7320459fd5267c0).setOptions(options);
     if (options.breakpoints) {
-        const breakpoints = new $3b466f211d4b9a1d$export$c38d2c1bff643203(document.body, options.breakpoints);
+        const breakpoints = new (0, $3b466f211d4b9a1d$export$c38d2c1bff643203)(document.body, options.breakpoints);
         breakpoints.start();
     }
     if (options.hijax) {
-        const hijax = new $f5869982bc3ea7c2$export$8c08cf4432b2f5b3(document.body, options.hijax);
+        const hijax = new (0, $f5869982bc3ea7c2$export$8c08cf4432b2f5b3)(document.body, options.hijax);
         hijax.start();
         $be4ac01db6cf9f9d$export$7869d9d42a3fc8a6 = hijax.setPage.bind(hijax);
     } else $be4ac01db6cf9f9d$export$7869d9d42a3fc8a6 = (url)=>{
         document.location.href = url;
     };
-    const supervisor = new $6d79acc30e030818$export$26b75d03ac531c24(document.body, options);
+    const supervisor = new (0, $6d79acc30e030818$export$26b75d03ac531c24)(document.body, options);
     supervisor.start(options);
     return supervisor;
 };
@@ -5010,24 +5096,24 @@ const $be4ac01db6cf9f9d$export$80ed8a0252d89225 = (options = {})=>{
 
 
 const $36a01d5a29783b8e$export$eab97d15b1788b8d = {
-    registerSargassoClass: $a2dfa52ef2fbbb46$export$22044c20eef36040,
-    bootSargasso: $be4ac01db6cf9f9d$export$80ed8a0252d89225,
-    elementTools: $d6606c57579c6e5f$export$6f53260fffa88f1c,
-    validate: $6f44ddd09e194478$export$a22775fa5e2eebd9,
-    setValidator: $6f44ddd09e194478$export$636d763ed7be9e97
+    registerSargassoClass: (0, $a2dfa52ef2fbbb46$export$22044c20eef36040),
+    bootSargasso: (0, $be4ac01db6cf9f9d$export$80ed8a0252d89225),
+    elementTools: (0, $d6606c57579c6e5f$export$6f53260fffa88f1c),
+    validate: (0, $6f44ddd09e194478$export$a22775fa5e2eebd9),
+    setValidator: (0, $6f44ddd09e194478$export$636d763ed7be9e97)
 };
 const $36a01d5a29783b8e$export$bce7a36871692cab = {
-    theDOMWatcher: $04abf88b58b0ffcd$export$77e1d49fdb880d27,
-    theScrollWatcher: $04abf88b58b0ffcd$export$c7320459fd5267c0,
-    theResizeWatcher: $04abf88b58b0ffcd$export$497098c8185e6e33,
-    theOrientationWatcher: $04abf88b58b0ffcd$export$296acd8d6f329fa3,
-    theWorkerWatcher: $04abf88b58b0ffcd$export$fa28dfcc49831a91,
-    theObservableObjectWatcher: $04abf88b58b0ffcd$export$788f7857dc8c77f5
+    theDOMWatcher: (0, $04abf88b58b0ffcd$export$77e1d49fdb880d27),
+    theScrollWatcher: (0, $04abf88b58b0ffcd$export$c7320459fd5267c0),
+    theResizeWatcher: (0, $04abf88b58b0ffcd$export$497098c8185e6e33),
+    theOrientationWatcher: (0, $04abf88b58b0ffcd$export$296acd8d6f329fa3),
+    theWorkerWatcher: (0, $04abf88b58b0ffcd$export$fa28dfcc49831a91),
+    theObservableObjectWatcher: (0, $04abf88b58b0ffcd$export$788f7857dc8c77f5)
 };
 const $36a01d5a29783b8e$export$505f1cb98cb78c0d = {
-    liveElements: $a2dfa52ef2fbbb46$export$85e745b96b6487a7,
-    registeredClasses: $a2dfa52ef2fbbb46$export$ac297e650eeb1e78,
-    elementMetaData: $d6606c57579c6e5f$export$8350ba437fdadadb
+    liveElements: (0, $a2dfa52ef2fbbb46$export$85e745b96b6487a7),
+    registeredClasses: (0, $a2dfa52ef2fbbb46$export$ac297e650eeb1e78),
+    elementMetaData: (0, $d6606c57579c6e5f$export$8350ba437fdadadb)
 };
 
 
