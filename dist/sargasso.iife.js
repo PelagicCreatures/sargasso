@@ -16,6 +16,7 @@ var SargassoModule = (function (exports) {
 	}
 
 	function getAugmentedNamespace(n) {
+	  if (n.__esModule) return n;
 	  var f = n.default;
 		if (typeof f == "function") {
 			var a = function a () {
@@ -3020,7 +3021,11 @@ var SargassoModule = (function (exports) {
 
 	var isArguments_1 = isArguments$1;
 
-	var isBuffer$2 = {exports: {}};
+	var isBufferExports = {};
+	var isBuffer$2 = {
+	  get exports(){ return isBufferExports; },
+	  set exports(v){ isBufferExports = v; },
+	};
 
 	/**
 	 * This method returns `false`.
@@ -3081,9 +3086,9 @@ var SargassoModule = (function (exports) {
 		var isBuffer = nativeIsBuffer || stubFalse;
 
 		module.exports = isBuffer;
-	} (isBuffer$2, isBuffer$2.exports));
+	} (isBuffer$2, isBufferExports));
 
-	var isBuffer_1 = isBuffer$2.exports;
+	var isBuffer_1 = isBufferExports;
 
 	/** Used as references for various `Number` constants. */
 
@@ -3226,7 +3231,11 @@ var SargassoModule = (function (exports) {
 
 	var _baseUnary = baseUnary$1;
 
-	var _nodeUtil$1 = {exports: {}};
+	var _nodeUtilExports = {};
+	var _nodeUtil$1 = {
+	  get exports(){ return _nodeUtilExports; },
+	  set exports(v){ _nodeUtilExports = v; },
+	};
 
 	(function (module, exports) {
 		var freeGlobal = _freeGlobal;
@@ -3259,13 +3268,13 @@ var SargassoModule = (function (exports) {
 		}());
 
 		module.exports = nodeUtil;
-	} (_nodeUtil$1, _nodeUtil$1.exports));
+	} (_nodeUtil$1, _nodeUtilExports));
 
-	var _nodeUtil = _nodeUtil$1.exports;
+	var _nodeUtil = _nodeUtilExports;
 
 	var baseIsTypedArray = _baseIsTypedArray,
 	    baseUnary = _baseUnary,
-	    nodeUtil = _nodeUtil$1.exports;
+	    nodeUtil = _nodeUtilExports;
 
 	/* Node.js helper references. */
 	var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
@@ -3294,7 +3303,7 @@ var SargassoModule = (function (exports) {
 	var baseTimes = _baseTimes,
 	    isArguments = isArguments_1,
 	    isArray$1 = isArray_1,
-	    isBuffer$1 = isBuffer$2.exports,
+	    isBuffer$1 = isBufferExports,
 	    isIndex = _isIndex,
 	    isTypedArray$1 = isTypedArray_1;
 
@@ -3693,7 +3702,7 @@ var SargassoModule = (function (exports) {
 	    equalObjects = _equalObjects,
 	    getTag = _getTag,
 	    isArray = isArray_1,
-	    isBuffer = isBuffer$2.exports,
+	    isBuffer = isBufferExports,
 	    isTypedArray = isTypedArray_1;
 
 	/** Used to compose bitmasks for value comparisons. */
@@ -3836,7 +3845,11 @@ var SargassoModule = (function (exports) {
 
 	var isEqual_1 = isEqual;
 
-	var observableSlim = {exports: {}};
+	var observableSlimExports = {};
+	var observableSlim = {
+	  get exports(){ return observableSlimExports; },
+	  set exports(v){ observableSlimExports = v; },
+	};
 
 	/*
 	 * 	Observable Slim
@@ -4599,7 +4612,7 @@ var SargassoModule = (function (exports) {
 
 			this.bound = {}; // watchers to sync on value change
 
-			this.data = observableSlim.exports.create(data, false, (changes)=>{
+			this.data = observableSlimExports.create(data, false, (changes)=>{
 				this.sync(changes);
 			});
 
@@ -4612,7 +4625,7 @@ var SargassoModule = (function (exports) {
 			@function destroy - remove all bindings
 			*/
 		destroy () {
-			observableSlim.exports.pause(this.data);
+			observableSlimExports.pause(this.data);
 
 			delete registeredObservables[this.id];
 			delete this.data;
@@ -4622,7 +4635,7 @@ var SargassoModule = (function (exports) {
 				});
 			});
 
-			observableSlim.exports.remove(this.data);
+			observableSlimExports.remove(this.data);
 		}
 
 		/*

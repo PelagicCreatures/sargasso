@@ -28,6 +28,8 @@ class SargassoComponent extends Sargasso {
 		this.renderOptions = this.observableStart('SargassoComponent-' + this.uid, {})
 
 		this.pendingLinkTagCount = 0
+
+		this.toDestroy = []
 	}
 
 	start () {
@@ -108,6 +110,11 @@ class SargassoComponent extends Sargasso {
 	}
 
 	sleep () {
+		if(this.toDestroy) {
+			for(const destroyable of this.toDestroy) {
+				destroyable.destroy()
+			}
+		}
 
 		if(this.attributeObserver) {
 			this.attributeObserver.disconnect();
