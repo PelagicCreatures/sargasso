@@ -143,13 +143,13 @@ module.exports = nodeUtil;
 
 	@author Michael Rhodes (except where noted)
 	@license MIT
-	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+	Made in Barbados 🇧🇧 Copyright © 2020-2023 Michael Rhodes
 **/ /**
 	Utility routines for Sargasso classes
 
 	@author Michael Rhodes (except where noted)
 	@license MIT
-	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+	Made in Barbados 🇧🇧 Copyright © 2020-2023 Michael Rhodes
 **/ var $f607bceeeb5e2d09$exports = {};
 var $0745e7b81ed4912f$exports = {};
 var $7e1ecfdf389d92c6$exports = {};
@@ -1027,9 +1027,7 @@ const $d6606c57579c6e5f$var$hasClass = (element, cssClass)=>{
         "notEmpty",
         "isString"
     ]);
-    const className = element.className || "";
-    const classes = className.split(/\s+/);
-    return classes.indexOf(cssClass) !== -1;
+    return element.classList.contains(cssClass);
 };
 // addClasses can be:
 // a string 'someclass'
@@ -1048,14 +1046,11 @@ const $d6606c57579c6e5f$var$addClass = (element, addClasses)=>{
             "isArray"
         ]
     ]);
-    const className = element.className || "";
-    const classes = className.split(/\s+/);
     if (!Array.isArray(addClasses)) addClasses = addClasses.split(/[\s,]/);
     addClasses.forEach((c)=>{
         c = c.trim();
-        if (classes.indexOf(c) === -1) classes.push(c);
+        if (!$d6606c57579c6e5f$var$hasClass(element, c)) element.classList.add(c);
     });
-    element.className = classes.join(" ");
 };
 // removeClasses can be:
 // a string 'someclass'
@@ -1074,14 +1069,11 @@ const $d6606c57579c6e5f$var$removeClass = (element, removeClasses)=>{
             "isArray"
         ]
     ]);
-    const className = element.className || "";
-    const classes = className.split(/\s+/);
     if (!Array.isArray(removeClasses)) removeClasses = removeClasses.split(/[\s,]/);
     removeClasses.forEach((c)=>{
         c = c.trim();
-        if (classes.indexOf(c) !== -1) classes.splice(classes.indexOf(c), 1);
+        if ($d6606c57579c6e5f$var$hasClass(element, c)) element.classList.remove(c);
     });
-    element.className = classes.join(" ");
 };
 const $d6606c57579c6e5f$var$isVisible = (element)=>{
     (0, $6f44ddd09e194478$export$a22775fa5e2eebd9)("isVisible element", element, [
@@ -1290,7 +1282,7 @@ const $d6606c57579c6e5f$export$6f53260fffa88f1c = {
 
 	@author Michael Rhodes (except where noted)
 	@license MIT
-	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+	Made in Barbados 🇧🇧 Copyright © 2020-2023 Michael Rhodes
 
 	Subscribers to these services must imlement handler methods
 	EG. watchDOM, watchScroll, watchResize, watchOrientation
@@ -1565,7 +1557,15 @@ $d26967c9d79595a6$exports = $d26967c9d79595a6$var$toNumber;
 $9fe0242a38a556ef$exports = $9fe0242a38a556ef$var$debounce;
 
 
-var $27b078180f7cecc3$exports = {};
+/**
+	ObservableObject
+
+	Build an obserbable object
+
+	@author Michael Rhodes (except where noted)
+	@license MIT
+	Made in Barbados 🇧🇧 Copyright © 2020-2023 Michael Rhodes
+**/ var $27b078180f7cecc3$exports = {};
 var $af0478bf0a744a07$exports = {};
 var $cbeb2879b695ddbc$exports = {};
 var $db9f4a25626a9022$exports = {};
@@ -4744,7 +4744,7 @@ $a2dfa52ef2fbbb46$export$22044c20eef36040("Sargasso", $a2dfa52ef2fbbb46$export$d
 
 	@author Michael Rhodes (except where noted)
 	@license MIT
-	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+	Made in Barbados 🇧🇧 Copyright © 2020-2023 Michael Rhodes
 **/ 
 /**
 	LazyInstantiate
@@ -4755,7 +4755,7 @@ $a2dfa52ef2fbbb46$export$22044c20eef36040("Sargasso", $a2dfa52ef2fbbb46$export$d
 
 	@author Michael Rhodes (except where noted)
 	@license MIT
-	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+	Made in Barbados 🇧🇧 Copyright © 2020-2023 Michael Rhodes
 **/ 
 
 
@@ -4848,7 +4848,7 @@ class $6d79acc30e030818$export$26b75d03ac531c24 extends (0, $a2dfa52ef2fbbb46$ex
 
 	@author Michael Rhodes (except where noted)
 	@license MIT
-	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+	Made in Barbados 🇧🇧 Copyright © 2020-2023 Michael Rhodes
 **/ 
 
 const $3b466f211d4b9a1d$export$f86ec3d89f756a21 = window.breakpoints || {
@@ -4913,7 +4913,7 @@ class $3b466f211d4b9a1d$export$c38d2c1bff643203 extends (0, $a2dfa52ef2fbbb46$ex
 
 	@author Michael Rhodes (except where noted)
 	@license MIT
-	Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+	Made in Barbados 🇧🇧 Copyright © 2020-2023 Michael Rhodes
 **/ 
 
 

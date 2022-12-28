@@ -1,21 +1,21 @@
-{
+module.exports = {
 	"env": {
 		"browser": true,
-		"es6": true
+		"es2021": true
 	},
 	"extends": [
-		"eslint:recommended"
+		"standard"
 	],
 	"parserOptions": {
-		"ecmaVersion": 6,
-    "sourceType": "module",
-		"allowImportExportEverywhere": true
+		"ecmaVersion": "latest",
+		"sourceType": "module"
 	},
 	"rules": {
 		"no-var": "error",
 		"semi": 0,
 		"prefer-const": "error",
 		"no-tabs": 0,
-		"indent": ["error", "tab"]
+		"indent": ["error", "tab"],
+		"quotes": "off"
 	}
 }

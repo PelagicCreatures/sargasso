@@ -65,8 +65,8 @@
   <sargasso-text-field outlined textarea label="type here" resizer></sargasso-text-field>
 
   <h3>Simple Textarea  w/all the sugar</h3>
-  <sargasso-text-field filled label="type here"  helper helper-text="helper text" character-counter maxlength="10" cols="30" rows="5"></sargasso-text-field>
-  <sargasso-text-field outlined label="type here"  helper helper-text="helper text" character-counter maxlength="10" cols="30" rows="5"></sargasso-text-field>
+  <sargasso-text-field filled textarea label="type here"  helper helper-text="helper text" character-counter maxlength="10" cols="30" rows="5"></sargasso-text-field>
+  <sargasso-text-field outlined textarea label="type here"  helper helper-text="helper text" character-counter maxlength="10" cols="30" rows="5"></sargasso-text-field>
 
 
   <!-- enable es6 modules and import maps -->
@@ -78,11 +78,9 @@
       "@pelagiccreatures/sargasso": "/dist/sargasso.mjs",
       "@pelagiccreatures/sargasso/modules/SargassoComponent": "/dist/modules/SargassoComponent.mjs",
       "@pelagiccreatures/sargasso/modules/TextField": "/dist/modules/MaterialTextField.mjs",
-      "@material/ripple":"https://unpkg.com/@material/ripple@14.0.0/index.js?module",
-      "@material/textfield":"https://unpkg.com/@material/textfield@14.0.0/index.js?module",
-      "@material/textfield/icon":"https://unpkg.com/@material/textfield@14.0.0/icon/index.js?module",
-      "@material/textfield/character-counter":"https://unpkg.com/@material/textfield@14.0.0/character-counter/index.js?module",
-      "lit-html": "https://unpkg.com/lit-html?module",
+      "@material/ripple":"/dist/modules/MDCRipple.mjs",
+      "@material/textfield":"/dist/modules/MDCTextfield.mjs",
+       "lit-html": "https://unpkg.com/lit-html?module",
 			"lit-html/directives/if-defined": "https://unpkg.com/lit-html/directives/if-defined?module"
     }
   }

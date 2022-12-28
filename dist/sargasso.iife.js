@@ -1017,7 +1017,7 @@ var SargassoModule = (function (exports) {
 
 		@author Michael Rhodes (except where noted)
 		@license MIT
-		Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+		Made in Barbados 🇧🇧 Copyright © 2020-2023 Michael Rhodes
 	**/
 
 	const elementMetaData = new WeakMap();
@@ -1025,9 +1025,7 @@ var SargassoModule = (function (exports) {
 	const hasClass = (element, cssClass) => {
 		validate('hasClass element', element, ['isDefined', 'isElement']);
 		validate('hasClass cssClass', cssClass, ['isDefined', 'notEmpty', 'isString']);
-		const className = element.className || '';
-		const classes = className.split(/\s+/);
-		return classes.indexOf(cssClass) !== -1
+		return element.classList.contains(cssClass)
 	};
 
 	// addClasses can be:
@@ -1038,21 +1036,17 @@ var SargassoModule = (function (exports) {
 		validate('addClass element', element, ['isDefined', 'isElement']);
 		validate('addClass addClasses', addClasses, ['isDefined', 'notEmpty', ['isString', 'isArray']]);
 
-		const className = element.className || '';
-		const classes = className.split(/\s+/);
-
 		if (!Array.isArray(addClasses)) {
 			addClasses = addClasses.split(/[\s,]/);
 		}
 
 		addClasses.forEach((c) => {
 			c = c.trim();
-			if (classes.indexOf(c) === -1) {
-				classes.push(c);
+
+			if(!hasClass(element,c)) {
+				element.classList.add(c);
 			}
 		});
-
-		element.className = classes.join(' ');
 	};
 
 	// removeClasses can be:
@@ -1063,21 +1057,16 @@ var SargassoModule = (function (exports) {
 		validate('removeClass element', element, ['isDefined', 'isElement']);
 		validate('removeClass removeClasses', removeClasses, ['isDefined', 'notEmpty', ['isString', 'isArray']]);
 
-		const className = element.className || '';
-		const classes = className.split(/\s+/);
-
 		if (!Array.isArray(removeClasses)) {
 			removeClasses = removeClasses.split(/[\s,]/);
 		}
 
 		removeClasses.forEach((c) => {
 			c = c.trim();
-			if (classes.indexOf(c) !== -1) {
-				classes.splice(classes.indexOf(c), 1);
+			if(hasClass(element,c)) {
+				element.classList.remove(c);
 			}
 		});
-
-		element.className = classes.join(' ');
 	};
 
 	const isVisible = (element) => {
@@ -4580,6 +4569,16 @@ var SargassoModule = (function (exports) {
 	// Export in a try catch to prevent this from erroring out on older browsers
 	try { observableSlim.exports = ObservableSlim; } catch (err) {};
 
+	/**
+		ObservableObject
+
+		Build an obserbable object
+
+		@author Michael Rhodes (except where noted)
+		@license MIT
+		Made in Barbados 🇧🇧 Copyright © 2020-2023 Michael Rhodes
+	**/
+
 	/*
 		build Proxy to observe changes to object properties
 		*/
@@ -4723,7 +4722,7 @@ var SargassoModule = (function (exports) {
 
 		@author Michael Rhodes (except where noted)
 		@license MIT
-		Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+		Made in Barbados 🇧🇧 Copyright © 2020-2023 Michael Rhodes
 
 		Subscribers to these services must imlement handler methods
 		EG. watchDOM, watchScroll, watchResize, watchOrientation
@@ -5208,7 +5207,7 @@ var SargassoModule = (function (exports) {
 
 		@author Michael Rhodes (except where noted)
 		@license MIT
-		Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+		Made in Barbados 🇧🇧 Copyright © 2020-2023 Michael Rhodes
 	**/
 
 	let unique = 0; // unique IDs for controllers
@@ -5981,7 +5980,7 @@ var SargassoModule = (function (exports) {
 
 		@author Michael Rhodes (except where noted)
 		@license MIT
-		Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+		Made in Barbados 🇧🇧 Copyright © 2020-2023 Michael Rhodes
 	**/
 
 	class LazyInstantiate extends Sargasso {
@@ -6037,7 +6036,7 @@ var SargassoModule = (function (exports) {
 
 		@author Michael Rhodes (except where noted)
 		@license MIT
-		Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+		Made in Barbados 🇧🇧 Copyright © 2020-2023 Michael Rhodes
 	**/
 
 	class SargassoSupervisor extends Sargasso {
@@ -6110,7 +6109,7 @@ var SargassoModule = (function (exports) {
 
 		@author Michael Rhodes (except where noted)
 		@license MIT
-		Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+		Made in Barbados 🇧🇧 Copyright © 2020-2023 Michael Rhodes
 	**/
 
 	const materialBreakpoints = window.breakpoints || {
@@ -6179,7 +6178,7 @@ var SargassoModule = (function (exports) {
 
 		@author Michael Rhodes (except where noted)
 		@license MIT
-		Made in Barbados 🇧🇧 Copyright © 2020 Michael Rhodes
+		Made in Barbados 🇧🇧 Copyright © 2020-2023 Michael Rhodes
 	**/
 
 	class HijaxLoader extends Sargasso {

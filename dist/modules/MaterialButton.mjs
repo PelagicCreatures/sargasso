@@ -13,10 +13,16 @@ class Button extends SargassoComponent {
 
 		// observed attributes - render only on change
 		this.renderAttributes = ['label','disabled']
+
+		this.MDCRipple = undefined
 	}
 
-	start () {
-		super.start()
+	sleep () {
+		if(this.MDCRipple) {
+			this.MDCRipple.destroy()
+			this.MDCRipple = undefined
+		}
+		super.sleep()
 	}
 
 	buildTemplate () {
@@ -49,12 +55,6 @@ class Button extends SargassoComponent {
 				:host {
 					display: inline-block
 				}
-
-				.web-component-body {
-					opacity: 0;
-					transition: opacity .25s ease-in-out;
-				}
-				.web-component-body--loaded { opacity: 1; }
 
 				.material-icons {
 					font-family: 'Material Icons';
@@ -104,10 +104,10 @@ class Button extends SargassoComponent {
 
 	instantiateMDC () {
 		const el = this.element.querySelector('.mdc-button')
-		if(el && !el.classList.contains('mdc-ripple-upgraded')) {
-			if(this.buttonRipple) { this.buttonRipple.destroy() }
-			this.buttonRipple = new MDCRipple(el)
-			this.toDestroy.push(this.buttonRipple)
+		if(el && !el.classList.contains('mdc-instantiated')) {
+			if(this.MDCRipple) { this.MDCRipple.destroy() }
+			this.MDCRipple = new MDCRipple(el)
+			this.addClass('mdc-instantiated')
 		}
 	}
 }
