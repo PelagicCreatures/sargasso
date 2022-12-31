@@ -6523,7 +6523,7 @@ var App = (function (exports) {
 
 			for(const attr of this.renderAttributes) {
 				const val = (this._hostElement || this.element).getAttribute(attr) || (this._hostElement || this.element).hasAttribute(attr) || undefined;
-				if(his.renderOptions.data[attr] !== val) {
+				if(this.renderOptions.data[attr] !== val) {
 					this.renderOptions.data[attr] = val;
 				}
 			}

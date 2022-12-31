@@ -5175,7 +5175,7 @@ class $1d13337eab472697$export$da2f2f1de028dda3 extends (0, $a2dfa52ef2fbbb46$ex
         }
         for (const attr1 of this.renderAttributes){
             const val1 = (this._hostElement || this.element).getAttribute(attr1) || (this._hostElement || this.element).hasAttribute(attr1) || undefined;
-            if (his.renderOptions.data[attr1] !== val1) this.renderOptions.data[attr1] = val1;
+            if (this.renderOptions.data[attr1] !== val1) this.renderOptions.data[attr1] = val1;
         }
     }
     buildTemplate() {
