@@ -55,22 +55,13 @@
   {
     "imports": {
       "@pelagiccreatures/sargasso": "/dist/sargasso.mjs",
-      "@pelagiccreatures/sargasso/modules/SargassoComponent": "/dist/modules/SargassoComponent.mjs",
       "@pelagiccreatures/sargasso/modules/Button": "/dist/modules/MaterialButton.mjs",
       "@material/ripple":"/dist/modules/MDCRipple.mjs",
       "lit-html": "https://unpkg.com/lit-html?module"
     }
   }
   </script>
-	<script>
-    window.sagassoComponentOptions = {
-      'Material': {
-        'Button': {
-          css: 'https://unpkg.com/@material/button@14.0.0/dist/mdc.button.min.css'
-        }
-      }
-    }
-  </script>
+	
   <script type="module">
     import { Sargasso, ObservableObject, utils } from "@pelagiccreatures/sargasso"
     import { Button } from "@pelagiccreatures/sargasso/modules/Button"

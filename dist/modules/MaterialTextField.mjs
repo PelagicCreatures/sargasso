@@ -1,8 +1,7 @@
-import { utils } from '@pelagiccreatures/sargasso'
+import { SargassoComponent, utils } from '@pelagiccreatures/sargasso'
 import { html } from 'lit-html'
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { MDCTextField,MDCTextFieldIcon,MDCTextFieldCharacterCounter } from '@material/textfield';
-import { SargassoComponent } from '@pelagiccreatures/sargasso/modules/SargassoComponent'
 
 class TextField extends SargassoComponent {
 	constructor (element, options) {

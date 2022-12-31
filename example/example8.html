@@ -6,13 +6,13 @@
 <body>
   <h3>Example Sargasso Web Component w/Observed Data &amp; Template Rendering</h3>
 
-  <!-- insert ToDoList Web Component into page -->
+  <!-- ToDoList Web Component UI -->
   <h3>A To Do List</h3>
-  <sargasso-to-do-list data-observable-id="todo"></sargasso-to-do-list>
+  <to-do-list data-observable-id="todo"></to-do-list>
 
-  <!-- this component will also sync with changes to To Do List -->
+  <!-- this component will output the to To Do List raw data in real time-->
   <h3>A Component that reacts to changes in the To Do List above</h3>
-  <sargasso-to-do-list-client data-observable-id="todo"></sargasso-to-do-list-client>
+  <to-do-list-client data-observable-id="todo"></to-do-list-client>
 
   <!-- log all changes to observed data -->
   <h3>To Do List Change Log</h3>
@@ -25,22 +25,26 @@
   {
     "imports": {
       "@pelagiccreatures/sargasso": "/dist/sargasso.mjs",
-      "@pelagiccreatures/sargasso/modules/SargassoComponent": "/dist/modules/SargassoComponent.mjs",
       "lit-html": "https://unpkg.com/lit-html?module"
     }
   }
   </script>
   <script type="module">
-    import { Sargasso, ObservableObject, utils } from "@pelagiccreatures/sargasso"
-		import { SargassoComponent } from "@pelagiccreatures/sargasso/modules/SargassoComponent"
+    window.sargassoOptions = {
+      customElementPrefix: ''
+    }
+
+    import { Sargasso, ObservableObject, SargassoComponent, utils, system, services } from "@pelagiccreatures/sargasso"
     import {
-      html,render
+      html
     } from 'lit-html'
+
+    window.nosy = { 'system': system, 'services': services }
 
     // data structure for todo list
     let todo = {
       lastId: 1,
-      list: [{id:1,name:"Pre Existing"}]
+      list: [{id:1,name:"Pre Existing Item"}]
     };
 
     // create an ObservableObject with the id "todo"
@@ -48,24 +52,14 @@
 
     // Define ToDoList Web Component as a subclass of Sargasso
     // Sargasso can re-render the template whenever data in ObservableObject "todo" is changed
-    class ToDoList extends Sargasso {
+    class ToDoList extends SargassoComponent {
       constructor(element, options = {}) {
         options.shadowDOM = true // put the element in a shadow DOM
         super(element, options)
-
-        this.obervableId = this._hostElement.getAttribute('data-observable-id')
-
-        this.buildTemplate()
       }
 
       start() {
         super.start();
-
-        // start watching for changes
-        this.observableStart(this.obervableId)
-
-        // hook up observable data - any changes will re-render element
-        this.setTemplateArgs(this.getObservableData(this.obervableId));
 
         // delegated 'click' event handler for add item button
         this.on("click", '[type="submit"]', e => {
@@ -73,7 +67,7 @@
         });
 
         // delegated 'click' event handler for checkboxes
-        this.on("click", '[type="checkbox"]', e => {
+        this.on("click", '[type="checkbox"]', (e,elem) => {
           e.preventDefault()
           this.removeItem(parseInt(e.srcElement.getAttribute('id')))
         })
@@ -81,19 +75,18 @@
 
       // define and install lit html template to render the component
       buildTemplate() {
-        let template = (todo) => html`
+        let template = (args) => html`
+          <input type="text" id="new" placeholder="add to list" autofocus> <input type="submit" value="add item">
           <ol>
-            ${todo.list.map((item) => html`
+            ${args.data.list.map((item) => html`
               <li>
                 <input type="checkbox" id=${item.id}>
                 <label for=${item.id}>${item.name}</label>
               </li>
             `)}
           </ol>
-          <input type="text" id="new" placeholder="add to list" autofocus> <input type="submit" value="add item">
         `;
 
-        this.setRenderer(render); // set lit-html render() as the renderer
         this.setTemplate(template); // set template function
       }
 
@@ -123,25 +116,27 @@
     // Register ToDoList custom element to the Sargasso framework
     utils.registerSargassoClass("ToDoList", ToDoList)
 
-    // Make a peer web component
+    utils.bootSargasso()
+
+
+    // Make a peer web component that will observe the data and output current state of data
     class ToDoListClient extends SargassoComponent {}
     utils.registerSargassoClass("ToDoListClient", ToDoListClient)
 
-    utils.bootSargasso()
 
-    // get the underlying proxied data
-    const proxied = observableToDo.getBoundData()
-
-    // anyone can watch changes...
+    // anyone can watch changes... log changes to element #change-log
     const logger = (id, type, path, newValue, previousValue) => {
       document.getElementById('change-log').innerText += `action:${type} path:${path} = ${JSON.stringify(newValue)} was ${JSON.stringify(previousValue)}\n`
     }
     observableToDo.bind('someuniqeid', logger, 'list')
 
     // any change to data will trigger notification to all watchers
+    // get the underlying proxied data
+    const proxied = observableToDo.getBoundData()
+    // add an item programatically
     setTimeout(()=>{
-      proxied.list.push({id:++proxied.lastId,name:'Added programmatically'})
-    }, 500)
+      proxied.list.push({id:++proxied.lastId,name:'Item Added programmatically'})
+    }, 1000)
 
   </script>
 </body>
