@@ -4598,7 +4598,7 @@ var SargassoModule = (function (exports) {
 		*/
 	class ObservableObject {
 		/*
-			@param { String } id - unique id of
+			@param { String } id - unique id 
 			@param { Object } data - optional externally defined javascript object to observe
 			@param { Object } options - optional, used by subclasses
 			*/
@@ -4638,9 +4638,9 @@ var SargassoModule = (function (exports) {
 		}
 
 		/*
-			@function getBoundData - return object being observed
+			@function getObservableData - return proxied data
 			*/
-		getBoundData () {
+		getObservableData () {
 			return this.data
 		}
 
@@ -5768,6 +5768,8 @@ var SargassoModule = (function (exports) {
 			}
 		}
 
+		// templates and rendering
+
 		setTemplate(template) {
 			this._template = template;
 		}
@@ -6468,7 +6470,7 @@ var SargassoModule = (function (exports) {
 			});
 
 			// build and install lit-html template
-			this.buildTemplate(); 
+			this.setTemplate(this.buildTemplate() ); // set template function
 
 			// set renderer for template
 			if(this._template) {
@@ -6500,7 +6502,7 @@ var SargassoModule = (function (exports) {
 				if(needSync) {
 					this.getAttributes();
 					if(needRebuild) {
-						this.buildTemplate();
+						this.setTemplate(this.buildTemplate()); // set template function
 						this.render();
 					}
 				}
@@ -6538,7 +6540,7 @@ var SargassoModule = (function (exports) {
 				<pre>options: ${JSON.stringify(args.options,'',2)}</pre>
 			</div>
 		`;
-			this.setTemplate(template); // set template function
+			return template
 		}
 
 		sleep () {

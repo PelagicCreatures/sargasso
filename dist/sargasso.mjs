@@ -3761,7 +3761,7 @@ const $4bd7951ed406c253$export$7ec259ba0528fb23 = (id)=>{
 
 	*/ class $4bd7951ed406c253$export$b176171395436676 {
     /*
-		@param { String } id - unique id of
+		@param { String } id - unique id 
 		@param { Object } data - optional externally defined javascript object to observe
 		@param { Object } options - optional, used by subclasses
 		*/ constructor(id, data = {}, options = {}){
@@ -3789,8 +3789,8 @@ const $4bd7951ed406c253$export$7ec259ba0528fb23 = (id)=>{
         $70f23c7c95ce5dd7$exports.remove(this.data);
     }
     /*
-		@function getBoundData - return object being observed
-		*/ getBoundData() {
+		@function getObservableData - return proxied data
+		*/ getObservableData() {
         return this.data;
     }
     /*
@@ -4604,6 +4604,7 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
     observableStopAll() {
         for(const id in this._observables)this.observableStop(id);
     }
+    // templates and rendering
     setTemplate(template) {
         this._template = template;
     }
@@ -5134,7 +5135,8 @@ class $1d13337eab472697$export$da2f2f1de028dda3 extends (0, $a2dfa52ef2fbbb46$ex
             data: this.observableData ? this.observableData.data : undefined
         });
         // build and install lit-html template
-        this.buildTemplate();
+        this.setTemplate(this.buildTemplate()) // set template function
+        ;
         // set renderer for template
         if (this._template) this.setRenderer((0, $8Ln3R$render));
     }
@@ -5157,7 +5159,8 @@ class $1d13337eab472697$export$da2f2f1de028dda3 extends (0, $a2dfa52ef2fbbb46$ex
             if (needSync) {
                 this.getAttributes();
                 if (needRebuild) {
-                    this.buildTemplate();
+                    this.setTemplate(this.buildTemplate()) // set template function
+                    ;
                     this.render();
                 }
             }
@@ -5187,8 +5190,7 @@ class $1d13337eab472697$export$da2f2f1de028dda3 extends (0, $a2dfa52ef2fbbb46$ex
 				<pre>options: ${JSON.stringify(args.options, "", 2)}</pre>
 			</div>
 		`;
-        this.setTemplate(template) // set template function
-        ;
+        return template;
     }
     sleep() {
         if (this.toDestroy) for (const destroyable of this.toDestroy)destroyable.destroy();

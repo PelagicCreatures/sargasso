@@ -87,7 +87,7 @@
           </ol>
         `;
 
-        this.setTemplate(template); // set template function
+        return template // set template function
       }
 
       // push a new to do item onto list
@@ -132,7 +132,7 @@
 
     // any change to data will trigger notification to all watchers
     // get the underlying proxied data
-    const proxied = observableToDo.getBoundData()
+    const proxied = observableToDo.getObservableData()
     // add an item programatically
     setTimeout(()=>{
       proxied.list.push({id:++proxied.lastId,name:'Item Added programmatically'})

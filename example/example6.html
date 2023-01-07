@@ -43,9 +43,7 @@
 
     utils.bootSargasso()
 
-    // get the underlying proxied data
-    const proxied = observableToDo.getBoundData()
-
+ 
     // make a logger...
     const logger = (id, type, path, newValue, previousValue) => {
       document.getElementById('change-log').innerText += `action:${type} path:${path} = ${JSON.stringify(newValue)} was ${JSON.stringify(previousValue)}\n`
@@ -53,6 +51,8 @@
     observableToDo.bind('someuniqeid', logger, 'list')
 
     // periodically create a todo list and ObservableObject will notify the observers
+    // get the underlying proxied data
+    const proxied = observableToDo.getObservableData()
     let count = 0
     setInterval(()=>{
       if(count>10) { proxied.list.shift() }
