@@ -6450,7 +6450,8 @@ var SargassoModule = (function (exports) {
 
 			// if defined start watching observable data to trigger render on changes
 			if(this.obervableId) {
-				this.observableData = this.observableStart(this.obervableId);
+				this.observable = this.observableStart(this.obervableId);
+				this.observableData = this.getObservableData(this.obervableId);
 			}
 
 			// trigger render on changes to host element attributes
@@ -6466,7 +6467,7 @@ var SargassoModule = (function (exports) {
 			this.setTemplateArgs({
 				options: this.options.componentOptions || {},
 				attributes:this.renderOptions.data,
-				data: this.observableData ? this.observableData.data : undefined,
+				data: this.observableData ? this.observableData : undefined,
 			});
 
 			// build and install lit-html template

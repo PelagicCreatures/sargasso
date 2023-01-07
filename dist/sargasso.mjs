@@ -5121,7 +5121,10 @@ class $1d13337eab472697$export$da2f2f1de028dda3 extends (0, $a2dfa52ef2fbbb46$ex
     start() {
         super.start();
         // if defined start watching observable data to trigger render on changes
-        if (this.obervableId) this.observableData = this.observableStart(this.obervableId);
+        if (this.obervableId) {
+            this.observable = this.observableStart(this.obervableId);
+            this.observableData = this.getObservableData(this.obervableId);
+        }
         // trigger render on changes to host element attributes
         this.renderOptions = this.observableStart("SargassoComponent-" + this.uid, {});
         // cache host element template and render attribute values
@@ -5132,7 +5135,7 @@ class $1d13337eab472697$export$da2f2f1de028dda3 extends (0, $a2dfa52ef2fbbb46$ex
         this.setTemplateArgs({
             options: this.options.componentOptions || {},
             attributes: this.renderOptions.data,
-            data: this.observableData ? this.observableData.data : undefined
+            data: this.observableData ? this.observableData : undefined
         });
         // build and install lit-html template
         this.setTemplate(this.buildTemplate()) // set template function
