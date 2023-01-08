@@ -26,8 +26,8 @@ class Button extends SargassoComponent {
 
 	buildTemplate () {
 
-		let iconLeading = html``
-		let iconTrailing  = html``
+		let iconLeading = (args, attributes, options) => html``
+		let iconTrailing  = (args, attributes, options) => html``
 		const classes = ['mdc-button','mdc-button--touch']
 		if(this.templateOptions.raised) {
 			classes.push('mdc-button--raised')
@@ -40,16 +40,16 @@ class Button extends SargassoComponent {
 		}
 		if(this.templateOptions['icon-leading'] && this.templateOptions.icon) {
 			classes.push('mdc-button--icon-leading')
-			iconLeading = html`<i class="material-icons mdc-button__icon" aria-hidden="true">${this.templateOptions.icon}</i>`
+			iconLeading = (args, attributes, options) => html`<i class="material-icons mdc-button__icon" aria-hidden="true">${this.templateOptions.icon}</i>`
 		}
 		if(this.templateOptions['icon-trailing'] && this.templateOptions.icon) {
 			classes.push('mdc-button--icon-trailing')
-			iconTrailing = html`<i class="material-icons mdc-button__icon" aria-hidden="true">${this.templateOptions.icon}</i>`
+			iconTrailing = (args, attributes, options) => html`<i class="material-icons mdc-button__icon" aria-hidden="true">${this.templateOptions.icon}</i>`
 		}
 
 		const buttonClasses = classes.join(' ')
 
-		const template = (args) => html`
+		const template = (args, attributes, options) => html`
 			<style>
 				:host {
 					display: inline-block
@@ -83,12 +83,12 @@ class Button extends SargassoComponent {
 
 			<div class="web-component-body">
 				<div class="mdc-touch-target-wrapper">
-					<button class="${buttonClasses}" ?disabled=${args.attributes.disabled}>
+					<button class="${buttonClasses}" ?disabled=${attributes.disabled}>
 						<span class="mdc-button__ripple"></span>
 						<span class="mdc-button__touch"></span>
-						${iconLeading}
-						<span class="mdc-button__label">${args.attributes.label}</span>
-						${iconTrailing}
+						${iconLeading(args, attributes, options)}
+						<span class="mdc-button__label">${attributes.label}</span>
+						${iconTrailing(args, attributes, options)}
 					</button>
 				</div>
 			</div>

@@ -4616,12 +4616,12 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
         this.render();
     }
     getTemplateArgs() {
-        const args = this._templateArgs || {};
+        const args = this._templateArgs || [];
         return JSON.parse(JSON.stringify(args));
     }
     // this.render is a debounced call to this
     _render() {
-        if (this._template && this.renderer) this.renderer(this._template(this.getTemplateArgs()), this.element);
+        if (this._template && this.renderer) this.renderer(this._template.apply(this, this.getTemplateArgs()), this.element);
     }
     /************************************************
 	PRIVATE METHODS: normally not called or overriden
@@ -5131,12 +5131,15 @@ class $1d13337eab472697$export$da2f2f1de028dda3 extends (0, $a2dfa52ef2fbbb46$ex
         this.getAttributes();
         // set up mutation observer to watch attribute changes on host element
         this.watchAttributes();
-        // data to pass to render
-        this.setTemplateArgs({
-            options: this.options.componentOptions || {},
-            attributes: this.renderOptions.data,
-            data: this.observableData ? this.observableData : undefined
-        });
+        // args to pass to template function template(data, attributes, options) function
+        // arg0 is the observable data
+        // arg1 is the current values of the render attributes
+        // arg2 is the component options
+        this.setTemplateArgs([
+            this.observableData ? this.observableData : undefined,
+            this.renderOptions.data,
+            this.options.componentOptions || {}
+        ]);
         // build and install lit-html template
         this.setTemplate(this.buildTemplate()) // set template function
         ;
@@ -5185,12 +5188,12 @@ class $1d13337eab472697$export$da2f2f1de028dda3 extends (0, $a2dfa52ef2fbbb46$ex
         }
     }
     buildTemplate() {
-        const template = (args)=>(0, $8Ln3R$html)`
+        const template = (data, attributes, options)=>(0, $8Ln3R$html)`
 			<div class="web-component-body">
 				<p>using default buildTemplate - override buildTemplate to customize component markup</p>
-				<pre>${this.obervableId}: ${JSON.stringify(args.data, "", 2)}</pre>
-				<pre>attributes: ${JSON.stringify(args.attributes, "", 2)}</pre>
-				<pre>options: ${JSON.stringify(args.options, "", 2)}</pre>
+				<pre>${this.obervableId}: ${JSON.stringify(data, "", 2)}</pre>
+				<pre>attributes: ${JSON.stringify(attributes, "", 2)}</pre>
+				<pre>options: ${JSON.stringify(options, "", 2)}</pre>
 			</div>
 		`;
         return template;

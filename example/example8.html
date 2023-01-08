@@ -75,10 +75,10 @@
 
       // define and install lit html template to render the component
       buildTemplate() {
-        let template = (args) => html`
+        let template = (data) => html`
           <input type="text" id="new" placeholder="add to list" autofocus> <input type="submit" value="add item">
           <ol>
-            ${args.data.list.map((item) => html`
+            ${data.list.map((item) => html`
               <li>
                 <input type="checkbox" id=${item.id}>
                 <label for=${item.id}>${item.name}</label>
