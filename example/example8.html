@@ -25,6 +25,7 @@
   {
     "imports": {
       "@pelagiccreatures/sargasso": "/dist/sargasso.mjs",
+      "@pelagiccreatures/sargasso/component": "/dist/component/index.mjs",
       "lit-html": "https://unpkg.com/lit-html?module"
     }
   }
@@ -34,7 +35,9 @@
       customElementPrefix: ''
     }
 
-    import { Sargasso, ObservableObject, SargassoComponent, utils, system, services } from "@pelagiccreatures/sargasso"
+    import { Sargasso, ObservableObject, utils, system, services } from "@pelagiccreatures/sargasso"
+    import { SargassoComponent } from "@pelagiccreatures/sargasso/component"
+
     import {
       html
     } from 'lit-html'

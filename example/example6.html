@@ -20,13 +20,15 @@
   <script type="importmap">
   {
     "imports": {
-      "@pelagiccreatures/sargasso": "https://unpkg.com/@pelagiccreatures/sargasso/dist/sargasso.mjs",
+      "@pelagiccreatures/sargasso": "/dist/sargasso.mjs",
+      "@pelagiccreatures/sargasso/component": "/dist/component/index.mjs",
       "lit-html": "https://unpkg.com/lit-html?module"
     }
   }
   </script>
   <script type="module">
-    import { SargassoComponent, ObservableObject, utils } from "@pelagiccreatures/sargasso"
+    import { ObservableObject, utils } from "@pelagiccreatures/sargasso"
+    import { SargassoComponent } from "@pelagiccreatures/sargasso/component"
 
     // data structure for todo list
     let todo = {

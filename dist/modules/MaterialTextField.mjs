@@ -1,4 +1,5 @@
-import { SargassoComponent, utils } from '@pelagiccreatures/sargasso'
+import { utils } from '@pelagiccreatures/sargasso'
+import { SargassoComponent } from '@pelagiccreatures/sargasso/component'
 import { html } from 'lit-html'
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { MDCTextField,MDCTextFieldIcon,MDCTextFieldCharacterCounter } from '@material/textfield';
