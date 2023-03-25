@@ -357,6 +357,29 @@ describe('Sargasso', function () {
 		container.appendChild(makeNode('<sargasso-instrumented-dom-class></sargasso-instrumented-dom-class>'))
 	})
 
+	it('Sargasso watchAttrbutes', function (done) {
+		class InstrumentedAttributesClass extends SargassoModule.Sargasso {
+			constructor(element, options) {
+				super(element, {
+					watchAttributes: true
+				})
+				this.triggered = false
+			}
+
+			attributeChanged() {
+				if (!this.triggered) {
+					this.triggered = true
+					done()
+				}
+			}
+		}
+
+		SargassoModule.utils.registerSargassoClass('InstrumentedAttributesClass', InstrumentedAttributesClass)
+		container.appendChild(makeNode('<sargasso-instrumented-attributes-class data-foo="bla"></sargasso-instrumented-attributes-class>'))
+		document.querySelector('sargasso-instrumented-attributes-class').setAttribute('data-foo', 'bar')
+	})
+
+
 	it('Sargasso watchResize', function (done) {
 		class InstrumentedResizeClass extends SargassoModule.Sargasso {
 			constructor(element, options) {

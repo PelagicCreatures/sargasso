@@ -11,6 +11,8 @@ class SargassoComponent extends Sargasso {
 		// global options for subclasses
 		options.componentOptions = window.sagassoComponentOptions || {}
 
+		options.watchAttributes = true
+
 		super(element, options)
 
 		// attributes that trigger template rebuild and render
@@ -44,9 +46,6 @@ class SargassoComponent extends Sargasso {
 		// cache host element template and render attribute values
 		this.getAttributes()
 
-		// set up mutation observer to watch attribute changes on host element
-		this.watchAttributes()
-
 		// args to pass to template function template(data, attributes, options) function
 		// arg0 is the observable data
 		// arg1 is the current values of the render attributes
@@ -66,40 +65,26 @@ class SargassoComponent extends Sargasso {
 		}
 	}
 
-	watchAttributes () {
+	attributeChanged (attr) {
 		// all attributes to observe
 		this.allAttributes = this.templateAttributes.concat(this.renderAttributes)
 
-		// watch for changes to host element attributes
-		this.attributeObserver = new MutationObserver((mutations) => {
-			let needSync = false
-			let needRebuild = false
-
-			mutations.forEach((mutation) => {
-				if (mutation.type === "attributes") {
-					if(this.allAttributes.indexOf(mutation.attributeName) !== -1) {
-						needSync = true
-						if(this.templateAttributes.indexOf(mutation.attributeName) !== -1) {
-							needRebuild = true
-						}
-					}
-				}
-			})
-
-			// attribute changed?
-			if(needSync) {
-				this.getAttributes()
-				if(needRebuild) {
-					this.setTemplate(this.buildTemplate()) // set template function
-					this.render()
-				}
+		let needSync = false
+		let needRebuild = false
+		if(this.allAttributes.indexOf(attr) !== -1) {
+			needSync = true
+			if(this.templateAttributes.indexOf(attr) !== -1) {
+				needRebuild = true
 			}
-		})
-
-		// start mutation observer
-		this.attributeObserver.observe(this._hostElement || this.element, {
-			attributes: true
-		})
+		}
+			
+		if(needSync) {
+			this.getAttributes()
+			if(needRebuild) {
+				this.setTemplate(this.buildTemplate()) // set template function
+				this.render()
+			}
+		}
 	}
 
 	getAttributes () {

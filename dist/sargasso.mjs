@@ -1882,7 +1882,7 @@ var $1e323287d9dee311$exports = {};
         } catch (e) {}
         try {
             return func + "";
-        } catch (e1) {}
+        } catch (e) {}
     }
     return "";
 }
@@ -4347,6 +4347,7 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
         if (this.options.watchScroll || this.options.watchViewport) (0, $04abf88b58b0ffcd$export$c7320459fd5267c0).subscribe(this);
         if (this.options.watchResize || this.options.watchViewport) (0, $04abf88b58b0ffcd$export$497098c8185e6e33).subscribe(this);
         if (this.options.watchOrientation || this.options.watchViewport) (0, $04abf88b58b0ffcd$export$296acd8d6f329fa3).subscribe(this);
+        if (this.options.watchAttributes) this.watchAttributes();
         /*
 			listen for 'sargasso' events
 			Call the method named in e.detail.sargassoEvent or call this.elementEvent
@@ -4369,10 +4370,21 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
         if (this.options.watchScroll || this.options.watchViewport) (0, $04abf88b58b0ffcd$export$c7320459fd5267c0).unSubscribe(this);
         if (this.options.watchResize || this.options.watchViewport) (0, $04abf88b58b0ffcd$export$497098c8185e6e33).unSubscribe(this);
         if (this.options.watchOrientation || this.options.watchViewport) (0, $04abf88b58b0ffcd$export$296acd8d6f329fa3).unSubscribe(this);
+        if (this.attributeObserver) this.attributeObserver.disconnect();
         this.element.removeEventListener("sargasso", this.elementListener);
         (0, $d6606c57579c6e5f$export$6f53260fffa88f1c).offAll(this.element) // remove all dangling event listeners created with on/once
         ;
         this._started = false;
+    }
+    watchAttributes() {
+        this.attributeObserver = new MutationObserver((mutations)=>{
+            mutations.forEach((mutation)=>{
+                if (mutation.type === "attributes") this.attributeChanged(mutation.attributeName);
+            });
+        });
+        this.attributeObserver.observe(this._hostElement || this.element, {
+            attributes: true
+        });
     }
     /**************************************************************
 	EVENT HOOKS - Override these methods in your subclass as needed
@@ -4429,6 +4441,7 @@ const $a2dfa52ef2fbbb46$var$eventNames = [
 		*/ observableChanged(id, type, path, newValue, previousValue) {
         this.render();
     }
+    attributeChanged(attribute) {}
     /****************************************************
 	UTILITY METHODS - callable but normally not overriden
 	*****************************************************/ /*
@@ -4834,7 +4847,7 @@ class $6d79acc30e030818$export$26b75d03ac531c24 extends (0, $a2dfa52ef2fbbb46$ex
         // check for dangling live elements and kill them
         const toCleanup = [];
         for(let i = 0; i < (0, $a2dfa52ef2fbbb46$export$85e745b96b6487a7).length; i++)if (!(0, $a2dfa52ef2fbbb46$export$85e745b96b6487a7)[i].options.immortal && !(0, $a2dfa52ef2fbbb46$export$85e745b96b6487a7)[i].options.isCustomElement && !document.body.contains((0, $a2dfa52ef2fbbb46$export$85e745b96b6487a7)[i].element)) toCleanup.push((0, $a2dfa52ef2fbbb46$export$85e745b96b6487a7)[i]);
-        for(let i1 = 0; i1 < toCleanup.length; i1++)toCleanup[i1].destroy();
+        for(let i = 0; i < toCleanup.length; i++)toCleanup[i].destroy();
     }
 }
 (0, $a2dfa52ef2fbbb46$export$22044c20eef36040)("SargassoSupervisor", $6d79acc30e030818$export$26b75d03ac531c24);

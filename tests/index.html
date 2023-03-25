@@ -10,7 +10,7 @@
 	<script src="../node_modules/chai/chai.js"></script>
 	<script src="../node_modules/sinon/pkg/sinon.js"></script>
 	<script>
-		mocha.setup({ui:'bdd'});
+		mocha.setup({ui:'bdd',globals: ['importShim']});
 		mocha.checkLeaks();
 		mocha.reporter('html');
 		var expect = chai.expect;
@@ -36,7 +36,7 @@
 		<div id="spacer"></div>
 	</div>
 
-	<script async src="https://unpkg.com/es-module-shims@1.6.2/dist/es-module-shims.js"></script>
+	<script async src="https://unpkg.com/es-module-shims/dist/es-module-shims.js"></script>
 	<script type="importmap">
 	{
 		"imports": {

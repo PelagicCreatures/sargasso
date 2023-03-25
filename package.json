@@ -33,23 +33,22 @@
 	"author": "Michael Rhodes",
 	"license": "MIT",
 	"devDependencies": {
-		"@rollup/plugin-commonjs": "^24.0.0",
+		"@rollup/plugin-commonjs": "^24.0.1",
 		"@rollup/plugin-json": "^6.0.0",
 		"@rollup/plugin-node-resolve": "^15.0.1",
-		"@rollup/plugin-terser": "^0.3.0",
+		"@rollup/plugin-terser": "^0.4.0",
 		"chai": "^4.3.7",
-		"core-js": "^3.27.1",
-		"eslint": "^8.31.0",
+		"core-js": "^3.29.1",
+		"eslint": "^8.36.0",
 		"mocha": "^10.2.0",
 		"mocha-chrome": "^2.2.0",
-		"parcel": "^2.8.2",
-		"rollup": "^3.9.1",
-		"rollup-plugin-terser": "^7.0.2",
+		"parcel": "^2.8.3",
+		"rollup": "^3.20.2",
 		"setimmediate": "^1.0.5",
-		"sinon": "^15.0.1"
+		"sinon": "^15.0.2"
 	},
 	"peerDependencies": {
-		"lit-html": "^2.5.0"
+		"lit-html": "^2.7.0"
 	},
 	"dependencies": {
 		"lodash": "^4.17.21",

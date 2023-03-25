@@ -5399,6 +5399,10 @@ var SargassoModule = (function (exports) {
 				theOrientationWatcher.subscribe(this);
 			}
 
+			if (this.options.watchAttributes) {
+				this.watchAttributes();
+			}
+
 			/*
 				listen for 'sargasso' events
 				Call the method named in e.detail.sargassoEvent or call this.elementEvent
@@ -5446,11 +5450,29 @@ var SargassoModule = (function (exports) {
 				theOrientationWatcher.unSubscribe(this);
 			}
 
+			if(this.attributeObserver) {
+				this.attributeObserver.disconnect();
+			}
+
 			this.element.removeEventListener('sargasso', this.elementListener);
 
 			elementTools.offAll(this.element); // remove all dangling event listeners created with on/once
 
 			this._started = false;
+		}
+
+		watchAttributes () {
+			this.attributeObserver = new MutationObserver((mutations) => {
+				mutations.forEach((mutation) => {
+					if (mutation.type === "attributes") {
+						this.attributeChanged(mutation.attributeName);
+					}
+				});
+			});
+
+			this.attributeObserver.observe(this._hostElement || this.element, {
+				attributes: true
+			});
 		}
 
 		/**************************************************************
@@ -5533,6 +5555,8 @@ var SargassoModule = (function (exports) {
 		observableChanged(id, type, path, newValue, previousValue) {
 			this.render();
 		}
+
+		attributeChanged(attribute) {}
 
 		/****************************************************
 		UTILITY METHODS - callable but normally not overriden
