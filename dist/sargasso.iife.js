@@ -4659,6 +4659,7 @@ var SargassoModule = (function (exports) {
 			(value) => {}
 			*/
 		bind (id, fn, property = '*') {
+			if(property === '__proto__') { throw new Error('Invalid property name') }
 			if (!this.bound[property]) {
 				this.bound[property] = {};
 			}

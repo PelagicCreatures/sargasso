@@ -3805,6 +3805,7 @@ const $4bd7951ed406c253$export$7ec259ba0528fb23 = (id)=>{
 		Otherwise just the value is supplied
 		(value) => {}
 		*/ bind(id, fn, property = "*") {
+        if (property === "__proto__") throw new Error("Invalid property name");
         if (!this.bound[property]) this.bound[property] = {};
         this.bound[property][id] = fn;
         fn(this.id, "connect");
