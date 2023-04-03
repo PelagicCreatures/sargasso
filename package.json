@@ -26,7 +26,6 @@
 		"progressive-enhancement"
 	],
 	"scripts": {
-		"test": "npx mocha-chrome http://localhost:8000/tests/index.html --ignore-exceptions",
 		"build": "npx rollup --no-treeshake -c rollup.config.js",
 		"build-module": "sh build-module.sh"
 	},
@@ -41,7 +40,6 @@
 		"core-js": "^3.29.1",
 		"eslint": "^8.37.0",
 		"mocha": "^10.2.0",
-		"mocha-chrome": "^2.2.0",
 		"parcel": "^2.8.3",
 		"rollup": "^3.20.2",
 		"setimmediate": "^1.0.5",
