@@ -5540,7 +5540,7 @@ var SargassoModule = (function (exports) {
 
 		/*
 			@function workerOnMessage - listen for worker postMessage event
-			@param { String } id - id of worker started with this._workerstart()
+			@param { String } id - id of worker started with this.workerstart()
 			@param { Object } data - data received from worker
 			*/
 		workerOnMessage(id, data) {}
@@ -5735,7 +5735,7 @@ var SargassoModule = (function (exports) {
 				})
 			}`
 
-			this._workerstart('pointless-stuff', mycode)
+			this.workerstart('pointless-stuff', mycode)
 
 			this.workerPostMessage('pointless-stuff', {answer:42})
 

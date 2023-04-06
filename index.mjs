@@ -39,6 +39,12 @@ import {
 }
 	from './lib/ObservableObject'
 
+import {
+	ObservableClient
+}
+	from './lib/ObservableClient'
+
+
 const utils = {
 	registerSargassoClass: registerSargassoClass,
 	bootSargasso: bootSargasso,
@@ -63,5 +69,5 @@ const system = {
 }
 
 export {
-	Sargasso, utils, loadPageHandler, ObservableObject, services, system
+	Sargasso, utils, loadPageHandler, ObservableObject, ObservableClient, services, system
 }

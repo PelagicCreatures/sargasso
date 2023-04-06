@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Example Observed Data</title>
+  <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
   <h3>Example Observed Data</h3>
@@ -27,7 +28,9 @@
   }
   </script>
   <script type="module">
-    import { ObservableObject, utils } from "@pelagiccreatures/sargasso"
+    document.cookie = "access-token=mytoken; expires=; path=/;";
+
+    import { ObservableObject, ObservableClient, utils } from "@pelagiccreatures/sargasso"
     import { SargassoComponent } from "@pelagiccreatures/sargasso/component"
 
     // data structure for todo list
@@ -37,7 +40,15 @@
     };
 
     // create an ObservableObject with the id "todo"
-    const observableToDo = new ObservableObject("todo", todo);
+    const observableToDo = new ObservableClient("todo", todo, { endpoint: '/' });
+
+    observableToDo.on('status', (status) => {
+      console.log('status',status)
+    })
+
+    observableToDo.on('error', (status) => {
+      console.log('error',status)
+    })
 
     // Make a peer web component
     class ToDoListClient extends SargassoComponent {}
