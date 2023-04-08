@@ -2404,6 +2404,7 @@ const $05b7f40ae55d062a$export$7ec259ba0528fb23 = (id)=>{
         if ($05b7f40ae55d062a$var$registeredObservables[this.id]) throw new Error("ObservableObject " + id + " already exists.");
         this.bound = {} // watchers to sync on value change
         ;
+        this.unproxied = data;
         this.data = (0, (/*@__PURE__*/$parcel$interopDefault($abb58fc96c93bc30$exports))).create(data, false, (changes)=>{
             this.sync(changes, this.getSource());
         });
@@ -3931,6 +3932,18 @@ $3b107fc3e17ef5bd$exports = $3b107fc3e17ef5bd$var$api;
 };
 
 
+
+var $f11df64d5740bdb1$var$cloneObj = (source, dest)=>{
+    Object.keys(source).forEach((key)=>{
+        if (Array.isArray(source[key])) {
+            dest[key] = [];
+            $f11df64d5740bdb1$var$cloneObj(source[key], dest[key]);
+        } else if (typeof source[key] === "object") {
+            dest[key] = {};
+            $f11df64d5740bdb1$var$cloneObj(source[key], dest[key]);
+        } else dest[key] = source[key];
+    });
+};
 class $f11df64d5740bdb1$export$8d7915f8e0cd6b7a extends (0, $05b7f40ae55d062a$export$b176171395436676) {
     constructor(id, data = {}, options = {}){
         (0, $d058b9b16cf9cda3$export$a22775fa5e2eebd9)("ObservableClient constructor endpoint", options.endpoint, [
@@ -3961,11 +3974,12 @@ class $f11df64d5740bdb1$export$8d7915f8e0cd6b7a extends (0, $05b7f40ae55d062a$ex
             this.connected = false;
         });
         this.socket.on("connect", ()=>{
-            this.socket.emit("authenticate", this.id, this.getSource(), this.authenticateHandler.bind(this));
+            if (this.socket.recovered) this.emit("status", "reconnected");
+            else this.socket.emit("authenticate", this.id, this.getSource(), this.authenticateHandler.bind(this));
         });
         // listen for change events from server side
         this.socket.on("change", (event)=>{
-            console.log("client got change event:", event);
+            console.log("client got change event from %s via %s", event.source, event.via);
             for (const change of event.changes){
                 const type = change.type;
                 const path = change.currentPath;
@@ -3973,12 +3987,20 @@ class $f11df64d5740bdb1$export$8d7915f8e0cd6b7a extends (0, $05b7f40ae55d062a$ex
                 const previousValue = change.previousValue;
                 const ptr = "/" + path.replace(/\./g, "/");
                 if (type === "update" || type === "add") {
-                    if (!(0, (/*@__PURE__*/$parcel$interopDefault($3b107fc3e17ef5bd$exports))).has(this.data, ptr) || (0, (/*@__PURE__*/$parcel$interopDefault($3b107fc3e17ef5bd$exports))).get(this.data, ptr) !== newValue) (0, (/*@__PURE__*/$parcel$interopDefault($3b107fc3e17ef5bd$exports))).set(this.data, ptr, newValue);
+                    if (!(0, (/*@__PURE__*/$parcel$interopDefault($3b107fc3e17ef5bd$exports))).has(this.unproxied, ptr) || (0, (/*@__PURE__*/$parcel$interopDefault($3b107fc3e17ef5bd$exports))).get(this.unproxied, ptr) !== newValue) (0, (/*@__PURE__*/$parcel$interopDefault($3b107fc3e17ef5bd$exports))).set(this.unproxied, ptr, newValue);
                 }
                 if (type === "delete") {
-                    if ((0, (/*@__PURE__*/$parcel$interopDefault($3b107fc3e17ef5bd$exports))).has(this.data, ptr)) (0, (/*@__PURE__*/$parcel$interopDefault($3b107fc3e17ef5bd$exports))).remove(this.data, ptr);
+                    if ((0, (/*@__PURE__*/$parcel$interopDefault($3b107fc3e17ef5bd$exports))).has(this.unproxied, ptr)) (0, (/*@__PURE__*/$parcel$interopDefault($3b107fc3e17ef5bd$exports))).remove(this.unproxied, ptr);
                 }
             }
+            this.sync(event.changes, event.source);
+        });
+        this.socket.on("init", (event)=>{
+            $f11df64d5740bdb1$var$cloneObj(event.init, this.unproxied);
+            this.sync([], event.source);
+        });
+        this.socket.onAny((eventName, ...args)=>{
+            console.log("socket event", eventName, args);
         });
     }
     authenticateHandler(result) {
@@ -3992,16 +4014,17 @@ class $f11df64d5740bdb1$export$8d7915f8e0cd6b7a extends (0, $05b7f40ae55d062a$ex
         this.connected = true;
     }
     getSource() {
-        return super.getSource() + ":" + this.socket.id;
+        return super.getSource() + ":client:" + this.socket.id;
     }
     destroy() {
         if (this.socket) this.socket.disconnect(true);
         super.destroy();
     }
     // propagate changes to server
-    sync(changes) {
+    sync(changes, source) {
         super.sync(changes);
-        if (this.socket && this.connected) this.socket.emit("change", {
+        // propagate this is source of change 
+        if (source === this.getSource() && this.socket && this.connected) this.socket.emit("change", {
             sourceId: this.getSource(),
             changes: changes
         }, (result)=>{
@@ -4009,6 +4032,7 @@ class $f11df64d5740bdb1$export$8d7915f8e0cd6b7a extends (0, $05b7f40ae55d062a$ex
                 message: "sync error",
                 response: result
             });
+            else this.emit("status", "sync ok");
         });
     }
 }

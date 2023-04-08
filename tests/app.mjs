@@ -24,47 +24,79 @@ const server = http.createServer((req, res) => {
 	readStream.pipe(res);
 })
 
-const io = new Server(server);
-
+const io = new Server(server, {
+	connectionStateRecovery: {
+		maxDisconnectionDuration: 2 * 60 * 1000,
+		skipMiddlewares: true
+	}
+})
 
 io.on('connection', (socket) => {
 	console.log('connection');
 
-	socket.on('authenticate', async (id, sourceId, cb) => {
+	if (socket.recovered) {
+		console.log('connection recovered');
+	}
+	else {
+		const auth = async (id, sourceId, cb) => {
 
-		console.log('authenticate', id, sourceId, cb);
+			console.log('authenticate', id, sourceId, cb);
 
-		const cookies = {}
-		const cookieHeader = socket.request.headers?.cookie || '';
-		cookieHeader.split(`;`).forEach(function(cookie) {
-			const [ key, ...rest] = cookie.split(`=`);
-			const value = rest.join(`=`).trim();
-			if(key && value) {
-				cookies[key?.trim()] = decodeURIComponent(value);
+			const cookies = {}
+			const cookieHeader = socket.request.headers?.cookie || '';
+			cookieHeader.split(`;`).forEach(function(cookie) {
+				const [ key, ...rest] = cookie.split(`=`);
+				const value = rest.join(`=`).trim();
+				if(key && value) {
+					cookies[key?.trim()] = decodeURIComponent(value);
+				}
+			});
+
+
+			if (!cookies['access-token']) {
+				return cb({ status: 'missing token' })
 			}
-		});
 
+			// ** in the real world you would probably lookup and validate access token and user
 
-		if (!cookies['access-token']) {
-			return cb({ status: 'missing token' })
+			// find or build observable for id
+			let observed = getObservable(id)
+
+			if(!observed) { 
+				let todo = {
+			      lastId: 0,
+			      list: []
+			    };
+				observed = new ObservableServer(id, todo, { authoritative: true })
+			}
+
+			socket.data.sourceId = sourceId
+			socket.data.cookies = cookies
+
+			observed.on('status', (message) => {
+				console.log('connection status', message)
+			})
+
+			observed.on('error', (message) => {
+				console.log('connection error %j', message)
+			})
+
+			observed.connect(socket)
+
+			cb({ status: 'ok' })
 		}
 
-		// ** in the real world you would probably lookup and validate access token and user
+		socket.on('authenticate', auth)
 
-		// find or build observable for id
-		const observed = getObservable(id) || new ObservableServer(id)
+		socket.on('disconnect', () => {
+			console.log('disconnected anon');
+			socket.off('authenticate', auth);
+		});
 
-		socket.sourceId = sourceId
-		socket.cookies = cookies
-
-		observed.listen(socket)
-
-		cb({ status: 'ok' })
-	});
-
-	socket.on('disconnect', () => {
-		console.log('disconnected anon');
-	});
+		socket.onAny((eventName, ...args) => {
+		  console.log('socket event', eventName, args)
+		});
+	}
 });
 
 

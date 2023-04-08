@@ -40,15 +40,8 @@
     };
 
     // create an ObservableObject with the id "todo"
-    const observableToDo = new ObservableClient("todo", todo, { endpoint: '/' });
+    const observableToDo = new ObservableObject("todo", todo);
 
-    observableToDo.on('status', (status) => {
-      console.log('status',status)
-    })
-
-    observableToDo.on('error', (status) => {
-      console.log('error',status)
-    })
 
     // Make a peer web component
     class ToDoListClient extends SargassoComponent {}
