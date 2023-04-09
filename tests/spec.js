@@ -470,6 +470,17 @@ describe('Sargasso', function () {
 		})
 	})
 
+	it('ObservedClient', (done) => {
+		fetch('http://localhost:8000/observable/todo?reset=true')
+			.then((response) => { 
+				return response.json() 
+			})
+			.then((jsonData) => {
+				expect(jsonData.lastId).to.equal(0)
+				done()
+			})
+	})
+
 	it('ObservableClient', (done) => {
         const observed1 = new SargassoModule.ObservableClient('todo', undefined, { endpoint: 'http://localhost:8000', io: io })
 
