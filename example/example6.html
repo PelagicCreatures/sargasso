@@ -2,7 +2,6 @@
 <html>
 <head>
   <title>Example Observed Data</title>
-  <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
   <h3>Example Observed Data</h3>
@@ -28,9 +27,7 @@
   }
   </script>
   <script type="module">
-    document.cookie = "access-token=mytoken; expires=; path=/;";
-
-    import { ObservableObject, ObservableClient, utils } from "@pelagiccreatures/sargasso"
+    import { ObservableObject, utils } from "@pelagiccreatures/sargasso"
     import { SargassoComponent } from "@pelagiccreatures/sargasso/component"
 
     // data structure for todo list

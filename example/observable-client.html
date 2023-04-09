@@ -11,10 +11,6 @@
   <h3>A To Do List</h3>
   <to-do-list data-observable-id="todo"></to-do-list>
 
-  <!-- this component will output the to To Do List raw data in real time-->
-  <h3>A Component that reacts to changes in the To Do List above</h3>
-  <to-do-list-client data-observable-id="todo"></to-do-list-client>
-
   <!-- enable es6 modules and import maps -->
   <script async src="https://unpkg.com/es-module-shims@1.6.2/dist/es-module-shims.js"></script>
   <!-- https://unpkg.com/@pelagiccreatures/sargasso/dist/sargasso.mjs -->
@@ -28,6 +24,8 @@
   }
   </script>
   <script type="module">
+    document.cookie = "access-token=mytoken; expires=; path=/;";
+
     window.sargassoOptions = {
       customElementPrefix: ''
     }
@@ -44,13 +42,13 @@
     // create an ObservableObject with the id "todo"
     // data structure for todo list
     let todo = {
+      test: 1,
       lastId: 0,
       list: []
     };
-    const observableToDo = new ObservableClient("todo", todo, { endpoint: '/' });
-
+    const observableToDo = new ObservableClient("todo", todo, { endpoint: '/', authoritative: false });
     observableToDo.on('error', (e) => {
-      console.log(e)
+      console.log('error: %j', e)
     })
 
     // Define ToDoList Web Component as a subclass of Sargasso
@@ -124,11 +122,6 @@
     utils.registerSargassoClass("ToDoList", ToDoList)
 
     utils.bootSargasso()
-
-
-    // Make a peer web component that will observe the data and output current state of data
-    class ToDoListClient extends SargassoComponent {}
-    utils.registerSargassoClass("ToDoListClient", ToDoListClient)
 
 
   </script>

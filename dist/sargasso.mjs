@@ -3751,7 +3751,15 @@ const $9ab666cb428a37d6$export$80ed8a0252d89225 = (options = {})=>{
 
 
 
+/**
+	ObservableClient
 
+	Build an obserbable object that syncs with a server via socket.io
+
+	@author Michael Rhodes (except where noted)
+	@license MIT
+	Made in Barbados 🇧🇧 Copyright © 2020-2023 Michael Rhodes
+**/ 
 
 var $3b107fc3e17ef5bd$exports = {};
 "use strict";
@@ -3933,17 +3941,19 @@ $3b107fc3e17ef5bd$exports = $3b107fc3e17ef5bd$var$api;
 
 
 
-var $f11df64d5740bdb1$var$cloneObj = (source, dest)=>{
+const $6cc3a86e86a06450$export$2bddc7254d5a4249 = (source, dest)=>{
     Object.keys(source).forEach((key)=>{
         if (Array.isArray(source[key])) {
             dest[key] = [];
-            $f11df64d5740bdb1$var$cloneObj(source[key], dest[key]);
+            $6cc3a86e86a06450$export$2bddc7254d5a4249(source[key], dest[key]);
         } else if (typeof source[key] === "object") {
             dest[key] = {};
-            $f11df64d5740bdb1$var$cloneObj(source[key], dest[key]);
+            $6cc3a86e86a06450$export$2bddc7254d5a4249(source[key], dest[key]);
         } else dest[key] = source[key];
     });
 };
+
+
 class $f11df64d5740bdb1$export$8d7915f8e0cd6b7a extends (0, $05b7f40ae55d062a$export$b176171395436676) {
     constructor(id, data = {}, options = {}){
         (0, $d058b9b16cf9cda3$export$a22775fa5e2eebd9)("ObservableClient constructor endpoint", options.endpoint, [
@@ -3953,16 +3963,17 @@ class $f11df64d5740bdb1$export$8d7915f8e0cd6b7a extends (0, $05b7f40ae55d062a$ex
         super(id, data, options);
         this.socket = null;
         this.connected = false;
-        this.socket = io(this.options.endpoint);
+        this.socket = (options.io || io)(this.options.endpoint);
         this.socket.on("error", (err)=>{
             this.emit("error", {
                 message: "socket error",
                 error: err
             });
         });
-        this.socket.on("connect_error", ()=>{
+        this.socket.on("connect_error", (err)=>{
             this.emit("error", {
-                message: "connect_error"
+                message: "connect_error",
+                error: err
             });
             this.connected = false;
         });
@@ -3974,12 +3985,10 @@ class $f11df64d5740bdb1$export$8d7915f8e0cd6b7a extends (0, $05b7f40ae55d062a$ex
             this.connected = false;
         });
         this.socket.on("connect", ()=>{
-            if (this.socket.recovered) this.emit("status", "reconnected");
-            else this.socket.emit("authenticate", this.id, this.getSource(), this.authenticateHandler.bind(this));
+            this.socket.emit("authenticate", this.id, this.getSource(), this.authenticateHandler.bind(this));
         });
         // listen for change events from server side
         this.socket.on("change", (event)=>{
-            console.log("client got change event from %s via %s", event.source, event.via);
             for (const change of event.changes){
                 const type = change.type;
                 const path = change.currentPath;
@@ -3994,13 +4003,12 @@ class $f11df64d5740bdb1$export$8d7915f8e0cd6b7a extends (0, $05b7f40ae55d062a$ex
                 }
             }
             this.sync(event.changes, event.source);
+            this.emit("synced_change");
         });
-        this.socket.on("init", (event)=>{
-            $f11df64d5740bdb1$var$cloneObj(event.init, this.unproxied);
-            this.sync([], event.source);
-        });
-        this.socket.onAny((eventName, ...args)=>{
-            console.log("socket event", eventName, args);
+        if (!this.options.authoritative) this.socket.on("init", (event)=>{
+            (0, $6cc3a86e86a06450$export$2bddc7254d5a4249)(event.init, this.unproxied);
+            this.sync(event.changes, event.source);
+            this.emit("initialized");
         });
     }
     authenticateHandler(result) {
@@ -4011,7 +4019,18 @@ class $f11df64d5740bdb1$export$8d7915f8e0cd6b7a extends (0, $05b7f40ae55d062a$ex
             });
             return;
         }
+        // optionally send initial data to server
+        if (this.options.authoritative) this.socket.emit("init", {
+            source: this.getSource(),
+            init: this.unproxied,
+            changes: [
+                {
+                    type: "init"
+                }
+            ]
+        });
         this.connected = true;
+        this.emit("status", "connected");
     }
     getSource() {
         return super.getSource() + ":client:" + this.socket.id;
@@ -4020,10 +4039,10 @@ class $f11df64d5740bdb1$export$8d7915f8e0cd6b7a extends (0, $05b7f40ae55d062a$ex
         if (this.socket) this.socket.disconnect(true);
         super.destroy();
     }
-    // propagate changes to server
+    // notify observers
     sync(changes, source) {
         super.sync(changes);
-        // propagate this is source of change 
+        // propagate to server only if local change 
         if (source === this.getSource() && this.socket && this.connected) this.socket.emit("change", {
             sourceId: this.getSource(),
             changes: changes

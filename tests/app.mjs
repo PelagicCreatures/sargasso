@@ -5,12 +5,37 @@ import { Server } from 'socket.io';
 import mime from 'mime';
 import { getObservable } from '../lib/ObservableObject.mjs'
 import { ObservableServer } from '../lib/ObservableServer.mjs'
-import * as url from 'url'
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
+import * as urlUtils from 'url'
+const __dirname = urlUtils.fileURLToPath(new URL('.', import.meta.url))
 
 
 const server = http.createServer((req, res) => {
 	const { method, url, headers } = req;
+
+	let matches = url.match(/^\/observable\/(\w+)/)
+	if(matches && matches[1]) {
+		let observed = getObservable(matches[1])
+
+		if(!observed) { 
+			let todo = {
+		    	lastId: 0,
+  				list: []
+		    };
+			observed = new ObservableServer('todo', todo, { authoritative: true })
+		}
+
+		const myURL = urlUtils.parse(url,true)
+		if(myURL.query?.reset) {
+			observed.data.lastId = 0;
+			observed.data.list = [];
+		}
+		if(myURL.query?.push) {
+			observed.data.list.push({ id: ++observed.data.lastId, name: 'server add' });
+		}
+		res.writeHead(200, { 'Content-Type': 'application/json' });
+		return res.end(JSON.stringify(observed?.data||{}))
+	}
+
 	const filePath = path.join(__dirname, '../', url === '/' ? '/index.html' : url);
 	if(!fileSystem.existsSync(filePath)) {
 		res.writeHead(404, { 'Content-Type': 'text/html' });
@@ -24,79 +49,51 @@ const server = http.createServer((req, res) => {
 	readStream.pipe(res);
 })
 
-const io = new Server(server, {
-	connectionStateRecovery: {
-		maxDisconnectionDuration: 2 * 60 * 1000,
-		skipMiddlewares: true
-	}
-})
+const io = new Server(server)
 
+// set up incoming requests to observe changes to 'todo' list data structure
 io.on('connection', (socket) => {
 	console.log('connection');
 
-	if (socket.recovered) {
-		console.log('connection recovered');
-	}
-	else {
-		const auth = async (id, sourceId, cb) => {
+	// client authenticate
+	const auth = async (id, sourceId, ack) => {
 
-			console.log('authenticate', id, sourceId, cb);
+		console.log('authenticate', id, sourceId);
 
-			const cookies = {}
-			const cookieHeader = socket.request.headers?.cookie || '';
-			cookieHeader.split(`;`).forEach(function(cookie) {
-				const [ key, ...rest] = cookie.split(`=`);
-				const value = rest.join(`=`).trim();
-				if(key && value) {
-					cookies[key?.trim()] = decodeURIComponent(value);
-				}
-			});
-
-
-			if (!cookies['access-token']) {
-				return cb({ status: 'missing token' })
+		// demo only - access token cookie handshake
+		const cookies = {}
+		const cookieHeader = socket.request.headers?.cookie || '';
+		cookieHeader.split(`;`).forEach(function(cookie) {
+			const [ key, ...rest] = cookie.split(`=`);
+			const value = rest.join(`=`).trim();
+			if(key && value) {
+				cookies[key?.trim()] = decodeURIComponent(value);
 			}
+		});
 
-			// ** in the real world you would probably lookup and validate access token and user
-
-			// find or build observable for id
-			let observed = getObservable(id)
-
-			if(!observed) { 
-				let todo = {
-			      lastId: 0,
-			      list: []
-			    };
-				observed = new ObservableServer(id, todo, { authoritative: true })
-			}
-
-			socket.data.sourceId = sourceId
-			socket.data.cookies = cookies
-
-			observed.on('status', (message) => {
-				console.log('connection status', message)
-			})
-
-			observed.on('error', (message) => {
-				console.log('connection error %j', message)
-			})
-
-			observed.connect(socket)
-
-			cb({ status: 'ok' })
+		if (!cookies['access-token']) {
+			return ack({ status: 'missing token' })
 		}
 
-		socket.on('authenticate', auth)
+		// real app would validate token and user here
 
-		socket.on('disconnect', () => {
-			console.log('disconnected anon');
-			socket.off('authenticate', auth);
-		});
+		// validation ok, find or build observable id
+		let observed = getObservable(id)
+		if(!observed) { 
+			let todo = {
+		    	lastId: 1,
+  				list: [{id:1,name:"From Server"}]
+		    };
+			observed = new ObservableServer(id, todo, { authoritative: true })
+		}
 
-		socket.onAny((eventName, ...args) => {
-		  console.log('socket event', eventName, args)
-		});
+		// hook socket up to observable
+		observed.connect(socket, io)
+
+		ack({ status: 'ok' })
 	}
+
+	socket.on('authenticate', auth)
 });
 
 
