@@ -12,7 +12,13 @@ const __dirname = urlUtils.fileURLToPath(new URL('.', import.meta.url))
 const server = http.createServer((req, res) => {
 	const { method, url, headers } = req;
 
-	let matches = url.match(/^\/observable\/(\w+)/)
+	let matches = url.match(/^\/(observable|dist|example|lib|tests|node_modules)\//)
+	if(!matches) {
+		res.writeHead(401, { 'Content-Type': 'application/html' });
+		return res.end('bad request')
+	}
+
+	matches = url.match(/^\/observable\/(\w+)/)
 	if(matches && matches[1]) {
 		let observed = getObservable(matches[1])
 
