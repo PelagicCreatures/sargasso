@@ -4003,7 +4003,7 @@ class $f11df64d5740bdb1$export$8d7915f8e0cd6b7a extends (0, $05b7f40ae55d062a$ex
                 }
             }
             this.sync(event.changes, event.source);
-            this.emit("synced_change");
+            this.emit("sync_from_server");
         });
         if (!this.options.authoritative) this.socket.on("init", (event)=>{
             (0, $6cc3a86e86a06450$export$2bddc7254d5a4249)(event.init, this.unproxied);
