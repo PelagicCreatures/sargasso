@@ -35,7 +35,7 @@ import {
 	from './lib/Services'
 
 import {
-	ObservableObject
+	ObservableObject, getObservable
 }
 	from './lib/ObservableObject'
 
@@ -50,7 +50,8 @@ const utils = {
 	bootSargasso: bootSargasso,
 	elementTools: elementTools,
 	validate: validate,
-	setValidator: setValidator
+	setValidator: setValidator,
+	getObservable: getObservable
 }
 
 const services = {

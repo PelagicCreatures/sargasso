@@ -12,13 +12,7 @@ const __dirname = urlUtils.fileURLToPath(new URL('.', import.meta.url))
 const server = http.createServer((req, res) => {
 	const { method, url, headers } = req;
 
-	let matches = url.match(/^\/(observable|dist|example|lib|tests|node_modules)\//)
-	if(!matches) {
-		res.writeHead(401, { 'Content-Type': 'application/html' });
-		return res.end('bad request')
-	}
-
-	matches = url.match(/^\/observable\/(\w+)/)
+	let matches = url.match(/^\/observable\/(\w+)/)
 	if(matches && matches[1]) {
 		let observed = getObservable(matches[1])
 
@@ -42,6 +36,12 @@ const server = http.createServer((req, res) => {
 		return res.end(JSON.stringify(observed?.data||{}))
 	}
 
+	// static files for tests and examples
+	matches = url.match(/^\/(dist|example|lib|tests|node_modules)\//)
+	if(!matches) {
+		res.writeHead(401, { 'Content-Type': 'application/html' });
+		return res.end('bad request')
+	}
 	const filePath = path.join(__dirname, '../', url === '/' ? '/index.html' : url);
 	if(!fileSystem.existsSync(filePath)) {
 		res.writeHead(404, { 'Content-Type': 'text/html' });
@@ -49,7 +49,6 @@ const server = http.createServer((req, res) => {
 	}
 
 	const mimeType = mime.getType(filePath)
-
 	const readStream = fileSystem.createReadStream(filePath);
 	res.writeHead(200, { 'Content-Type': mimeType });
 	readStream.pipe(res);

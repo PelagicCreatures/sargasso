@@ -4062,7 +4062,8 @@ const $74781ab65e5661d8$export$eab97d15b1788b8d = {
     bootSargasso: (0, $9ab666cb428a37d6$export$80ed8a0252d89225),
     elementTools: (0, $b17b0a5c39dee3e4$export$6f53260fffa88f1c),
     validate: (0, $d058b9b16cf9cda3$export$a22775fa5e2eebd9),
-    setValidator: (0, $d058b9b16cf9cda3$export$636d763ed7be9e97)
+    setValidator: (0, $d058b9b16cf9cda3$export$636d763ed7be9e97),
+    getObservable: (0, $05b7f40ae55d062a$export$7ec259ba0528fb23)
 };
 const $74781ab65e5661d8$export$bce7a36871692cab = {
     theDOMWatcher: (0, $d026517949359551$export$77e1d49fdb880d27),
