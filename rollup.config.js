@@ -25,7 +25,7 @@ export default {
 
 	plugins: [
 		json(),
-		nodeResolve(),
+		nodeResolve({ preferBuiltins: false, mainFields: ['browser'] }),
 		commonjs()
 	]
 }

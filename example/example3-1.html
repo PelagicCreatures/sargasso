@@ -16,22 +16,28 @@
   <div id="page-body" data-hijax>
     <p>Page content <strong>changed on this page</strong></p>
     <sargasso-noisy id="content-page-1" data-log-it="newPage,sleep,stopWorker,destroy"></sargasso-noisy>
+
+    <script id="injected" src="/example/injected.mjs" type="module"></script>
+    <script id="ephemeral" type="module" data-ephemeral>
+      import {doIt} from "/example/injected.mjs"
+      doIt()
+    </script>
   </div>
 
-	<div id="some-element" data-hijax data-hijax-skip-unchanged>
+  <div id="some-element" data-hijax data-hijax-skip-unchanged>
     <p>This content also sometimes changes from page to page, otherwise leave it alone.</p>
   </div>
 
-	<div id="some-element-key" data-hijax data-hijax-cache-key-selector="#sub-element">
-		<p id="sub-element" data-hijax-cache-key="111">This content uses a cache key to signal changes, otherwise leave it alone.</p>
-	</div>
+  <div id="some-element-key" data-hijax data-hijax-cache-key-selector="#sub-element">
+    <p id="sub-element" data-hijax-cache-key="111">This content uses a cache key to signal changes, otherwise leave it alone.</p>
+  </div>
 
   <hr>
   <p>This is also static wrapper content. Maybe a footer.</p>
 
   <sargasso-noisy id="static-page-1" data-log-it="newPage,sleep,stopWorker,destroy"></sargasso-noisy>
 
-	<script src="/dist/sargasso.iife.js"></script>
+  <script src="/dist/sargasso.iife.js"></script>
 
   <script defer>
     window.onload = () => {

@@ -20,7 +20,6 @@ function wait(ms) {
 
 describe('Sargasso', function () {
 
-
 	const testElement = document.createElement('div')
 	testElement.setAttribute('id', 'test-element')
 	const testElement1 = document.createElement('div')
@@ -470,6 +469,47 @@ describe('Sargasso', function () {
 			done()
 		})
 	})
+
+	it('ObservedClient', (done) => {
+		fetch('http://localhost:8000/observable/todo?reset=true')
+			.then((response) => { 
+				return response.json() 
+			})
+			.then((jsonData) => {
+				expect(jsonData.lastId).to.equal(0)
+				done()
+			})
+	})
+
+	it('ObservableClient', (done) => {
+        const observed1 = new SargassoModule.ObservableClient('todo', undefined, { endpoint: 'http://localhost:8000', io: io })
+
+        // wait for init
+        observed1.on('initialized', () => {
+	  		expect(observed1.data.lastId).to.equal(0)
+
+			// call test harness on server side which adds a todo item and updates lastId
+  			fetch('http://localhost:8000/observable/todo?push=true')
+        		.then((response) => { 
+        			return response.json() 
+        		})
+        		.then((jsonData) => {
+        			expect(jsonData.lastId).to.equal(1)
+        			expect(observed1.data.lastId).to.equal(1)
+
+        			observed1.data.lastId = 2
+
+        			fetch('http://localhost:8000/observable/todo')
+		        		.then((response) => { 
+		        			return response.json() 
+		        		})
+		        		.then((jsonData) => {
+		        			expect(jsonData.lastId).to.equal(2)
+		        			done()
+		        		})
+		        	})
+	  	})
+    })
 
 	/*
 		excercises

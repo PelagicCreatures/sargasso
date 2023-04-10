@@ -35,16 +35,23 @@ import {
 	from './lib/Services'
 
 import {
-	ObservableObject
+	ObservableObject, getObservable
 }
 	from './lib/ObservableObject'
+
+import {
+	ObservableClient
+}
+	from './lib/ObservableClient'
+
 
 const utils = {
 	registerSargassoClass: registerSargassoClass,
 	bootSargasso: bootSargasso,
 	elementTools: elementTools,
 	validate: validate,
-	setValidator: setValidator
+	setValidator: setValidator,
+	getObservable: getObservable
 }
 
 const services = {
@@ -63,5 +70,5 @@ const system = {
 }
 
 export {
-	Sargasso, utils, loadPageHandler, ObservableObject, services, system
+	Sargasso, utils, loadPageHandler, ObservableObject, ObservableClient, services, system
 }

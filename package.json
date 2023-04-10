@@ -1,13 +1,14 @@
 {
 	"name": "@pelagiccreatures/sargasso",
-	"version": "2.3.5",
+	"version": "2.4.0",
 	"description": "Simple, Fast, Reactive, Supervised Javascript controllers for custom html elements.",
 	"type": "module",
 	"browser": "dist/sargasso.mjs",
 	"targets": {
 		"browser": {
 			"includeNodeModules": {
-				"lit-html": false
+				"lit-html": false,
+				"events": true
 			}
 		}
 	},
@@ -18,12 +19,13 @@
 		"web worker",
 		"framework",
 		"lazy load",
+		"web components",
 		"pwa",
 		"web app",
 		"hijax",
-		"animation-frame",
-		"custom-elements",
-		"progressive-enhancement"
+		"animation frame",
+		"custom elements",
+		"progressive enhancement"
 	],
 	"scripts": {
 		"build": "npx rollup --no-treeshake -c rollup.config.js",
@@ -49,6 +51,8 @@
 		"lit-html": "^2.7.0"
 	},
 	"dependencies": {
+		"events": "^3.3.0",
+		"json-pointer": "^0.6.2",
 		"lodash": "^4.17.21",
 		"observable-slim": "^0.1.6"
 	},
