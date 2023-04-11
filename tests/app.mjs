@@ -1,13 +1,11 @@
 import http from 'http';
 import fileSystem from 'fs';
 import path from 'path';
-import { Server } from 'socket.io';
 import mime from 'mime';
 import { getObservable } from '../lib/ObservableObject.mjs'
-import { ObservableServer } from '../lib/ObservableServer.mjs'
+import { ObservableServer, connectionListener } from '../lib/ObservableServer.mjs'
 import * as urlUtils from 'url'
 const __dirname = urlUtils.fileURLToPath(new URL('.', import.meta.url))
-
 
 const server = http.createServer((req, res) => {
 	const { method, url, headers } = req;
@@ -54,52 +52,44 @@ const server = http.createServer((req, res) => {
 	readStream.pipe(res);
 })
 
-const io = new Server(server)
+// demo initial data
+const todo = {
+	lastId: 0,
+	list: []
+}
 
-// set up incoming requests to observe changes to 'todo' list data structure
-io.on('connection', (socket) => {
-	console.log('connection');
+// demo auth function - replace with your own
+// in this case we expect a cookie called 'access-token' in the request headers
+// @param socket - socket.io socket
+// @param id - observable id
+const auth = async (socket, id) => {
 
-	// client authenticate
-	const auth = async (id, sourceId, ack) => {
+	console.log('authenticate', id);
 
-		console.log('authenticate', id, sourceId);
-
-		// demo only - access token cookie handshake
-		const cookies = {}
-		const cookieHeader = socket.request.headers?.cookie || '';
-		cookieHeader.split(`;`).forEach(function(cookie) {
-			const [ key, ...rest] = cookie.split(`=`);
-			const value = rest.join(`=`).trim();
-			if(key && value) {
-				cookies[key?.trim()] = decodeURIComponent(value);
-			}
-		});
-
-		if (!cookies['access-token']) {
-			return ack({ status: 'missing token' })
-		}
-
-		// real app would validate token and user here
-
-		// validation ok, find or build observable id
-		let observed = getObservable(id)
-		if(!observed) { 
-			let todo = {
-		    	lastId: 1,
-  				list: [{id:1,name:"From Server"}]
-		    };
-			observed = new ObservableServer(id, todo, { authoritative: true })
-		}
-
-		// hook socket up to observable
-		observed.connect(socket, io)
-
-		ack({ status: 'ok' })
+	if(id !== 'todo') {
+		throw(new Error('unknown observable id',id))
 	}
 
-	socket.on('authenticate', auth)
-});
+	// demo only - access token cookie handshake
+	const cookies = {}
+	const cookieHeader = socket.request.headers?.cookie || '';
+	cookieHeader.split(`;`).forEach(function(cookie) {
+		const [ key, ...rest] = cookie.split(`=`);
+		const value = rest.join(`=`).trim();
+		if(key && value) {
+			cookies[key?.trim()] = decodeURIComponent(value);
+		}
+	});
 
+	if (!cookies['access-token']) {
+		throw(new Error('missing token'))
+	}
+
+	return todo // return initial data object structure
+}
+
+
+// start the io server
+connectionListener(server, auth)
 
 server.listen(8000);

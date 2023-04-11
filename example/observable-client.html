@@ -40,13 +40,7 @@
     window.nosy = { 'system': system, 'services': services, utils: utils }
 
     // create an ObservableObject with the id "todo"
-    // data structure for todo list
-    let todo = {
-      test: 1,
-      lastId: 0,
-      list: []
-    };
-    const observableToDo = new ObservableClient("todo", todo, { endpoint: '/', authoritative: false });
+    const observableToDo = new ObservableClient("todo", undefined, { endpoint: '/' });
     observableToDo.on('error', (e) => {
       console.log('error: %j', e)
     })
