@@ -49,6 +49,8 @@ var SargassoModule = (function (exports) {
 
 	var _freeGlobal = freeGlobal$1;
 
+	var _freeGlobal$1 = /*@__PURE__*/getDefaultExportFromCjs(_freeGlobal);
+
 	var freeGlobal = _freeGlobal;
 
 	/** Detect free variable `self`. */
@@ -59,12 +61,16 @@ var SargassoModule = (function (exports) {
 
 	var _root = root$2;
 
+	var _root$1 = /*@__PURE__*/getDefaultExportFromCjs(_root);
+
 	var root$1 = _root;
 
 	/** Built-in value references. */
 	var Symbol$3 = root$1.Symbol;
 
 	var _Symbol = Symbol$3;
+
+	var _Symbol$1 = /*@__PURE__*/getDefaultExportFromCjs(_Symbol);
 
 	/**
 	 * A specialized version of `_.map` for arrays without support for iteratee
@@ -88,6 +94,8 @@ var SargassoModule = (function (exports) {
 	}
 
 	var _arrayMap = arrayMap$1;
+
+	var _arrayMap$1 = /*@__PURE__*/getDefaultExportFromCjs(_arrayMap);
 
 	/**
 	 * Checks if `value` is classified as an `Array` object.
@@ -116,6 +124,8 @@ var SargassoModule = (function (exports) {
 	var isArray$1 = Array.isArray;
 
 	var isArray_1 = isArray$1;
+
+	var isArray$2 = /*@__PURE__*/getDefaultExportFromCjs(isArray_1);
 
 	var Symbol$2 = _Symbol;
 
@@ -164,6 +174,8 @@ var SargassoModule = (function (exports) {
 
 	var _getRawTag = getRawTag$1;
 
+	var _getRawTag$1 = /*@__PURE__*/getDefaultExportFromCjs(_getRawTag);
+
 	/** Used for built-in method references. */
 
 	var objectProto = Object.prototype;
@@ -187,6 +199,8 @@ var SargassoModule = (function (exports) {
 	}
 
 	var _objectToString = objectToString$1;
+
+	var _objectToString$1 = /*@__PURE__*/getDefaultExportFromCjs(_objectToString);
 
 	var Symbol$1 = _Symbol,
 	    getRawTag = _getRawTag,
@@ -216,6 +230,8 @@ var SargassoModule = (function (exports) {
 	}
 
 	var _baseGetTag = baseGetTag$1;
+
+	var _baseGetTag$1 = /*@__PURE__*/getDefaultExportFromCjs(_baseGetTag);
 
 	/**
 	 * Checks if `value` is object-like. A value is object-like if it's not `null`
@@ -248,6 +264,8 @@ var SargassoModule = (function (exports) {
 
 	var isObjectLike_1 = isObjectLike$1;
 
+	var isObjectLike$2 = /*@__PURE__*/getDefaultExportFromCjs(isObjectLike_1);
+
 	var baseGetTag = _baseGetTag,
 	    isObjectLike = isObjectLike_1;
 
@@ -277,6 +295,8 @@ var SargassoModule = (function (exports) {
 	}
 
 	var isSymbol_1 = isSymbol$2;
+
+	var isSymbol$3 = /*@__PURE__*/getDefaultExportFromCjs(isSymbol_1);
 
 	var Symbol = _Symbol,
 	    arrayMap = _arrayMap,
@@ -316,6 +336,8 @@ var SargassoModule = (function (exports) {
 
 	var _baseToString = baseToString$1;
 
+	var _baseToString$1 = /*@__PURE__*/getDefaultExportFromCjs(_baseToString);
+
 	var baseToString = _baseToString;
 
 	/**
@@ -344,6 +366,8 @@ var SargassoModule = (function (exports) {
 	}
 
 	var toString_1 = toString$5;
+
+	var toString$6 = /*@__PURE__*/getDefaultExportFromCjs(toString_1);
 
 	/**
 	 * The base implementation of `_.slice` without an iteratee call guard.
@@ -378,6 +402,8 @@ var SargassoModule = (function (exports) {
 
 	var _baseSlice = baseSlice$1;
 
+	var _baseSlice$1 = /*@__PURE__*/getDefaultExportFromCjs(_baseSlice);
+
 	var baseSlice = _baseSlice;
 
 	/**
@@ -396,6 +422,8 @@ var SargassoModule = (function (exports) {
 	}
 
 	var _castSlice = castSlice$1;
+
+	var _castSlice$1 = /*@__PURE__*/getDefaultExportFromCjs(_castSlice);
 
 	/** Used to compose unicode character classes. */
 
@@ -425,6 +453,8 @@ var SargassoModule = (function (exports) {
 
 	var _hasUnicode = hasUnicode$2;
 
+	var _hasUnicode$1 = /*@__PURE__*/getDefaultExportFromCjs(_hasUnicode);
+
 	/**
 	 * Converts an ASCII `string` to an array.
 	 *
@@ -438,6 +468,8 @@ var SargassoModule = (function (exports) {
 	}
 
 	var _asciiToArray = asciiToArray$1;
+
+	var _asciiToArray$1 = /*@__PURE__*/getDefaultExportFromCjs(_asciiToArray);
 
 	/** Used to compose unicode character classes. */
 
@@ -481,6 +513,8 @@ var SargassoModule = (function (exports) {
 
 	var _unicodeToArray = unicodeToArray$1;
 
+	var _unicodeToArray$1 = /*@__PURE__*/getDefaultExportFromCjs(_unicodeToArray);
+
 	var asciiToArray = _asciiToArray,
 	    hasUnicode$1 = _hasUnicode,
 	    unicodeToArray = _unicodeToArray;
@@ -499,6 +533,8 @@ var SargassoModule = (function (exports) {
 	}
 
 	var _stringToArray = stringToArray$1;
+
+	var _stringToArray$1 = /*@__PURE__*/getDefaultExportFromCjs(_stringToArray);
 
 	var castSlice = _castSlice,
 	    hasUnicode = _hasUnicode,
@@ -534,6 +570,8 @@ var SargassoModule = (function (exports) {
 
 	var _createCaseFirst = createCaseFirst$1;
 
+	var _createCaseFirst$1 = /*@__PURE__*/getDefaultExportFromCjs(_createCaseFirst);
+
 	var createCaseFirst = _createCaseFirst;
 
 	/**
@@ -556,6 +594,8 @@ var SargassoModule = (function (exports) {
 	var upperFirst$1 = createCaseFirst('toUpperCase');
 
 	var upperFirst_1 = upperFirst$1;
+
+	var upperFirst$2 = /*@__PURE__*/getDefaultExportFromCjs(upperFirst_1);
 
 	var toString$3 = toString_1,
 	    upperFirst = upperFirst_1;
@@ -580,6 +620,8 @@ var SargassoModule = (function (exports) {
 	}
 
 	var capitalize_1 = capitalize$1;
+
+	var capitalize$2 = /*@__PURE__*/getDefaultExportFromCjs(capitalize_1);
 
 	/**
 	 * A specialized version of `_.reduce` for arrays without support for
@@ -609,6 +651,8 @@ var SargassoModule = (function (exports) {
 
 	var _arrayReduce = arrayReduce$1;
 
+	var _arrayReduce$1 = /*@__PURE__*/getDefaultExportFromCjs(_arrayReduce);
+
 	/**
 	 * The base implementation of `_.propertyOf` without support for deep paths.
 	 *
@@ -624,6 +668,8 @@ var SargassoModule = (function (exports) {
 	}
 
 	var _basePropertyOf = basePropertyOf$1;
+
+	var _basePropertyOf$1 = /*@__PURE__*/getDefaultExportFromCjs(_basePropertyOf);
 
 	var basePropertyOf = _basePropertyOf;
 
@@ -697,6 +743,8 @@ var SargassoModule = (function (exports) {
 
 	var _deburrLetter = deburrLetter$1;
 
+	var _deburrLetter$1 = /*@__PURE__*/getDefaultExportFromCjs(_deburrLetter);
+
 	var deburrLetter = _deburrLetter,
 	    toString$2 = toString_1;
 
@@ -743,6 +791,8 @@ var SargassoModule = (function (exports) {
 
 	var deburr_1 = deburr$1;
 
+	var deburr$2 = /*@__PURE__*/getDefaultExportFromCjs(deburr_1);
+
 	/** Used to match words composed of alphanumeric characters. */
 
 	var reAsciiWord = /[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/g;
@@ -760,6 +810,8 @@ var SargassoModule = (function (exports) {
 
 	var _asciiWords = asciiWords$1;
 
+	var _asciiWords$1 = /*@__PURE__*/getDefaultExportFromCjs(_asciiWords);
+
 	/** Used to detect strings that need a more robust regexp to match words. */
 
 	var reHasUnicodeWord = /[a-z][A-Z]|[A-Z]{2}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]/;
@@ -776,6 +828,8 @@ var SargassoModule = (function (exports) {
 	}
 
 	var _hasUnicodeWord = hasUnicodeWord$1;
+
+	var _hasUnicodeWord$1 = /*@__PURE__*/getDefaultExportFromCjs(_hasUnicodeWord);
 
 	/** Used to compose unicode character classes. */
 
@@ -848,6 +902,8 @@ var SargassoModule = (function (exports) {
 
 	var _unicodeWords = unicodeWords$1;
 
+	var _unicodeWords$1 = /*@__PURE__*/getDefaultExportFromCjs(_unicodeWords);
+
 	var asciiWords = _asciiWords,
 	    hasUnicodeWord = _hasUnicodeWord,
 	    toString$1 = toString_1,
@@ -884,6 +940,8 @@ var SargassoModule = (function (exports) {
 
 	var words_1 = words$1;
 
+	var words$2 = /*@__PURE__*/getDefaultExportFromCjs(words_1);
+
 	var arrayReduce = _arrayReduce,
 	    deburr = deburr_1,
 	    words = words_1;
@@ -908,6 +966,8 @@ var SargassoModule = (function (exports) {
 	}
 
 	var _createCompounder = createCompounder$2;
+
+	var _createCompounder$1 = /*@__PURE__*/getDefaultExportFromCjs(_createCompounder);
 
 	var capitalize = capitalize_1,
 	    createCompounder$1 = _createCompounder;
@@ -938,6 +998,8 @@ var SargassoModule = (function (exports) {
 	});
 
 	var camelCase_1 = camelCase;
+
+	var camelCase$1 = /*@__PURE__*/getDefaultExportFromCjs(camelCase_1);
 
 	const validators = {};
 
@@ -1104,7 +1166,7 @@ var SargassoModule = (function (exports) {
 
 		for (const prop in css) {
 			if (Object.prototype.hasOwnProperty.call(css, prop)) {
-				const key = camelCase_1(prop);
+				const key = camelCase$1(prop);
 				element.style[key] = css[prop] !== null ? css[prop] : null;
 			}
 		}
@@ -1290,6 +1352,8 @@ var SargassoModule = (function (exports) {
 
 	var isObject_1 = isObject$2;
 
+	var isObject$3 = /*@__PURE__*/getDefaultExportFromCjs(isObject_1);
+
 	var root = _root;
 
 	/**
@@ -1314,6 +1378,8 @@ var SargassoModule = (function (exports) {
 
 	var now_1 = now$1;
 
+	var now$2 = /*@__PURE__*/getDefaultExportFromCjs(now_1);
+
 	/** Used to match a single whitespace character. */
 
 	var reWhitespace = /\s/;
@@ -1335,6 +1401,8 @@ var SargassoModule = (function (exports) {
 
 	var _trimmedEndIndex = trimmedEndIndex$1;
 
+	var _trimmedEndIndex$1 = /*@__PURE__*/getDefaultExportFromCjs(_trimmedEndIndex);
+
 	var trimmedEndIndex = _trimmedEndIndex;
 
 	/** Used to match leading whitespace. */
@@ -1354,6 +1422,8 @@ var SargassoModule = (function (exports) {
 	}
 
 	var _baseTrim = baseTrim$1;
+
+	var _baseTrim$1 = /*@__PURE__*/getDefaultExportFromCjs(_baseTrim);
 
 	var baseTrim = _baseTrim,
 	    isObject$1 = isObject_1,
@@ -1419,6 +1489,8 @@ var SargassoModule = (function (exports) {
 	}
 
 	var toNumber_1 = toNumber$1;
+
+	var toNumber$2 = /*@__PURE__*/getDefaultExportFromCjs(toNumber_1);
 
 	var isObject = isObject_1,
 	    now = now_1,
@@ -1612,11 +1684,11 @@ var SargassoModule = (function (exports) {
 
 	var debounce_1 = debounce;
 
-	var eventsExports = {};
-	var events = {
-	  get exports(){ return eventsExports; },
-	  set exports(v){ eventsExports = v; },
-	};
+	var debounce$1 = /*@__PURE__*/getDefaultExportFromCjs(debounce_1);
+
+	var events$1 = {exports: {}};
+
+	var events = events$1.exports;
 
 	// Copyright Joyent, Inc. and other Node contributors.
 	//
@@ -1673,8 +1745,8 @@ var SargassoModule = (function (exports) {
 	function EventEmitter() {
 	  EventEmitter.init.call(this);
 	}
-	events.exports = EventEmitter;
-	var once_1 = eventsExports.once = once;
+	events$1.exports = EventEmitter;
+	var once_1 = events$1.exports.once = once;
 
 	// Backwards-compat with node 0.10.x
 	EventEmitter.EventEmitter = EventEmitter;
@@ -2116,11 +2188,10 @@ var SargassoModule = (function (exports) {
 	  }
 	}
 
-	var observableSlimExports = {};
-	var observableSlim = {
-	  get exports(){ return observableSlimExports; },
-	  set exports(v){ observableSlimExports = v; },
-	};
+	var eventsExports = events$1.exports;
+	var EventEmitter$1 = /*@__PURE__*/getDefaultExportFromCjs(eventsExports);
+
+	var observableSlim$1 = {exports: {}};
 
 	/*
 	 * 	Observable Slim
@@ -2135,6 +2206,7 @@ var SargassoModule = (function (exports) {
 	 *	reflecting changes in the model to the view. Observable Slim aspires to be as lightweight and easily
 	 *	understood as possible. Minifies down to roughly 3000 characters.
 	 */
+	var observableSlim = observableSlim$1.exports;
 
 	var ObservableSlim = (function() {
 		var paths = [];
@@ -2849,7 +2921,10 @@ var SargassoModule = (function (exports) {
 	})();
 
 	// Export in a try catch to prevent this from erroring out on older browsers
-	try { observableSlim.exports = ObservableSlim; } catch (err) {};
+	try { observableSlim$1.exports = ObservableSlim; } catch (err) {};
+
+	var observableSlimExports = observableSlim$1.exports;
+	var ObservableSlim$1 = /*@__PURE__*/getDefaultExportFromCjs(observableSlimExports);
 
 	/**
 		ObservableObject
@@ -2873,7 +2948,7 @@ var SargassoModule = (function (exports) {
 		changes can be observed and manages subscribing and notifying observers.
 	*/
 
-	class ObservableObject extends eventsExports {
+	class ObservableObject extends EventEmitter$1 {
 		/*
 			@param { String } id - unique id 
 			@param { Object } data - optional externally defined javascript object to observe
@@ -2892,7 +2967,7 @@ var SargassoModule = (function (exports) {
 
 			this.unproxied = data;
 			
-			this.data = observableSlimExports.create(data, false, (changes)=>{
+			this.data = ObservableSlim$1.create(data, false, (changes)=>{
 				this.sync(changes, this.getSource());
 			});
 
@@ -2909,7 +2984,7 @@ var SargassoModule = (function (exports) {
 			@function destroy - remove all bindings
 		*/
 		destroy () {
-			observableSlimExports.pause(this.data);
+			ObservableSlim$1.pause(this.data);
 
 			delete registeredObservables[this.id];
 			delete this.data;
@@ -2919,7 +2994,7 @@ var SargassoModule = (function (exports) {
 				});
 			});
 
-			observableSlimExports.remove(this.data);
+			ObservableSlim$1.remove(this.data);
 		}
 
 		/*
@@ -3095,7 +3170,7 @@ var SargassoModule = (function (exports) {
 			super(options);
 
 			// debounce - just need to know if a change occured, not every change
-			this.mutationHandler = debounce_1((mutations, observer) => {
+			this.mutationHandler = debounce$1((mutations, observer) => {
 				this.observeDOM(this.options.shadowDOM || document.body);
 			}, 25, {
 				maxWait: 100
@@ -3209,7 +3284,7 @@ var SargassoModule = (function (exports) {
 		constructor (options) {
 			super(options);
 
-			this.debounce = debounce_1(() => {
+			this.debounce = debounce$1(() => {
 				this.watchResize();
 			}, 250);
 		}
@@ -3244,7 +3319,7 @@ var SargassoModule = (function (exports) {
 				elementTools.addClass(document.body, 'no-orientation');
 			}
 
-			this.debounce = debounce_1(() => {
+			this.debounce = debounce$1(() => {
 				this.watchOrientation();
 			}, 250);
 		}
@@ -3484,6 +3559,8 @@ var SargassoModule = (function (exports) {
 
 	var kebabCase_1 = kebabCase;
 
+	var kebabCase$1 = /*@__PURE__*/getDefaultExportFromCjs(kebabCase_1);
+
 	/**
 		Sargasso
 
@@ -3586,7 +3663,7 @@ var SargassoModule = (function (exports) {
 
 			const options = window.sargassoOptions || {};
 			const prefix = typeof options.customElementPrefix !== 'undefined' ? options.customElementPrefix : 'sargasso-';
-			customElements.define(prefix + kebabCase_1(className), fn);
+			customElements.define(prefix + kebabCase$1(className), fn);
 		}
 	};
 
@@ -3635,7 +3712,7 @@ var SargassoModule = (function (exports) {
 			this._templateArgs = {};
 			this._started = false;
 
-			this.render = debounce_1(() => {
+			this.render = debounce$1(() => {
 				this._render();
 			}, 100, {
 				maxWait: 250
@@ -4449,7 +4526,7 @@ var SargassoModule = (function (exports) {
 			this.widths = [];
 			this.classes = [];
 
-			this.debouncedDetectGeometry = debounce_1(() => {
+			this.debouncedDetectGeometry = debounce$1(() => {
 				this.detectGeometry();
 			}, 100, {
 				maxWait: 150
@@ -4742,6 +4819,8 @@ var SargassoModule = (function (exports) {
 	    }
 	};
 
+	var index = /*@__PURE__*/getDefaultExportFromCjs(foreach);
+
 	'use strict';
 
 	var each = foreach;
@@ -4975,6 +5054,8 @@ var SargassoModule = (function (exports) {
 	    return '/' + refTokens.map(api.escape).join('/');
 	};
 
+	var pointer = /*@__PURE__*/getDefaultExportFromCjs(jsonPointer);
+
 	const cloneObj = (source,dest) => {
 		Object.keys(source).forEach((key) => {
 			if(Array.isArray(source[key])){
@@ -5048,13 +5129,13 @@ var SargassoModule = (function (exports) {
 					const ptr = '/' + path.replace(/\./g,'/');
 
 					if(type === 'update' || type === 'add') {
-						if(!jsonPointer.has(this.unproxied, ptr) || (jsonPointer.get(this.unproxied, ptr) !== newValue)) {
-							jsonPointer.set(this.unproxied, ptr, newValue);
+						if(!pointer.has(this.unproxied, ptr) || (pointer.get(this.unproxied, ptr) !== newValue)) {
+							pointer.set(this.unproxied, ptr, newValue);
 						}
 					}
 					if(type === 'delete') {
-						if(jsonPointer.has(this.unproxied, ptr)) {
-							jsonPointer.remove(this.unproxied, ptr);
+						if(pointer.has(this.unproxied, ptr)) {
+							pointer.remove(this.unproxied, ptr);
 						}
 					}
 				}
